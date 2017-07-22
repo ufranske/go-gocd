@@ -6,6 +6,8 @@ import (
 	"io"
 	"bytes"
 	"encoding/json"
+	"reflect"
+	"context"
 )
 
 const (
@@ -87,11 +89,12 @@ func newResponse(r *http.Response) *Response {
 	return response
 }
 
-func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
+func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Response, error) {
+
+	req = req.WithContext(ctx)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-
 		if e, ok := err.(*url.Error); ok {
 			if url, err := url.Parse(e.URL); err == nil {
 				e.URL = sanitizeURL(url).String()
@@ -137,6 +140,22 @@ func sanitizeURL(uri *url.URL) *url.URL {
 		uri.RawQuery = params.Encode()
 	}
 	return uri
+}
+
+// addOptions adds the parameters in opt as URL query parameters to s. opt
+// must be a struct whose fields may contain "url" tags.
+func addOptions(s string, opt interface{}) (string, error) {
+	v := reflect.ValueOf(opt)
+	if v.Kind() == reflect.Ptr && v.IsNil() {
+		return s, nil
+	}
+
+	u, err := url.Parse(s)
+	if err != nil {
+		return s, err
+	}
+
+	return u.String(), nil
 }
 
 // CheckResponse checks the API response for errors, and returns them if
