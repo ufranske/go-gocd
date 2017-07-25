@@ -2,30 +2,36 @@ package gocd
 
 import (
 	"context"
+	//"fmt"
+	"fmt"
 )
 
-type PipelineTemplatesService service
-
 type PipelineTemplateResponse struct {
+	Name string `json:"name"`
 	Embedded struct {
-				 Templates []struct {
-					 Name     string `json:"name"`
-					 Embedded struct {
-								  Pipelines []struct {
-									  Name string `json:"name"`
-								  }
-							  }`json:"_embedded"`
-				 } `json:"templates"`
-			 } `json:"_embedded"`
+		Pipelines []struct {
+			Name string `json:"name"`
+		}
+	}`json:"_embedded,omitempty"`
+}
+
+type PipelineTemplatesResponse struct {
+	Embedded struct {
+		Templates []PipelineTemplateResponse `json:"templates"`
+	} `json:"_embedded"`
 }
 
 type PipelineTemplate struct {
-	Name      string
-	Pipelines []string
+	Name      string `json:"name"`
+	Pipelines []string `json:",omitempty"`
+	Stages    []Stage `json:"stages"`
 }
 
-func (s *PipelineTemplatesService) ListPipelines(ctx context.Context) (*[]PipelineTemplate, *Response, error) {
-	u, err := addOptions("events", struct{}{})
+type PipelineTemplatesService service
+
+func (s *PipelineTemplatesService) GetPipelineTemplate(ctx context.Context, name string) (*PipelineTemplate, *Response, error) {
+	u, err := addOptions(fmt.Sprintf("admin/templates/%s", name))
+
 	if err != nil {
 		return nil, nil, err
 	}
@@ -35,8 +41,29 @@ func (s *PipelineTemplatesService) ListPipelines(ctx context.Context) (*[]Pipeli
 		return nil, nil, err
 	}
 
-	//var pipelineTemplates list.List[]
-	var ptr PipelineTemplateResponse
+	var pt PipelineTemplate
+	resp, err := s.client.Do(ctx, req, &pt)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &pt, resp, nil
+
+}
+
+func (s *PipelineTemplatesService) ListPipelineTemplates(ctx context.Context) (*[]PipelineTemplate, *Response, error) {
+	u, err := addOptions("admin/templates")
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := s.client.NewRequest("GET", u, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var ptr PipelineTemplatesResponse
 	resp, err := s.client.Do(ctx, req, &ptr)
 	if err != nil {
 		return nil, resp, err

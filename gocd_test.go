@@ -3,10 +3,14 @@ package gocd
 import (
 	"testing"
 	"net/http"
-	"io/ioutil"
-	"strings"
 	"net/http/httptest"
 	"fmt"
+	"reflect"
+	"context"
+)
+
+const (
+	mockAuthorization = "Basic bW9ja1VzZXJuYW1lOm1vY2tQYXNzd29yZA=="
 )
 
 var (
@@ -23,16 +27,13 @@ var (
 // setup sets up a test HTTP server along with a gocd.Client that is
 // configured to talk to that test server. Tests should register handlers on
 // mux which provide mock responses for the API method being tested.
-func setup(s transportMock) {
+func setup() {
 	// test server
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
 
-	mockClient := &http.Client{}
-	mockClient.Transport = newMockTransport(s)
-
-	// github client configured to use test server
-	client = NewClient(server.URL, mockClient)
+	// gocd client configured to use test server
+	client = NewClient(server.URL, &Auth{Username: "mockUsername", Password: "mockPassword"}, nil)
 }
 
 // teardown closes the test HTTP server.
@@ -40,72 +41,77 @@ func teardown() {
 	server.Close()
 }
 
-func newMockTransport(r transportMock) http.RoundTripper {
-	responseData, _ := ioutil.ReadFile(r.Response)
-
-	return &transportMock{
-		Response: string(responseData),
-	}
-}
-
-type transportMock struct {
-	Response string
-}
-
 func testMethod(t *testing.T, r *http.Request, want string) {
-	fmt.Print(r.Header)
+
 	if got := r.Method; got != want {
 		t.Errorf("Request method: %v, want %v", got, want)
 	}
 }
 
 func testAuth(t *testing.T, r *http.Request, want string) {
-	fmt.Print(r.Header)
-	if got := r.Header["WWW-Authenticate"][1]; got != want {
-		t.Errorf("Auth expected: %v, want %v", got, want)
-	}
-}
 
-func (t *transportMock) RoundTrip(req *http.Request) (*http.Response, error) {
-	response := &http.Response{
-		Header: make(http.Header),
-		Request: req,
-		StatusCode: http.StatusOK,
+	if val, ok := r.Header["Authorization"]; ok {
+		if got := val[0]; got != want {
+			t.Errorf("Auth expected: %v, want %v", got, want)
+		}
+	} else {
+		t.Error("'Authorization' header not found")
 	}
-	response.Header.Set("Content-Type", "application/json")
-	response.Body = ioutil.NopCloser(strings.NewReader(t.Response))
-	return response, nil
 }
 
 func TestNewClient(t *testing.T) {
 
-	mockClient := &http.Client{}
-	mockClient.Transport = newMockTransport(transportMock{
-		"tests/pipelinetemplates/0.response.json",
-	})
+	c := NewClient("http://ci.example.com/go", &Auth{Username: "mockUsername", Password: "mockPassword"}, nil)
 
-	client := NewClient("https://ci.example.com/go", mockClient)
-	if client.BaseURL.Host != "ci.example.com" {
-		t.Error(
-			"Expected: 'ci.example.com'. ",
-			"Got: '", client.BaseURL, "'",
-		)
+	if got, want := c.BaseURL.String(), "http://ci.example.com/go"; got != want {
+		t.Errorf("NewClient BaseURL is %v, want %v", got, want)
+	}
+	if got, want := c.UserAgent, userAgent; got != want {
+		t.Errorf("NewClient UserAgent is %v, want %v", got, want)
 	}
 
-	if client.PipelineGroups == nil {
+	if c.BaseURL.Host != "ci.example.com" {
+		t.Errorf("Expected: 'ci.example.com'. Got '%s'", client.BaseURL)
+	}
+
+	if c.PipelineGroups == nil {
 		t.Error("`PipelineGroups` missing from `client`.")
 	}
 
-	if client.Stages == nil {
+	if c.Stages == nil {
 		t.Error("`Stages` missing from `client`.")
 	}
 
-	if client.Jobs == nil {
+	if c.Jobs == nil {
 		t.Error("`Jobs` missing from `client`.")
 	}
 
-	if client.PipelineTemplates == nil {
+	if c.PipelineTemplates == nil {
 		t.Error("`PipelineTemplates` missing from `client`.")
 	}
 }
 
+func TestDo(t *testing.T) {
+	setup()
+	defer teardown()
+
+	type foo struct {
+		A string
+	}
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if m := "GET"; m != r.Method {
+			t.Errorf("Request method = %v, want %v", r.Method, m)
+		}
+		fmt.Fprint(w, `{"A":"a"}`)
+	})
+
+	req, _ := client.NewRequest("GET", "/", nil)
+	body := new(foo)
+	client.Do(context.Background(), req, body)
+
+	want := &foo{"a"}
+	if !reflect.DeepEqual(body, want) {
+		t.Errorf("Response body = %v, want %v", body, want)
+	}
+}

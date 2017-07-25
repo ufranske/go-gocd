@@ -6,41 +6,50 @@ import (
 	"io"
 	"bytes"
 	"encoding/json"
-	"reflect"
 	"context"
 )
 
 const (
 	libraryVersion = "1"
-	userAgent = "go-gocd/" + libraryVersion
-	mediaTypeV1 = "application/vnd.go.cd.v1+json"
+	userAgent      = "go-gocd/" + libraryVersion
+	mediaTypeV1    = "application/vnd.go.cd.v1+json"
 )
 
+type ClientInterface interface {
+
+}
+
 type Client struct {
-	client            *http.Client
-	BaseURL           *url.URL
-	UserAgent         string
+	client    *http.Client
+	BaseURL   *url.URL
+	UserAgent string
+	Auth      *Auth
 
 	PipelineGroups    *PipelineGroupsService
 	Stages            *StagesService
 	Jobs              *JobsService
 	PipelineTemplates *PipelineTemplatesService
 
-	common            service
+	common service
 }
 
 type service struct {
 	client *Client
 }
 
-func NewClient(gocdBaseUrl string, httpClient *http.Client) *Client {
+type Auth struct {
+	Username string
+	Password string
+}
+
+func NewClient(gocdBaseUrl string, auth *Auth, httpClient *http.Client) (*Client) {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
 
 	baseURL, _ := url.Parse(gocdBaseUrl)
 
-	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
+	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent, Auth: auth}
 	c.common.client = c
 	c.PipelineGroups = (*PipelineGroupsService)(&c.common)
 	c.Stages = (*StagesService)(&c.common)
@@ -50,7 +59,7 @@ func NewClient(gocdBaseUrl string, httpClient *http.Client) *Client {
 }
 
 func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Request, error) {
-	rel, err := url.Parse(urlStr)
+	rel, err := url.Parse("api/" + urlStr)
 
 	if err != nil {
 		return nil, err
@@ -77,6 +86,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 	}
 	req.Header.Set("Accept", mediaTypeV1)
 	req.Header.Set("User-Agent", c.UserAgent)
+	req.SetBasicAuth(c.Auth.Username, c.Auth.Password)
 	return req, nil
 }
 
@@ -127,7 +137,6 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Res
 
 }
 
-
 // sanitizeURL redacts the client_secret parameter from the URL which may be
 // exposed to the user.
 func sanitizeURL(uri *url.URL) *url.URL {
@@ -144,11 +153,12 @@ func sanitizeURL(uri *url.URL) *url.URL {
 
 // addOptions adds the parameters in opt as URL query parameters to s. opt
 // must be a struct whose fields may contain "url" tags.
-func addOptions(s string, opt interface{}) (string, error) {
-	v := reflect.ValueOf(opt)
-	if v.Kind() == reflect.Ptr && v.IsNil() {
-		return s, nil
-	}
+//func addOptions(s string, opt interface{}) (string, error) {
+func addOptions(s string) (string, error) {
+	//v := reflect.ValueOf(opt)
+	//if v.Kind() == reflect.Ptr && v.IsNil() {
+	//	return s, nil
+	//}
 
 	u, err := url.Parse(s)
 	if err != nil {
