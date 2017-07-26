@@ -12,7 +12,13 @@ before_install:
 script:
   - go test -v ./...
 #  - go test -v ./... -coverprofile=cover.out
-  - go list -f '{{if len .TestGoFiles}}"go test -coverprofile={{.Dir}}/.coverprofile {{.ImportPath}}"{{end}}' ./... | xargs -i sh -c {}
+  - for d in $(go list ./... | grep -v vendor); do
+        go test -race -coverprofile=profile.out -covermode=atomic $d
+        if [ -f profile.out ]; then
+            cat profile.out >> coverage.txt
+            rm profile.out
+        fi
+    done
   - gover . coverprofile.txt
 
 after_success:
