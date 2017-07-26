@@ -15,4 +15,5 @@ script:
 
 after_success:
   # Send coverage reports to Codecov
+  - cat coverprofile.out
   - bash <(curl -s https://codecov.io/bash) -f coverprofile.out
