@@ -1,12 +1,12 @@
 package gocd
 
 import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"io"
 	"net/http"
 	"net/url"
-	"io"
-	"bytes"
-	"encoding/json"
-	"context"
 )
 
 const (
@@ -16,7 +16,6 @@ const (
 )
 
 type ClientInterface interface {
-
 }
 
 type Client struct {
@@ -42,7 +41,7 @@ type Auth struct {
 	Password string
 }
 
-func NewClient(gocdBaseUrl string, auth *Auth, httpClient *http.Client) (*Client) {
+func NewClient(gocdBaseUrl string, auth *Auth, httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}

@@ -1,12 +1,12 @@
 package gocd
 
 import (
-	"testing"
+	"context"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"fmt"
 	"reflect"
-	"context"
+	"testing"
 )
 
 const (

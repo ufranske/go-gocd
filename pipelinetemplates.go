@@ -7,12 +7,12 @@ import (
 )
 
 type PipelineTemplateResponse struct {
-	Name string `json:"name"`
+	Name     string `json:"name"`
 	Embedded struct {
 		Pipelines []struct {
 			Name string `json:"name"`
 		}
-	}`json:"_embedded,omitempty"`
+	} `json:"_embedded,omitempty"`
 }
 
 type PipelineTemplatesResponse struct {
@@ -22,9 +22,9 @@ type PipelineTemplatesResponse struct {
 }
 
 type PipelineTemplate struct {
-	Name      string `json:"name"`
+	Name      string   `json:"name"`
 	Pipelines []string `json:",omitempty"`
-	Stages    []Stage `json:"stages"`
+	Stages    []Stage  `json:"stages"`
 }
 
 type PipelineTemplatesService service

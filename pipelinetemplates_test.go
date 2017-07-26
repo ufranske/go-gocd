@@ -1,10 +1,10 @@
 package gocd
 
 import (
-	"testing"
-	"net/http"
 	"context"
 	"fmt"
+	"net/http"
+	"testing"
 )
 
 func TestPipelineTemplateService_ListPipelineTemplates(t *testing.T) {
