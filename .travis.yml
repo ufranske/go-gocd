@@ -7,12 +7,9 @@ go:
 
 before_install:
   - go get golang.org/x/tools/cmd/cover
-  - go get golang.org/x/tools/cmd/vet
   - go get github.com/modocache/gover
-  - go get github.com/vendor/package/...
 
 script:
-  - go vet github.com/vendor/package...
   - go test -v ./...
 #  - go test -v ./... -coverprofile=cover.out
   - go list -f '{{if len .TestGoFiles}}"go test -coverprofile={{.Dir}}/.coverprofile {{.ImportPath}}"{{end}}' ./... | xargs -i sh -c {}
