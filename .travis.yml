@@ -1,10 +1,9 @@
 language: go
 go:
- - 1.6.3
- - 1.7.5
- - 1.8
+ - 1.7.x
+ - 1.8.x
  - release
  - tip
 
 script:
- - go test -v ./...
+ - go test -v ./... -coverprofile=cover.out
