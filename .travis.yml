@@ -10,17 +10,9 @@ before_install:
   - go get github.com/modocache/gover
 
 script:
-  - go test -v ./...
-#  - go test -v ./... -coverprofile=cover.out
-  - for d in $(go list ./... | grep -v vendor); do
-        go test -race -coverprofile=profile.out -covermode=atomic $d;
-        if [ -f profile.out ]; then
-            cat profile.out >> coverage.txt;
-            rm profile.out;
-        fi
-    done
-  - gover . coverprofile.txt
+  - go test -v ./... -race -coverprofile=coverprofile.out -covermode=atomic
+  - gover . coverprofile.out
 
 after_success:
   # Send coverage reports to Codecov
-  - bash <(curl -s https://codecov.io/bash) -f coverprofile.txt
+  - bash <(curl -s https://codecov.io/bash) -f coverprofile.out
