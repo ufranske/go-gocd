@@ -6,14 +6,10 @@ go:
  - tip
 
 before_install:
-  - go get golang.org/x/tools/cmd/cover
-  - go get github.com/modocache/gover
+  - go get -t -v ./...
 
 script:
-  - go test -v ./... -race -coverprofile=coverprofile.out -covermode=atomic
-  - gover . coverprofile.out
+  - ./go.test.sh
 
 after_success:
-  # Send coverage reports to Codecov
-  - cat coverprofile.out
-  - bash <(curl -s https://codecov.io/bash) -f coverprofile.out
+  - bash <(curl -s https://codecov.io/bash)
