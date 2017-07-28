@@ -43,7 +43,7 @@ func TestPipelineTemplateService_GetPipelineTemplates(t *testing.T) {
 		j, _ := ioutil.ReadFile("test/resources/pipelinetemplates.1.json")
 		fmt.Fprint(w, string(j))
 	})
-	
+
 	template, _, err := client.PipelineTemplates.GetPipelineTemplate(
 		context.Background(),
 		"template1",
