@@ -26,34 +26,15 @@ func TestAgnet_Get(t *testing.T) {
 
 	testAgent(t, agent)
 
+	testGotStringSlice(t, []TestStringSlice{
+		{agent.BuildDetails.Links.Job.String(), "https://ci.example.com/go/tab/build/detail/up42/1/up42_stage/1/up42_job"},
+		{agent.BuildDetails.Links.Stage.String(), "https://ci.example.com/go/pipelines/up42/1/up42_stage/1"},
+		{agent.BuildDetails.Links.Pipeline.String(), "https://ci.example.com/go/tab/pipeline/history/up42"},
+	})
+
 	if agent.BuildDetails == nil {
 		t.Error("Expected 'build_agents'. Got 'nil'.")
 	}
-
-	if agent.BuildDetails.Links.Job.String() != "https://ci.example.com/go/tab/build/detail/up42/1/up42_stage/1/up42_job" {
-		t.Errorf(
-			"Expected '%s'. Got '%s'",
-			"https://ci.example.com/go/tab/build/detail/up42/1/up42_stage/1/up42_job",
-			agent.BuildDetails.Links.Job.String(),
-		)
-	}
-
-	if agent.BuildDetails.Links.Stage.String() != "https://ci.example.com/go/pipelines/up42/1/up42_stage/1" {
-		t.Errorf(
-			"Expected '%s'. Got '%s'",
-			"https://ci.example.com/go/pipelines/up42/1/up42_stage/1",
-			agent.BuildDetails.Links.Stage.String(),
-		)
-	}
-
-	if agent.BuildDetails.Links.Pipeline.String() != "https://ci.example.com/go/tab/pipeline/history/up42" {
-		t.Errorf(
-			"Expected '%s'. Got '%s'",
-			"https://ci.example.com/go/tab/pipeline/history/up42",
-			agent.BuildDetails.Links.Pipeline.String(),
-		)
-	}
-
 }
 
 func TestAgent_List(t *testing.T) {
@@ -82,10 +63,7 @@ func TestAgent_List(t *testing.T) {
 }
 
 func testAgent(t *testing.T, agent *Agent) {
-	for index, test := range []struct {
-		got  string
-		want string
-	}{
+	testGotStringSlice(t, []TestStringSlice{
 		{agent.Links.Self.String(), "https://ci.example.com/go/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da"},
 		{agent.Links.Doc.String(), "https://api.gocd.org/#agents"},
 		{agent.Links.Find.String(), "https://ci.example.com/go/api/agents/:uuid"},
@@ -102,11 +80,7 @@ func testAgent(t *testing.T, agent *Agent) {
 		{agent.Environments[0], "perf"},
 		{agent.Environments[1], "UAT"},
 		{agent.BuildState, "Idle"},
-	} {
-		if test.got != test.want {
-			t.Errorf("Expected '%s'. Got '%s' in '%d'", test.want, test.got, index)
-		}
-	}
+	})
 
 	if agent.FreeSpace != 84983328768 {
 		t.Errorf("Expected '84983328768'. Got '%d'.", agent.FreeSpace)

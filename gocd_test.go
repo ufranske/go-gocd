@@ -25,6 +25,11 @@ var (
 	server *httptest.Server
 )
 
+type TestStringSlice struct {
+	got  string
+	want string
+}
+
 // setup sets up a test HTTP server along with a gocd.Client that is
 // configured to talk to that test server. Tests should register handlers on
 // mux which provide mock responses for the API method being tested.
@@ -67,6 +72,14 @@ func testStringInSlice(t *testing.T, s []string, e string) {
 		}
 	}
 	t.Errorf("Expected '%s' in '%s'.", e, strings.Join(s, ","))
+}
+
+func testGotStringSlice(t *testing.T, got_want []TestStringSlice) {
+	for index, test := range got_want {
+		if test.got != test.want {
+			t.Errorf("Expected '%s'. Got '%s' in '%d'", test.want, test.got, index)
+		}
+	}
 }
 
 func TestNewClient(t *testing.T) {

@@ -26,26 +26,11 @@ func TestPipelineTemplateService_ListPipelineTemplates(t *testing.T) {
 		t.Error(err)
 	}
 
-	if len((*templates)) != 1 {
-		t.Error(
-			"Expected template length: '1 ",
-			"Got: '", (*templates)[0].Name, "'",
-		)
-	}
-
-	if (*templates)[0].Name != "template0" {
-		t.Error(
-			"Expected: 'template1. ",
-			"Got: '", (*templates)[0].Name, "'",
-		)
-	}
-
-	if (*templates)[0].Pipelines[0] != "up42" {
-		t.Error(
-			"Expected: 'up42. ",
-			"Got: '", (*templates)[0].Pipelines[0], "'",
-		)
-	}
+	testGotStringSlice(t, []TestStringSlice{
+		{(*templates)[0].Name, "template0"},
+		{(*templates)[0].Pipelines[0], "up42"},
+		{string(len((*templates))), "1"},
+	})
 }
 
 func TestPipelineTemplateService_GetPipelineTemplates(t *testing.T) {
@@ -58,6 +43,7 @@ func TestPipelineTemplateService_GetPipelineTemplates(t *testing.T) {
 		j, _ := ioutil.ReadFile("test/resources/pipelinetemplates.1.json")
 		fmt.Fprint(w, string(j))
 	})
+	
 	template, _, err := client.PipelineTemplates.GetPipelineTemplate(
 		context.Background(),
 		"template1",
@@ -67,11 +53,8 @@ func TestPipelineTemplateService_GetPipelineTemplates(t *testing.T) {
 		t.Error(err)
 	}
 
-	if template.Name != "template1" {
-		t.Error(fmt.Printf("Expected template name: 'template1'. Got: '%s'.", template.Name))
-	}
-
-	if len(template.Stages) != 1 {
-		t.Error(fmt.Printf("Expected 1 stage. Got '%d'.", len(template.Stages)))
-	}
+	testGotStringSlice(t, []TestStringSlice{
+		{template.Name, "template1"},
+		{string(len(template.Stages)), "1"},
+	})
 }
