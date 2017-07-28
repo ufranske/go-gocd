@@ -12,7 +12,10 @@ import (
 const (
 	libraryVersion = "1"
 	userAgent      = "go-gocd/" + libraryVersion
-	mediaTypeV1    = "application/vnd.go.cd.v1+json"
+	apiV1          = "application/vnd.go.cd.v1+json"
+	apiV2          = "application/vnd.go.cd.v2+json"
+	apiV3          = "application/vnd.go.cd.v3+json"
+	apiV4          = "application/vnd.go.cd.v4+json"
 )
 
 type ClientInterface interface {
@@ -24,12 +27,14 @@ type Client struct {
 	UserAgent string
 	Auth      *Auth
 
+	Agents            *AgentsService
 	PipelineGroups    *PipelineGroupsService
 	Stages            *StagesService
 	Jobs              *JobsService
 	PipelineTemplates *PipelineTemplatesService
 
 	common service
+	cookie string
 }
 
 type service struct {
@@ -50,6 +55,7 @@ func NewClient(gocdBaseUrl string, auth *Auth, httpClient *http.Client) *Client 
 
 	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent, Auth: auth}
 	c.common.client = c
+	c.Agents = (*AgentsService)(&c.common)
 	c.PipelineGroups = (*PipelineGroupsService)(&c.common)
 	c.Stages = (*StagesService)(&c.common)
 	c.Jobs = (*JobsService)(&c.common)
@@ -57,11 +63,15 @@ func NewClient(gocdBaseUrl string, auth *Auth, httpClient *http.Client) *Client 
 	return c
 }
 
-func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Request, error) {
+func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion string) (*http.Request, error) {
 	rel, err := url.Parse("api/" + urlStr)
 
 	if err != nil {
 		return nil, err
+	}
+
+	if apiVersion == "" {
+		apiVersion = apiV1
 	}
 
 	u := c.BaseURL.ResolveReference(rel)
@@ -83,12 +93,17 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
-	req.Header.Set("Accept", mediaTypeV1)
+	req.Header.Set("Accept", apiVersion)
 	req.Header.Set("User-Agent", c.UserAgent)
-	req.SetBasicAuth(c.Auth.Username, c.Auth.Password)
+
+	if c.cookie == "" {
+		req.SetBasicAuth(c.Auth.Username, c.Auth.Password)
+	} else {
+		req.Header.Set("Cookie", c.cookie)
+	}
+
 	return req, nil
 }
-
 
 func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*APIResponse, error) {
 
@@ -158,5 +173,3 @@ func addOptions(s string) (string, error) {
 
 	return u.String(), nil
 }
-
-

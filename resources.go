@@ -2,6 +2,7 @@ package gocd
 
 import (
 	"net/http"
+	"net/url"
 )
 
 type APIResponse struct {
@@ -13,7 +14,13 @@ func newResponse(r *http.Response) *APIResponse {
 	return response
 }
 
-type Response struct {
-	Links    ResponseLinks `json:"_links,omitempty"`
-	Embedded ResponseEmbedded `json:"_embedded"`
+//go:generate gocd-response-links -type=ResponseLinks -output=responselinks_responselinks.go
+type ResponseLinks struct {
+	Doc    *url.URL
+	Find   *url.URL
+	Job    *url.URL
+	Latest *url.URL
+	Next   *url.URL
+	Oldest *url.URL
+	Self   *url.URL
 }

@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"reflect"
 	"testing"
+	"strings"
 )
 
 const (
@@ -59,6 +60,15 @@ func testAuth(t *testing.T, r *http.Request, want string) {
 	}
 }
 
+func testStringInSlice(t *testing.T, s []string, e string) {
+	for _, a := range s {
+		if a == e {
+			return
+		}
+	}
+	t.Errorf("Expected '%s' in '%s'.", e, strings.Join(s, ","))
+}
+
 func TestNewClient(t *testing.T) {
 
 	c := NewClient("http://ci.example.com/go", &Auth{Username: "mockUsername", Password: "mockPassword"}, nil)
@@ -106,7 +116,7 @@ func TestDo(t *testing.T) {
 		fmt.Fprint(w, `{"A":"a"}`)
 	})
 
-	req, _ := client.NewRequest("GET", "/", nil)
+	req, _ := client.NewRequest("GET", "/", nil, "api-version")
 	body := new(foo)
 	client.Do(context.Background(), req, body)
 

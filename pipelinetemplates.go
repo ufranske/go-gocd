@@ -7,7 +7,7 @@ import (
 )
 
 type PipelineTemplateResponse struct {
-	Name     string `json:"name"`
+	Name string `json:"name"`
 	Embedded struct {
 		Pipelines []struct {
 			Name string `json:"name"`
@@ -36,7 +36,7 @@ func (s *PipelineTemplatesService) GetPipelineTemplate(ctx context.Context, name
 		return nil, nil, err
 	}
 
-	req, err := s.client.NewRequest("GET", u, nil)
+	req, err := s.client.NewRequest("GET", u, nil, apiV1)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -58,7 +58,7 @@ func (s *PipelineTemplatesService) ListPipelineTemplates(ctx context.Context) (*
 		return nil, nil, err
 	}
 
-	req, err := s.client.NewRequest("GET", u, nil)
+	req, err := s.client.NewRequest("GET", u, nil, apiV4)
 	if err != nil {
 		return nil, nil, err
 	}
