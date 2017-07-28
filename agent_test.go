@@ -87,13 +87,13 @@ func testAgent(t *testing.T, agent *Agent) {
 		want string
 	}{
 		{agent.Links.Self.String(), "https://ci.example.com/go/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da"},
-		{agent.Links.Doc.String(), "https://api.gocd.org/#agents" },
+		{agent.Links.Doc.String(), "https://api.gocd.org/#agents"},
 		{agent.Links.Find.String(), "https://ci.example.com/go/api/agents/:uuid"},
 		{agent.Uuid, "adb9540a-b954-4571-9d9b-2f330739d4da"},
 		{agent.Hostname, "agent01.example.com"},
 		{agent.IpAddress, "10.12.20.47"},
 		{agent.Sandbox, "/Users/ketanpadegaonkar/projects/gocd/gocd/agent"},
-		{agent.OperatingSystem, "Mac OS X" },
+		{agent.OperatingSystem, "Mac OS X"},
 		{agent.AgentConfigState, "Enabled"},
 		{agent.AgentState, "Idle"},
 		{agent.Resources[0], "java"},
@@ -102,7 +102,6 @@ func testAgent(t *testing.T, agent *Agent) {
 		{agent.Environments[0], "perf"},
 		{agent.Environments[1], "UAT"},
 		{agent.BuildState, "Idle"},
-
 	} {
 		if test.got != test.want {
 			t.Errorf("Expected '%s'. Got '%s' in '%d'", test.want, test.got, index)
