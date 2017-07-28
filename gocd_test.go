@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"reflect"
-	"testing"
 	"strings"
+	"testing"
 )
 
 const (

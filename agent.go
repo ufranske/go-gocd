@@ -21,35 +21,35 @@ type AgentLinks struct {
 }
 
 type AgentsResponse struct {
-	Links AgentsLinks `json:"_links,omitempty"`
+	Links    AgentsLinks `json:"_links,omitempty"`
 	Embedded struct {
 		Agents []*Agent `json:"agents"`
-	}`json:"_embedded"`
+	} `json:"_embedded"`
 }
 
 type Agent struct {
-	Uuid             string `json:"uuid"`
-	Hostname         string `json:"hostname"`
-	ElasticAgentId   string `json:"elastic_agent_id"`
-	ElasticPluginId  string `json:"elastic_plugin_id"`
-	IpAddress        string `json:"ip_address"`
-	Sandbox          string `json:"sandbox"`
-	OperatingSystem  string `json:"operating_system"`
-	FreeSpace        int64 `json:"free_space"`
-	AgentConfigState string `json:"agent_config_state"`
-	AgentState       string `json:"agent_state"`
-	Resources        []string `json:"resources"`
-	Environments     []string `json:"environments"`
-	BuildState       string `json:"build_state"`
+	Uuid             string        `json:"uuid"`
+	Hostname         string        `json:"hostname"`
+	ElasticAgentId   string        `json:"elastic_agent_id"`
+	ElasticPluginId  string        `json:"elastic_plugin_id"`
+	IpAddress        string        `json:"ip_address"`
+	Sandbox          string        `json:"sandbox"`
+	OperatingSystem  string        `json:"operating_system"`
+	FreeSpace        int64         `json:"free_space"`
+	AgentConfigState string        `json:"agent_config_state"`
+	AgentState       string        `json:"agent_state"`
+	Resources        []string      `json:"resources"`
+	Environments     []string      `json:"environments"`
+	BuildState       string        `json:"build_state"`
 	BuildDetails     *BuildDetails `json:"build_details"`
-	Links            *AgentLinks `json:"_links"`
+	Links            *AgentLinks   `json:"_links"`
 }
 
 type BuildDetails struct {
 	Links    *BuildDetailsLinks `json:"_links"`
-	Pipeline string `json:"pipeline"`
-	Stage    string `json:"stage"`
-	Job      string `json:"job"`
+	Pipeline string             `json:"pipeline"`
+	Stage    string             `json:"stage"`
+	Job      string             `json:"job"`
 }
 
 //go:generate gocd-response-links -type=BuildDetailsLinks

@@ -3,9 +3,9 @@ package gocd
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"testing"
-	"io/ioutil"
 )
 
 func TestPipelineTemplateService_ListPipelineTemplates(t *testing.T) {

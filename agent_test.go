@@ -1,11 +1,11 @@
 package gocd
 
 import (
-	"testing"
-	"io/ioutil"
-	"fmt"
-	"net/http"
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"testing"
 )
 
 func TestAgnet_Get(t *testing.T) {

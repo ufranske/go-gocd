@@ -7,7 +7,7 @@ import (
 )
 
 type PipelineTemplateResponse struct {
-	Name string `json:"name"`
+	Name     string `json:"name"`
 	Embedded struct {
 		Pipelines []struct {
 			Name string `json:"name"`

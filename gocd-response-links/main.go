@@ -296,7 +296,6 @@ func (g *Generator) buildUnmarshalling(values []string, typeName string) {
 	g.Printf(unmarshall_footer)
 }
 
-
 // format returns the gofmt-ed contents of the Generator's buffer.
 func (g *Generator) format() ([]byte, error) {
 	return format.Source(g.buf.Bytes())
@@ -350,7 +349,6 @@ func (f *File) genDecl(node ast.Node) bool {
 
 			link_name := obj.Name()
 			f.values = append(f.values, link_name)
-
 
 		}
 	}

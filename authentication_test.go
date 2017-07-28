@@ -1,11 +1,11 @@
 package gocd
 
 import (
-	"testing"
 	"context"
-	"io/ioutil"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"testing"
 )
 
 func TestAuthentication_Login(t *testing.T) {
@@ -20,7 +20,7 @@ func TestAuthentication_Login(t *testing.T) {
 		testMethod(t, r, "GET")
 		testAuth(t, r, mockAuthorization)
 
-		w.Header().Set("Set-Cookie", mock_cookie, )
+		w.Header().Set("Set-Cookie", mock_cookie)
 
 		j, _ := ioutil.ReadFile("test/resources/agents.0.json")
 		fmt.Fprint(w, string(j))

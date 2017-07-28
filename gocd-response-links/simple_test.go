@@ -2,7 +2,6 @@
 // - https://blog.golang.org/generate
 // - http://godoc.org/golang.org/x/tools/cmd/stringer
 
-
 package main
 
 import (
