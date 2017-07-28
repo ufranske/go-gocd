@@ -1,11 +1,7 @@
-// Copyright 2014 The Go Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+// Adapted from `stringer`:
+// - https://blog.golang.org/generate
+// - http://godoc.org/golang.org/x/tools/cmd/stringer
 
-// This file contains simple golden tests for various examples.
-// Besides validating the results when the implementation changes,
-// it provides a way to look at the generated code without having
-// to execute the print statements in one's head.
 
 package main
 
@@ -16,7 +12,6 @@ import (
 	"go/format"
 )
 
-// Simple test: enumeration of type int starting at 0.
 const test_input = `type BuildDetails_ResponseLinks struct {
 	Doc    *url.URL
 	Find   *url.URL
@@ -69,7 +64,7 @@ func (l *BuildDetails_ResponseLinks) UnmarshalJSON(j []byte) error {
 }
 `
 
-func TestGolden(t *testing.T) {
+func TestGenerator(t *testing.T) {
 	var g Generator
 	name := "test"
 	file := name + ".go"

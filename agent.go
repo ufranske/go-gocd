@@ -8,8 +8,20 @@ import (
 
 type AgentsService service
 
-type AgentResponse struct {
-	Links ResponseLinks `json:"_links,omitempty"`
+//go:generate gocd-response-links -type=AgentsLinks,AgentLinks
+type AgentsLinks struct {
+	Self *url.URL
+	Doc  *url.URL
+}
+
+type AgentLinks struct {
+	Self *url.URL
+	Doc  *url.URL
+	Find *url.URL
+}
+
+type AgentsResponse struct {
+	Links AgentsLinks `json:"_links,omitempty"`
 	Embedded struct {
 		Agents []*Agent `json:"agents"`
 	}`json:"_embedded"`
@@ -30,46 +42,21 @@ type Agent struct {
 	Environments     []string `json:"environments"`
 	BuildState       string `json:"build_state"`
 	BuildDetails     *BuildDetails `json:"build_details"`
-	Links            *ResponseLinks `json:"_links"`
+	Links            *AgentLinks `json:"_links"`
 }
 
 type BuildDetails struct {
-	Links    *BuildDetails_ResponseLinks `json:"_links"`
+	Links    *BuildDetailsLinks `json:"_links"`
 	Pipeline string `json:"pipeline"`
 	Stage    string `json:"stage"`
 	Job      string `json:"job"`
 }
 
-//go:generate gocd-response-links -type=BuildDetails_ResponseLinks -output=responselinks_builddetails.go
-type BuildDetails_ResponseLinks struct {
-	Doc    *url.URL
-	Find   *url.URL
-	Job    *url.URL
-	Latest *url.URL
-	Next   *url.URL
-	Oldest *url.URL
-	Self   *url.URL
-}
-
-
-func (s *AgentsService) Get(ctx context.Context, uuid string) (*Agent, *APIResponse, error) {
-	u, err := addOptions(fmt.Sprintf("agents/%s", uuid))
-	if err != nil {
-		return nil, nil, err
-	}
-
-	req, err := s.client.NewRequest("GET", u, nil, apiV4)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	a := Agent{}
-	resp, err := s.client.Do(ctx, req, &a)
-	if err != nil {
-		return nil, resp, err
-	}
-
-	return &a, resp, nil
+//go:generate gocd-response-links -type=BuildDetailsLinks
+type BuildDetailsLinks struct {
+	Job      *url.URL
+	Stage    *url.URL
+	Pipeline *url.URL
 }
 
 func (s *AgentsService) List(ctx context.Context) ([]*Agent, *APIResponse, error) {
@@ -84,7 +71,7 @@ func (s *AgentsService) List(ctx context.Context) ([]*Agent, *APIResponse, error
 		return nil, nil, err
 	}
 
-	r := AgentResponse{}
+	r := AgentsResponse{}
 	resp, err := s.client.Do(ctx, req, &r)
 	if err != nil {
 		return nil, resp, err
@@ -92,4 +79,32 @@ func (s *AgentsService) List(ctx context.Context) ([]*Agent, *APIResponse, error
 
 	//return &r.Embedded, resp, nil
 	return r.Embedded.Agents, resp, nil
+}
+
+func (s *AgentsService) Get(ctx context.Context, uuid string) (*Agent, *APIResponse, error) {
+	return s.handleAgentRequest(ctx, "GET", uuid, nil)
+}
+
+func (s *AgentsService) Update(ctx context.Context, uuid string, agent *Agent) (*Agent, *APIResponse, error) {
+	return s.handleAgentRequest(ctx, "PATCH", uuid, agent)
+}
+
+func (s *AgentsService) handleAgentRequest(ctx context.Context, action string, uuid string, body *Agent) (*Agent, *APIResponse, error) {
+	u, err := addOptions(fmt.Sprintf("agents/%s", uuid))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := s.client.NewRequest(action, u, body, apiV4)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	a := Agent{}
+	resp, err := s.client.Do(ctx, req, &a)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &a, resp, nil
 }

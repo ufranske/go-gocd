@@ -1,6 +1,6 @@
-// Copyright 2014 The Go Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+// Adapted from `stringer`:
+// - https://blog.golang.org/generate
+// - http://godoc.org/golang.org/x/tools/cmd/stringer
 
 package main
 
@@ -91,7 +91,7 @@ func main() {
 	// Write to file.
 	outputName := *output
 	if outputName == "" {
-		baseName := fmt.Sprintf("%s_responselinks.go", types[0])
+		baseName := fmt.Sprintf("gen_%s.go", strings.ToLower(types[0]))
 		outputName = filepath.Join(dir, strings.ToLower(baseName))
 	}
 	err = ioutil.WriteFile(outputName, src, 0644)

@@ -1,8 +1,7 @@
-// Copyright 2017 The Go Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+// Adapted from `stringer`:
+// - https://blog.golang.org/generate
+// - http://godoc.org/golang.org/x/tools/cmd/stringer
 
-// +build !go1.9
 
 package main
 
