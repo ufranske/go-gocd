@@ -10,14 +10,14 @@ type AgentsService service
 
 //go:generate gocd-response-links -type=AgentsLinks,AgentLinks
 type AgentsLinks struct {
-	Self *url.URL
-	Doc  *url.URL
+	Self *url.URL `json:"self"`
+	Doc  *url.URL `json:"doc"`
 }
 
 type AgentLinks struct {
-	Self *url.URL
-	Doc  *url.URL
-	Find *url.URL
+	Self *url.URL `json:"self"`
+	Doc  *url.URL `json:"doc"`
+	Find *url.URL `json:"find"`
 }
 
 type AgentsResponse struct {
