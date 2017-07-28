@@ -29,7 +29,7 @@ type PipelineTemplate struct {
 
 type PipelineTemplatesService service
 
-func (s *PipelineTemplatesService) GetPipelineTemplate(ctx context.Context, name string) (*PipelineTemplate, *Response, error) {
+func (s *PipelineTemplatesService) GetPipelineTemplate(ctx context.Context, name string) (*PipelineTemplate, *APIResponse, error) {
 	u, err := addOptions(fmt.Sprintf("admin/templates/%s", name))
 
 	if err != nil {
@@ -51,7 +51,7 @@ func (s *PipelineTemplatesService) GetPipelineTemplate(ctx context.Context, name
 
 }
 
-func (s *PipelineTemplatesService) ListPipelineTemplates(ctx context.Context) (*[]PipelineTemplate, *Response, error) {
+func (s *PipelineTemplatesService) ListPipelineTemplates(ctx context.Context) (*[]PipelineTemplate, *APIResponse, error) {
 	u, err := addOptions("admin/templates")
 
 	if err != nil {

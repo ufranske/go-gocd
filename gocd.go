@@ -89,16 +89,8 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 	return req, nil
 }
 
-type Response struct {
-	*http.Response
-}
 
-func newResponse(r *http.Response) *Response {
-	response := &Response{Response: r}
-	return response
-}
-
-func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Response, error) {
+func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*APIResponse, error) {
 
 	req = req.WithContext(ctx)
 
@@ -116,10 +108,10 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Res
 
 	response := newResponse(resp)
 
-	err = CheckResponse(resp)
-	if err != nil {
-		return response, err
-	}
+	//err = CheckResponse(resp)
+	//if err != nil {
+	//	return response, err
+	//}
 
 	if v != nil {
 		if w, ok := v.(io.Writer); ok {
@@ -167,53 +159,4 @@ func addOptions(s string) (string, error) {
 	return u.String(), nil
 }
 
-// CheckResponse checks the API response for errors, and returns them if
-// present. A response is considered an error if it has a status code outside
-// the 200 range or equal to 202 Accepted.
-// API error responses are expected to have either no response
-// body, or a JSON response body that maps to ErrorResponse. Any other
-// response body will be silently ignored.
-//
-// The error type will be *RateLimitError for rate limit exceeded errors,
-// *AcceptedError for 202 Accepted status codes,
-// and *TwoFactorAuthError for two-factor authentication errors.
-func CheckResponse(r *http.Response) error {
-	//if r.StatusCode == http.StatusAccepted {
-	//	return &AcceptedError{}
-	//}
-	//if c := r.StatusCode; 200 <= c && c <= 299 {
-	//	return nil
-	//}
-	//errorResponse := &ErrorResponse{Response: r}
-	//data, err := ioutil.ReadAll(r.Body)
-	//if err == nil && data != nil {
-	//	json.Unmarshal(data, errorResponse)
-	//}
-	//switch {
-	//case r.StatusCode == http.StatusUnauthorized && strings.HasPrefix(r.Header.Get(headerOTP), "required"):
-	//	return (*TwoFactorAuthError)(errorResponse)
-	//case r.StatusCode == http.StatusForbidden && r.Header.Get(headerRateRemaining) == "0" && strings.HasPrefix(errorResponse.Message, "API rate limit exceeded for "):
-	//	return &RateLimitError{
-	//		Rate:     parseRate(r),
-	//		Response: errorResponse.Response,
-	//		Message:  errorResponse.Message,
-	//	}
-	//case r.StatusCode == http.StatusForbidden && errorResponse.DocumentationURL == "https://developer.github.com/v3#abuse-rate-limits":
-	//	abuseRateLimitError := &AbuseRateLimitError{
-	//		Response: errorResponse.Response,
-	//		Message:  errorResponse.Message,
-	//	}
-	//	if v := r.Header["Retry-After"]; len(v) > 0 {
-	//		// According to GitHub support, the "Retry-After" header value will be
-	//		// an integer which represents the number of seconds that one should
-	//		// wait before resuming making requests.
-	//		retryAfterSeconds, _ := strconv.ParseInt(v[0], 10, 64) // Error handling is noop.
-	//		retryAfter := time.Duration(retryAfterSeconds) * time.Second
-	//		abuseRateLimitError.RetryAfter = &retryAfter
-	//	}
-	//	return abuseRateLimitError
-	//default:
-	//	return errorResponse
-	//}
-	return nil
-}
+

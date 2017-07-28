@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"testing"
+	"io/ioutil"
 )
 
 func TestPipelineTemplateService_ListPipelineTemplates(t *testing.T) {
@@ -15,56 +16,8 @@ func TestPipelineTemplateService_ListPipelineTemplates(t *testing.T) {
 	mux.HandleFunc("/api/admin/templates", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testAuth(t, r, mockAuthorization)
-		fmt.Fprint(w, `{
-  "_links": {
-    "self": {
-      "href": "https://ci.example.com/go/api/admin/templates"
-    },
-    "doc": {
-      "href": "https://api.gocd.org/#template-config"
-    },
-    "find": {
-      "href": "https://ci.example.com/go/api/admin/templates/:template_name"
-    }
-  },
-  "_embedded": {
-    "templates": [
-      {
-        "_links": {
-          "self": {
-            "href": "https://ci.example.com/go/api/admin/templates/template1"
-          },
-          "doc": {
-            "href": "https://api.gocd.org/#template-config"
-          },
-          "find": {
-            "href": "https://ci.example.com/go/api/admin/templates/:template_name"
-          }
-        },
-        "name": "template1",
-        "_embedded": {
-          "pipelines": [
-            {
-              "_links": {
-                "self": {
-                  "href": "https://ci.example.com/go/api/admin/pipelines/up42"
-                },
-                "doc": {
-                  "href": "https://api.gocd.org/#pipeline-config"
-                },
-                "find": {
-                  "href": "https://ci.example.com/go/api/admin/pipelines/:pipeline_name"
-                }
-              },
-              "name": "up42"
-            }
-          ]
-        }
-      }
-    ]
-  }
-}
-`)
+		j, _ := ioutil.ReadFile("test/resources/pipelinetemplates.0.json")
+		fmt.Fprint(w, string(j))
 	})
 
 	templates, _, err := client.PipelineTemplates.ListPipelineTemplates(context.Background())
@@ -80,7 +33,7 @@ func TestPipelineTemplateService_ListPipelineTemplates(t *testing.T) {
 		)
 	}
 
-	if (*templates)[0].Name != "template1" {
+	if (*templates)[0].Name != "template0" {
 		t.Error(
 			"Expected: 'template1. ",
 			"Got: '", (*templates)[0].Name, "'",
@@ -102,77 +55,8 @@ func TestPipelineTemplateService_GetPipelineTemplates(t *testing.T) {
 	mux.HandleFunc("/api/admin/templates/template1", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testAuth(t, r, mockAuthorization)
-		fmt.Fprint(w, `{
-  "_links": {
-    "self": {
-      "href": "https://ci.example.com/go/api/admin/templates/template.name"
-    },
-    "doc": {
-      "href": "https://api.gocd.org/#template-config"
-    },
-    "find": {
-      "href": "https://ci.example.com/go/api/admin/templates/:template_name"
-    }
-  },
-  "name": "template1",
-  "stages": [
-    {
-      "name": "up42_stage",
-      "fetch_materials": true,
-      "clean_working_directory": false,
-      "never_cleanup_artifacts": false,
-      "approval": {
-        "type": "success",
-        "authorization": {
-          "roles": [
-
-          ],
-          "users": [
-
-          ]
-        }
-      },
-      "environment_variables": [
-
-      ],
-      "jobs": [
-        {
-          "name": "up42_job",
-          "run_instance_count": null,
-          "timeout": "never",
-          "elastic_profile_id": "docker",
-          "environment_variables": [
-
-          ],
-          "resources": [
-
-          ],
-          "tasks": [
-            {
-              "type": "exec",
-              "attributes": {
-                "run_if": [
-
-                ],
-                "on_cancel": null,
-                "command": "ls",
-                "working_directory": null
-              }
-            }
-          ],
-          "tabs": [
-
-          ],
-          "artifacts": [
-
-          ],
-          "properties": null
-        }
-      ]
-    }
-  ]
-}`)
-
+		j, _ := ioutil.ReadFile("test/resources/pipelinetemplates.1.json")
+		fmt.Fprint(w, string(j))
 	})
 	template, _, err := client.PipelineTemplates.GetPipelineTemplate(
 		context.Background(),
@@ -184,8 +68,10 @@ func TestPipelineTemplateService_GetPipelineTemplates(t *testing.T) {
 	}
 
 	if template.Name != "template1" {
-		t.Error(fmt.Printf(
-			"Expected template name: 'template1'. Got: '%s'.", template.Name,
-		))
+		t.Error(fmt.Printf("Expected template name: 'template1'. Got: '%s'.", template.Name))
+	}
+
+	if len(template.Stages) != 1 {
+		t.Error(fmt.Printf("Expected 1 stage. Got '%d'.", len(template.Stages)))
 	}
 }
