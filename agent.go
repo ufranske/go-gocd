@@ -54,9 +54,9 @@ type BuildDetails struct {
 
 //go:generate gocd-response-links -type=BuildDetailsLinks
 type BuildDetailsLinks struct {
-	Job      *url.URL
-	Stage    *url.URL
-	Pipeline *url.URL
+	Job      *url.URL `json:"job"`
+	Stage    *url.URL `json:"stage"`
+	Pipeline *url.URL `json:"pipeline"`
 }
 
 func (s *AgentsService) List(ctx context.Context) ([]*Agent, *APIResponse, error) {
