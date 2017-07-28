@@ -9,7 +9,7 @@ import (
 
 func (l BuildDetailsLinks) MarshalJSON() ([]byte, error) {
 	type h struct {
-		h string `json:"href"`
+		H string `json:"href"`
 	}
 	ls := struct {
 		Job      *h `json:"job,omitempty"`
@@ -17,13 +17,13 @@ func (l BuildDetailsLinks) MarshalJSON() ([]byte, error) {
 		Pipeline *h `json:"pipeline,omitempty"`
 	}{}
 	if l.Job != nil {
-		ls.Job = &h{h: l.Job.String()}
+		ls.Job = &h{H: l.Job.String()}
 	}
 	if l.Stage != nil {
-		ls.Stage = &h{h: l.Stage.String()}
+		ls.Stage = &h{H: l.Stage.String()}
 	}
 	if l.Pipeline != nil {
-		ls.Pipeline = &h{h: l.Pipeline.String()}
+		ls.Pipeline = &h{H: l.Pipeline.String()}
 	}
 	j, e := json.Marshal(ls)
 	if e != nil {

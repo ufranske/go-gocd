@@ -9,17 +9,17 @@ import (
 
 func (l AgentsLinks) MarshalJSON() ([]byte, error) {
 	type h struct {
-		h string `json:"href"`
+		H string `json:"href"`
 	}
 	ls := struct {
 		Self *h `json:"self,omitempty"`
 		Doc  *h `json:"doc,omitempty"`
 	}{}
 	if l.Self != nil {
-		ls.Self = &h{h: l.Self.String()}
+		ls.Self = &h{H: l.Self.String()}
 	}
 	if l.Doc != nil {
-		ls.Doc = &h{h: l.Doc.String()}
+		ls.Doc = &h{H: l.Doc.String()}
 	}
 	j, e := json.Marshal(ls)
 	if e != nil {
@@ -51,7 +51,7 @@ func (l *AgentsLinks) UnmarshalJSON(j []byte) error {
 }
 func (l AgentLinks) MarshalJSON() ([]byte, error) {
 	type h struct {
-		h string `json:"href"`
+		H string `json:"href"`
 	}
 	ls := struct {
 		Self *h `json:"self,omitempty"`
@@ -59,13 +59,13 @@ func (l AgentLinks) MarshalJSON() ([]byte, error) {
 		Find *h `json:"find,omitempty"`
 	}{}
 	if l.Self != nil {
-		ls.Self = &h{h: l.Self.String()}
+		ls.Self = &h{H: l.Self.String()}
 	}
 	if l.Doc != nil {
-		ls.Doc = &h{h: l.Doc.String()}
+		ls.Doc = &h{H: l.Doc.String()}
 	}
 	if l.Find != nil {
-		ls.Find = &h{h: l.Find.String()}
+		ls.Find = &h{H: l.Find.String()}
 	}
 	j, e := json.Marshal(ls)
 	if e != nil {

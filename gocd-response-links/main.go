@@ -240,7 +240,7 @@ func (g *Generator) generate(typeName string) {
 
 const marshall_header = `func (l %s) MarshalJSON() ([]byte, error) {
 type h struct {
-	h string ` + "`json:\"href\"`" + `
+	H string ` + "`json:\"href\"`" + `
 }
 ls := struct {
 `
@@ -260,7 +260,7 @@ func (g *Generator) buildMarshalling(values []string, typeName string) {
 	g.Printf("}{}\n")
 
 	for _, field := range values {
-		g.Printf(fmt.Sprintf("if l.%s != nil {ls.%s = &h{h:l.%s.String()}}\n", field, field, field))
+		g.Printf(fmt.Sprintf("if l.%s != nil {ls.%s = &h{H:l.%s.String()}}\n", field, field, field))
 	}
 	g.Printf(marshall_footer)
 	g.Printf("}\n")

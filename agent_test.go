@@ -26,31 +26,31 @@ func TestAgnet_Get(t *testing.T) {
 
 	testAgent(t, agent)
 
-	if agent.BuildDetails != nil {
+	if agent.BuildDetails == nil {
 		t.Error("Expected 'build_agents'. Got 'nil'.")
 	}
 
-	if agent.BuildDetails.Links.Job.String() != "https://ci.example.com/go/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da" {
+	if agent.BuildDetails.Links.Job.String() != "https://ci.example.com/go/tab/build/detail/up42/1/up42_stage/1/up42_job" {
 		t.Errorf(
 			"Expected '%s'. Got '%s'",
-			"https://ci.example.com/go/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da",
-			agent.Links.Self.String(),
+			"https://ci.example.com/go/tab/build/detail/up42/1/up42_stage/1/up42_job",
+			agent.BuildDetails.Links.Job.String(),
 		)
 	}
 
-	if agent.BuildDetails.Links.Doc.String() != "https://api.gocd.org/#agents" {
+	if agent.BuildDetails.Links.Stage.String() != "https://ci.example.com/go/pipelines/up42/1/up42_stage/1" {
 		t.Errorf(
 			"Expected '%s'. Got '%s'",
-			"https://api.gocd.org/#agents",
-			agent.Links.Self.String(),
+			"https://ci.example.com/go/pipelines/up42/1/up42_stage/1",
+			agent.BuildDetails.Links.Stage.String(),
 		)
 	}
 
-	if agent.BuildDetails.Links.Find.String() != "https://ci.example.com/go/api/agents/:uuid" {
+	if agent.BuildDetails.Links.Pipeline.String() != "https://ci.example.com/go/tab/pipeline/history/up42" {
 		t.Errorf(
 			"Expected '%s'. Got '%s'",
-			"https://ci.example.com/go/api/agents/:uuid",
-			agent.Links.Self.String(),
+			"https://ci.example.com/go/tab/pipeline/history/up42",
+			agent.BuildDetails.Links.Pipeline.String(),
 		)
 	}
 
@@ -74,7 +74,7 @@ func TestAgent_List(t *testing.T) {
 	}
 
 	if len(agents) != 1 {
-		t.Errorf("Expected '1' agents. Got '%s'", len(agents))
+		t.Errorf("Expected '1' agents. Got '%d'", len(agents))
 	}
 
 	testAgent(t, agents[0])
@@ -82,128 +82,35 @@ func TestAgent_List(t *testing.T) {
 }
 
 func testAgent(t *testing.T, agent *Agent) {
-	if agent.Links.Self.String() != "https://ci.example.com/go/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da" {
-		t.Errorf(
-			"Expected '%s'. Got '%s'",
-			"https://ci.example.com/go/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da",
-			agent.Links.Self.String(),
-		)
-	}
+	for index, test := range []struct {
+		got  string
+		want string
+	}{
+		{agent.Links.Self.String(), "https://ci.example.com/go/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da"},
+		{agent.Links.Doc.String(), "https://api.gocd.org/#agents" },
+		{agent.Links.Find.String(), "https://ci.example.com/go/api/agents/:uuid"},
+		{agent.Uuid, "adb9540a-b954-4571-9d9b-2f330739d4da"},
+		{agent.Hostname, "agent01.example.com"},
+		{agent.IpAddress, "10.12.20.47"},
+		{agent.Sandbox, "/Users/ketanpadegaonkar/projects/gocd/gocd/agent"},
+		{agent.OperatingSystem, "Mac OS X" },
+		{agent.AgentConfigState, "Enabled"},
+		{agent.AgentState, "Idle"},
+		{agent.Resources[0], "java"},
+		{agent.Resources[1], "linux"},
+		{agent.Resources[2], "firefox"},
+		{agent.Environments[0], "perf"},
+		{agent.Environments[1], "UAT"},
+		{agent.BuildState, "Idle"},
 
-	if agent.Links.Doc.String() != "https://api.gocd.org/#agents" {
-		t.Errorf(
-			"Expected '%s'. Got '%s'",
-			"https://api.gocd.org/#agents",
-			agent.Links.Self.String(),
-		)
-	}
-
-	if agent.Links.Find.String() != "https://ci.example.com/go/api/agents/:uuid" {
-		t.Errorf(
-			"Expected '%s'. Got '%s'",
-			"https://ci.example.com/go/api/agents/:uuid",
-			agent.Links.Self.String(),
-		)
-	}
-
-	if agent.Uuid != "adb9540a-b954-4571-9d9b-2f330739d4da" {
-		t.Error(
-			"Expected '%s'. Got '%s'.",
-			"adb9540a-b954-4571-9d9b-2f330739d4da",
-			agent.Uuid,
-		)
-	}
-
-	if agent.Hostname != "agent01.example.com" {
-		t.Errorf(
-			"Expected 'agent01.example.com'. Got '%s'.",
-			agent.Hostname,
-		)
-	}
-
-	if agent.IpAddress != "10.12.20.47" {
-		t.Errorf(
-			"Expected '10.12.20.47'. Got '%s'.",
-			agent.IpAddress,
-		)
-	}
-
-	if agent.Sandbox != "/Users/ketanpadegaonkar/projects/gocd/gocd/agent" {
-		t.Errorf(
-			"Expected '%s'. Got '%s'.",
-			"/Users/ketanpadegaonkar/projects/gocd/gocd/agent",
-			agent.Sandbox,
-		)
-	}
-
-	if agent.OperatingSystem != "Mac OS X" {
-		t.Errorf(
-			"Expected 'Mac OS X'. Got '%s'.",
-			agent.OperatingSystem,
-		)
+	} {
+		if test.got != test.want {
+			t.Errorf("Expected '%s'. Got '%s' in '%d'", test.want, test.got, index)
+		}
 	}
 
 	if agent.FreeSpace != 84983328768 {
-		t.Errorf(
-			"Expected '%d'. Got '%d'.",
-			84983328768,
-			agent.FreeSpace,
-		)
+		t.Errorf("Expected '84983328768'. Got '%d'.", agent.FreeSpace)
 	}
 
-	if agent.AgentConfigState != "Enabled" {
-		t.Errorf(
-			"Expected 'Enabled'. Got '%s'.",
-			agent.AgentConfigState,
-		)
-	}
-
-	if agent.AgentState != "Idle" {
-		t.Errorf(
-			"Expected 'Idle'. Got '%s'.",
-			agent.AgentState,
-		)
-	}
-
-	if agent.Resources[0] != "java" {
-		t.Errorf(
-			"Expected 'java'. Got '%s'.",
-			agent.Resources[0],
-		)
-	}
-
-	if agent.Resources[1] != "linux" {
-		t.Errorf(
-			"Expected 'linux'. Got '%s'.",
-			agent.Resources[1],
-		)
-	}
-
-	if agent.Resources[2] != "firefox" {
-		t.Errorf(
-			"Expected 'firefox'. Got '%s'.",
-			agent.Resources[2],
-		)
-	}
-
-	if agent.Environments[0] != "perf" {
-		t.Errorf(
-			"Expected 'perf'. Got '%s'.",
-			agent.Environments[0],
-		)
-	}
-
-	if agent.Environments[1] != "UAT" {
-		t.Errorf(
-			"Expected 'UAT'. Got '%s'.",
-			agent.Environments[1],
-		)
-	}
-
-	if agent.BuildState != "Idle" {
-		t.Errorf(
-			"Expected 'Idle'. Got '%s'.",
-			agent.BuildState,
-		)
-	}
 }
