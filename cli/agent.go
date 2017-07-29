@@ -15,6 +15,8 @@ const (
 	GetAgentCommandUsage    = "Get Agent by UUID"
 	UpdateAgentCommandName  = "update-agent"
 	UpdateAgentCommandUsage = "Update Agent"
+	DeleteAgentCommandName  = "delete-agent"
+	DeleteAgentCommandUsage = "Delete Agent"
 )
 
 func ListAgentsAction(c *cli.Context) error {
@@ -57,6 +59,18 @@ func UpdateAgentAction(c *cli.Context) error {
 	return handleOutput(agent, r, "UpdateAgent", err)
 }
 
+func DeleteAgentAction(c *cli.Context) error {
+	if c.String("uuid") == "" {
+		return handleOutput(nil, nil, "DeleteAgent", errors.New("'--uuid' is missing."))
+	}
+
+	deleteResponse, r, err := cliAgent().Agents.Delete(context.Background(), c.String("uuid"))
+	if r.StatusCode == 406 {
+		err = errors.New(deleteResponse)
+	}
+	return handleOutput(deleteResponse, r, "DeleteAgent", err)
+}
+
 func ListAgentsCommand() *cli.Command {
 	return &cli.Command{
 		Name:   ListAgentsCommandName,
@@ -84,6 +98,17 @@ func UpdateAgentCommand() *cli.Command {
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
 			cli.StringFlag{Name: "config, c", Usage: "JSON encoded config for agent update."},
+		},
+	}
+}
+
+func DeleteAgentCommand() *cli.Command {
+	return &cli.Command{
+		Name:   DeleteAgentCommandName,
+		Usage:  DeleteAgentCommandUsage,
+		Action: DeleteAgentAction,
+		Flags: []cli.Flag{
+			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
 		},
 	}
 }
