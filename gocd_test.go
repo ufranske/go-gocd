@@ -39,7 +39,15 @@ func setup() {
 	server = httptest.NewServer(mux)
 
 	// gocd client configured to use test server
-	client = NewClient(server.URL, &Auth{Username: "mockUsername", Password: "mockPassword"}, nil)
+	client = NewClient(
+		server.URL,
+		&Auth{
+			Username: "mockUsername",
+			Password: "mockPassword",
+		},
+		nil,
+		false,
+	)
 }
 
 // teardown closes the test HTTP server.
@@ -84,7 +92,15 @@ func testGotStringSlice(t *testing.T, got_want []TestStringSlice) {
 
 func TestNewClient(t *testing.T) {
 
-	c := NewClient("http://ci.example.com/go", &Auth{Username: "mockUsername", Password: "mockPassword"}, nil)
+	c := NewClient(
+		"http://ci.example.com/go",
+		&Auth{
+			Username: "mockUsername",
+			Password: "mockPassword",
+		},
+		nil,
+		false,
+	)
 
 	testGotStringSlice(t, []TestStringSlice{
 		{c.BaseURL.String(), "http://ci.example.com/go"},

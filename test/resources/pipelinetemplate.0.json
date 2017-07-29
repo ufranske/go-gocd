@@ -1,7 +1,7 @@
 {
   "_links": {
     "self": {
-      "href": "https://ci.example.com/go/api/admin/templates/template.name"
+      "href": "https://ci.example.com/go/api/admin/templates/template1"
     },
     "doc": {
       "href": "https://api.gocd.org/#template-config"

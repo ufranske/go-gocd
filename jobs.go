@@ -1,7 +1,5 @@
 package gocd
 
-import "context"
-
 type JobsService service
 
 type Job struct {
@@ -28,5 +26,5 @@ type JobStateTransition struct {
 
 type JobRunHistoryResponse struct {
 	Jobs       []*Job             `json:"jobs"`
-	Pagination PaginationResponse `json:"pagination,omitempty"`
+	Pagination *PaginationResponse `json:"pagination,omitempty"`
 }

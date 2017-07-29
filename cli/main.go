@@ -22,11 +22,13 @@ func main() {
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
 		*ConfigureCommand(),
-		*GetAgentCommand(),
-		*UpdateAgentCommand(),
-		*DeleteAgentCommand(),
 		*ListAgentsCommand(),
+		*ListPipelineTemplatesCommand(),
+		*GetAgentCommand(),
+		*GetPipelineTemplateCommand(),
+		*UpdateAgentCommand(),
 		*UpdateAgentsCommand(),
+		*DeleteAgentCommand(),
 		*DeleteAgentsCommand(),
 	}
 
@@ -51,6 +53,8 @@ func cliAgent() *gocd.Client {
 			Username: cfg.Username,
 			Password: cfg.Password,
 		}
+	} else {
+		auth = nil
 	}
 
 	return gocd.NewClient(cfg.Server, auth, nil, cfg.SslCheck)

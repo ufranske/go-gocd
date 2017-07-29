@@ -21,10 +21,10 @@ type AgentLinks struct {
 }
 
 type AgentsResponse struct {
-	Links AgentsLinks `json:"_links,omitempty"`
-	Embedded struct {
+	Links *AgentsLinks `json:"_links,omitempty"`
+	Embedded *struct {
 		Agents []*Agent `json:"agents"`
-	} `json:"_embedded"`
+	} `json:"_embedded,omitempty"`
 }
 
 type Agent struct {
@@ -64,13 +64,13 @@ type AgentUpdate struct {
 
 type AgentBulkUpdate struct {
 	Uuids            []string                  `json:"uuids"`
-	Operations       AgentBulkOperationsUpdate `json:"operations,omitempty"`
+	Operations       *AgentBulkOperationsUpdate `json:"operations,omitempty"`
 	AgentConfigState string                    `json:"agent_config_state,omitempty"`
 }
 
 type AgentBulkOperationsUpdate struct {
-	Environments AgentBulkOperationUpdate `json:"environments,omitempty"`
-	Resources    AgentBulkOperationUpdate `json:"resources,omitempty"`
+	Environments *AgentBulkOperationUpdate `json:"environments,omitempty"`
+	Resources    *AgentBulkOperationUpdate `json:"resources,omitempty"`
 }
 
 type AgentBulkOperationUpdate struct {

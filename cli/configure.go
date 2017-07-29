@@ -81,20 +81,19 @@ func loadConfig() (*Configuration, error) {
 		return nil, err
 	}
 
-	if cfg.Server == "" {
-		cfg.Server = os.Getenv(EnvVarServer)
+	if server := os.Getenv(EnvVarServer); server != "" {
+		cfg.Server = server
 	}
 
-	if cfg.Username == "" {
-		cfg.Username = os.Getenv(EnvVarUsername)
+	if username := os.Getenv(EnvVarUsername); username != "" {
+		cfg.Username = username
 	}
 
-	if cfg.Password == "" {
-		cfg.Password = os.Getenv(EnvVarPassword)
+	if password := os.Getenv(EnvVarPassword); password != "" {
+		cfg.Password = password
 	}
 
 	return &cfg, nil
-
 }
 
 func ConfigureCommand() *cli.Command {

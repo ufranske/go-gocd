@@ -25,6 +25,9 @@ const (
 
 func ListAgentsAction(c *cli.Context) error {
 	agents, r, err := cliAgent().Agents.List(context.Background())
+	if err != nil {
+		return handleOutput(nil, r, "ListAgents", err)
+	}
 	for _, agent := range agents {
 		agent.RemoveLinks()
 	}
@@ -83,7 +86,7 @@ func UpdateAgentsAction(c *cli.Context) error {
 		if err := json.Unmarshal(b, &op); err == nil {
 			return handleOutput(nil, nil, "BulkAgentUpdate", err)
 		} else {
-			u.Operations = op
+			u.Operations = &op
 		}
 	}
 

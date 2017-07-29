@@ -80,7 +80,7 @@ func NewClient(gocdBaseUrl string, auth *Auth, httpClient *http.Client, checkSsl
 
 	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
 
-	if auth != nil {
+	if &auth != nil {
 		c.Auth = auth
 	}
 	c.common.client = c

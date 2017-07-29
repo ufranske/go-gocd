@@ -20,31 +20,34 @@ func TestPipelineTemplateService_ListPipelineTemplates(t *testing.T) {
 		fmt.Fprint(w, string(j))
 	})
 
-	templates, _, err := client.PipelineTemplates.ListPipelineTemplates(context.Background())
+	templates, _, err := client.PipelineTemplates.List(context.Background())
 
 	if err != nil {
 		t.Error(err)
 	}
 
+	if len(templates) != 1 {
+		t.Error(fmt.Sprintf("Expected '1' template, got '%s'", len(templates)))
+	}
+
 	testGotStringSlice(t, []TestStringSlice{
-		{(*templates)[0].Name, "template0"},
-		{(*templates)[0].Pipelines[0], "up42"},
-		{string(len((*templates))), "1"},
+		{templates[0].Name, "template0"},
+		{templates[0].Embedded.Pipelines[0].Name, "up42"},
 	})
 }
 
-func TestPipelineTemplateService_GetPipelineTemplates(t *testing.T) {
+func TestPipelineTemplateService_GetPipelineTemplate(t *testing.T) {
 	setup()
 	defer teardown()
 
 	mux.HandleFunc("/api/admin/templates/template1", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testAuth(t, r, mockAuthorization)
-		j, _ := ioutil.ReadFile("test/resources/pipelinetemplates.1.json")
+		j, _ := ioutil.ReadFile("test/resources/pipelinetemplate.0.json")
 		fmt.Fprint(w, string(j))
 	})
 
-	template, _, err := client.PipelineTemplates.GetPipelineTemplate(
+	template, _, err := client.PipelineTemplates.Get(
 		context.Background(),
 		"template1",
 	)
@@ -53,8 +56,13 @@ func TestPipelineTemplateService_GetPipelineTemplates(t *testing.T) {
 		t.Error(err)
 	}
 
+	if len(template.Stages) != 1 {
+		t.Error(fmt.Sprintf("Expected '1' template, got '%d'", len(template.Stages)))
+	}
+
 	testGotStringSlice(t, []TestStringSlice{
 		{template.Name, "template1"},
-		{string(len(template.Stages)), "1"},
+		{template.Stages[0].Name, "up42_stage"},
+		{template.Stages[0].Approval.Type, "success"},
 	})
 }
