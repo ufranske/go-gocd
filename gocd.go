@@ -18,8 +18,20 @@ const (
 	apiV4          = "application/vnd.go.cd.v4+json"
 )
 
-type ClientInterface interface {
+type APIResponse struct {
+	*http.Response
 }
+
+func newResponse(r *http.Response) *APIResponse {
+	response := &APIResponse{Response: r}
+	return response
+}
+
+type DeleteResponse struct {
+	Message string `json:"message"`
+}
+
+type ClientInterface interface{}
 
 type Client struct {
 	client    *http.Client

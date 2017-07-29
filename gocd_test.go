@@ -86,16 +86,11 @@ func TestNewClient(t *testing.T) {
 
 	c := NewClient("http://ci.example.com/go", &Auth{Username: "mockUsername", Password: "mockPassword"}, nil)
 
-	if got, want := c.BaseURL.String(), "http://ci.example.com/go"; got != want {
-		t.Errorf("NewClient BaseURL is %v, want %v", got, want)
-	}
-	if got, want := c.UserAgent, userAgent; got != want {
-		t.Errorf("NewClient UserAgent is %v, want %v", got, want)
-	}
-
-	if c.BaseURL.Host != "ci.example.com" {
-		t.Errorf("Expected: 'ci.example.com'. Got '%s'", client.BaseURL)
-	}
+	testGotStringSlice(t, []TestStringSlice{
+		{c.BaseURL.String(), "http://ci.example.com/go"},
+		{c.UserAgent, userAgent},
+		{c.BaseURL.Host, "ci.example.com"},
+	})
 
 	if c.PipelineGroups == nil {
 		t.Error("`PipelineGroups` missing from `client`.")

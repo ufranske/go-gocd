@@ -89,6 +89,26 @@ func (s *AgentsService) Update(ctx context.Context, uuid string, agent *Agent) (
 	return s.handleAgentRequest(ctx, "PATCH", uuid, agent)
 }
 
+func (s *AgentsService) Delete(ctx context.Context, uuid string) (string, *APIResponse, error) {
+	u, err := addOptions(fmt.Sprintf("agents/%s", uuid))
+	if err != nil {
+		return "", nil, err
+	}
+
+	req, err := s.client.NewRequest("DELETE", u, nil, apiV4)
+	if err != nil {
+		return "", nil, err
+	}
+
+	a := DeleteResponse{}
+	resp, err := s.client.Do(ctx, req, &a)
+	if err != nil {
+		return "", resp, err
+	}
+
+	return a.Message, resp, nil
+}
+
 func (s *AgentsService) handleAgentRequest(ctx context.Context, action string, uuid string, body *Agent) (*Agent, *APIResponse, error) {
 	u, err := addOptions(fmt.Sprintf("agents/%s", uuid))
 	if err != nil {
