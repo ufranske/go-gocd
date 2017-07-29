@@ -16,7 +16,7 @@ const (
 	%[1]sCommandUsage = "%[3]s"
 )
 
-func %[1]sAction() error {
+func %[1]sAction(c *cli.Context) error {
 	return nil
 }
 
@@ -39,15 +39,18 @@ func main() {
 	flag.BoolVar(&stdout, "stdout", false, "If true, print to stdout.")
 	flag.Parse()
 
+	name_capitalised := strings.Replace(strings.Title(cn), "-", "", -1)
+	name_lower := strings.ToLower(cn)
+
 	if stdout {
-		fmt.Printf(command_template, strings.Title(cn), strings.ToLower(cn), dsc)
+		fmt.Printf(command_template, name_capitalised, name_lower, dsc)
 	} else {
 		f, err := os.Create(fmt.Sprintf("./%s.go", cn))
 		if err != nil {
 			panic(err)
 		}
 		defer f.Close()
-		_, err = f.WriteString(fmt.Sprintf(command_template, strings.Title(cn), strings.ToLower(cn), dsc))
+		_, err = f.WriteString(fmt.Sprintf(command_template, name_capitalised, name_lower, dsc))
 		if err != nil {
 			panic(err)
 		}

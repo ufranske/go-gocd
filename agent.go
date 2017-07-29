@@ -21,7 +21,7 @@ type AgentLinks struct {
 }
 
 type AgentsResponse struct {
-	Links    AgentsLinks `json:"_links,omitempty"`
+	Links AgentsLinks `json:"_links,omitempty"`
 	Embedded struct {
 		Agents []*Agent `json:"agents"`
 	} `json:"_embedded"`
@@ -42,8 +42,16 @@ type Agent struct {
 	Environments     []string      `json:"environments"`
 	BuildState       string        `json:"build_state"`
 	BuildDetails     *BuildDetails `json:"build_details"`
-	Links            *AgentLinks   `json:"_links"`
+	Links            *AgentLinks   `json:"_links,omitempty"`
 }
+
+type AgentUpdate struct {
+	Hostname         string `json:"hostname,omitempty"`
+	Resources        []string `json:"resources,omitempty"`
+	Environments     []string `json:"environments,omitempty"`
+	AgentConfigState string `json:"agent_config_state,omitempty"`
+}
+
 
 type BuildDetails struct {
 	Links    *BuildDetailsLinks `json:"_links"`
@@ -57,6 +65,10 @@ type BuildDetailsLinks struct {
 	Job      *url.URL `json:"job"`
 	Stage    *url.URL `json:"stage"`
 	Pipeline *url.URL `json:"pipeline"`
+}
+
+func (a *Agent) RemoveLinks() {
+	a.Links = nil
 }
 
 func (s *AgentsService) List(ctx context.Context) ([]*Agent, *APIResponse, error) {
@@ -85,8 +97,8 @@ func (s *AgentsService) Get(ctx context.Context, uuid string) (*Agent, *APIRespo
 	return s.handleAgentRequest(ctx, "GET", uuid, nil)
 }
 
-func (s *AgentsService) Update(ctx context.Context, uuid string, agent *Agent) (*Agent, *APIResponse, error) {
-	return s.handleAgentRequest(ctx, "PATCH", uuid, agent)
+func (s *AgentsService) Update(ctx context.Context, uuid string, agent AgentUpdate) (*Agent, *APIResponse, error) {
+	return s.handleAgentRequest(ctx, "PATCH", uuid, &agent)
 }
 
 func (s *AgentsService) Delete(ctx context.Context, uuid string) (string, *APIResponse, error) {
@@ -109,7 +121,7 @@ func (s *AgentsService) Delete(ctx context.Context, uuid string) (string, *APIRe
 	return a.Message, resp, nil
 }
 
-func (s *AgentsService) handleAgentRequest(ctx context.Context, action string, uuid string, body *Agent) (*Agent, *APIResponse, error) {
+func (s *AgentsService) handleAgentRequest(ctx context.Context, action string, uuid string, body *AgentUpdate) (*Agent, *APIResponse, error) {
 	u, err := addOptions(fmt.Sprintf("agents/%s", uuid))
 	if err != nil {
 		return nil, nil, err

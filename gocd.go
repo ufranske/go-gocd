@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"crypto/tls"
 )
 
 const (
@@ -58,14 +59,24 @@ type Auth struct {
 	Password string
 }
 
-func NewClient(gocdBaseUrl string, auth *Auth, httpClient *http.Client) *Client {
+func NewClient(gocdBaseUrl string, auth *Auth, httpClient *http.Client, checkSsl bool) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
 
+	if !checkSsl {
+		httpClient.Transport = &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
+	}
+
 	baseURL, _ := url.Parse(gocdBaseUrl)
 
-	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent, Auth: auth}
+	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
+
+	if auth != nil {
+		c.Auth = auth
+	}
 	c.common.client = c
 	c.Agents = (*AgentsService)(&c.common)
 	c.PipelineGroups = (*PipelineGroupsService)(&c.common)
@@ -109,7 +120,9 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 	req.Header.Set("User-Agent", c.UserAgent)
 
 	if c.cookie == "" {
-		req.SetBasicAuth(c.Auth.Username, c.Auth.Password)
+		if c.Auth != nil {
+			req.SetBasicAuth(c.Auth.Username, c.Auth.Password)
+		}
 	} else {
 		req.Header.Set("Cookie", c.cookie)
 	}
@@ -185,3 +198,13 @@ func addOptions(s string) (string, error) {
 
 	return u.String(), nil
 }
+
+//type ResourceNotFound struct {
+//	When     time.Time
+//	Resource string
+//}
+//
+//func (e ResourceNotFound) Error() string {
+//	return fmt.Sprintf("Could not find '%s'.", e.Resource)
+//	error.
+//}
