@@ -27,6 +27,7 @@ func main() {
 		*DeleteAgentCommand(),
 		*ListAgentsCommand(),
 		*UpdateAgentsCommand(),
+		*DeleteAgentsCommand(),
 	}
 
 	app.Flags = []cli.Flag{

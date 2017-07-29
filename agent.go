@@ -21,7 +21,7 @@ type AgentLinks struct {
 }
 
 type AgentsResponse struct {
-	Links AgentsLinks `json:"_links,omitempty"`
+	Links    AgentsLinks `json:"_links,omitempty"`
 	Embedded struct {
 		Agents []*Agent `json:"agents"`
 	} `json:"_embedded"`
@@ -46,16 +46,16 @@ type Agent struct {
 }
 
 type AgentUpdate struct {
-	Hostname         string `json:"hostname,omitempty"`
+	Hostname         string   `json:"hostname,omitempty"`
 	Resources        []string `json:"resources,omitempty"`
 	Environments     []string `json:"environments,omitempty"`
-	AgentConfigState string `json:"agent_config_state,omitempty"`
+	AgentConfigState string   `json:"agent_config_state,omitempty"`
 }
 
 type AgentBulkUpdate struct {
-	Uuids            []string `json:"uuids"`
-	Operations       AgentBulkOperationsUpdate  `json:"operations,omitempty"`
-	AgentConfigState string `json:"agent_config_state,omitempty"`
+	Uuids            []string                  `json:"uuids"`
+	Operations       AgentBulkOperationsUpdate `json:"operations,omitempty"`
+	AgentConfigState string                    `json:"agent_config_state,omitempty"`
 }
 
 type AgentBulkOperationsUpdate struct {
@@ -137,7 +137,7 @@ func (s *AgentsService) Delete(ctx context.Context, uuid string) (string, *APIRe
 }
 
 func (s *AgentsService) BulkUpdate(ctx context.Context, agents AgentBulkUpdate) (string, *APIResponse, error) {
-	u, err := addOptions("agents");
+	u, err := addOptions("agents")
 	if err != nil {
 		return "", nil, err
 	}

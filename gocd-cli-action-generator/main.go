@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"strings"
 	"os"
+	"strings"
 )
 
 const command_template = `package main

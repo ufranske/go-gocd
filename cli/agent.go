@@ -19,6 +19,8 @@ const (
 	DeleteAgentCommandUsage  = "Delete Agent"
 	UpdateAgentsCommandName  = "update-agents"
 	UpdateAgentsCommandUsage = "Bulk Update Agents"
+	DeleteAgentsCommandName  = "delete-agents"
+	DeleteAgentsCommandUsage = "Bulk Delete Agents"
 )
 
 func ListAgentsAction(c *cli.Context) error {
@@ -102,6 +104,10 @@ func UpdateAgentsAction(c *cli.Context) error {
 	return handleOutput(updateResponse, r, "BulkAgentUpdate", err)
 }
 
+func DeleteAgentsAction(c *cli.Context) error {
+	return nil
+}
+
 func ListAgentsCommand() *cli.Command {
 	return &cli.Command{
 		Name:   ListAgentsCommandName,
@@ -153,6 +159,17 @@ func UpdateAgentsCommand() *cli.Command {
 			cli.StringSliceFlag{Name: "uuid", Usage: "GoCD Agent UUIDs"},
 			cli.StringFlag{Name: "state", Usage: "Whether agents are enabled or disabled. Allowed values 'Enabled','Disabled'."},
 			cli.StringFlag{Name: "operations", Usage: "JSON encoded config for bulk operation updates."},
+		},
+	}
+}
+
+func DeleteAgentsCommand() *cli.Command {
+	return &cli.Command{
+		Name:   DeleteAgentsCommandName,
+		Usage:  DeleteAgentsCommandUsage,
+		Action: DeleteAgentsAction,
+		Flags: []cli.Flag{
+			cli.StringSliceFlag{Name: "uuid", Usage: "GoCD Agent UUIDs"},
 		},
 	}
 }

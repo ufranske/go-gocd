@@ -3,11 +3,11 @@ package gocd
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"io"
 	"net/http"
 	"net/url"
-	"crypto/tls"
 )
 
 const (
