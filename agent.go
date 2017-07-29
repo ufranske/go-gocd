@@ -21,7 +21,7 @@ type AgentLinks struct {
 }
 
 type AgentsResponse struct {
-	Links    AgentsLinks `json:"_links,omitempty"`
+	Links AgentsLinks `json:"_links,omitempty"`
 	Embedded struct {
 		Agents []*Agent `json:"agents"`
 	} `json:"_embedded"`
@@ -44,6 +44,15 @@ type Agent struct {
 	BuildDetails     *BuildDetails `json:"build_details"`
 	Links            *AgentLinks   `json:"_links,omitempty"`
 	client           *Client
+}
+
+func (a *Agent) JobRunHistory(ctx context.Context) ([]*Job, error) {
+	jobs, _, err := a.client.Agents.JobRunHistory(ctx, a.Uuid)
+	if err != nil {
+		return nil, err
+	}
+
+	return jobs, nil
 }
 
 type AgentUpdate struct {

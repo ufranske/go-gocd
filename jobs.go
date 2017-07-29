@@ -30,8 +30,3 @@ type JobRunHistoryResponse struct {
 	Jobs       []*Job             `json:"jobs"`
 	Pagination PaginationResponse `json:"pagination,omitempty"`
 }
-
-func (a *Agent) JobRunHistory(ctx context.Context) ([]*Job, error) {
-	a.client.Agents.JobRunHistory(ctx, a.Uuid)
-	return nil, nil
-}
