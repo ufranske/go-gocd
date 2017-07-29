@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/urfave/cli"
 	"context"
-	"github.com/drewsonne/gocdsdk"
 	"encoding/json"
 	"errors"
+	"github.com/drewsonne/gocdsdk"
+	"github.com/urfave/cli"
 )
 
 const (

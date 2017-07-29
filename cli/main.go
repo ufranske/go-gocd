@@ -3,11 +3,11 @@
 package main
 
 import (
-	"github.com/urfave/cli"
-	"os"
-	"github.com/drewsonne/gocdsdk"
 	"encoding/json"
 	"fmt"
+	"github.com/drewsonne/gocdsdk"
+	"github.com/urfave/cli"
+	"os"
 )
 
 const UtilityName = "gocd"

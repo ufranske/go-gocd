@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/urfave/cli"
-	"os/user"
-	"strings"
 	"github.com/segmentio/go-prompt"
+	"github.com/urfave/cli"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
+	"os/user"
+	"strings"
 )
 
 const (
@@ -38,7 +38,7 @@ type Configuration struct {
 	Server   string `yaml:"server"`
 	Username string `yaml:"username,omitempty"`
 	Password string `yaml:"password,omitempty"`
-	SslCheck bool `yaml:"ssl_check,omitempty"`
+	SslCheck bool   `yaml:"ssl_check,omitempty"`
 }
 
 func (c *Configuration) HasAuth() bool {
