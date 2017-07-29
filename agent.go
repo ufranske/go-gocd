@@ -52,6 +52,21 @@ type AgentUpdate struct {
 	AgentConfigState string `json:"agent_config_state,omitempty"`
 }
 
+type AgentBulkUpdate struct {
+	Uuids            []string `json:"uuids"`
+	Operations       AgentBulkOperationsUpdate  `json:"operations,omitempty"`
+	AgentConfigState string `json:"agent_config_state,omitempty"`
+}
+
+type AgentBulkOperationsUpdate struct {
+	Environments AgentBulkOperationUpdate `json:"environments,omitempty"`
+	Resources    AgentBulkOperationUpdate `json:"resources,omitempty"`
+}
+
+type AgentBulkOperationUpdate struct {
+	Add    []string `json:"add,omitempty"`
+	Remove []string `json:"remove,omitempty"`
+}
 
 type BuildDetails struct {
 	Links    *BuildDetailsLinks `json:"_links"`
@@ -112,7 +127,26 @@ func (s *AgentsService) Delete(ctx context.Context, uuid string) (string, *APIRe
 		return "", nil, err
 	}
 
-	a := DeleteResponse{}
+	a := StringResponse{}
+	resp, err := s.client.Do(ctx, req, &a)
+	if err != nil {
+		return "", resp, err
+	}
+
+	return a.Message, resp, nil
+}
+
+func (s *AgentsService) BulkUpdate(ctx context.Context, agents AgentBulkUpdate) (string, *APIResponse, error) {
+	u, err := addOptions("agents");
+	if err != nil {
+		return "", nil, err
+	}
+
+	req, err := s.client.NewRequest("PATCH", u, agents, apiV4)
+	if err != nil {
+		return "", nil, err
+	}
+	a := StringResponse{}
 	resp, err := s.client.Do(ctx, req, &a)
 	if err != nil {
 		return "", resp, err

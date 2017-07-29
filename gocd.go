@@ -28,7 +28,7 @@ func newResponse(r *http.Response) *APIResponse {
 	return response
 }
 
-type DeleteResponse struct {
+type StringResponse struct {
 	Message string `json:"message"`
 }
 

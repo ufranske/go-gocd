@@ -22,10 +22,11 @@ func main() {
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
 		*ConfigureCommand(),
-		*ListAgentsCommand(),
 		*GetAgentCommand(),
 		*UpdateAgentCommand(),
 		*DeleteAgentCommand(),
+		*ListAgentsCommand(),
+		*UpdateAgentsCommand(),
 	}
 
 	app.Flags = []cli.Flag{
