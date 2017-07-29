@@ -43,6 +43,7 @@ type Agent struct {
 	BuildState       string        `json:"build_state"`
 	BuildDetails     *BuildDetails `json:"build_details"`
 	Links            *AgentLinks   `json:"_links,omitempty"`
+	client           *Client
 }
 
 type AgentUpdate struct {
@@ -104,7 +105,10 @@ func (s *AgentsService) List(ctx context.Context) ([]*Agent, *APIResponse, error
 		return nil, resp, err
 	}
 
-	//return &r.Embedded, resp, nil
+	for _, agent := range r.Embedded.Agents {
+		agent.client = s.client
+	}
+
 	return r.Embedded.Agents, resp, nil
 }
 
@@ -155,6 +159,25 @@ func (s *AgentsService) BulkUpdate(ctx context.Context, agents AgentBulkUpdate) 
 	return a.Message, resp, nil
 }
 
+func (s *AgentsService) JobRunHistory(ctx context.Context, uuid string) ([]*Job, *APIResponse, error) {
+	u, err := addOptions(fmt.Sprintf("agents/%s/job_run_history", uuid))
+	if err != nil {
+		return nil, nil, err
+	}
+	req, err := s.client.NewRequest("GET", u, nil, apiV4)
+	if err != nil {
+		return nil, nil, err
+	}
+	a := JobRunHistoryResponse{}
+	resp, err := s.client.Do(ctx, req, &a)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return a.Jobs, resp, nil
+
+}
+
 func (s *AgentsService) handleAgentRequest(ctx context.Context, action string, uuid string, body *AgentUpdate) (*Agent, *APIResponse, error) {
 	u, err := addOptions(fmt.Sprintf("agents/%s", uuid))
 	if err != nil {
@@ -166,7 +189,7 @@ func (s *AgentsService) handleAgentRequest(ctx context.Context, action string, u
 		return nil, nil, err
 	}
 
-	a := Agent{}
+	a := Agent{client: s.client}
 	resp, err := s.client.Do(ctx, req, &a)
 	if err != nil {
 		return nil, resp, err

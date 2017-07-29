@@ -50,6 +50,12 @@ type Client struct {
 	cookie string
 }
 
+type PaginationResponse struct {
+	Offset   int64 `json:"offset"`
+	Total    int64 `json:"total"`
+	PageSize int64 `json:"page_size"`
+}
+
 type service struct {
 	client *Client
 }
