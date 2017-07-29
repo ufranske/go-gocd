@@ -59,7 +59,6 @@ func TestAgent_List(t *testing.T) {
 	}
 
 	testAgent(t, agents[0])
-
 }
 
 func testAgent(t *testing.T, agent *Agent) {
