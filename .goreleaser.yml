@@ -1,7 +1,11 @@
 # .goreleaser.yml
 # Build customization
+
+project_name: go-gocd
+
 builds:
   - binary: gocd
+    main: ./cli/main.go
     goos:
       - windows
       - darwin
@@ -11,7 +15,15 @@ builds:
 
 archive:
   name_template: "gocd-{{ .Version }}-{{ .Os }}-{{ .Arch }}"
-
+  format_overrides:
+    - goos: windows
+      format: zip
+    - goos: darwin
+      format: zip
+  files:
+    - LICENSE
+    - README.md
+    - CHANGELOG.md
 fpm:
   homepage: https://github.com/drewsonne/gocdsdk
   maintainer: Drew J. Sonne <drew.sonne@gmail.com>
