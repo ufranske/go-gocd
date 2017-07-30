@@ -173,9 +173,9 @@ func UpdatePipelineTemplateCommand() *cli.Command {
 }
 func DeletePipelineTemplateCommand() *cli.Command {
 	return &cli.Command{
-		Name:   DeletePipelineTemplateCommandName,
-		Usage:  DeletePipelineTemplateCommandUsage,
-		Action: DeletePipelineTemplateAction,
+		Name:     DeletePipelineTemplateCommandName,
+		Usage:    DeletePipelineTemplateCommandUsage,
+		Action:   DeletePipelineTemplateAction,
 		Category: "Pipeline Templates",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "template-name", Usage: "Pipeline Template name."},

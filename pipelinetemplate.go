@@ -150,7 +150,7 @@ func (s *PipelineTemplatesService) Update(ctx context.Context, name string, vers
 		return nil, nil, err
 	}
 
-	req.Http.Header.Set("If-Match", fmt.Sprintf("\"%s\"",version))
+	req.Http.Header.Set("If-Match", fmt.Sprintf("\"%s\"", version))
 
 	ptr := PipelineTemplate{}
 	resp, err := s.client.Do(ctx, req, &ptr)

@@ -113,18 +113,18 @@ func DeleteAgentsAction(c *cli.Context) error {
 
 func ListAgentsCommand() *cli.Command {
 	return &cli.Command{
-		Name:   ListAgentsCommandName,
-		Usage:  ListAgentsCommandUsage,
-		Action: ListAgentsAction,
+		Name:     ListAgentsCommandName,
+		Usage:    ListAgentsCommandUsage,
+		Action:   ListAgentsAction,
 		Category: "Agents",
 	}
 }
 
 func GetAgentCommand() *cli.Command {
 	return &cli.Command{
-		Name:   GetAgentCommandName,
-		Usage:  GetAgentCommandUsage,
-		Action: GetAgentAction,
+		Name:     GetAgentCommandName,
+		Usage:    GetAgentCommandUsage,
+		Action:   GetAgentAction,
 		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
@@ -134,9 +134,9 @@ func GetAgentCommand() *cli.Command {
 
 func UpdateAgentCommand() *cli.Command {
 	return &cli.Command{
-		Name:   UpdateAgentCommandName,
-		Usage:  UpdateAgentCommandUsage,
-		Action: UpdateAgentAction,
+		Name:     UpdateAgentCommandName,
+		Usage:    UpdateAgentCommandUsage,
+		Action:   UpdateAgentAction,
 		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
@@ -147,9 +147,9 @@ func UpdateAgentCommand() *cli.Command {
 
 func DeleteAgentCommand() *cli.Command {
 	return &cli.Command{
-		Name:   DeleteAgentCommandName,
-		Usage:  DeleteAgentCommandUsage,
-		Action: DeleteAgentAction,
+		Name:     DeleteAgentCommandName,
+		Usage:    DeleteAgentCommandUsage,
+		Action:   DeleteAgentAction,
 		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
@@ -159,9 +159,9 @@ func DeleteAgentCommand() *cli.Command {
 
 func UpdateAgentsCommand() *cli.Command {
 	return &cli.Command{
-		Name:   UpdateAgentsCommandName,
-		Usage:  UpdateAgentsCommandUsage,
-		Action: UpdateAgentsAction,
+		Name:     UpdateAgentsCommandName,
+		Usage:    UpdateAgentsCommandUsage,
+		Action:   UpdateAgentsAction,
 		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringSliceFlag{Name: "uuid", Usage: "GoCD Agent UUIDs"},
@@ -173,9 +173,9 @@ func UpdateAgentsCommand() *cli.Command {
 
 func DeleteAgentsCommand() *cli.Command {
 	return &cli.Command{
-		Name:   DeleteAgentsCommandName,
-		Usage:  DeleteAgentsCommandUsage,
-		Action: DeleteAgentsAction,
+		Name:     DeleteAgentsCommandName,
+		Usage:    DeleteAgentsCommandUsage,
+		Action:   DeleteAgentsAction,
 		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringSliceFlag{Name: "uuid", Usage: "GoCD Agent UUIDs"},
