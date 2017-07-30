@@ -57,3 +57,4 @@ Temporary Items
 /build
 /dist
 /cli/dist
+/gocd/coverage.txt
