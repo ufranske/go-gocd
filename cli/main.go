@@ -19,7 +19,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = GoCDUtilityName
 	app.Usage = GoCDUtilityUsageInstructions
-	app.Version = version()
+	app.Version = Version()
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
 		*ConfigureCommand(),
@@ -44,7 +44,7 @@ func main() {
 	app.Run(os.Args)
 }
 
-func version() string {
+func Version() string {
 	if tag := os.Getenv("TAG"); tag != "" {
 		return tag
 	} else {
