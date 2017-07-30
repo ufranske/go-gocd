@@ -1,53 +1,13 @@
-// GoCD CLI tool
-
 package cli
 
 import (
 	"encoding/json"
 	"fmt"
 	"github.com/drewsonne/go-gocd/gocd"
-	"github.com/urfave/cli"
 	"os"
 )
 
-const GoCDUtilityName = "gocd"
-const GoCDUtilityUsageInstructions = "CLI Tool to interact with GoCD server"
 const GoCDUtilityDefaultVersion = "dev"
-
-func main() {
-
-	app := cli.NewApp()
-	app.Name = GoCDUtilityName
-	app.Usage = GoCDUtilityUsageInstructions
-	app.Version = Version()
-	app.EnableBashCompletion = true
-	app.Commands = []cli.Command{
-		*ConfigureCommand(),
-		*ListAgentsCommand(),
-		*ListPipelineTemplatesCommand(),
-		*GetAgentCommand(),
-		*GetPipelineTemplateCommand(),
-		*CreatePipelineTemplateCommand(),
-		*UpdateAgentCommand(),
-		*UpdateAgentsCommand(),
-		*UpdatePipelineConfigCommand(),
-		*UpdatePipelineTemplateCommand(),
-		*DeleteAgentCommand(),
-		*DeleteAgentsCommand(),
-		*DeletePipelineTemplateCommand(),
-		*ListPipelineGroupsCommand(),
-		*GetPipelineHistoryCommand(),
-		*CreatePipelineConfigCommand(),
-	}
-
-	app.Flags = []cli.Flag{
-		cli.StringFlag{Name: "server", EnvVar: EnvVarServer},
-		cli.StringFlag{Name: "username", EnvVar: EnvVarUsername},
-		cli.StringFlag{Name: "password", EnvVar: EnvVarPassword},
-	}
-
-	app.Run(os.Args)
-}
 
 func Version() string {
 	if tag := os.Getenv("TAG"); tag != "" {
