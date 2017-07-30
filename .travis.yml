@@ -32,10 +32,7 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - make gocd.darwin gocd.linux
-  - gem install --no-ri --no-rdoc fpm
   - go get github.com/goreleaser/goreleaser
-  - gem env
 
 deploy:
   - provider: script
@@ -43,6 +40,7 @@ deploy:
     script: gem install --no-ri --no-rdoc fpm && cd cli && goreleaser
     on:
       tags: true
+      condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
 #  - provider: script
 #    skip_cleanup: true
 #    script: gem install --no-ri --no-rdoc fpm && cd cli && goreleaser --snapshot
