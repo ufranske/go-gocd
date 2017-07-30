@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [0.2.4] - 30-07-2017
+### Changed
+ - Fixed bad paths in build frameworks, which caused builds on travis to fail.
 
 ## [0.2.3] - 30-07-2017
 ### Added
