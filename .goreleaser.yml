@@ -1,7 +1,8 @@
 # .goreleaser.yml
 # Build customization
 builds:
-  - binary: drum-roll
+  - main ./cli/main.go
+    binary: gocd
     goos:
       - windows
       - darwin
