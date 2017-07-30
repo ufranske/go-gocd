@@ -163,3 +163,23 @@ func (s *PipelineTemplatesService) Update(ctx context.Context, name string, vers
 	return &ptr, resp, nil
 
 }
+
+func (s *PipelineTemplatesService) Delete(ctx context.Context, uuid string) (string, *APIResponse, error) {
+	u, err := addOptions(fmt.Sprintf("admin/templates/%s", uuid))
+	if err != nil {
+		return "", nil, err
+	}
+
+	req, err := s.client.NewRequest("DELETE", u, nil, apiV4)
+	if err != nil {
+		return "", nil, err
+	}
+
+	a := StringResponse{}
+	resp, err := s.client.Do(ctx, req, &a)
+	if err != nil {
+		return "", resp, err
+	}
+
+	return a.Message, resp, nil
+}

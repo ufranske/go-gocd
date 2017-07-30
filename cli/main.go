@@ -33,6 +33,7 @@ func main() {
 		*UpdatePipelineTemplateCommand(),
 		*DeleteAgentCommand(),
 		*DeleteAgentsCommand(),
+		*DeletePipelineTemplateCommand(),
 	}
 
 	app.Flags = []cli.Flag{
