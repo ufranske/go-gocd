@@ -30,6 +30,7 @@ after_success:
   - bash <(curl -s https://codecov.io/bash)
   - make gocd.darwin gocd.linux
   - gem install --no-ri --no-rdoc fpm
+  - gem env
 
 deploy:
   - provider: script
