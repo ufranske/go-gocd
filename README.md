@@ -1,8 +1,8 @@
 # GoCD SDK 0.2.3
 
 [![GoDoc](https://godoc.org/github.com/drewsonne/go-gocd/gocd?status.svg)](https://godoc.org/github.com/drewsonne/go-gocd/gocd)
-[![Build Status](https://travis-ci.org/drewsonne/gocdsdk.svg?branch=master)](https://travis-ci.org/drewsonne/gocdsdk)
-[![codecov](https://codecov.io/gh/drewsonne/gocdsdk/branch/master/graph/badge.svg)](https://codecov.io/gh/drewsonne/gocdsdk)
+[![Build Status](https://travis-ci.org/drewsonne/go-gocd.svg?branch=master)](https://travis-ci.org/drewsonne/go-gocd)
+[![codecov](https://codecov.io/gh/drewsonne/go-gocd/branch/master/graph/badge.svg)](https://codecov.io/gh/drewsonne/go-gocd)
 
 ## Library
 
