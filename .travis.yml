@@ -1,9 +1,13 @@
 language: go
 go:
- - 1.7.x
- - 1.8.x
- - release
- - tip
+  - 1.7.x
+  - 1.8.x
+  - release
+  - tip
+
+env:
+  global:
+    - secure: ax6R000Lq+b4jbOKXxXBFyWKAQdPQkdwxSqy7qukPKk9fOh5mXI/gEX7ep6JHRvcBqbq5LavXgNCQpyGdTevhdi8eQBhvOE79one/bLbDYj4mCbDu2rHtk3Dln3+xWTIhe2HFembCxcVHLHK8zAv8vSadJN/bDEGGTdfkZS+h3GW5LKhtcD3j3prJ6baJUkmGiiOt7kDcYEYkXMDaS13fM9E/G8GD0hI7YrwUJ5HY1EMBcUjHiFUDwSLM6OqF4bKbDxVcsVNwh5SLSTG4PDMmdKDP3suTgQZauGuzCL51KjsYIdC9wGkFnUK2BLM++7CkYjsrVAAGEWoQhPhjIi5psuQbaGYrvtbSbjb6Zx2jjtbzTJJ1KtIRcjzkiFKF6EhG8+HAlfSubBSMov+geoj5VXbMgCT7Pwnzf7I4kKd+xUYvKZ8Zda3OrXk2iY9qJ+WGCgtb38rHsgE1bLIVcdZyX0cNcTQZmCvTny81teZNuIS5zWbOyZxwnRVaDv51uvs+YL1+zwgBmSR2dzef5NN4eUxzip93/FhBDmqYxpu7XWtMMrI5roWsmpWNL0DACf8qIDRYtGR2Wr+oC+uadG8aqEiCp5vPmgsPmOwvatOqAScuR5J2bYylDqtseFKUuWoYPNT6BfTk+ZMLv9r08230+W5SmF2/KIzJm0OjRc/OLw=
 
 matrix:
   allow_failures:
@@ -16,25 +20,24 @@ before_install:
 
 script:
   - diff -u <(echo -n) <(gofmt -d -s .)
-  - go generate -x ./... && git diff --exit-code; code=$?; git checkout -- .; (exit $code) # Check that go generate ./... produces a zero diff; clean up any changes afterwards.
+  - go generate -x ./... && git diff --exit-code; code=$?; git checkout -- .; (exit
+    $code)
   - go tool vet .
   - bash ./go.test.sh
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - env
-  - TAG=${TRAVIS_TAG} COMMIT=${TRAVIS_COMMIT} make gocd.darwin gocd.linux
-  - test -n "$TRAVIS_TAG" &&cd cli && curl -sL https://git.io/goreleaser | bash
+  - make gocd.darwin gocd.linux
+  - test -n "$TRAVIS_TAG" && cd cli && curl -sL https://git.io/goreleaser | bash
 
-
-deploy:
-  - skip_cleanup: true
-    provider: releases
-    api_key:
-      secure: InBfpc4+Lxk8c3l1WKFX8Kd0VY4VDkNaflO5WnsfyaZmOwqHf3QuPULb5/yAb4YeCWXQ+HytQaZlooBQb8Fffg5aF29MMF6/kuzSMSW8ubO0CzfEo9n3mwlGBYagyR+Ilge40aVVOJIMczECsEejDGkxEFuJb7QeB835M5D/1hR6JBvG74l36AM+nmPs6Hwz3nQ4SX4eXmLEUggjc5CknPcx0cCK7OFYaEsEEsbMYtPxVJCRJrHAtoPG4cVmq4QDPqPzSctZf7F+ncPosS+uasUgBGIEqT6bga/8x+CIwEeuKcEyuO8oTiYng0csbgdx2s9Kcer+OZUsv1hnZu8asKclnudUdWzTqEhTEQhB49xHecjzy/ztZUV2ORDNIBLUJUlQTQEAU0ZKvYtY0PuR2hcWi2cYMEGB3a1jSq84I5Dhr/N7yFF/30QMOFVccFvKJ/YapyybsBg73cnw9jAf8f6KsPp168zD2nF5lREoJkrPiyNSytc/xaj8lOsPlrTVU8sSYR+dcDRlI8w+E4L4k8Q0TRfRrsqqRrz3wdhZrNtr42qiHFOf3Es5VwV2z4hN2axNhw/JuIe2VF/eNAnzIbhcEcwEpCiEoHz1omkHFBs8lR82WKHz1AQMD9W4Xk4I4v8Y6664KgMJihnmWjKIxCnhDeSqQ8bu9fma7F9ejKE=
-    file_glob: true
-    file: target/*
-    on:
-      repo: drewsonne/gocdsdk
-      tags: true
-      branch: develop
+#deploy:
+#  - skip_cleanup: true
+#    provider: releases
+#    api_key:
+#      secure: InBfpc4+Lxk8c3l1WKFX8Kd0VY4VDkNaflO5WnsfyaZmOwqHf3QuPULb5/yAb4YeCWXQ+HytQaZlooBQb8Fffg5aF29MMF6/kuzSMSW8ubO0CzfEo9n3mwlGBYagyR+Ilge40aVVOJIMczECsEejDGkxEFuJb7QeB835M5D/1hR6JBvG74l36AM+nmPs6Hwz3nQ4SX4eXmLEUggjc5CknPcx0cCK7OFYaEsEEsbMYtPxVJCRJrHAtoPG4cVmq4QDPqPzSctZf7F+ncPosS+uasUgBGIEqT6bga/8x+CIwEeuKcEyuO8oTiYng0csbgdx2s9Kcer+OZUsv1hnZu8asKclnudUdWzTqEhTEQhB49xHecjzy/ztZUV2ORDNIBLUJUlQTQEAU0ZKvYtY0PuR2hcWi2cYMEGB3a1jSq84I5Dhr/N7yFF/30QMOFVccFvKJ/YapyybsBg73cnw9jAf8f6KsPp168zD2nF5lREoJkrPiyNSytc/xaj8lOsPlrTVU8sSYR+dcDRlI8w+E4L4k8Q0TRfRrsqqRrz3wdhZrNtr42qiHFOf3Es5VwV2z4hN2axNhw/JuIe2VF/eNAnzIbhcEcwEpCiEoHz1omkHFBs8lR82WKHz1AQMD9W4Xk4I4v8Y6664KgMJihnmWjKIxCnhDeSqQ8bu9fma7F9ejKE=
+#    file_glob: true
+#    file: target/*
+#    on:
+#      repo: drewsonne/gocdsdk
+#      tags: true
+#      branch: develop
