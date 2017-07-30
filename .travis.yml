@@ -17,7 +17,7 @@ matrix:
 
 before_install:
   - go get -t -v ./...
-  - go get github.com/drewsonne/goreleaser
+  - go get github.com/goreleaser/goreleaser
 
 script:
   - diff -u <(echo -n) <(gofmt -d -s .)
