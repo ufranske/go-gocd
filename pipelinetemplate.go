@@ -23,12 +23,12 @@ type PipelineTemplateLinks struct {
 }
 
 type PipelineTemplateRequest struct {
-	Name   string `json:"name"`
+	Name   string   `json:"name"`
 	Stages []*Stage `json:"stages"`
 }
 
 type PipelineTemplateResponse struct {
-	Name string `json:"name"`
+	Name     string `json:"name"`
 	Embedded *struct {
 		Pipelines []*struct {
 			Name string `json:"name"`
@@ -37,19 +37,19 @@ type PipelineTemplateResponse struct {
 }
 
 type PipelineTemplatesResponse struct {
-	Links PipelineTemplatesLinks `json:"_links,omitempty"`
+	Links    PipelineTemplatesLinks `json:"_links,omitempty"`
 	Embedded *struct {
 		Templates []*PipelineTemplate `json:"templates"`
 	} `json:"_embedded,omitempty"`
 }
 
 type PipelineTemplate struct {
-	Links *PipelineTemplateLinks `json:"_links,omitempty"`
-	Name  string   `json:"name"`
+	Links    *PipelineTemplateLinks `json:"_links,omitempty"`
+	Name     string                 `json:"name"`
 	Embedded *struct {
 		Pipelines []*Pipeline `json:"pipelines,omitempty"`
 	} `json:"_embedded,omitempty"`
-	Version string `json:"template_version"`
+	Version string   `json:"template_version"`
 	Stages  []*Stage `json:"stages,omitempty"`
 }
 
@@ -57,7 +57,7 @@ func (pt *PipelineTemplate) RemoveLinks() {
 	pt.Links = nil
 }
 
-func (pt *PipelineTemplate) Pipelines() ([]*Pipeline) {
+func (pt *PipelineTemplate) Pipelines() []*Pipeline {
 	return pt.Embedded.Pipelines
 }
 

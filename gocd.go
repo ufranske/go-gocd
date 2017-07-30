@@ -6,9 +6,9 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
-	"io/ioutil"
 )
 
 const (

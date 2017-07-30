@@ -27,7 +27,7 @@ type JobStateTransition struct {
 }
 
 type JobRunHistoryResponse struct {
-	Jobs       []*Job             `json:"jobs"`
+	Jobs       []*Job              `json:"jobs"`
 	Pagination *PaginationResponse `json:"pagination,omitempty"`
 }
 

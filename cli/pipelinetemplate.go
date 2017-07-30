@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/urfave/cli"
 	"context"
+	"encoding/json"
 	"errors"
 	"github.com/drewsonne/gocdsdk"
-	"encoding/json"
+	"github.com/urfave/cli"
 )
 
 const (
@@ -31,7 +31,7 @@ func ListPipelineTemplatesAction(c *cli.Context) error {
 
 	type ptr struct {
 		Name      string `json:"name"`
-		Pipelines []*p `json:"pipelines"`
+		Pipelines []*p   `json:"pipelines"`
 	}
 	responses := []ptr{}
 	for _, pt := range ts {
@@ -121,7 +121,7 @@ func CreatePipelineTemplateCommand() *cli.Command {
 		Action: CreatePipelineTemplateAction,
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "template-name", Usage: "Pipeline Template name."},
-			cli.StringSliceFlag{Name: "stage", Usage: "JSON encoded stage object." },
+			cli.StringSliceFlag{Name: "stage", Usage: "JSON encoded stage object."},
 		},
 	}
 }
@@ -132,9 +132,9 @@ func UpdatePipelineTemplateCommand() *cli.Command {
 		Usage:  UpdatePipelineTemplateCommandUsage,
 		Action: UpdatePipelineTemplateAction,
 		Flags: []cli.Flag{
-			cli.StringFlag{Name: "version",Usage:"Pipeline template version."},
+			cli.StringFlag{Name: "version", Usage: "Pipeline template version."},
 			cli.StringFlag{Name: "template-name", Usage: "Pipeline Template name."},
-			cli.StringSliceFlag{Name: "stage", Usage: "JSON encoded stage object." },
+			cli.StringSliceFlag{Name: "stage", Usage: "JSON encoded stage object."},
 		},
 	}
 }

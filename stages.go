@@ -11,7 +11,7 @@ type Stage struct {
 	NeverCleanupArtifacts bool      `json:"never_cleanup_artifacts"`
 	Approval              *Approval `json:"approval,omitempty"`
 	EnvironmentVariables  []string  `json:"environment_variables,omitempty"`
-	Jobs                  []*Job     `json:"jobs,omitempty"`
+	Jobs                  []*Job    `json:"jobs,omitempty"`
 }
 
 //func (s Stage) MarshalJSON() ([]byte, error) {
