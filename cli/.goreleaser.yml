@@ -8,3 +8,10 @@ builds:
       - linux
     goarch:
       - amd64
+fpm:
+  homepage: https://github.com/drewsonne/gocdsdk
+  maintainer: Drew J. Sonne <drew.sonne@gmail.com>
+  license: LGPLv3
+  formats:
+    - deb
+    - rpm
