@@ -22,7 +22,6 @@ matrix:
 
 before_install:
   - go get -t -v ./...
-  - go get github.com/goreleaser/goreleaser
 
 script:
   - diff -u <(echo -n) <(gofmt -d -s .)
@@ -35,6 +34,7 @@ after_success:
   - bash <(curl -s https://codecov.io/bash)
   - make gocd.darwin gocd.linux
   - gem install --no-ri --no-rdoc fpm
+  - go get github.com/goreleaser/goreleaser
   - gem env
 
 deploy:
@@ -43,8 +43,8 @@ deploy:
     script: gem install --no-ri --no-rdoc fpm && cd cli && goreleaser
     on:
       tags: true
-  - provider: script
-    skip_cleanup: true
-    script: gem install --no-ri --no-rdoc fpm && cd cli && goreleaser --snapshot
-    on:
-      branch: develop
+#  - provider: script
+#    skip_cleanup: true
+#    script: gem install --no-ri --no-rdoc fpm && cd cli && goreleaser --snapshot
+#    on:
+#      branch: develop
