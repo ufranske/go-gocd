@@ -15,6 +15,8 @@ const (
 	GetPipelineTemplateCommandUsage    = "Get Pipeline Templates"
 	CreatePipelineTemplateCommandName  = "create-pipeline-template"
 	CreatePipelineTemplateCommandUsage = "Create Pipeline Templates"
+	UpdatePipelineTemplateCommandName  = "update-pipeline-template"
+	UpdatePipelineTemplateCommandUsage = "Update Pipeline template"
 )
 
 func ListPipelineTemplatesAction(c *cli.Context) error {
@@ -82,6 +84,17 @@ func CreatePipelineTemplateAction(c *cli.Context) error {
 	return handleOutput(pt, r, "CreatePipelineTemplate", err)
 }
 
+func UpdatePipelineTemplateAction(c *cli.Context) error {
+	if c.String("template-name") == "" {
+		return handleOutput(nil, nil, "CreatePipelineTemplate", errors.New("'--template-name' is missing."))
+	}
+	if len(c.StringSlice("stage")) < 1 {
+		return handleOutput(nil, nil, "CreatePipelineTemplate", errors.New("At least 1 '--stage' must be set."))
+	}
+
+	return nil
+}
+
 func ListPipelineTemplatesCommand() *cli.Command {
 	return &cli.Command{
 		Name:   ListPipelineTemplatesCommandName,
@@ -107,6 +120,19 @@ func CreatePipelineTemplateCommand() *cli.Command {
 		Usage:  CreatePipelineTemplateCommandUsage,
 		Action: CreatePipelineTemplateAction,
 		Flags: []cli.Flag{
+			cli.StringFlag{Name: "template-name", Usage: "Pipeline Template name."},
+			cli.StringSliceFlag{Name: "stage", Usage: "JSON encoded stage object." },
+		},
+	}
+}
+
+func UpdatePipelineTemplateCommand() *cli.Command {
+	return &cli.Command{
+		Name:   UpdatePipelineTemplateCommandName,
+		Usage:  UpdatePipelineTemplateCommandUsage,
+		Action: UpdatePipelineTemplateAction,
+		Flags: []cli.Flag{
+			cli.StringFlag{Name: "version",Usage:"Pipeline template version."},
 			cli.StringFlag{Name: "template-name", Usage: "Pipeline Template name."},
 			cli.StringSliceFlag{Name: "stage", Usage: "JSON encoded stage object." },
 		},

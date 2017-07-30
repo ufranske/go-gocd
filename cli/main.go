@@ -29,6 +29,7 @@ func main() {
 		*CreatePipelineTemplateCommand(),
 		*UpdateAgentCommand(),
 		*UpdateAgentsCommand(),
+		*UpdatePipelineTemplateCommand(),
 		*DeleteAgentCommand(),
 		*DeleteAgentsCommand(),
 	}
