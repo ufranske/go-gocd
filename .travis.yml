@@ -18,6 +18,7 @@ matrix:
 before_install:
   - go get -t -v ./...
   - go get github.com/goreleaser/goreleaser
+  - gem install --no-ri --no-rdoc fpm
 
 script:
   - diff -u <(echo -n) <(gofmt -d -s .)
