@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAgnet_Get(t *testing.T) {
+func TestAgent_Get(t *testing.T) {
 
 	setup()
 	defer teardown()
