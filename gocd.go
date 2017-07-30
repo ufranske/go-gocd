@@ -102,12 +102,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 		return nil, err
 	}
 
-	//if apiVersion == "" {
-	//	apiVersion = apiV1
-	//}
-
 	u := c.BaseURL.ResolveReference(rel)
-
 	request := &APIRequest{}
 
 	var buf io.ReadWriter
