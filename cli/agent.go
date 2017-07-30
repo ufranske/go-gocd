@@ -36,7 +36,7 @@ func ListAgentsAction(c *cli.Context) error {
 
 func GetAgentAction(c *cli.Context) error {
 	agent, r, err := cliAgent().Agents.Get(context.Background(), c.String("uuid"))
-	if r.StatusCode != 404 {
+	if r.Http.StatusCode != 404 {
 		agent.RemoveLinks()
 	}
 	return handleOutput(agent, r, "GetAgent", err)
@@ -59,7 +59,7 @@ func UpdateAgentAction(c *cli.Context) error {
 	}
 
 	agent, r, err := cliAgent().Agents.Update(context.Background(), c.String("uuid"), a)
-	if r.StatusCode != 404 {
+	if r.Http.StatusCode != 404 {
 		agent.RemoveLinks()
 	}
 	return handleOutput(agent, r, "UpdateAgent", err)
@@ -71,7 +71,7 @@ func DeleteAgentAction(c *cli.Context) error {
 	}
 
 	deleteResponse, r, err := cliAgent().Agents.Delete(context.Background(), c.String("uuid"))
-	if r.StatusCode == 406 {
+	if r.Http.StatusCode == 406 {
 		err = errors.New(deleteResponse)
 	}
 	return handleOutput(deleteResponse, r, "DeleteAgent", err)
@@ -101,7 +101,7 @@ func UpdateAgentsAction(c *cli.Context) error {
 	}
 
 	updateResponse, r, err := cliAgent().Agents.BulkUpdate(context.Background(), u)
-	if r.StatusCode == 406 {
+	if r.Http.StatusCode == 406 {
 		err = errors.New(updateResponse)
 	}
 	return handleOutput(updateResponse, r, "BulkAgentUpdate", err)

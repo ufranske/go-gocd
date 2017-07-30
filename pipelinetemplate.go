@@ -2,7 +2,6 @@ package gocd
 
 import (
 	"context"
-	//"fmt"
 	"fmt"
 	"net/url"
 )
@@ -21,6 +20,12 @@ type PipelineTemplateLinks struct {
 	Doc  *url.URL `json:"doc"`
 	Find *url.URL `json:"find"`
 }
+
+type PipelineTemplateRequest struct {
+	Name   string `json:"name"`
+	Stages []*Stage `json:"stages"`
+}
+
 type PipelineTemplateResponse struct {
 	Name string `json:"name"`
 	Embedded *struct {
@@ -95,4 +100,30 @@ func (s *PipelineTemplatesService) List(ctx context.Context) ([]*PipelineTemplat
 	}
 
 	return ptr.Embedded.Templates, resp, nil
+}
+
+func (s *PipelineTemplatesService) Create(ctx context.Context, name string, st []*Stage) (*PipelineTemplate, *APIResponse, error) {
+	u, err := addOptions("admin/templates")
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pt := PipelineTemplateRequest{
+		Name:   name,
+		Stages: st,
+	}
+
+	req, err := s.client.NewRequest("POST", u, pt, apiV3)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	ptr := PipelineTemplate{}
+	resp, err := s.client.Do(ctx, req, &ptr)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &ptr, resp, nil
+
 }

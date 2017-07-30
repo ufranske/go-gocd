@@ -7,14 +7,14 @@ func (c *Client) Login(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	req.SetBasicAuth(c.Auth.Username, c.Auth.Password)
+	req.Http.SetBasicAuth(c.Auth.Username, c.Auth.Password)
 
 	resp, err := c.Do(ctx, req, nil)
 	if err != nil {
 		return err
 	}
 
-	c.cookie = resp.Header["Set-Cookie"][0]
+	c.cookie = resp.Http.Header["Set-Cookie"][0]
 
 	return nil
 }

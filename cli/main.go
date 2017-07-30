@@ -26,6 +26,7 @@ func main() {
 		*ListPipelineTemplatesCommand(),
 		*GetAgentCommand(),
 		*GetPipelineTemplateCommand(),
+		*CreatePipelineTemplateCommand(),
 		*UpdateAgentCommand(),
 		*UpdateAgentsCommand(),
 		*DeleteAgentCommand(),
@@ -61,25 +62,28 @@ func cliAgent() *gocd.Client {
 
 }
 
-func handleOutput(r interface{}, ar *gocd.APIResponse, reqType string, err error) error {
+func handleOutput(r interface{}, hr *gocd.APIResponse, reqType string, err error) error {
 	var b []byte
 	var o map[string]interface{}
 	if err != nil {
 		o = map[string]interface{}{
 			"Error": err.Error(),
 		}
-	} else if ar.StatusCode >= 200 && ar.StatusCode < 300 {
+	} else if hr.Http.StatusCode >= 200 && hr.Http.StatusCode < 300 {
 		o = map[string]interface{}{
 			fmt.Sprintf("%sResponse", reqType): r,
 		}
-	} else if ar.StatusCode == 404 {
+	} else if hr.Http.StatusCode == 404 {
 		o = map[string]interface{}{
 			"Error": fmt.Sprintf("Could not find resource for '%s' action.", reqType),
 		}
 	} else {
+
 		o = map[string]interface{}{
-			"Error":        "An error occured while retrieving the resource.",
-			"RequestError": fmt.Sprintf("%s", ar),
+			"Error":          "An error occured while retrieving the resource.",
+			"ResponseHeader": fmt.Sprintf("%s", hr.Http.Header),
+			"ResponseBody":   hr.Body,
+			"RequestBody":    hr.Request.Body,
 		}
 	}
 	b, err = json.MarshalIndent(o, "", "    ")

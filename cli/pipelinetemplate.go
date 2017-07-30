@@ -4,13 +4,17 @@ import (
 	"github.com/urfave/cli"
 	"context"
 	"errors"
+	"github.com/drewsonne/gocdsdk"
+	"encoding/json"
 )
 
 const (
-	ListPipelineTemplatesCommandName  = "list-pipeline-templates"
-	ListPipelineTemplatesCommandUsage = "List Pipeline Templates"
-	GetPipelineTemplateCommandName    = "get-pipeline-template"
-	GetPipelineTemplateCommandUsage   = "Get Pipeline Templates"
+	ListPipelineTemplatesCommandName   = "list-pipeline-templates"
+	ListPipelineTemplatesCommandUsage  = "List Pipeline Templates"
+	GetPipelineTemplateCommandName     = "get-pipeline-template"
+	GetPipelineTemplateCommandUsage    = "Get Pipeline Templates"
+	CreatePipelineTemplateCommandName  = "create-pipeline-template"
+	CreatePipelineTemplateCommandUsage = "Create Pipeline Templates"
 )
 
 func ListPipelineTemplatesAction(c *cli.Context) error {
@@ -49,10 +53,33 @@ func GetPipelineTemplateAction(c *cli.Context) error {
 	}
 
 	pt, r, err := cliAgent().PipelineTemplates.Get(context.Background(), c.String("template-name"))
-	if r.StatusCode != 404 {
+	if r.Http.StatusCode != 404 {
 		pt.RemoveLinks()
 	}
 	return handleOutput(pt, r, "GetPipelineTemplate", err)
+}
+
+func CreatePipelineTemplateAction(c *cli.Context) error {
+	if c.String("template-name") == "" {
+		return handleOutput(nil, nil, "CreatePipelineTemplate", errors.New("'--template-name' is missing."))
+	}
+	if len(c.StringSlice("stage")) < 1 {
+		return handleOutput(nil, nil, "CreatePipelineTemplate", errors.New("At least 1 '--stage' must be set."))
+	}
+
+	stages := []*gocd.Stage{}
+	for _, stage := range c.StringSlice("stage") {
+		st := gocd.Stage{}
+		json.Unmarshal([]byte(stage), &st)
+
+		if err := st.Validate(); err != nil {
+			return handleOutput(nil, nil, "CreatePipelineTemplate", err)
+		}
+		stages = append(stages, &st)
+	}
+
+	pt, r, err := cliAgent().PipelineTemplates.Create(context.Background(), c.String("template-name"), stages)
+	return handleOutput(pt, r, "CreatePipelineTemplate", err)
 }
 
 func ListPipelineTemplatesCommand() *cli.Command {
@@ -70,6 +97,18 @@ func GetPipelineTemplateCommand() *cli.Command {
 		Action: GetPipelineTemplateAction,
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "template-name", Usage: "Name of the Pipeline Template configuration."},
+		},
+	}
+}
+
+func CreatePipelineTemplateCommand() *cli.Command {
+	return &cli.Command{
+		Name:   CreatePipelineTemplateCommandName,
+		Usage:  CreatePipelineTemplateCommandUsage,
+		Action: CreatePipelineTemplateAction,
+		Flags: []cli.Flag{
+			cli.StringFlag{Name: "template-name", Usage: "Pipeline Template name."},
+			cli.StringSliceFlag{Name: "stage", Usage: "JSON encoded stage object." },
 		},
 	}
 }

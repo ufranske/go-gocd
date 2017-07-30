@@ -1,5 +1,7 @@
 package gocd
 
+import "errors"
+
 type StagesService service
 
 type Stage struct {
@@ -9,7 +11,32 @@ type Stage struct {
 	NeverCleanupArtifacts bool      `json:"never_cleanup_artifacts"`
 	Approval              *Approval `json:"approval,omitempty"`
 	EnvironmentVariables  []string  `json:"environment_variables,omitempty"`
-	Jobs                  []Job     `json:"jobs"`
+	Jobs                  []*Job     `json:"jobs,omitempty"`
+}
+
+//func (s Stage) MarshalJSON() ([]byte, error) {
+//	if s.Approval == nil {
+//		return nil, nil
+//	}
+//	return nil, nil
+//}
+
+func (s *Stage) Validate() error {
+	if s.Name == "" {
+		return errors.New("`gocd.Stage.Name` is empty.")
+	}
+
+	if len(s.Jobs) == 0 {
+		return errors.New("At least one `Job` must be spcified.")
+	} else {
+		for _, job := range s.Jobs {
+			if err := job.Validate(); err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
 }
 
 //type StageInstance struct {

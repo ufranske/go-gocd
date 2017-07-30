@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"io/ioutil"
 )
 
 const (
@@ -19,20 +20,22 @@ const (
 	apiV4          = "application/vnd.go.cd.v4+json"
 )
 
-type APIResponse struct {
-	*http.Response
-}
-
-func newResponse(r *http.Response) *APIResponse {
-	response := &APIResponse{Response: r}
-	return response
-}
-
 type StringResponse struct {
 	Message string `json:"message"`
 }
 
 type ClientInterface interface{}
+
+type APIResponse struct {
+	Http    *http.Response
+	Body    string
+	Request *APIRequest
+}
+
+type APIRequest struct {
+	Http *http.Request
+	Body string
+}
 
 type Client struct {
 	client    *http.Client
@@ -92,7 +95,7 @@ func NewClient(gocdBaseUrl string, auth *Auth, httpClient *http.Client, checkSsl
 	return c
 }
 
-func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion string) (*http.Request, error) {
+func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion string) (*APIRequest, error) {
 	rel, err := url.Parse("api/" + urlStr)
 
 	if err != nil {
@@ -105,6 +108,8 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 
 	u := c.BaseURL.ResolveReference(rel)
 
+	request := &APIRequest{}
+
 	var buf io.ReadWriter
 	if body != nil {
 		buf = new(bytes.Buffer)
@@ -112,9 +117,12 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 		if err != nil {
 			return nil, err
 		}
+		bdy, _ := ioutil.ReadAll(buf)
+		request.Body = string(bdy)
 	}
 
 	req, err := http.NewRequest(method, u.String(), buf)
+	request.Http = req
 	if err != nil {
 		return nil, err
 	}
@@ -133,14 +141,18 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 		req.Header.Set("Cookie", c.cookie)
 	}
 
-	return req, nil
+	return request, nil
 }
 
-func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*APIResponse, error) {
+func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}) (*APIResponse, error) {
 
-	req = req.WithContext(ctx)
+	req.Http = req.Http.WithContext(ctx)
 
-	resp, err := c.client.Do(req)
+	response := &APIResponse{
+		Request: req,
+	}
+
+	resp, err := c.client.Do(req.Http)
 	if err != nil {
 		if e, ok := err.(*url.Error); ok {
 			if url, err := url.Parse(e.URL); err == nil {
@@ -152,8 +164,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*API
 		return nil, err
 	}
 
-	response := newResponse(resp)
-
+	response.Http = resp
 	//err = CheckResponse(resp)
 	//if err != nil {
 	//	return response, err
@@ -163,7 +174,9 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*API
 		if w, ok := v.(io.Writer); ok {
 			io.Copy(w, resp.Body)
 		} else {
-			err = json.NewDecoder(resp.Body).Decode(v)
+			bdy, err := ioutil.ReadAll(resp.Body)
+			err = json.Unmarshal(bdy, v)
+			response.Body = string(bdy)
 			if err == io.EOF {
 				err = nil // ignore EOF errors caused by empty response body
 			}
@@ -171,7 +184,6 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*API
 	}
 
 	return response, err
-
 }
 
 // sanitizeURL redacts the client_secret parameter from the URL which may be

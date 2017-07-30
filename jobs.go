@@ -1,5 +1,7 @@
 package gocd
 
+import "errors"
+
 type JobsService service
 
 type Job struct {
@@ -27,4 +29,11 @@ type JobStateTransition struct {
 type JobRunHistoryResponse struct {
 	Jobs       []*Job             `json:"jobs"`
 	Pagination *PaginationResponse `json:"pagination,omitempty"`
+}
+
+func (j *Job) Validate() error {
+	if j.Name == "" {
+		return errors.New("`gocd.Jobs.Name` is empty.")
+	}
+	return nil
 }
