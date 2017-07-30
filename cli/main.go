@@ -1,6 +1,6 @@
 // GoCD CLI tool
 
-package main
+package cli
 
 import (
 	"encoding/json"
