@@ -49,7 +49,7 @@ func version() string {
 		return tag
 	} else {
 		if commit := os.Getenv("TRAVIS_COMMIT"); commit != "" {
-			return commit
+			return commit[0:8]
 		} else {
 			return GoCDUtilityDefaultVersion
 		}
