@@ -4,3 +4,6 @@ fmt: format
 
 format:
 	gofmt -w -s .
+
+gocd:
+	(cd cli && go build -o ../gocd)
