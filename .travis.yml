@@ -22,6 +22,7 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - env
   - make gocd.darwin gocd.linux
 
 
