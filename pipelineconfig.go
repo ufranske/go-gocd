@@ -10,17 +10,17 @@ type PipelineConfig struct {
 }
 
 type PipelineConfigRequest struct {
-	Group    string `json:"group"`
+	Group    string    `json:"group"`
 	Pipeline *Pipeline `json:"pipeline"`
 }
 
-func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *Pipeline) (*PipelineConfig, *APIResponse, error) {
+func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *Pipeline) (*Pipeline, *APIResponse, error) {
 	u, err := addOptions("admin/pipelines")
 	if err != nil {
 		return nil, nil, err
 	}
 
-	pt := PipelineConfigRequest{
+	pt := &PipelineConfigRequest{
 		Group:    group,
 		Pipeline: p,
 	}
@@ -30,7 +30,7 @@ func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *
 		return nil, nil, err
 	}
 
-	pc := PipelineConfig{}
+	pc := Pipeline{}
 	resp, err := pcs.client.Do(ctx, req, &pc)
 	if err != nil {
 		return nil, resp, err

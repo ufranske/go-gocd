@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/urfave/cli"
 	"context"
-	"github.com/drewsonne/gocdsdk"
 	"encoding/json"
+	"github.com/drewsonne/gocdsdk"
 	"github.com/pkg/errors"
+	"github.com/urfave/cli"
+	"io/ioutil"
 )
 
 const (
@@ -19,7 +20,6 @@ func CreatePipelineConfigAction(c *cli.Context) error {
 		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--group' is missing."))
 	}
 
-	p := &gocd.Pipeline{}
 	pipeline := c.String("pipeline")
 	pipeline_file := c.String("pipeline-file")
 	if pipeline == "" && pipeline_file == "" {
@@ -36,11 +36,21 @@ func CreatePipelineConfigAction(c *cli.Context) error {
 		)
 	}
 
+	var pf []byte
+	var err error
 	if pipeline_file != "" {
-
+		pf, err = ioutil.ReadFile(pipeline_file)
+		if err != nil {
+			return handeErrOutput("CreatePipelineConfig", err)
+		}
+	} else {
+		pf = []byte(pipeline)
 	}
-
-	json.Unmarshal([]byte(pipeline), &p)
+	p := &gocd.Pipeline{}
+	err = json.Unmarshal(pf, &p)
+	if err != nil {
+		return handeErrOutput("CreatePipelineConfig", err)
+	}
 
 	pc, r, err := cliAgent().PipelineConfigs.Create(context.Background(), group, p)
 	if err != nil {

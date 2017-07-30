@@ -8,7 +8,27 @@ import (
 type PipelinesService service
 
 type Pipeline struct {
-	Name string `json:"name"`
+	Name                  string     `json:"name"`
+	LabelTemplate         string     `json:"label_template,omitempty"`
+	EnablePipelineLocking bool       `json:"enable_pipeline_locking,omitempty"`
+	Template              string     `json:"template,omitempty"`
+	Materials             []Material `json:"materials,omitempty"`
+	Stages                []Stage    `json:"stages"`
+}
+
+type Material struct {
+	Type       string `json:"type"`
+	Attributes struct {
+		Url             string      `json:"url"`
+		Destination     string      `json:"destination,omitempty"`
+		Filter          interface{} `json:"filter,omitempty"`
+		InvertFilter    bool        `json:"invert_filter,omitempty"`
+		Name            string      `json:"name,omitempty"`
+		AutoUpdate      bool        `json:"auto_update,omitempty"`
+		Branch          string      `json:"branch,omitempty"`
+		SubmoduleFolder string      `json:"submodule_folder,omitempty"`
+		ShallowClone    bool        `json:"shallow_clone,omitempty"`
+	} `json:"attributes"`
 }
 
 type PipelineHistory struct {

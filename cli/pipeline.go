@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/urfave/cli"
 	"context"
 	"errors"
+	"github.com/urfave/cli"
 )
 
 const (

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/urfave/cli"
 	"context"
+	"github.com/urfave/cli"
 )
 
 const (
@@ -21,9 +21,9 @@ func ListPipelineGroupsAction(c *cli.Context) error {
 
 func ListPipelineGroupsCommand() *cli.Command {
 	return &cli.Command{
-		Name:   ListPipelineGroupsCommandName,
-		Usage:  ListPipelineGroupsCommandUsage,
-		Action: ListPipelineGroupsAction,
+		Name:     ListPipelineGroupsCommandName,
+		Usage:    ListPipelineGroupsCommandUsage,
+		Action:   ListPipelineGroupsAction,
 		Category: "Pipeline Groups",
 	}
 }
