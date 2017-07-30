@@ -116,6 +116,7 @@ func ListAgentsCommand() *cli.Command {
 		Name:   ListAgentsCommandName,
 		Usage:  ListAgentsCommandUsage,
 		Action: ListAgentsAction,
+		Category: "Agents",
 	}
 }
 
@@ -124,6 +125,7 @@ func GetAgentCommand() *cli.Command {
 		Name:   GetAgentCommandName,
 		Usage:  GetAgentCommandUsage,
 		Action: GetAgentAction,
+		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
 		},
@@ -135,6 +137,7 @@ func UpdateAgentCommand() *cli.Command {
 		Name:   UpdateAgentCommandName,
 		Usage:  UpdateAgentCommandUsage,
 		Action: UpdateAgentAction,
+		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
 			cli.StringFlag{Name: "config, c", Usage: "JSON encoded config for agent update."},
@@ -147,6 +150,7 @@ func DeleteAgentCommand() *cli.Command {
 		Name:   DeleteAgentCommandName,
 		Usage:  DeleteAgentCommandUsage,
 		Action: DeleteAgentAction,
+		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
 		},
@@ -158,6 +162,7 @@ func UpdateAgentsCommand() *cli.Command {
 		Name:   UpdateAgentsCommandName,
 		Usage:  UpdateAgentsCommandUsage,
 		Action: UpdateAgentsAction,
+		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringSliceFlag{Name: "uuid", Usage: "GoCD Agent UUIDs"},
 			cli.StringFlag{Name: "state", Usage: "Whether agents are enabled or disabled. Allowed values 'Enabled','Disabled'."},
@@ -171,6 +176,7 @@ func DeleteAgentsCommand() *cli.Command {
 		Name:   DeleteAgentsCommandName,
 		Usage:  DeleteAgentsCommandUsage,
 		Action: DeleteAgentsAction,
+		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringSliceFlag{Name: "uuid", Usage: "GoCD Agent UUIDs"},
 		},
