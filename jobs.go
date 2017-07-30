@@ -5,19 +5,19 @@ import "errors"
 type JobsService service
 
 type Job struct {
-	AgentUUID           string                `json:"agent_uuid"`
+	AgentUUID           string                `json:"agent_uuid,omitempty"`
 	Name                string                `json:"name"`
-	JobStateTransitions []*JobStateTransition `json:"job_state_transitions"`
-	ScheduledDate       int64                 `json:"scheduled_date"`
-	OrginalJobId        string                `json:"orginal_job_id"`
-	PipelineCounter     int64                 `json:"pipeline_counter"`
-	Rerun               bool                  `json:"rerun"`
-	PipelineName        string                `json:"pipeline_name"`
-	Result              string                `json:"result"`
-	State               string                `json:"state"`
-	Id                  int64                 `json:"id"`
-	StageCounter        string                `json:"stage_counter"`
-	StageName           string                `json:"stage_name"`
+	JobStateTransitions []*JobStateTransition `json:"job_state_transitions,omitempty"`
+	ScheduledDate       int64                 `json:"scheduled_date,omitempty"`
+	OrginalJobId        string                `json:"orginal_job_id,omitempty"`
+	PipelineCounter     int64                 `json:"pipeline_counter,omitempty"`
+	Rerun               bool                  `json:"rerun,omitempty"`
+	PipelineName        string                `json:"pipeline_name,omitempty"`
+	Result              string                `json:"result,omitempty"`
+	State               string                `json:"state,omitempty"`
+	Id                  int64                 `json:"id,omitempty"`
+	StageCounter        string                `json:"stage_counter,omitempty"`
+	StageName           string                `json:"stage_name,omitempty"`
 }
 
 type JobStateTransition struct {

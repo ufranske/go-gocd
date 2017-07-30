@@ -135,12 +135,12 @@ func (s *PipelineTemplatesService) Create(ctx context.Context, name string, st [
 }
 
 func (s *PipelineTemplatesService) Update(ctx context.Context, name string, version string, st []*Stage) (*PipelineTemplate, *APIResponse, error) {
-	u, err := addOptions(fmt.Sprintf("admin/template/%s", name))
+	u, err := addOptions(fmt.Sprintf("admin/templates/%s", name))
 	if err != nil {
 		return nil, nil, err
 	}
 
-	pt := PipelineTemplateRequest{
+	pt := &PipelineTemplateRequest{
 		Name:   name,
 		Stages: st,
 	}
@@ -150,7 +150,7 @@ func (s *PipelineTemplatesService) Update(ctx context.Context, name string, vers
 		return nil, nil, err
 	}
 
-	req.Http.Header.Set("If-Match", version)
+	req.Http.Header.Set("If-Match", fmt.Sprintf("\"%s\"",version))
 
 	ptr := PipelineTemplate{}
 	resp, err := s.client.Do(ctx, req, &ptr)
@@ -162,4 +162,24 @@ func (s *PipelineTemplatesService) Update(ctx context.Context, name string, vers
 
 	return &ptr, resp, nil
 
+}
+
+func (s *PipelineTemplatesService) Delete(ctx context.Context, uuid string) (string, *APIResponse, error) {
+	u, err := addOptions(fmt.Sprintf("admin/templates/%s", uuid))
+	if err != nil {
+		return "", nil, err
+	}
+
+	req, err := s.client.NewRequest("DELETE", u, nil, apiV4)
+	if err != nil {
+		return "", nil, err
+	}
+
+	a := StringResponse{}
+	resp, err := s.client.Do(ctx, req, &a)
+	if err != nil {
+		return "", resp, err
+	}
+
+	return a.Message, resp, nil
 }
