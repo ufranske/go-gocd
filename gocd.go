@@ -102,9 +102,9 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 		return nil, err
 	}
 
-	if apiVersion == "" {
-		apiVersion = apiV1
-	}
+	//if apiVersion == "" {
+	//	apiVersion = apiV1
+	//}
 
 	u := c.BaseURL.ResolveReference(rel)
 
@@ -136,7 +136,9 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
-	req.Header.Set("Accept", apiVersion)
+	if apiVersion != "" {
+		req.Header.Set("Accept", apiVersion)
+	}
 	req.Header.Set("User-Agent", c.UserAgent)
 
 	if c.cookie == "" {
