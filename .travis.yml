@@ -30,4 +30,13 @@ script:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - make gocd.darwin gocd.linux
-  - test -n "$TRAVIS_TAG" && cd cli && goreleaser
+
+deploy:
+  - provider: script
+    script: cd cli && goreleaser
+    on:
+      tags: true
+  - provider: script
+    script: cd cli && goreleaser --snapshot
+    on:
+      branch: develop
