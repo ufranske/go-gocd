@@ -5,7 +5,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/drewsonne/gocdsdk"
+	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/urfave/cli"
 	"os"
 )
@@ -30,9 +30,14 @@ func main() {
 		*CreatePipelineTemplateCommand(),
 		*UpdateAgentCommand(),
 		*UpdateAgentsCommand(),
+		*UpdatePipelineConfigCommand(),
 		*UpdatePipelineTemplateCommand(),
 		*DeleteAgentCommand(),
 		*DeleteAgentsCommand(),
+		*DeletePipelineTemplateCommand(),
+		*ListPipelineGroupsCommand(),
+		*GetPipelineHistoryCommand(),
+		*CreatePipelineConfigCommand(),
 	}
 
 	app.Flags = []cli.Flag{
@@ -76,6 +81,10 @@ func cliAgent() *gocd.Client {
 
 }
 
+func handeErrOutput(reqType string, err error) error {
+	return handleOutput(nil, nil, reqType, err)
+}
+
 func handleOutput(r interface{}, hr *gocd.APIResponse, reqType string, err error) error {
 	var b []byte
 	var o map[string]interface{}
@@ -87,24 +96,30 @@ func handleOutput(r interface{}, hr *gocd.APIResponse, reqType string, err error
 		o = map[string]interface{}{
 			fmt.Sprintf("%sResponse", reqType): r,
 		}
-	} else if hr.Http.StatusCode == 404 {
-		o = map[string]interface{}{
-			"Error": fmt.Sprintf("Could not find resource for '%s' action.", reqType),
-		}
+		//} else if hr.Http.StatusCode == 404 {
+		//	o = map[string]interface{}{
+		//		"Error": fmt.Sprintf("Could not find resource for '%s' action.", reqType),
+		//	}
 	} else {
 
+		b1, _ := json.Marshal(hr.Http.Header)
+		b2, _ := json.Marshal(hr.Request.Http.Header)
 		o = map[string]interface{}{
-			"Error":          "An error occured while retrieving the resource.",
-			"ResponseHeader": fmt.Sprintf("%s", hr.Http.Header),
-			"ResponseBody":   hr.Body,
-			"RequestBody":    hr.Request.Body,
+			"Error":           "An error occured while retrieving the resource.",
+			"Status":          hr.Http.StatusCode,
+			"ResponseHeader":  string(b1),
+			"ResponseBody":    hr.Body,
+			"RequestBody":     hr.Request.Body,
+			"RequestEndpoint": hr.Request.Http.URL.String(),
+			"RequestHeader":   string(b2),
 		}
 	}
 	b, err = json.MarshalIndent(o, "", "    ")
 	if err != nil {
-		return err
+		panic(err)
 	}
-	fmt.Println(string(b))
-	return nil
 
+	fmt.Println(string(b))
+
+	return nil
 }

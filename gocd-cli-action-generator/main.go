@@ -9,7 +9,10 @@ import (
 
 const command_template = `package main
 
-import "github.com/urfave/cli"
+import (
+	"github.com/urfave/cli"
+	"context"
+)
 
 const (
 	%[1]sCommandName  = "%[2]s"

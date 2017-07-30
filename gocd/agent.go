@@ -8,7 +8,7 @@ import (
 
 type AgentsService service
 
-//go:generate gocd-response-links -type=AgentsLinks,AgentLinks
+//go:generate gocd-response-links-generator -type=AgentsLinks,AgentLinks
 type AgentsLinks struct {
 	Self *url.URL `json:"self"`
 	Doc  *url.URL `json:"doc"`
@@ -85,7 +85,7 @@ type BuildDetails struct {
 	Job      string             `json:"job"`
 }
 
-//go:generate gocd-response-links -type=BuildDetailsLinks
+//go:generate gocd-response-links-generator -type=BuildDetailsLinks
 type BuildDetailsLinks struct {
 	Job      *url.URL `json:"job"`
 	Stage    *url.URL `json:"stage"`

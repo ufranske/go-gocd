@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [unreleased]
+
+## [0.2.2] - 30-07-2017
+### Added
+ - Added `pipeline config` creation in sdk and cli tool.
+ - Added `pipeline config` update in sdk and cli tool.
+
+### Changed
+ - Moved gocd package into subdirectory.
+ - Added `doc.go` for godoc.com.
+
 ## [0.2.1] - 30-07-2017
 ### Changed
  - Added `goreleaser` to travis build
