@@ -35,6 +35,8 @@ func main() {
 		*DeleteAgentsCommand(),
 		*DeletePipelineTemplateCommand(),
 		*ListPipelineGroupsCommand(),
+		*GetPipelineHistoryCommand(),
+		*CreatePipelineConfigCommand(),
 	}
 
 	app.Flags = []cli.Flag{

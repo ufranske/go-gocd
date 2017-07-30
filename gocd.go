@@ -48,6 +48,8 @@ type Client struct {
 	Stages            *StagesService
 	Jobs              *JobsService
 	PipelineTemplates *PipelineTemplatesService
+	Pipelines         *PipelinesService
+	PipelineConfigs   *PipelineConfigsService
 
 	common service
 	cookie string
@@ -92,6 +94,8 @@ func NewClient(gocdBaseUrl string, auth *Auth, httpClient *http.Client, checkSsl
 	c.Stages = (*StagesService)(&c.common)
 	c.Jobs = (*JobsService)(&c.common)
 	c.PipelineTemplates = (*PipelineTemplatesService)(&c.common)
+	c.Pipelines = (*PipelinesService)(&c.common)
+	c.PipelineConfigs = (*PipelineConfigsService)(&c.common)
 	return c
 }
 
