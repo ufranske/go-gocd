@@ -40,6 +40,7 @@ deploy:
     script: gem install --no-ri --no-rdoc fpm && cd cli && goreleaser
     on:
       tags: true
+      condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
 #  - provider: script
 #    skip_cleanup: true
 #    script: gem install --no-ri --no-rdoc fpm && cd cli && goreleaser --snapshot
