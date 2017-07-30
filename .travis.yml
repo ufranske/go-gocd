@@ -19,10 +19,10 @@ script:
   - go generate -x ./... && git diff --exit-code; code=$?; git checkout -- .; (exit $code) # Check that go generate ./... produces a zero diff; clean up any changes afterwards.
   - go tool vet .
   - bash ./go.test.sh
-  - make gocd
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - make gocd.darwin gocd.linux
 
 
 deploy:
@@ -30,7 +30,8 @@ deploy:
     provider: releases
     api_key:
       secure: InBfpc4+Lxk8c3l1WKFX8Kd0VY4VDkNaflO5WnsfyaZmOwqHf3QuPULb5/yAb4YeCWXQ+HytQaZlooBQb8Fffg5aF29MMF6/kuzSMSW8ubO0CzfEo9n3mwlGBYagyR+Ilge40aVVOJIMczECsEejDGkxEFuJb7QeB835M5D/1hR6JBvG74l36AM+nmPs6Hwz3nQ4SX4eXmLEUggjc5CknPcx0cCK7OFYaEsEEsbMYtPxVJCRJrHAtoPG4cVmq4QDPqPzSctZf7F+ncPosS+uasUgBGIEqT6bga/8x+CIwEeuKcEyuO8oTiYng0csbgdx2s9Kcer+OZUsv1hnZu8asKclnudUdWzTqEhTEQhB49xHecjzy/ztZUV2ORDNIBLUJUlQTQEAU0ZKvYtY0PuR2hcWi2cYMEGB3a1jSq84I5Dhr/N7yFF/30QMOFVccFvKJ/YapyybsBg73cnw9jAf8f6KsPp168zD2nF5lREoJkrPiyNSytc/xaj8lOsPlrTVU8sSYR+dcDRlI8w+E4L4k8Q0TRfRrsqqRrz3wdhZrNtr42qiHFOf3Es5VwV2z4hN2axNhw/JuIe2VF/eNAnzIbhcEcwEpCiEoHz1omkHFBs8lR82WKHz1AQMD9W4Xk4I4v8Y6664KgMJihnmWjKIxCnhDeSqQ8bu9fma7F9ejKE=
-    file: gocd
+    file_glob: true
+    file: target/*
     on:
       repo: drewsonne/gocdsdk
       tags: true

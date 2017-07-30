@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := gocd
-.PHONY: gocd-all gocd-mac gocd-linux
 
 CWD:=$(CURDIR)
+TRAVIS_TAG ?= dev
 
 fmt: format
 	git add .
@@ -10,15 +10,12 @@ fmt: format
 format:
 	gofmt -w -s .
 
-gocd: gocd.darwin gocd.linux
-	(cd cli && go build -o $(CWD)/target/gocd)
-
 gocd.%: init
-	(cd cli && \
-		mkdir -p ../build/$*/ && \
-		GOOS=$* go build -o ../build/$*/gocd && \
+	(cd $(CWD)/cli && \
+		mkdir -p $(CWD)/build/$*/ && \
+		GOOS=$* go build -o $(CWD)/build/$*/gocd && \
 		cd $(CWD)/build/$* && \
-		tar -czvf $(CWD)/target/gocd-$*.tgz ./gocd)
+		tar -czvf $(CWD)/target/gocd-$*-$(TRAVIS_TAG).tgz ./gocd)
 
 init:
 	mkdir -p $(CWD)/target/
