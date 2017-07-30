@@ -35,4 +35,3 @@ deploy:
       repo: drewsonne/gocdsdk
       tags: true
       branch: develop
-      go: '1.8.x'
