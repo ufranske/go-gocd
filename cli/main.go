@@ -5,7 +5,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/drewsonne/gocdsdk/gocd"
+	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/urfave/cli"
 	"os"
 )

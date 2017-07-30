@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/drewsonne/gocdsdk/gocd"
 	"github.com/urfave/cli"
+	"github.com/drewsonne/go-gocd/gocd"
 )
 
 const (

@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/drewsonne/gocdsdk"
+	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/urfave/cli"
 )
 

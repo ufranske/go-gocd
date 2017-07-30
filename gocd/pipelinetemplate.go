@@ -9,7 +9,7 @@ import (
 
 type PipelineTemplatesService service
 
-//go:generate gocd-response-links -type=PipelineTemplatesLinks,PipelineTemplateLinks
+//go:generate gocd-response-links-generator -type=PipelineTemplatesLinks,PipelineTemplateLinks
 type PipelineTemplatesLinks struct {
 	Self *url.URL `json:"self"`
 	Doc  *url.URL `json:"doc"`
