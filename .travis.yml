@@ -19,7 +19,7 @@ script:
   - go generate -x ./... && git diff --exit-code; code=$?; git checkout -- .; (exit $code) # Check that go generate ./... produces a zero diff; clean up any changes afterwards.
   - go tool vet .
   - bash ./go.test.sh
-  - make cli
+  - make gocd
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -35,3 +35,4 @@ deploy:
       repo: drewsonne/gocdsdk
       tags: true
       branch: develop
+      go: '1.8'
