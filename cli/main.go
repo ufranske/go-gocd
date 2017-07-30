@@ -45,14 +45,14 @@ func main() {
 }
 
 func version() string {
-	if tag := os.Getenv("TRAVIS_TAG"); tag == "" {
-		if commit := os.Getenv("TRAVIS_COMMIT"); commit == "" {
-			return commit
+	if tag := os.Getenv("TAG"); tag != "" {
+		return tag
+	} else {
+		if commit := os.Getenv("COMMIT"); commit != "" {
+			return commit[0:8]
 		} else {
 			return GoCDUtilityDefaultVersion
 		}
-	} else {
-		return tag
 	}
 }
 
