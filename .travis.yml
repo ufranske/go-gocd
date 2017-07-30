@@ -31,3 +31,4 @@ deploy:
   file: gocd
   on:
     repo: drewsonne/gocdsdk
+    tags: true
