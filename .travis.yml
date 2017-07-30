@@ -28,7 +28,7 @@ script:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - make gocd.darwin gocd.linux
-  - test -n "$TRAVIS_TAG" && cd cli && curl -sL https://git.io/goreleaser | bash
+  - test -n "$TRAVIS_TAG" && curl -sL https://git.io/goreleaser | bash
 
 #deploy:
 #  - skip_cleanup: true
