@@ -17,7 +17,6 @@ matrix:
 
 before_install:
   - go get -t -v ./...
-  - go get github.com/goreleaser/goreleaser
 
 script:
   - diff -u <(echo -n) <(gofmt -d -s .)
@@ -29,7 +28,7 @@ script:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - make gocd.darwin gocd.linux
-  - test -n "$TRAVIS_TAG" && goreleaser
+  - test -n "$TRAVIS_TAG" && cd cli && curl -sL https://git.io/goreleaser | bash
 
 #deploy:
 #  - skip_cleanup: true
