@@ -10,15 +10,16 @@ import (
 	"os"
 )
 
-const UtilityName = "gocd"
-const UtilityUsageInstructions = "CLI Tool to interact with GoCD server"
-const UtilityVersion = "1.0.0"
+const GoCDUtilityName = "gocd"
+const GoCDUtilityUsageInstructions = "CLI Tool to interact with GoCD server"
+const GoCDUtilityDefaultVersion = "dev"
 
 func main() {
+
 	app := cli.NewApp()
-	app.Name = UtilityName
-	app.Usage = UtilityUsageInstructions
-	app.Version = UtilityVersion
+	app.Name = GoCDUtilityName
+	app.Usage = GoCDUtilityUsageInstructions
+	app.Version = version()
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
 		*ConfigureCommand(),
@@ -41,6 +42,18 @@ func main() {
 	}
 
 	app.Run(os.Args)
+}
+
+func version() string {
+	if tag := os.Getenv("TRAVIS_TAG"); tag == "" {
+		if commit := os.Getenv("TRAVIS_COMMIT"); commit == "" {
+			return commit
+		} else {
+			return GoCDUtilityDefaultVersion
+		}
+	} else {
+		return tag
+	}
 }
 
 func cliAgent() *gocd.Client {
