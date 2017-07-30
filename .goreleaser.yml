@@ -5,7 +5,7 @@ project_name: go-gocd
 
 builds:
   - binary: gocd
-    main: ./cli/*.go
+    main: ./cli/main.go
     goos:
       - windows
       - darwin
