@@ -30,5 +30,4 @@ the structure of the GoCD API documentation at
 https://api.gocd.org/17.7.0/.
 
 */
-
 package gocd
