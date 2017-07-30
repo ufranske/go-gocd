@@ -14,10 +14,11 @@ type Pipeline struct {
 	Template              string     `json:"template,omitempty"`
 	Materials             []Material `json:"materials,omitempty"`
 	Stages                []Stage    `json:"stages"`
+	Version               string
 }
 
 type Material struct {
-	Type       string `json:"type"`
+	Type string `json:"type"`
 	Attributes struct {
 		Url             string      `json:"url"`
 		Destination     string      `json:"destination,omitempty"`

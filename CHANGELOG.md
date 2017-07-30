@@ -6,8 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
- - Added `pipeline config` creation in sdk.
- - Added `pipeline config` creation in cli tool.
+ - Added `pipeline config` creation in sdk and cli tool.
+ - Added `pipeline config` update in sdk and cli tool.
 
 ## [0.2.1] - 30-07-2017
 ### Changed
