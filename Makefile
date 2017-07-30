@@ -1,4 +1,4 @@
-.DEFAULT: gocd
+.DEFAULT_GOAL := gocd
 .PHONY: gocd-all gocd-mac gocd-linux
 
 CWD:=$(CURDIR)
@@ -23,3 +23,7 @@ gocd.%: init
 init:
 	mkdir -p $(CWD)/target/
 	mkdir -p $(CWD)/build/
+
+clean:
+	rm -rf $(CWD)/target
+	rm -rf $(CWD)/build
