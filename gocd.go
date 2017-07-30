@@ -119,6 +119,12 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 		}
 		bdy, _ := ioutil.ReadAll(buf)
 		request.Body = string(bdy)
+
+		buf = new(bytes.Buffer)
+		err = json.NewEncoder(buf).Encode(body)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	req, err := http.NewRequest(method, u.String(), buf)
