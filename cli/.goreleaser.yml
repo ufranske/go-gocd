@@ -20,10 +20,10 @@ fpm:
     - deb
     - rpm
 
-brew:
-  github.com:
-    owner: drewsonne
-    name: homebrew-devops
-    homepage: https://github.com/drewsonne/gocdsdk
-    test: |
-      system "#{bin}/gocd --version"
+#brew:
+#  github.com:
+#    owner: drewsonne
+#    name: homebrew-devops
+#  homepage: https://github.com/drewsonne/gocdsdk
+#  test: |
+#    system "#{bin}/gocd --version"
