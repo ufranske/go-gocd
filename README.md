@@ -1,4 +1,4 @@
-# GoCD SDK 0.1.5
+# GoCD SDK 0.1.6
 
 [![Build Status](https://travis-ci.org/drewsonne/gocdsdk.svg?branch=master)](https://travis-ci.org/drewsonne/gocdsdk)
 [![codecov](https://codecov.io/gh/drewsonne/gocdsdk/branch/master/graph/badge.svg)](https://codecov.io/gh/drewsonne/gocdsdk)
