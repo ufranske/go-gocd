@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.1.10] - 30-07-2017
+## [0.1.12] - 30-07-2017
+
 ### Changed
  - Fixed Travis release process
 
