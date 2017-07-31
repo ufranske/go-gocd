@@ -1,7 +1,7 @@
 package gocd
 
 type Approval struct {
-	Type          string        `json:"type"`
+	Type          string         `json:"type"`
 	Authorization *Authorization `json:"authorization,omitempty"`
 }
 
