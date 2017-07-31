@@ -19,14 +19,14 @@ type Job struct {
 	StageCounter         string                `json:"stage_counter,omitempty"`
 	StageName            string                `json:"stage_name,omitempty"`
 	RunInstanceCount     int64                 `json:"run_instance_count,omitempty"`
-	Timeout              int64                 `json:"timeout"`
-	EnvironmentVariables []string              `json:"environment_variables"`
-	Resources            []string              `json:"resources"`
+	Timeout              int64                 `json:"timeout,omitempty"`
+	EnvironmentVariables []string              `json:"environment_variables,omitempty"`
+	Resources            []string              `json:"resources,omitempty"`
 	Tasks                []Task                `json:"tasks"`
 }
 
 type Task struct {
-	Type       string `json:"type"`
+	Type string `json:"type"`
 	Attributes struct {
 		RunIf            []string `json:"run_if"`
 		Command          string   `json:"command"`
