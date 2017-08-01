@@ -43,6 +43,7 @@ func (pcs *PipelineConfigsService) Update(ctx context.Context, group string, nam
 	return &pc, resp, nil
 
 }
+
 func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *Pipeline) (*Pipeline, *APIResponse, error) {
 	u, err := addOptions("admin/pipelines")
 	if err != nil {
@@ -67,4 +68,8 @@ func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *
 	pc.Version = strings.Replace(resp.Http.Header.Get("Etag"), "\"", "", -1)
 
 	return &pc, resp, nil
+}
+
+func (pcs *PipelineConfigsService) Delete(ctx context.Context, name string) (string, *APIResponse, error) {
+	return pcs.client.genericDeleteAction(ctx, fmt.Sprintf("admin/pipelines/%s", name))
 }

@@ -14,6 +14,8 @@ const (
 	CreatePipelineConfigCommandUsage = "Create Pipeline config"
 	UpdatePipelineConfigCommandName  = "update-pipeline-config"
 	UpdatePipelineConfigCommandUsage = "Update Pipeline config"
+	DeletePipelineConfigCommandName  = "deletepipelineconfig"
+	DeletePipelineConfigCommandUsage = "Remove Pipeline. This will not delete the pipeline history, which will be stored in the database"
 )
 
 func CreatePipelineConfigAction(c *cli.Context) error {
@@ -117,6 +119,19 @@ func UpdatePipelineConfigAction(c *cli.Context) error {
 
 }
 
+func DeletePipelineConfigAction(c *cli.Context) error {
+	name := c.String("name")
+	if name == "" {
+		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--name' is missing."))
+	}
+
+	deleteResponse, r, err := cliAgent().PipelineConfigs.Delete(context.Background(), name)
+	if r.Http.StatusCode == 406 {
+		err = errors.New(deleteResponse)
+	}
+	return handleOutput(deleteResponse, r, "DeletePipelineTemplate", err)
+}
+
 func CreatePipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:     CreatePipelineConfigCommandName,
@@ -143,6 +158,17 @@ func UpdatePipelineConfigCommand() *cli.Command {
 			cli.StringFlag{Name: "pipeline-version"},
 			cli.StringFlag{Name: "pipeline"},
 			cli.StringFlag{Name: "pipeline-file"},
+		},
+	}
+}
+
+func DeletePipelineConfigCommand() *cli.Command {
+	return &cli.Command{
+		Name:   DeletePipelineConfigCommandName,
+		Usage:  DeletePipelineConfigCommandUsage,
+		Action: DeletePipelineConfigAction,
+		Flags: []cli.Flag{
+			cli.StringFlag{Name: "name"},
 		},
 	}
 }

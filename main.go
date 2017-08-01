@@ -32,6 +32,7 @@ func main() {
 		*gocli.DeleteAgentCommand(),
 		*gocli.DeleteAgentsCommand(),
 		*gocli.DeletePipelineTemplateCommand(),
+		*gocli.DeletePipelineConfigCommand(),
 		*gocli.ListPipelineGroupsCommand(),
 		*gocli.GetPipelineHistoryCommand(),
 		*gocli.CreatePipelineConfigCommand(),
