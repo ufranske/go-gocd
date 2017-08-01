@@ -27,11 +27,14 @@ type Job struct {
 
 type Task struct {
 	Type       string `json:"type"`
-	Attributes struct {
-		RunIf            []string `json:"run_if"`
-		Command          string   `json:"command"`
-		WorkingDirectory string   `json:"working_directory,omitempty"`
-	} `json:"attributes"`
+	Attributes TaskAttributes  `json:"attributes"`
+}
+
+type TaskAttributes struct {
+	RunIf            []string `json:"run_if"`
+	Command          string   `json:"command"`
+	WorkingDirectory string   `json:"working_directory,omitempty"`
+	Arguments        []string `json:"arguments,omitempty"`
 }
 
 type JobStateTransition struct {
