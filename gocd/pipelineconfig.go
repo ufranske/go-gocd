@@ -71,5 +71,5 @@ func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *
 }
 
 func (pcs *PipelineConfigsService) Delete(ctx context.Context, name string) (string, *APIResponse, error) {
-	return pcs.client.genericDeleteAction(ctx, fmt.Sprintf("admin/pipelines/%s", name))
+	return pcs.client.genericDeleteAction(ctx, fmt.Sprintf("admin/pipelines/%s", name), apiV3)
 }

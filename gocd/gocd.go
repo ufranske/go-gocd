@@ -5,10 +5,12 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 const (
@@ -70,24 +72,42 @@ type Auth struct {
 	Password string
 }
 
-func NewClient(gocdBaseUrl string, auth *Auth, httpClient *http.Client, checkSsl bool) *Client {
+type Configuration struct {
+	Server   string `yaml:"server"`
+	Username string `yaml:"username,omitempty"`
+	Password string `yaml:"password,omitempty"`
+	SslCheck bool   `yaml:"ssl_check,omitempty"`
+}
+
+func (c *Configuration) HasAuth() bool {
+	return (c.Username != "") && (c.Password != "")
+}
+
+func (c *Configuration) Client() *Client {
+	return NewClient(c, nil)
+}
+
+func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
 
-	if !checkSsl {
-		httpClient.Transport = &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	if strings.HasPrefix(cfg.Server, "https") {
+		if !cfg.SslCheck {
+			httpClient.Transport = &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			}
 		}
 	}
 
-	baseURL, _ := url.Parse(gocdBaseUrl)
+	baseURL, _ := url.Parse(cfg.Server)
 
-	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
-
-	if &auth != nil {
-		c.Auth = auth
+	c := &Client{
+		client:    httpClient,
+		BaseURL:   baseURL,
+		UserAgent: userAgent,
 	}
+
 	c.common.client = c
 	c.Agents = (*AgentsService)(&c.common)
 	c.PipelineGroups = (*PipelineGroupsService)(&c.common)
@@ -172,10 +192,10 @@ func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}) (*APIRe
 	}
 
 	response.Http = resp
-	//err = CheckResponse(resp)
-	//if err != nil {
-	//	return response, err
-	//}
+	err = CheckResponse(response.Http)
+	if err != nil {
+		return response, err
+	}
 
 	if v != nil {
 		if w, ok := v.(io.Writer); ok {
@@ -191,6 +211,20 @@ func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}) (*APIRe
 	}
 
 	return response, err
+}
+func CheckResponse(response *http.Response) error {
+	if response.StatusCode < 200 || response.StatusCode >= 400 {
+		bdy, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			panic(err)
+		}
+		return fmt.Errorf(
+			"Received HTTP Status '%s': '%s'",
+			response.Status,
+			bdy,
+		)
+	}
+	return nil
 }
 
 // sanitizeURL redacts the client_secret parameter from the URL which may be

@@ -61,6 +61,10 @@ func (pt *PipelineTemplate) Pipelines() []*Pipeline {
 	return pt.Embedded.Pipelines
 }
 
+func (s *PipelineTemplatesService) Exists(ctx context.Context, name string) (bool, *APIResponse, error) {
+	return s.client.genericHeadAction(ctx, fmt.Sprintf("admin/templates/%s", name), apiV3)
+}
+
 func (s *PipelineTemplatesService) Get(ctx context.Context, name string) (*PipelineTemplate, *APIResponse, error) {
 	u, err := addOptions(fmt.Sprintf("admin/templates/%s", name))
 
@@ -165,5 +169,5 @@ func (s *PipelineTemplatesService) Update(ctx context.Context, name string, vers
 }
 
 func (pts *PipelineTemplatesService) Delete(ctx context.Context, uuid string) (string, *APIResponse, error) {
-	return pts.client.genericDeleteAction(ctx, fmt.Sprintf("admin/templates/%s", uuid))
+	return pts.client.genericDeleteAction(ctx, fmt.Sprintf("admin/templates/%s", uuid), apiV3)
 }

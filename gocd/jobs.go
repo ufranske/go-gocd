@@ -22,29 +22,29 @@ type Job struct {
 	Timeout              int64                 `json:"timeout,omitempty"`
 	EnvironmentVariables []string              `json:"environment_variables,omitempty"`
 	Resources            []string              `json:"resources,omitempty"`
-	Tasks                []Task                `json:"tasks"`
+	Tasks                []Task                `json:"tasks,omitempty"`
 }
 
 type Task struct {
-	Type       string `json:"type"`
-	Attributes TaskAttributes  `json:"attributes"`
+	Type       string         `json:"type"`
+	Attributes TaskAttributes `json:"attributes"`
 }
 
 type TaskAttributes struct {
-	RunIf            []string `json:"run_if"`
-	Command          string   `json:"command"`
+	RunIf            []string `json:"run_if,omitempty"`
+	Command          string   `json:"command,omitempty"`
 	WorkingDirectory string   `json:"working_directory,omitempty"`
 	Arguments        []string `json:"arguments,omitempty"`
 }
 
 type JobStateTransition struct {
-	StateChangeTime int64  `json:"state_change_time"`
-	Id              int64  `json:"id"`
-	State           string `json:"state"`
+	StateChangeTime int64  `json:"state_change_time,omitempty"`
+	Id              int64  `json:"id,omitempty"`
+	State           string `json:"state,omitempty"`
 }
 
 type JobRunHistoryResponse struct {
-	Jobs       []*Job              `json:"jobs"`
+	Jobs       []*Job              `json:"jobs,omitempty"`
 	Pagination *PaginationResponse `json:"pagination,omitempty"`
 }
 
