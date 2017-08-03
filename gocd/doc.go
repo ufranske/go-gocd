@@ -25,10 +25,6 @@ access different parts of the GoCD Server API. For example:
 	// list all organizations for user "willnorris"
 	orgs, _, err := client.Agents.List(context.Background())
 
-Some API methods have optional parameters that can be passed. For example:
-
-	client := github.NewClient(nil)
-
 The services of a client divide the API into logical chunks and correspond to
 the structure of the GoCD API documentation at
 https://api.gocd.org/17.7.0/.
