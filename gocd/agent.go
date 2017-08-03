@@ -9,17 +9,20 @@ import (
 type AgentsService service
 
 //go:generate gocd-response-links-generator -type=AgentsLinks,AgentLinks
+// AgentsLinks describes the HAL _link resource for the api response object for a collection of agent objects.
 type AgentsLinks struct {
 	Self *url.URL `json:"self"`
 	Doc  *url.URL `json:"doc"`
 }
 
+// AgentLinks describes the HAL _link resource for the api response object for a single agent object.
 type AgentLinks struct {
 	Self *url.URL `json:"self"`
 	Doc  *url.URL `json:"doc"`
 	Find *url.URL `json:"find"`
 }
 
+// AgentsResponse describes the structure of the API response when listing collections of agent object.
 type AgentsResponse struct {
 	Links    *AgentsLinks `json:"_links,omitempty"`
 	Embedded *struct {
@@ -27,6 +30,7 @@ type AgentsResponse struct {
 	} `json:"_embedded,omitempty"`
 }
 
+// Agent describes a single agent object.
 type Agent struct {
 	Uuid             string        `json:"uuid"`
 	Hostname         string        `json:"hostname"`
@@ -46,6 +50,7 @@ type Agent struct {
 	client           *Client
 }
 
+// JobRunHistory retrieves the list of jobs run on this agent
 func (a *Agent) JobRunHistory(ctx context.Context) ([]*Job, error) {
 	jobs, _, err := a.client.Agents.JobRunHistory(ctx, a.Uuid)
 	if err != nil {
@@ -55,6 +60,7 @@ func (a *Agent) JobRunHistory(ctx context.Context) ([]*Job, error) {
 	return jobs, nil
 }
 
+// AgentUpdate describes the structure for the PUT payload when updating an agent
 type AgentUpdate struct {
 	Hostname         string   `json:"hostname,omitempty"`
 	Resources        []string `json:"resources,omitempty"`
@@ -62,17 +68,21 @@ type AgentUpdate struct {
 	AgentConfigState string   `json:"agent_config_state,omitempty"`
 }
 
+// AgentBulkUpdate describes the structure for the PUT payload when updating multiple agents
 type AgentBulkUpdate struct {
 	Uuids            []string                   `json:"uuids"`
 	Operations       *AgentBulkOperationsUpdate `json:"operations,omitempty"`
 	AgentConfigState string                     `json:"agent_config_state,omitempty"`
 }
 
+// AgentBulkOperationsUpdate describes the structure for a single Operation in AgentBulkUpdate the PUT payload when
+// updating multiple agents
 type AgentBulkOperationsUpdate struct {
 	Environments *AgentBulkOperationUpdate `json:"environments,omitempty"`
 	Resources    *AgentBulkOperationUpdate `json:"resources,omitempty"`
 }
 
+// AgentBulkOperationUpdate describes an action to be performed on an Environmnet or Resource
 type AgentBulkOperationUpdate struct {
 	Add    []string `json:"add,omitempty"`
 	Remove []string `json:"remove,omitempty"`

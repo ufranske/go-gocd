@@ -8,7 +8,10 @@ import (
 	"os"
 )
 
+// GoCDUtilityName is used in help text to identify the gocd cli util by name
 const GoCDUtilityName = "gocd"
+
+// GoCDUtilityUsageInstructions providers user facing support on operation of the gocd cli tool. @TODO Expand this content.
 const GoCDUtilityUsageInstructions = "CLI Tool to interact with GoCD server"
 
 func main() {
