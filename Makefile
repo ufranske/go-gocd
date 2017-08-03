@@ -1,8 +1,8 @@
-fmt: format
+format: fmt
 	git add .
 	git commit -m "Autocommit for 'gofmt -w'."
 
-format:
+fmt:
 	gofmt -w -s .
 	golint . gocd cli
 	$(MAKE) -C ./cli/ format
