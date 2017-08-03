@@ -13,10 +13,14 @@ Usage:
 Construct a new GoCD client, then use the various services on the client to
 access different parts of the GoCD Server API. For example:
 
-	client := gocd.NewClient("https://goserver:8154/go", &gocd.Auth{
+	cfg := &gocd.Configuration{
+		Server:   "https://goserver:8154/go",
 		Username: os.GetEnv("GOCD_USERNAME"),
 		Password: os.GetEnv("GOCD_PASSWORD"),
-	}, nil, false)
+		SslCheck: false,
+	}
+
+	client := cfg.Client()
 
 	// list all organizations for user "willnorris"
 	orgs, _, err := client.Agents.List(ctx)
