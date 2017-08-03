@@ -9,6 +9,7 @@ fmt: format
 
 format:
 	gofmt -w -s .
+	golint
 
 gocd.%: init
 	(cd $(CWD)/cli && \

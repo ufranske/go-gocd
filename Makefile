@@ -4,5 +4,6 @@ fmt: format
 
 format:
 	gofmt -w -s .
+	golint . gocd cli
 	$(MAKE) -C ./cli/ format
 	$(MAKE) -C ./gocd/ format
