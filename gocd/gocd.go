@@ -14,31 +14,40 @@ import (
 )
 
 const (
+	// Version of the gocd library in the event that we change it for the user agent.
 	libraryVersion = "1"
-	userAgent      = "go-gocd/" + libraryVersion
-	apiV1          = "application/vnd.go.cd.v1+json"
-	apiV2          = "application/vnd.go.cd.v2+json"
-	apiV3          = "application/vnd.go.cd.v3+json"
-	apiV4          = "application/vnd.go.cd.v4+json"
+	// UserAgent to be used when calling the GoCD agent.
+	userAgent = "go-gocd/" + libraryVersion
+	// Version 1 of the GoCD API.
+	apiV1 = "application/vnd.go.cd.v1+json"
+	// Version 2 of the GoCD API.
+	apiV2 = "application/vnd.go.cd.v2+json"
+	// Version 3 of the GoCD API.
+	apiV3 = "application/vnd.go.cd.v3+json"
+	// Version 4 of the GoCD API.
+	apiV4 = "application/vnd.go.cd.v4+json"
 )
 
+// StringResponse handles the unmarshaling of the single string response from DELETE requests.
 type StringResponse struct {
 	Message string `json:"message"`
 }
 
-type ClientInterface interface{}
-
+// APIResponse encapsulates the net/http.Response object, a string representing the Body, and a gocd.Request object
+// encapsulating the response from the API.
 type APIResponse struct {
 	Http    *http.Response
 	Body    string
 	Request *APIRequest
 }
 
+// APIRequest encapsulates the net/http.Request object, and a string representing the Body.
 type APIRequest struct {
 	Http *http.Request
 	Body string
 }
 
+// Client struct which acts as an interface to the GoCD Server. Exposes resource service handlers.
 type Client struct {
 	client    *http.Client
 	BaseURL   *url.URL
@@ -57,21 +66,26 @@ type Client struct {
 	cookie string
 }
 
+// PaginationResponse is a struct used to handle paging through resposnes.
 type PaginationResponse struct {
 	Offset   int64 `json:"offset"`
 	Total    int64 `json:"total"`
 	PageSize int64 `json:"page_size"`
 }
 
+// service is a generic service encapsulating the client for talking to the GoCD server.
 type service struct {
 	client *Client
 }
 
+// Auth structure wrapping the Username and Password variables, which are used to get an Auth cookie header used for
+// subsequent requests.
 type Auth struct {
 	Username string
 	Password string
 }
 
+// Configuration object used to initialise a gocd lib client to interact with the GoCD server.
 type Configuration struct {
 	Server   string `yaml:"server"`
 	Username string `yaml:"username,omitempty"`
@@ -79,14 +93,18 @@ type Configuration struct {
 	SslCheck bool   `yaml:"ssl_check,omitempty"`
 }
 
+// HasAuth checks whether or not we have the required Username/Password variables provided.
 func (c *Configuration) HasAuth() bool {
 	return (c.Username != "") && (c.Password != "")
 }
 
+// Client returns a client which allows us to interact with the GoCD Server.
 func (c *Configuration) Client() *Client {
 	return NewClient(c, nil)
 }
 
+// Create a new client based on the provided configuration payload, and optionally a custom httpClient to allow
+// overriding of http client structures.
 func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
@@ -119,6 +137,7 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 	return c
 }
 
+// NewRequest creates an HTTP requests to the GoCD API endpoints.
 func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion string) (*APIRequest, error) {
 	rel, err := url.Parse("api/" + urlStr)
 
@@ -171,6 +190,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 	return request, nil
 }
 
+// Do takes an HTTP request and resposne the response from the GoCD API endpoint.
 func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}) (*APIResponse, error) {
 
 	req.Http = req.Http.WithContext(ctx)
@@ -212,6 +232,8 @@ func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}) (*APIRe
 
 	return response, err
 }
+
+// CheckResponse asserts that the http response status code was 2xx.
 func CheckResponse(response *http.Response) error {
 	if response.StatusCode < 200 || response.StatusCode >= 400 {
 		bdy, err := ioutil.ReadAll(response.Body)

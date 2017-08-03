@@ -82,12 +82,13 @@ type AgentBulkOperationsUpdate struct {
 	Resources    *AgentBulkOperationUpdate `json:"resources,omitempty"`
 }
 
-// AgentBulkOperationUpdate describes an action to be performed on an Environmnet or Resource
+// AgentBulkOperationUpdate describes an action to be performed on an Environment or Resource during an agent update.
 type AgentBulkOperationUpdate struct {
 	Add    []string `json:"add,omitempty"`
 	Remove []string `json:"remove,omitempty"`
 }
 
+// BuildDetails describes the builds being performed on this agent.
 type BuildDetails struct {
 	Links    *BuildDetailsLinks `json:"_links"`
 	Pipeline string             `json:"pipeline"`
@@ -96,16 +97,19 @@ type BuildDetails struct {
 }
 
 //go:generate gocd-response-links-generator -type=BuildDetailsLinks
+// Describes the HAL structure for _link objects for the build details.
 type BuildDetailsLinks struct {
 	Job      *url.URL `json:"job"`
 	Stage    *url.URL `json:"stage"`
 	Pipeline *url.URL `json:"pipeline"`
 }
 
+// RemoveLinks sets the `Link` attribute as `nil`. Used when rendering an `Agent` struct to JSON.
 func (a *Agent) RemoveLinks() {
 	a.Links = nil
 }
 
+// List will retrieve all agents, their status, and metadata from the GoCD Server.
 func (s *AgentsService) List(ctx context.Context) ([]*Agent, *APIResponse, error) {
 	u, err := addOptions("agents")
 
@@ -131,14 +135,17 @@ func (s *AgentsService) List(ctx context.Context) ([]*Agent, *APIResponse, error
 	return r.Embedded.Agents, resp, nil
 }
 
+// Get will retrieve a single agent based on the provided UUID.
 func (s *AgentsService) Get(ctx context.Context, uuid string) (*Agent, *APIResponse, error) {
 	return s.handleAgentRequest(ctx, "GET", uuid, nil)
 }
 
+// Update will modify the configuration for an existing agents.
 func (s *AgentsService) Update(ctx context.Context, uuid string, agent AgentUpdate) (*Agent, *APIResponse, error) {
 	return s.handleAgentRequest(ctx, "PATCH", uuid, &agent)
 }
 
+// Delete will remove an existing agent. Note: The agent must be disabled, and not currently building to be deleted.
 func (s *AgentsService) Delete(ctx context.Context, uuid string) (string, *APIResponse, error) {
 	u, err := addOptions(fmt.Sprintf("agents/%s", uuid))
 	if err != nil {
@@ -159,6 +166,7 @@ func (s *AgentsService) Delete(ctx context.Context, uuid string) (string, *APIRe
 	return a.Message, resp, nil
 }
 
+// BulkUpdate will change the configuration for multiple agents in a single request.
 func (s *AgentsService) BulkUpdate(ctx context.Context, agents AgentBulkUpdate) (string, *APIResponse, error) {
 	u, err := addOptions("agents")
 	if err != nil {
@@ -178,6 +186,7 @@ func (s *AgentsService) BulkUpdate(ctx context.Context, agents AgentBulkUpdate) 
 	return a.Message, resp, nil
 }
 
+// JobRunHistory will return a list of Jobs run on this agent.
 func (s *AgentsService) JobRunHistory(ctx context.Context, uuid string) ([]*Job, *APIResponse, error) {
 	u, err := addOptions(fmt.Sprintf("agents/%s/job_run_history", uuid))
 	if err != nil {
@@ -197,6 +206,7 @@ func (s *AgentsService) JobRunHistory(ctx context.Context, uuid string) ([]*Job,
 
 }
 
+// handleAgentRequest handles the flow to perform an HTTP action on an agent resource.
 func (s *AgentsService) handleAgentRequest(ctx context.Context, action string, uuid string, body *AgentUpdate) (*Agent, *APIResponse, error) {
 	u, err := addOptions(fmt.Sprintf("agents/%s", uuid))
 	if err != nil {

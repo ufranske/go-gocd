@@ -238,7 +238,8 @@ func (g *Generator) generate(typeName string) {
 	g.buildUnmarshalling(values, typeName)
 }
 
-const marshall_header = `func (l %s) MarshalJSON() ([]byte, error) {
+const marshall_header = `// MarshalJSON converts _links objects to json objects
+func (l %s) MarshalJSON() ([]byte, error) {
 type h struct {
 	H string ` + "`json:\"href\"`" + `
 }

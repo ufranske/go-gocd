@@ -2,6 +2,8 @@ package gocd
 
 import "context"
 
+// Login sends basic auth to the GoCD Server and sets an auth cookie in the client to enable cookie based auth
+// for future requests.
 func (c *Client) Login(ctx context.Context) error {
 	req, err := c.NewRequest("GET", "api/agents", nil, apiV2)
 	if err != nil {

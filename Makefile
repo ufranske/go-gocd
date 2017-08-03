@@ -7,3 +7,8 @@ fmt:
 	golint . gocd cli
 	$(MAKE) -C ./cli/ format
 	$(MAKE) -C ./gocd/ format
+
+lint:
+	golint .
+	$(MAKE) -C ./cli/ lint
+	$(MAKE) -C ./gocd/ lint

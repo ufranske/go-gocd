@@ -25,3 +25,6 @@ init:
 clean:
 	rm -rf $(CWD)/target
 	rm -rf $(CWD)/build
+
+lint:
+	golint .

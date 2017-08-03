@@ -43,6 +43,7 @@ type PipelineTemplatesResponse struct {
 	} `json:"_embedded,omitempty"`
 }
 
+// PipelineTemplate 
 type PipelineTemplate struct {
 	Links    *PipelineTemplateLinks `json:"_links,omitempty"`
 	Name     string                 `json:"name"`
@@ -53,32 +54,36 @@ type PipelineTemplate struct {
 	Stages  []*Stage `json:"stages,omitempty"`
 }
 
+// RemoveLinks gets the PipelineTemplate ready to be submitted to the GoCD API.
 func (pt *PipelineTemplate) RemoveLinks() {
 	pt.Links = nil
 }
 
+// Pipelines returns a list of Pipelines attached to this PipelineTemplate object.
 func (pt *PipelineTemplate) Pipelines() []*Pipeline {
 	return pt.Embedded.Pipelines
 }
 
-func (s *PipelineTemplatesService) Exists(ctx context.Context, name string) (bool, *APIResponse, error) {
-	return s.client.genericHeadAction(ctx, fmt.Sprintf("admin/templates/%s", name), apiV3)
+// Exists ensures whether or not a PipelineTemplate is present in the API.
+func (pts *PipelineTemplatesService) Exists(ctx context.Context, name string) (bool, *APIResponse, error) {
+	return pts.client.genericHeadAction(ctx, fmt.Sprintf("admin/templates/%s", name), apiV3)
 }
 
-func (s *PipelineTemplatesService) Get(ctx context.Context, name string) (*PipelineTemplate, *APIResponse, error) {
+// Get a single PipelineTemplate object in the GoCD API.
+func (pts *PipelineTemplatesService) Get(ctx context.Context, name string) (*PipelineTemplate, *APIResponse, error) {
 	u, err := addOptions(fmt.Sprintf("admin/templates/%s", name))
 
 	if err != nil {
 		return nil, nil, err
 	}
 
-	req, err := s.client.NewRequest("GET", u, nil, apiV3)
+	req, err := pts.client.NewRequest("GET", u, nil, apiV3)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	pt := PipelineTemplate{}
-	resp, err := s.client.Do(ctx, req, &pt)
+	resp, err := pts.client.Do(ctx, req, &pt)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -89,20 +94,21 @@ func (s *PipelineTemplatesService) Get(ctx context.Context, name string) (*Pipel
 
 }
 
-func (s *PipelineTemplatesService) List(ctx context.Context) ([]*PipelineTemplate, *APIResponse, error) {
+// List all PipelineTemplate objects in the GoCD API.
+func (pts *PipelineTemplatesService) List(ctx context.Context) ([]*PipelineTemplate, *APIResponse, error) {
 	u, err := addOptions("admin/templates")
 
 	if err != nil {
 		return nil, nil, err
 	}
 
-	req, err := s.client.NewRequest("GET", u, nil, apiV3)
+	req, err := pts.client.NewRequest("GET", u, nil, apiV3)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	ptr := PipelineTemplatesResponse{}
-	resp, err := s.client.Do(ctx, req, &ptr)
+	resp, err := pts.client.Do(ctx, req, &ptr)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -110,7 +116,8 @@ func (s *PipelineTemplatesService) List(ctx context.Context) ([]*PipelineTemplat
 	return ptr.Embedded.Templates, resp, nil
 }
 
-func (s *PipelineTemplatesService) Create(ctx context.Context, name string, st []*Stage) (*PipelineTemplate, *APIResponse, error) {
+// Create a new PipelineTemplate object in the GoCD API.
+func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st []*Stage) (*PipelineTemplate, *APIResponse, error) {
 	u, err := addOptions("admin/templates")
 	if err != nil {
 		return nil, nil, err
@@ -121,13 +128,13 @@ func (s *PipelineTemplatesService) Create(ctx context.Context, name string, st [
 		Stages: st,
 	}
 
-	req, err := s.client.NewRequest("POST", u, pt, apiV3)
+	req, err := pts.client.NewRequest("POST", u, pt, apiV3)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	ptr := PipelineTemplate{}
-	resp, err := s.client.Do(ctx, req, &ptr)
+	resp, err := pts.client.Do(ctx, req, &ptr)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -138,7 +145,8 @@ func (s *PipelineTemplatesService) Create(ctx context.Context, name string, st [
 
 }
 
-func (s *PipelineTemplatesService) Update(ctx context.Context, name string, version string, st []*Stage) (*PipelineTemplate, *APIResponse, error) {
+// Update an PipelineTemplate object in the GoCD API.
+func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, version string, st []*Stage) (*PipelineTemplate, *APIResponse, error) {
 	u, err := addOptions(fmt.Sprintf("admin/templates/%s", name))
 	if err != nil {
 		return nil, nil, err
@@ -149,7 +157,7 @@ func (s *PipelineTemplatesService) Update(ctx context.Context, name string, vers
 		Stages: st,
 	}
 
-	req, err := s.client.NewRequest("PUT", u, pt, apiV3)
+	req, err := pts.client.NewRequest("PUT", u, pt, apiV3)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -157,7 +165,7 @@ func (s *PipelineTemplatesService) Update(ctx context.Context, name string, vers
 	req.Http.Header.Set("If-Match", fmt.Sprintf("\"%s\"", version))
 
 	ptr := PipelineTemplate{}
-	resp, err := s.client.Do(ctx, req, &ptr)
+	resp, err := pts.client.Do(ctx, req, &ptr)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -168,6 +176,7 @@ func (s *PipelineTemplatesService) Update(ctx context.Context, name string, vers
 
 }
 
+// Delete a PipelineTemplate from the GoCD API.
 func (pts *PipelineTemplatesService) Delete(ctx context.Context, uuid string) (string, *APIResponse, error) {
 	return pts.client.genericDeleteAction(ctx, fmt.Sprintf("admin/templates/%s", uuid), apiV3)
 }

@@ -5,3 +5,6 @@ format: fmt
 fmt:
 	golint
 	gofmt -w -s .
+
+lint:
+	golint .
