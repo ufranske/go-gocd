@@ -25,16 +25,82 @@ type Job struct {
 	Tasks                []Task                `json:"tasks,omitempty"`
 }
 
+type PluginConfiguration struct {
+	Id      string `json:"id"`
+	Version string `json:"version"`
+}
+
+type PluginConfigurationKVPair struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
 type Task struct {
 	Type       string         `json:"type"`
 	Attributes TaskAttributes `json:"attributes"`
 }
 
+func (t *Task) Validate() error {
+	switch t.Type {
+	case "exec":
+		return t.Attributes.ValidateExec()
+	case "ant":
+		return t.Attributes.ValidateAnt()
+	default:
+		return errors.New("Unexpected `gocd.Task.Attribute` types")
+	}
+}
+
 type TaskAttributes struct {
-	RunIf            []string `json:"run_if,omitempty"`
-	Command          string   `json:"command,omitempty"`
-	WorkingDirectory string   `json:"working_directory,omitempty"`
-	Arguments        []string `json:"arguments,omitempty"`
+	RunIf               []string                    `json:"run_if,omitempty"`
+	Command             string                      `json:"command,omitempty"`
+	WorkingDirectory    string                      `json:"working_directory,omitempty"`
+	Arguments           []string                    `json:"arguments,omitempty"`
+	BuildFile           string                      `json:"build_file,omitempty"`
+	Target              string                      `json:"target,omitempty"`
+	NantPath            string                      `json:"nant_path,omitempty"`
+	Pipeline            string                      `json:"pipeline,omitempty"`
+	Stage               string                      `json:"stage,omitempty"`
+	Job                 string                      `json:"job,omitempty"`
+	Source              string                      `json:"source,omitempty"`
+	IsSourceAFile       string                      `json:"is_source_a_file,omitempty"`
+	Destination         string                      `json:"destination,omitempty"`
+	PluginConfiguration *PluginConfiguration         `json:"plugin_configuration,omitempty"`
+	Configuration       []PluginConfigurationKVPair `json:"configuration,omitempty"`
+}
+
+func (t *TaskAttributes) ValidateExec() error {
+	if len(t.RunIf) == 0 {
+		return errors.New("'run_if' must not be empty.")
+	}
+	if t.Command == "" {
+		return errors.New("'command' must not be empty")
+	}
+	if len(t.Arguments) == 0 {
+		return errors.New("'arguments' must not be empty.")
+	}
+	if t.WorkingDirectory == "" {
+		return errors.New("'working_directory' must not empty.")
+	}
+
+	return nil
+}
+
+func (t *TaskAttributes) ValidateAnt() error {
+	if len(t.RunIf) == 0 {
+		return errors.New("'run_if' must not be empty.")
+	}
+	if t.BuildFile == "" {
+		return errors.New("'build_file' must not be empty")
+	}
+	if t.Target == "" {
+		return errors.New("'target' must not be empty")
+	}
+	if t.WorkingDirectory == "" {
+		return errors.New("'working_directory' must not empty.")
+	}
+
+	return nil
 }
 
 type JobStateTransition struct {
