@@ -23,7 +23,7 @@ access different parts of the GoCD Server API. For example:
 	client := cfg.Client()
 
 	// list all organizations for user "willnorris"
-	orgs, _, err := client.Agents.List(ctx)
+	orgs, _, err := client.Agents.List(context.Background())
 
 Some API methods have optional parameters that can be passed. For example:
 
