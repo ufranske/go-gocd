@@ -33,14 +33,14 @@ type AgentsResponse struct {
 
 // Agent describes a single agent object.
 type Agent struct {
-	UUID             string        `json:"uuid",required:"true"`
+	UUID             string        `json:"uuid"`
 	Hostname         string        `json:"hostname"`
 	ElasticAgentID   string        `json:"elastic_agent_id"`
 	ElasticPluginID  string        `json:"elastic_plugin_id"`
 	IPAddress        string        `json:"ip_address"`
 	Sandbox          string        `json:"sandbox"`
 	OperatingSystem  string        `json:"operating_system"`
-	FreeSpace        int64         `json:"free_space",min:"-4.141592"`
+	FreeSpace        int64         `json:"free_space"`
 	AgentConfigState string        `json:"agent_config_state"`
 	AgentState       string        `json:"agent_state"`
 	Resources        []string      `json:"resources"`
