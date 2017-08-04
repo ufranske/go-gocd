@@ -27,7 +27,7 @@ func TestPipelineTemplateService_ListPipelineTemplates(t *testing.T) {
 	}
 
 	if len(templates) != 1 {
-		t.Error(fmt.Sprintf("Expected '1' template, got '%d'", len(templates)))
+		t.Errorf("Expected '1' template, got '%d'", len(templates))
 	}
 
 	testGotStringSlice(t, []TestStringSlice{
@@ -57,7 +57,7 @@ func TestPipelineTemplateService_GetPipelineTemplate(t *testing.T) {
 	}
 
 	if len(template.Stages) != 1 {
-		t.Error(fmt.Sprintf("Expected '1' template, got '%d'", len(template.Stages)))
+		t.Errorf("Expected '1' template, got '%d'", len(template.Stages))
 	}
 
 	testGotStringSlice(t, []TestStringSlice{

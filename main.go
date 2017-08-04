@@ -8,7 +8,10 @@ import (
 	"os"
 )
 
+// GoCDUtilityName is used in help text to identify the gocd cli util by name
 const GoCDUtilityName = "gocd"
+
+// GoCDUtilityUsageInstructions providers user facing support on operation of the gocd cli tool. @TODO Expand this content.
 const GoCDUtilityUsageInstructions = "CLI Tool to interact with GoCD server"
 
 func main() {
@@ -32,9 +35,11 @@ func main() {
 		*gocli.DeleteAgentCommand(),
 		*gocli.DeleteAgentsCommand(),
 		*gocli.DeletePipelineTemplateCommand(),
+		*gocli.DeletePipelineConfigCommand(),
 		*gocli.ListPipelineGroupsCommand(),
 		*gocli.GetPipelineHistoryCommand(),
 		*gocli.CreatePipelineConfigCommand(),
+		*gocli.GenerateJSONSchemaCommand(),
 	}
 
 	app.Flags = []cli.Flag{
