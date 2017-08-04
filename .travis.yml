@@ -44,3 +44,4 @@ deploy:
     script: gem install --no-ri --no-rdoc fpm && cd $TRAVIS_BUILD_DIR && go get && goreleaser --snapshot
     on:
       branch: develop
+      condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
