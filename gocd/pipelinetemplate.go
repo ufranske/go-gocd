@@ -7,8 +7,10 @@ import (
 	"strings"
 )
 
+// PipelineTemplatesService describes the HAL _link resource for the api response object for a pipeline configuration objects.
 type PipelineTemplatesService service
 
+// PipelineTemplatesLinks describes a single pipeline template config object HAL links
 //go:generate gocd-response-links-generator -type=PipelineTemplatesLinks,PipelineTemplateLinks
 type PipelineTemplatesLinks struct {
 	Self *url.URL `json:"self"`
@@ -16,17 +18,20 @@ type PipelineTemplatesLinks struct {
 	Find *url.URL `json:"find"`
 }
 
+// PipelineTemplateLinks describes multiple pipeline template config object HAL links
 type PipelineTemplateLinks struct {
 	Self *url.URL `json:"self"`
 	Doc  *url.URL `json:"doc"`
 	Find *url.URL `json:"find"`
 }
 
+// PipelineTemplateRequest describes a PipelineTemplate
 type PipelineTemplateRequest struct {
 	Name   string   `json:"name"`
 	Stages []*Stage `json:"stages"`
 }
 
+// PipelineTemplateResponse describes an api response for a single pipeline templates
 type PipelineTemplateResponse struct {
 	Name     string `json:"name"`
 	Embedded *struct {
@@ -36,6 +41,7 @@ type PipelineTemplateResponse struct {
 	} `json:"_embedded,omitempty"`
 }
 
+// PipelineTemplatesResponse describes an api response for multiple pipeline templates
 type PipelineTemplatesResponse struct {
 	Links    PipelineTemplatesLinks `json:"_links,omitempty"`
 	Embedded *struct {
@@ -43,7 +49,7 @@ type PipelineTemplatesResponse struct {
 	} `json:"_embedded,omitempty"`
 }
 
-// PipelineTemplate
+// PipelineTemplate describes a response from the API for a pipeline template object.
 type PipelineTemplate struct {
 	Links    *PipelineTemplateLinks `json:"_links,omitempty"`
 	Name     string                 `json:"name"`

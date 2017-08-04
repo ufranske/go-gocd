@@ -5,8 +5,10 @@ import (
 	"fmt"
 )
 
+// PipelinesService describes the HAL _link resource for the api response object for a pipelineconfig
 type PipelinesService service
 
+// Pipeline describes a pipeline object
 type Pipeline struct {
 	Name                  string     `json:"name"`
 	LabelTemplate         string     `json:"label_template,omitempty"`
@@ -17,10 +19,11 @@ type Pipeline struct {
 	Version               string
 }
 
+// Material describes an artifact dependency for a pipeline object.
 type Material struct {
 	Type       string `json:"type"`
 	Attributes struct {
-		Url             string      `json:"url"`
+		URL             string      `json:"url"`
 		Destination     string      `json:"destination,omitempty"`
 		Filter          interface{} `json:"filter,omitempty"`
 		InvertFilter    bool        `json:"invert_filter,omitempty"`
@@ -32,12 +35,16 @@ type Material struct {
 	} `json:"attributes"`
 }
 
+// PipelineHistory describes the history of runs for a pipeline
 type PipelineHistory struct {
 	Pipelines []*PipelineInstance `json:"pipelines"`
 }
+
+// PipelineInstance describes a single pipeline run
 type PipelineInstance struct {
 }
 
+// GetHistory returns a list of pipeline instanves describing the pipeline history.
 func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset int) (*PipelineHistory, *APIResponse, error) {
 	stub := fmt.Sprintf("pipelines/%s/history", name)
 	if offset > 0 {
