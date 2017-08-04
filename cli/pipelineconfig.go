@@ -19,32 +19,34 @@ const (
 	DeletePipelineConfigCommandUsage = "Remove Pipeline. This will not delete the pipeline history, which will be stored in the database"
 )
 
+// CreatePipelineConfigAction handles the interaction between the cli flags and the action handler for
+// create-pipeline-config-action
 func CreatePipelineConfigAction(c *cli.Context) error {
 	group := c.String("group")
 	if group == "" {
-		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--group' is missing."))
+		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--group' is missing"))
 	}
 
 	pipeline := c.String("pipeline")
-	pipeline_file := c.String("pipeline-file")
-	if pipeline == "" && pipeline_file == "" {
+	pipelineFile := c.String("pipeline-file")
+	if pipeline == "" && pipelineFile == "" {
 		return handeErrOutput(
 			"CreatePipelineConfig",
-			errors.New("One of '--pipeline-file' or '--pipeline' must be specified."),
+			errors.New("One of '--pipeline-file' or '--pipeline' must be specified"),
 		)
 	}
 
-	if pipeline != "" && pipeline_file != "" {
+	if pipeline != "" && pipelineFile != "" {
 		return handeErrOutput(
 			"CreatePipelineConfig",
-			errors.New("Only one of '--pipeline-file' or '--pipeline' can be specified."),
+			errors.New("Only one of '--pipeline-file' or '--pipeline' can be specified"),
 		)
 	}
 
 	var pf []byte
 	var err error
-	if pipeline_file != "" {
-		pf, err = ioutil.ReadFile(pipeline_file)
+	if pipelineFile != "" {
+		pf, err = ioutil.ReadFile(pipelineFile)
 		if err != nil {
 			return handeErrOutput("CreatePipelineConfig", err)
 		}
@@ -64,42 +66,44 @@ func CreatePipelineConfigAction(c *cli.Context) error {
 	return handleOutput(pc, r, "CreatePipelineConfig", err)
 }
 
+// UpdatePipelineConfigAction handles the interaction between the cli flags and the action handler for
+// update-pipeline-config-action
 func UpdatePipelineConfigAction(c *cli.Context) error {
 	name := c.String("name")
 	if name == "" {
-		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--name' is missing."))
+		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--name' is missing"))
 	}
 
 	version := c.String("pipeline-version")
 	if version == "" {
-		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--pipeline-version' is missing."))
+		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--pipeline-version' is missing"))
 	}
 
 	group := c.String("group")
 	if group == "" {
-		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--group' is missing."))
+		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--group' is missing"))
 	}
 
 	pipeline := c.String("pipeline")
-	pipeline_file := c.String("pipeline-file")
-	if pipeline == "" && pipeline_file == "" {
+	pipelineFile := c.String("pipeline-file")
+	if pipeline == "" && pipelineFile == "" {
 		return handeErrOutput(
 			"CreatePipelineConfig",
-			errors.New("One of '--pipeline-file' or '--pipeline' must be specified."),
+			errors.New("One of '--pipeline-file' or '--pipeline' must be specified"),
 		)
 	}
 
-	if pipeline != "" && pipeline_file != "" {
+	if pipeline != "" && pipelineFile != "" {
 		return handeErrOutput(
 			"CreatePipelineConfig",
-			errors.New("Only one of '--pipeline-file' or '--pipeline' can be specified."),
+			errors.New("Only one of '--pipeline-file' or '--pipeline' can be specified"),
 		)
 	}
 
 	var pf []byte
 	var err error
-	if pipeline_file != "" {
-		pf, err = ioutil.ReadFile(pipeline_file)
+	if pipelineFile != "" {
+		pf, err = ioutil.ReadFile(pipelineFile)
 		if err != nil {
 			return handeErrOutput("CreatePipelineConfig", err)
 		}
@@ -120,14 +124,16 @@ func UpdatePipelineConfigAction(c *cli.Context) error {
 
 }
 
+// DeletePipelineConfigAction handles the interaction between the cli flags and the action handler for
+// delete-pipeline-config-action
 func DeletePipelineConfigAction(c *cli.Context) error {
 	name := c.String("name")
 	if name == "" {
-		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--name' is missing."))
+		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--name' is missing"))
 	}
 
 	deleteResponse, r, err := cliAgent().PipelineConfigs.Delete(context.Background(), name)
-	if r.Http.StatusCode == 406 {
+	if r.HTTP.StatusCode == 406 {
 		err = errors.New(deleteResponse)
 	}
 	return handleOutput(deleteResponse, r, "DeletePipelineTemplate", err)

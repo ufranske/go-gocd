@@ -11,16 +11,24 @@ import (
 	"strings"
 )
 
+// List of command name and descriptions
 const (
 	ConfigureCommandName  = "configure"
 	ConfigureCommandUsage = "Generate configuration file ~/.gocd.conf"
-	ConfigDirectoryPath   = "~/.gocd.conf"
-	EnvVarServer          = "GOCD_SERVER"
-	EnvVarUsername        = "GOCD_USERNAME"
-	EnvVarPassword        = "GOCD_PASSWORD"
 )
 
-func ConfigureAction(c *cli.Context) error {
+// ConfigDirectoryPath is the location where the authentication information is stored
+const ConfigDirectoryPath = "~/.gocd.conf"
+
+// Environmnet variables for configuration.
+const (
+	EnvVarServer   = "GOCD_SERVER"
+	EnvVarUsername = "GOCD_USERNAME"
+	EnvVarPassword = "GOCD_PASSWORD"
+)
+
+//
+func configureAction(c *cli.Context) error {
 
 	s, err := generateConfigFile()
 	if err != nil {

@@ -24,6 +24,7 @@ const (
 	DeleteAgentsCommandUsage = "Bulk Delete Agents"
 )
 
+// ListAgentsAction gets a list of agents and return them.
 func ListAgentsAction(c *cli.Context) error {
 	agents, r, err := cliAgent().Agents.List(context.Background())
 	if err != nil {
@@ -35,6 +36,7 @@ func ListAgentsAction(c *cli.Context) error {
 	return handleOutput(agents, r, "ListAgents", err)
 }
 
+// GetAgentAction retrieves a single agent object.
 func GetAgentAction(c *cli.Context) error {
 	agent, r, err := cliAgent().Agents.Get(context.Background(), c.String("uuid"))
 	if r.HTTP.StatusCode != 404 {
@@ -43,14 +45,15 @@ func GetAgentAction(c *cli.Context) error {
 	return handleOutput(agent, r, "GetAgent", err)
 }
 
+// UpdateAgentAction updates a single agent.
 func UpdateAgentAction(c *cli.Context) error {
 
 	if c.String("uuid") == "" {
-		return handleOutput(nil, nil, "UpdateAgent", errors.New("'--uuid' is missing."))
+		return handleOutput(nil, nil, "UpdateAgent", errors.New("'--uuid' is missing"))
 	}
 
 	if c.String("config") == "" {
-		return handleOutput(nil, nil, "UpdateAgent", errors.New("'--config' is missing."))
+		return handleOutput(nil, nil, "UpdateAgent", errors.New("'--config' is missing"))
 	}
 
 	a := gocd.AgentUpdate{}
@@ -66,9 +69,10 @@ func UpdateAgentAction(c *cli.Context) error {
 	return handleOutput(agent, r, "UpdateAgent", err)
 }
 
+// DeleteAgentAction delets an agent. Note: The agent must be disabled.
 func DeleteAgentAction(c *cli.Context) error {
 	if c.String("uuid") == "" {
-		return handleOutput(nil, nil, "DeleteAgent", errors.New("'--uuid' is missing."))
+		return handleOutput(nil, nil, "DeleteAgent", errors.New("'--uuid' is missing"))
 	}
 
 	deleteResponse, r, err := cliAgent().Agents.Delete(context.Background(), c.String("uuid"))
@@ -78,6 +82,7 @@ func DeleteAgentAction(c *cli.Context) error {
 	return handleOutput(deleteResponse, r, "DeleteAgent", err)
 }
 
+// UpdateAgentsAction updates a single agent.
 func UpdateAgentsAction(c *cli.Context) error {
 
 	u := gocd.AgentBulkUpdate{}
@@ -86,16 +91,15 @@ func UpdateAgentsAction(c *cli.Context) error {
 		op := gocd.AgentBulkOperationsUpdate{}
 		if err := json.Unmarshal(b, &op); err == nil {
 			return handleOutput(nil, nil, "BulkAgentUpdate", err)
-		} else {
-			u.Operations = &op
 		}
+		u.Operations = &op
 	}
 
-	if uuids := c.StringSlice("uuid"); len(uuids) == 0 {
-		return handleOutput(nil, nil, "BulkAgentUpdate", errors.New("'--uuid' is missing."))
-	} else {
-		u.Uuids = uuids
+	var uuids []string
+	if uuids = c.StringSlice("uuid"); len(uuids) == 0 {
+		return handleOutput(nil, nil, "BulkAgentUpdate", errors.New("'--uuid' is missing"))
 	}
+	u.Uuids = uuids
 
 	if state := c.String("state"); state != "" {
 		u.AgentConfigState = c.String("state")
@@ -108,11 +112,12 @@ func UpdateAgentsAction(c *cli.Context) error {
 	return handleOutput(updateResponse, r, "BulkAgentUpdate", err)
 }
 
+// DeleteAgentsAction must be implemented.
 func DeleteAgentsAction(c *cli.Context) error {
 	return nil
 }
 
-// ListAgentsCommand handles the interaction between the cli flags and the action handler for list-agents
+// ListAgentsCommand checks a template-name is provided and that the response is a 2xx response.
 func ListAgentsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     ListAgentsCommandName,

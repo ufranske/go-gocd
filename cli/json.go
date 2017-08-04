@@ -10,11 +10,13 @@ import (
 	"strings"
 )
 
+// List of command name and descriptions
 const (
 	GenerateJSONSchemaCommandName  = "generate-json-schema"
 	GenerateJSONSchemaCommandUsage = "Generates a JSON schema based on the structs in this library"
 )
 
+// Schemas is a collection of json structs to write to file as json schemas.
 var Schemas = map[string]interface{}{
 	"job":           gocd.Job{},
 	"agent":         gocd.Agent{},
@@ -22,6 +24,7 @@ var Schemas = map[string]interface{}{
 	"stage":         gocd.Stage{},
 }
 
+// GenerateJSONSchemaAction will generate the list of files for the JSON Schema for the defined structs.
 func GenerateJSONSchemaAction(c *cli.Context) error {
 	directory := "schema"
 	os.Mkdir(directory, os.FileMode(int(0777)))
@@ -39,6 +42,7 @@ func GenerateJSONSchemaAction(c *cli.Context) error {
 	return nil
 }
 
+// GenerateJSONSchemaCommand handles the interaction between the cli flags and the action handler for generate-json
 func GenerateJSONSchemaCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GenerateJSONSchemaCommandName,

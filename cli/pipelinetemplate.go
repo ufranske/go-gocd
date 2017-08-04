@@ -118,17 +118,27 @@ func UpdatePipelineTemplateAction(c *cli.Context) error {
 	return handleOutput(pt, r, "UpdatePipelineTemplate", err)
 }
 
-// DeletePipelineTemplateAction checks a template-name is provided and that the response is a 2xx response.
-func DeletePipelineTemplateAction(c *cli.Context) error {
-	if c.String("template-name") == "" {
-		return handleOutput(nil, nil, "DeletePipelineTemplate", errors.New("'--template-name' is missing"))
-	}
+// DeletePipelineTemplateCommand handles the interaction between the cli flags and the action handler for
+// delete-pipeline-template and checks a template-name is provided and that the response is a 2xx response.
+func DeletePipelineTemplateCommand() *cli.Command {
+	return &cli.Command{
+		Name:     DeletePipelineTemplateCommandName,
+		Usage:    DeletePipelineTemplateCommandUsage,
+		Category: "Pipeline Templates",
+		Flags: []cli.Flag{
+			cli.StringFlag{			Name: "template-name", Usage: "Pipeline Template name."},},
+		Action: func(c *cli.Context) error {
+			if c.String("template-name") == "" {
+				return handleOutput(nil, nil, "DeletePipelineTemplate", errors.New("'--template-name' is missing"))
+			}
 
-	deleteResponse, r, err := cliAgent().PipelineTemplates.Delete(context.Background(), c.String("template-name"))
-	if r.HTTP.StatusCode == 406 {
-		err = errors.New(deleteResponse)
+			deleteResponse, r, err := cliAgent().PipelineTemplates.Delete(context.Background(), c.String("template-name"))
+			if r.HTTP.StatusCode == 406 {
+				err = errors.New(deleteResponse)
+			}
+			return handleOutput(deleteResponse, r, "DeletePipelineTemplate", err)
+		},
 	}
-	return handleOutput(deleteResponse, r, "DeletePipelineTemplate", err)
 }
 
 // ListPipelineTemplatesCommand handles the interaction between the cli flags and the action handler for
@@ -183,20 +193,6 @@ func UpdatePipelineTemplateCommand() *cli.Command {
 			cli.StringFlag{Name: "template-version", Usage: "Pipeline template version."},
 			cli.StringFlag{Name: "template-name", Usage: "Pipeline Template name."},
 			cli.StringSliceFlag{Name: "stage", Usage: "JSON encoded stage object."},
-		},
-	}
-}
-
-// DeletePipelineTemplateCommand handles the interaction between the cli flags and the action handler for
-// delete-pipeline-template
-func DeletePipelineTemplateCommand() *cli.Command {
-	return &cli.Command{
-		Name:     DeletePipelineTemplateCommandName,
-		Usage:    DeletePipelineTemplateCommandUsage,
-		Action:   DeletePipelineTemplateAction,
-		Category: "Pipeline Templates",
-		Flags: []cli.Flag{
-			cli.StringFlag{Name: "template-name", Usage: "Pipeline Template name."},
 		},
 	}
 }

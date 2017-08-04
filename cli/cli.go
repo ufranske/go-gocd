@@ -7,18 +7,16 @@ import (
 	"os"
 )
 
+// GoCDUtilityDefaultVersion is the default version if no environmnet variables are set
 const GoCDUtilityDefaultVersion = "dev"
 
-func Version() string {
+func version() string {
 	if tag := os.Getenv("TAG"); tag != "" {
 		return tag
-	} else {
-		if commit := os.Getenv("COMMIT"); commit != "" {
-			return commit[0:8]
-		} else {
-			return GoCDUtilityDefaultVersion
-		}
+	} else if commit := os.Getenv("COMMIT"); commit != "" {
+		return commit[0:8]
 	}
+	return GoCDUtilityDefaultVersion
 }
 
 func cliAgent() *gocd.Client {
