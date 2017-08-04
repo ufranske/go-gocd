@@ -27,7 +27,9 @@ func GetPipelineHistoryAction(c *cli.Context) error {
 	return handleOutput(pgs, r, "GetPipelineHistory", err)
 }
 
-func getPipelineHistoryCommand() *cli.Command {
+// GetPipelineHistoryCommand handles the interaction between the cli flags and the action handler for
+// get-pipeline-history-action
+func GetPipelineHistoryCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetPipelineHistoryCommandName,
 		Usage:    GetPipelineHistoryCommandUsage,
