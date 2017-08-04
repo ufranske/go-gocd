@@ -26,7 +26,7 @@ func cliAgent() *gocd.Client {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	return cfg.Client()
 }
 

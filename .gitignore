@@ -59,3 +59,4 @@ Temporary Items
 /cli/dist
 /gocd/coverage.txt
 /.idea
+/go-gocd
