@@ -15,7 +15,7 @@ type Job struct {
 	PipelineName         string                `json:"pipeline_name,omitempty"`
 	Result               string                `json:"result,omitempty"`
 	State                string                `json:"state,omitempty"`
-	Id                   int64                 `json:"id,omitempty"`
+	ID                   int64                 `json:"id,omitempty"`
 	StageCounter         string                `json:"stage_counter,omitempty"`
 	StageName            string                `json:"stage_name,omitempty"`
 	RunInstanceCount     int64                 `json:"run_instance_count,omitempty"`
@@ -71,16 +71,16 @@ type TaskAttributes struct {
 
 func (t *TaskAttributes) ValidateExec() error {
 	if len(t.RunIf) == 0 {
-		return errors.New("'run_if' must not be empty.")
+		return errors.New("'run_if' must not be empty")
 	}
 	if t.Command == "" {
 		return errors.New("'command' must not be empty")
 	}
 	if len(t.Arguments) == 0 {
-		return errors.New("'arguments' must not be empty.")
+		return errors.New("'arguments' must not be empty")
 	}
 	if t.WorkingDirectory == "" {
-		return errors.New("'working_directory' must not empty.")
+		return errors.New("'working_directory' must not empty")
 	}
 
 	return nil
@@ -88,7 +88,7 @@ func (t *TaskAttributes) ValidateExec() error {
 
 func (t *TaskAttributes) ValidateAnt() error {
 	if len(t.RunIf) == 0 {
-		return errors.New("'run_if' must not be empty.")
+		return errors.New("'run_if' must not be empty")
 	}
 	if t.BuildFile == "" {
 		return errors.New("'build_file' must not be empty")
@@ -97,7 +97,7 @@ func (t *TaskAttributes) ValidateAnt() error {
 		return errors.New("'target' must not be empty")
 	}
 	if t.WorkingDirectory == "" {
-		return errors.New("'working_directory' must not empty.")
+		return errors.New("'working_directory' must not empty")
 	}
 
 	return nil
@@ -109,14 +109,16 @@ type JobStateTransition struct {
 	State           string `json:"state,omitempty"`
 }
 
+// JobRunHistoryResponse describes the api response from
 type JobRunHistoryResponse struct {
 	Jobs       []*Job              `json:"jobs,omitempty"`
 	Pagination *PaginationResponse `json:"pagination,omitempty"`
 }
 
+// Validate a job structure has non-nil values on correct attributes
 func (j *Job) Validate() error {
 	if j.Name == "" {
-		return errors.New("`gocd.Jobs.Name` is empty.")
+		return errors.New("`gocd.Jobs.Name` is empty")
 	}
 	return nil
 }

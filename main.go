@@ -39,6 +39,7 @@ func main() {
 		*gocli.ListPipelineGroupsCommand(),
 		*gocli.GetPipelineHistoryCommand(),
 		*gocli.CreatePipelineConfigCommand(),
+		*gocli.GenerateJSONSchemaCommand(),
 	}
 
 	app.Flags = []cli.Flag{

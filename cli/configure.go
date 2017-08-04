@@ -86,6 +86,7 @@ func loadConfig() (*gocd.Configuration, error) {
 	return &cfg, nil
 }
 
+// ConfigureCommand handles the interaction between the cli flags and the action handler for configure
 func ConfigureCommand() *cli.Command {
 	return &cli.Command{
 		Name:   ConfigureCommandName,

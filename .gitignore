@@ -60,3 +60,4 @@ Temporary Items
 /gocd/coverage.txt
 /.idea
 /go-gocd
+/gocd-cli-action-generator/gocd-cli-action-generator

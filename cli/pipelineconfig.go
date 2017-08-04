@@ -132,6 +132,7 @@ func DeletePipelineConfigAction(c *cli.Context) error {
 	return handleOutput(deleteResponse, r, "DeletePipelineTemplate", err)
 }
 
+// CreatePipelineConfigCommand handles the interaction between the cli flags and the action handler for create-pipeline-config
 func CreatePipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:     CreatePipelineConfigCommandName,
@@ -146,6 +147,7 @@ func CreatePipelineConfigCommand() *cli.Command {
 	}
 }
 
+// UpdatePipelineConfigCommand handles the interaction between the cli flags and the action handler for update-pipeline-config
 func UpdatePipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:     UpdatePipelineConfigCommandName,
@@ -162,6 +164,7 @@ func UpdatePipelineConfigCommand() *cli.Command {
 	}
 }
 
+// DeletePipelineConfigCommand handles the interaction between the cli flags and the action handler for delete-pipeline-config
 func DeletePipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:   DeletePipelineConfigCommandName,

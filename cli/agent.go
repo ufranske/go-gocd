@@ -111,6 +111,7 @@ func DeleteAgentsAction(c *cli.Context) error {
 	return nil
 }
 
+// ListAgentsCommand handles the interaction between the cli flags and the action handler for list-agents
 func ListAgentsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     ListAgentsCommandName,
@@ -120,6 +121,7 @@ func ListAgentsCommand() *cli.Command {
 	}
 }
 
+// GetAgentCommand handles the interaction between the cli flags and the action handler for get-agent
 func GetAgentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetAgentCommandName,
@@ -132,6 +134,7 @@ func GetAgentCommand() *cli.Command {
 	}
 }
 
+// UpdateAgentCommand handles the interaction between the cli flags and the action handler for update-agent
 func UpdateAgentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     UpdateAgentCommandName,
@@ -145,6 +148,7 @@ func UpdateAgentCommand() *cli.Command {
 	}
 }
 
+// DeleteAgentCommand handles the interaction between the cli flags and the action handler for delete-agent
 func DeleteAgentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     DeleteAgentCommandName,
@@ -157,6 +161,7 @@ func DeleteAgentCommand() *cli.Command {
 	}
 }
 
+// UpdateAgentsCommand handles the interaction between the cli flags and the action handler for update-agents
 func UpdateAgentsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     UpdateAgentsCommandName,
@@ -171,6 +176,7 @@ func UpdateAgentsCommand() *cli.Command {
 	}
 }
 
+// DeleteAgentsCommand handles the interaction between the cli flags and the action handler for delete-agents
 func DeleteAgentsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     DeleteAgentsCommandName,
