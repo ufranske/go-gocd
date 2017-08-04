@@ -3,12 +3,13 @@
 CWD:=$(CURDIR)
 TRAVIS_TAG ?= dev
 
-fmt: format
+format: fmt
 	git add .
 	git commit -m "Autocommit for 'gofmt -w'."
 
-format:
+fmt:
 	gofmt -w -s .
+	golint
 
 gocd.%: init
 	(cd $(CWD)/cli && \
@@ -24,3 +25,6 @@ init:
 clean:
 	rm -rf $(CWD)/target
 	rm -rf $(CWD)/build
+
+lint:
+	golint .

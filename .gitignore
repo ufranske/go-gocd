@@ -58,3 +58,6 @@ Temporary Items
 /dist
 /cli/dist
 /gocd/coverage.txt
+/.idea
+/go-gocd
+/gocd-cli-action-generator/gocd-cli-action-generator

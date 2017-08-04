@@ -27,18 +27,7 @@ func cliAgent() *gocd.Client {
 		panic(err)
 	}
 
-	var auth *gocd.Auth
-	if cfg.HasAuth() {
-		auth = &gocd.Auth{
-			Username: cfg.Username,
-			Password: cfg.Password,
-		}
-	} else {
-		auth = nil
-	}
-
-	return gocd.NewClient(cfg.Server, auth, nil, cfg.SslCheck)
-
+	return cfg.Client()
 }
 
 func handeErrOutput(reqType string, err error) error {

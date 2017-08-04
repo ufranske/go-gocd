@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/segmentio/go-prompt"
 	"github.com/urfave/cli"
 	"gopkg.in/yaml.v2"
@@ -34,20 +35,9 @@ func ConfigureAction(c *cli.Context) error {
 	return nil
 }
 
-type Configuration struct {
-	Server   string `yaml:"server"`
-	Username string `yaml:"username,omitempty"`
-	Password string `yaml:"password,omitempty"`
-	SslCheck bool   `yaml:"ssl_check,omitempty"`
-}
-
-func (c *Configuration) HasAuth() bool {
-	return (c.Username != "") && (c.Password != "")
-}
-
 // Build a default template
 func generateConfigFile() (string, error) {
-	cfg := Configuration{}
+	cfg := gocd.Configuration{}
 	cfg.Server = prompt.StringRequired("GoCD Server (should contain '/go/' suffix)")
 	if u := prompt.String("Client Username"); u != "" {
 		cfg.Username = u
@@ -69,13 +59,13 @@ func configFilePath() string {
 	return strings.Replace(ConfigDirectoryPath, "~", usr.HomeDir, 1)
 }
 
-func loadConfig() (*Configuration, error) {
+func loadConfig() (*gocd.Configuration, error) {
 	s, err := ioutil.ReadFile(configFilePath())
 	if err != nil {
 		return nil, err
 	}
 
-	cfg := Configuration{}
+	cfg := gocd.Configuration{}
 	err = yaml.Unmarshal(s, &cfg)
 	if err != nil {
 		return nil, err
@@ -96,6 +86,7 @@ func loadConfig() (*Configuration, error) {
 	return &cfg, nil
 }
 
+// ConfigureCommand handles the interaction between the cli flags and the action handler for configure
 func ConfigureCommand() *cli.Command {
 	return &cli.Command{
 		Name:   ConfigureCommandName,
