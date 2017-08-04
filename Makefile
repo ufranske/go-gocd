@@ -15,4 +15,4 @@ lint:
 test: lint
 	cd gocd
 	go tool vet .
-	bash ./go.test.sh
+	cd gocd && bash ./go.test.sh
