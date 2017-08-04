@@ -2,14 +2,16 @@ package gocd
 
 import "errors"
 
+// JobsService describes the HAL _link resource for the api response object for a job
 type JobsService service
 
+// Job describes a job object.
 type Job struct {
 	AgentUUID            string                `json:"agent_uuid,omitempty"`
 	Name                 string                `json:"name"`
 	JobStateTransitions  []*JobStateTransition `json:"job_state_transitions,omitempty"`
 	ScheduledDate        int64                 `json:"scheduled_date,omitempty"`
-	OrginalJobId         string                `json:"orginal_job_id,omitempty"`
+	OrginalJobID         string                `json:"orginal_job_id,omitempty"`
 	PipelineCounter      int64                 `json:"pipeline_counter,omitempty"`
 	Rerun                bool                  `json:"rerun,omitempty"`
 	PipelineName         string                `json:"pipeline_name,omitempty"`
@@ -25,21 +27,25 @@ type Job struct {
 	Tasks                []Task                `json:"tasks,omitempty"`
 }
 
+// PluginConfiguration describes how to reference a plugin.
 type PluginConfiguration struct {
-	Id      string `json:"id"`
+	ID      string `json:"id"`
 	Version string `json:"version"`
 }
 
+// PluginConfigurationKVPair describes a key/value pair of plugin configurations.
 type PluginConfigurationKVPair struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
 }
 
+// Task Describes a Task object in the GoCD api.
 type Task struct {
 	Type       string         `json:"type"`
 	Attributes TaskAttributes `json:"attributes"`
 }
 
+// Validate each of the possible task types.
 func (t *Task) Validate() error {
 	switch t.Type {
 	case "exec":
@@ -51,6 +57,7 @@ func (t *Task) Validate() error {
 	}
 }
 
+// TaskAttributes describes all the properties for a Task.
 type TaskAttributes struct {
 	RunIf               []string                    `json:"run_if,omitempty"`
 	Command             string                      `json:"command,omitempty"`
@@ -69,6 +76,7 @@ type TaskAttributes struct {
 	Configuration       []PluginConfigurationKVPair `json:"configuration,omitempty"`
 }
 
+// ValidateExec checks that the specified values for the Task struct are correct for a cli exec task
 func (t *TaskAttributes) ValidateExec() error {
 	if len(t.RunIf) == 0 {
 		return errors.New("'run_if' must not be empty")
@@ -86,6 +94,7 @@ func (t *TaskAttributes) ValidateExec() error {
 	return nil
 }
 
+// ValidateAnt checks that the specified values for the Task struct are correct for a an Ant task
 func (t *TaskAttributes) ValidateAnt() error {
 	if len(t.RunIf) == 0 {
 		return errors.New("'run_if' must not be empty")
@@ -103,9 +112,10 @@ func (t *TaskAttributes) ValidateAnt() error {
 	return nil
 }
 
+// JobStateTransition describes a State Transition object in a GoCD api response
 type JobStateTransition struct {
 	StateChangeTime int64  `json:"state_change_time,omitempty"`
-	Id              int64  `json:"id,omitempty"`
+	ID              int64  `json:"id,omitempty"`
 	State           string `json:"state,omitempty"`
 }
 

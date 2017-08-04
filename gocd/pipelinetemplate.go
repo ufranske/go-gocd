@@ -94,7 +94,7 @@ func (pts *PipelineTemplatesService) Get(ctx context.Context, name string) (*Pip
 		return nil, resp, err
 	}
 
-	pt.Version = strings.Replace(resp.Http.Header.Get("Etag"), "\"", "", -1)
+	pt.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
 
 	return &pt, resp, nil
 
@@ -145,7 +145,7 @@ func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st
 		return nil, resp, err
 	}
 
-	ptr.Version = strings.Replace(resp.Http.Header.Get("Etag"), "\"", "", -1)
+	ptr.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
 
 	return &ptr, resp, nil
 
@@ -168,7 +168,7 @@ func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, ve
 		return nil, nil, err
 	}
 
-	req.Http.Header.Set("If-Match", fmt.Sprintf("\"%s\"", version))
+	req.HTTP.Header.Set("If-Match", fmt.Sprintf("\"%s\"", version))
 
 	ptr := PipelineTemplate{}
 	resp, err := pts.client.Do(ctx, req, &ptr)
@@ -176,7 +176,7 @@ func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, ve
 		return nil, resp, err
 	}
 
-	ptr.Version = strings.Replace(resp.Http.Header.Get("Etag"), "\"", "", -1)
+	ptr.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
 
 	return &ptr, resp, nil
 

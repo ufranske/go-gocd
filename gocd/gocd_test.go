@@ -39,15 +39,11 @@ func setup() {
 	server = httptest.NewServer(mux)
 
 	// gocd client configured to use test server
-	client = NewClient(
-		server.URL,
-		&Auth{
-			Username: "mockUsername",
-			Password: "mockPassword",
-		},
-		nil,
-		false,
-	)
+	client = NewClient(&Configuration{
+		Server:   server.URL,
+		Username: "mockUsername",
+		Password: "mockPassword",
+	}, nil)
 }
 
 // teardown closes the test HTTP server.
@@ -82,8 +78,8 @@ func testStringInSlice(t *testing.T, s []string, e string) {
 	t.Errorf("Expected '%s' in '%s'.", e, strings.Join(s, ","))
 }
 
-func testGotStringSlice(t *testing.T, got_want []TestStringSlice) {
-	for index, test := range got_want {
+func testGotStringSlice(t *testing.T, gotWant []TestStringSlice) {
+	for index, test := range gotWant {
 		if test.got != test.want {
 			t.Errorf("Expected '%s'. Got '%s' in '%d'", test.want, test.got, index)
 		}
@@ -92,20 +88,15 @@ func testGotStringSlice(t *testing.T, got_want []TestStringSlice) {
 
 func TestNewClient(t *testing.T) {
 
-	c := NewClient(
-		"http://ci.example.com/go",
-		&Auth{
-			Username: "mockUsername",
-			Password: "mockPassword",
-		},
-		nil,
-		false,
-	)
+	c := NewClient(&Configuration{
+		Server:   server.URL,
+		Username: "mockUsername",
+		Password: "mockPassword",
+	}, nil)
 
 	testGotStringSlice(t, []TestStringSlice{
-		{c.BaseURL.String(), "http://ci.example.com/go"},
+		{c.BaseURL.String(), server.URL},
 		{c.UserAgent, userAgent},
-		{c.BaseURL.Host, "ci.example.com"},
 	})
 
 	if c.PipelineGroups == nil {

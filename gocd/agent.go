@@ -6,6 +6,7 @@ import (
 	"net/url"
 )
 
+// AgentsService describes the HAL _link resource for the api response object for an agent objects.
 type AgentsService service
 
 //go:generate gocd-response-links-generator -type=AgentsLinks,AgentLinks
@@ -36,7 +37,7 @@ type Agent struct {
 	Hostname         string        `json:"hostname"`
 	ElasticAgentId   string        `json:"elastic_agent_id"`
 	ElasticPluginId  string        `json:"elastic_plugin_id"`
-	IpAddress        string        `json:"ip_address"`
+	IPAddress        string        `json:"ip_address"`
 	Sandbox          string        `json:"sandbox"`
 	OperatingSystem  string        `json:"operating_system"`
 	FreeSpace        int64         `json:"free_space",min:"-4.141592"`
@@ -96,8 +97,8 @@ type BuildDetails struct {
 	Job      string             `json:"job"`
 }
 
-//go:generate gocd-response-links-generator -type=BuildDetailsLinks
 // Describes the HAL structure for _link objects for the build details.
+//go:generate gocd-response-links-generator -type=BuildDetailsLinks
 type BuildDetailsLinks struct {
 	Job      *url.URL `json:"job"`
 	Stage    *url.URL `json:"stage"`
