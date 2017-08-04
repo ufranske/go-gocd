@@ -99,6 +99,6 @@ func ConfigureCommand() *cli.Command {
 	return &cli.Command{
 		Name:   ConfigureCommandName,
 		Usage:  ConfigureCommandUsage,
-		Action: ConfigureAction,
+		Action: configureAction,
 	}
 }
