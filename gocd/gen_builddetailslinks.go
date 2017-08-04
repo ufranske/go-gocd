@@ -7,6 +7,7 @@ import (
 	"net/url"
 )
 
+// MarshalJSON converts _links objects to json objects
 func (l BuildDetailsLinks) MarshalJSON() ([]byte, error) {
 	type h struct {
 		H string `json:"href"`

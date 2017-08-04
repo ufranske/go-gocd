@@ -21,7 +21,7 @@ func (c *Client) genericHeadAction(ctx context.Context, path string, apiversion 
 		return false, resp, err
 	}
 
-	exists := resp.Http.StatusCode >= 300 || resp.Http.StatusCode < 200
+	exists := resp.HTTP.StatusCode >= 300 || resp.HTTP.StatusCode < 200
 
 	return exists, resp, nil
 

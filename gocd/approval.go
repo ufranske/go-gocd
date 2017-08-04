@@ -1,6 +1,5 @@
 package gocd
 
-
 // Approval represents a request/response object describing the approval configuration for a GoCD Job
 type Approval struct {
 	Type          string         `json:"type"`

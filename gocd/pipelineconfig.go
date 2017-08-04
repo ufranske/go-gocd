@@ -10,7 +10,7 @@ import (
 type PipelineConfigsService service
 
 // PipelineConfig describes the configuration for a pipeline
-type PipelineConfig struct {}
+type PipelineConfig struct{}
 
 // PipelineConfigRequest describes a request object for creating or updating pipelines
 type PipelineConfigRequest struct {
@@ -35,7 +35,7 @@ func (pcs *PipelineConfigsService) Update(ctx context.Context, group string, nam
 		return nil, nil, err
 	}
 
-	req.Http.Header.Set("If-Match", fmt.Sprintf("\"%s\"", version))
+	req.HTTP.Header.Set("If-Match", fmt.Sprintf("\"%s\"", version))
 
 	pc := Pipeline{}
 	resp, err := pcs.client.Do(ctx, req, &pc)
@@ -69,7 +69,7 @@ func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *
 	if err != nil {
 		return nil, resp, err
 	}
-	pc.Version = strings.Replace(resp.Http.Header.Get("Etag"), "\"", "", -1)
+	pc.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
 
 	return &pc, resp, nil
 }

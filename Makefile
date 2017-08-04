@@ -10,11 +10,9 @@ fmt:
 
 lint:
 	$(shell diff -u <(echo -n) <(gofmt -d -s .))
-	golint .
-	$(MAKE) -C ./cli/ lint
-	$(MAKE) -C ./gocd/ lint
+	golint . cli gocd
 
 test: lint
 	cd gocd
 	go tool vet .
-	bash ./go.test.sh
+	cd gocd && bash ./go.test.sh

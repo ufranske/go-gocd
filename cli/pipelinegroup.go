@@ -5,11 +5,14 @@ import (
 	"github.com/urfave/cli"
 )
 
+// List of command name and descriptions
 const (
 	ListPipelineGroupsCommandName  = "list-pipeline-groups"
 	ListPipelineGroupsCommandUsage = "List Pipeline Groups"
 )
 
+// ListPipelineGroupsAction handles the interaction between the cli flags and the action handler for
+// list-pipeline-groups
 func ListPipelineGroupsAction(c *cli.Context) error {
 	pgs, r, err := cliAgent().PipelineGroups.List(context.Background())
 	if err != nil {
@@ -19,6 +22,8 @@ func ListPipelineGroupsAction(c *cli.Context) error {
 	return handleOutput(pgs, r, "ListPipelineTemplates", err)
 }
 
+// ListPipelineGroupsCommand handles the interaction between the cli flags and the action handler for
+// list-pipeline-groups
 func ListPipelineGroupsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     ListPipelineGroupsCommandName,

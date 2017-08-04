@@ -36,23 +36,26 @@ type StringResponse struct {
 // APIResponse encapsulates the net/http.Response object, a string representing the Body, and a gocd.Request object
 // encapsulating the response from the API.
 type APIResponse struct {
-	Http    *http.Response
+	HTTP    *http.Response
 	Body    string
 	Request *APIRequest
 }
 
 // APIRequest encapsulates the net/http.Request object, and a string representing the Body.
 type APIRequest struct {
-	Http *http.Request
+	HTTP *http.Request
 	Body string
 }
 
 // Client struct which acts as an interface to the GoCD Server. Exposes resource service handlers.
 type Client struct {
-	client    *http.Client
-	BaseURL   *url.URL
+	client *http.Client
+
+	BaseURL  *url.URL
+	Username string
+	Password string
+
 	UserAgent string
-	Auth      *Auth
 
 	Agents            *AgentsService
 	PipelineGroups    *PipelineGroupsService
@@ -103,8 +106,8 @@ func (c *Configuration) Client() *Client {
 	return NewClient(c, nil)
 }
 
-// Create a new client based on the provided configuration payload, and optionally a custom httpClient to allow
-// overriding of http client structures.
+// NewClient creates a new client based on the provided configuration payload, and optionally a custom httpClient to
+// allow overriding of http client structures.
 func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
@@ -127,6 +130,10 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 	}
 
 	c.common.client = c
+
+	c.Username = cfg.Username
+	c.Password = cfg.Password
+
 	c.Agents = (*AgentsService)(&c.common)
 	c.PipelineGroups = (*PipelineGroupsService)(&c.common)
 	c.Stages = (*StagesService)(&c.common)
@@ -134,6 +141,7 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 	c.PipelineTemplates = (*PipelineTemplatesService)(&c.common)
 	c.Pipelines = (*PipelinesService)(&c.common)
 	c.PipelineConfigs = (*PipelineConfigsService)(&c.common)
+
 	return c
 }
 
@@ -166,7 +174,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 	}
 
 	req, err := http.NewRequest(method, u.String(), buf)
-	request.Http = req
+	request.HTTP = req
 	if err != nil {
 		return nil, err
 	}
@@ -180,8 +188,8 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 	req.Header.Set("User-Agent", c.UserAgent)
 
 	if c.cookie == "" {
-		if c.Auth != nil {
-			req.SetBasicAuth(c.Auth.Username, c.Auth.Password)
+		if c.Username != "" && c.Password != "" {
+			req.SetBasicAuth(c.Username, c.Password)
 		}
 	} else {
 		req.Header.Set("Cookie", c.cookie)
@@ -193,13 +201,13 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 // Do takes an HTTP request and resposne the response from the GoCD API endpoint.
 func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}) (*APIResponse, error) {
 
-	req.Http = req.Http.WithContext(ctx)
+	req.HTTP = req.HTTP.WithContext(ctx)
 
 	response := &APIResponse{
 		Request: req,
 	}
 
-	resp, err := c.client.Do(req.Http)
+	resp, err := c.client.Do(req.HTTP)
 	if err != nil {
 		if e, ok := err.(*url.Error); ok {
 			if url, err := url.Parse(e.URL); err == nil {
@@ -211,8 +219,8 @@ func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}) (*APIRe
 		return nil, err
 	}
 
-	response.Http = resp
-	err = CheckResponse(response.Http)
+	response.HTTP = resp
+	err = CheckResponse(response.HTTP)
 	if err != nil {
 		return response, err
 	}

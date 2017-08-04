@@ -6,10 +6,11 @@ import (
 	"net/url"
 )
 
+// AgentsService describes the HAL _link resource for the api response object for an agent objects.
 type AgentsService service
 
-//go:generate gocd-response-links-generator -type=AgentsLinks,AgentLinks
 // AgentsLinks describes the HAL _link resource for the api response object for a collection of agent objects.
+//go:generate gocd-response-links-generator -type=AgentsLinks,AgentLinks
 type AgentsLinks struct {
 	Self *url.URL `json:"self"`
 	Doc  *url.URL `json:"doc"`
@@ -24,7 +25,7 @@ type AgentLinks struct {
 
 // AgentsResponse describes the structure of the API response when listing collections of agent object.
 type AgentsResponse struct {
-	Links    *AgentsLinks `json:"_links,omitempty"`
+	Links *AgentsLinks `json:"_links,omitempty"`
 	Embedded *struct {
 		Agents []*Agent `json:"agents"`
 	} `json:"_embedded,omitempty"`
@@ -32,14 +33,14 @@ type AgentsResponse struct {
 
 // Agent describes a single agent object.
 type Agent struct {
-	Uuid             string        `json:"uuid",required:"true"`
+	UUID             string        `json:"uuid"`
 	Hostname         string        `json:"hostname"`
-	ElasticAgentId   string        `json:"elastic_agent_id"`
-	ElasticPluginId  string        `json:"elastic_plugin_id"`
-	IpAddress        string        `json:"ip_address"`
+	ElasticAgentID   string        `json:"elastic_agent_id"`
+	ElasticPluginID  string        `json:"elastic_plugin_id"`
+	IPAddress        string        `json:"ip_address"`
 	Sandbox          string        `json:"sandbox"`
 	OperatingSystem  string        `json:"operating_system"`
-	FreeSpace        int64         `json:"free_space",min:"-4.141592"`
+	FreeSpace        int64         `json:"free_space"`
 	AgentConfigState string        `json:"agent_config_state"`
 	AgentState       string        `json:"agent_state"`
 	Resources        []string      `json:"resources"`
@@ -52,7 +53,7 @@ type Agent struct {
 
 // JobRunHistory retrieves the list of jobs run on this agent
 func (a *Agent) JobRunHistory(ctx context.Context) ([]*Job, error) {
-	jobs, _, err := a.client.Agents.JobRunHistory(ctx, a.Uuid)
+	jobs, _, err := a.client.Agents.JobRunHistory(ctx, a.UUID)
 	if err != nil {
 		return nil, err
 	}
@@ -96,8 +97,8 @@ type BuildDetails struct {
 	Job      string             `json:"job"`
 }
 
+// BuildDetailsLinks describes the HAL structure for _link objects for the build details.
 //go:generate gocd-response-links-generator -type=BuildDetailsLinks
-// Describes the HAL structure for _link objects for the build details.
 type BuildDetailsLinks struct {
 	Job      *url.URL `json:"job"`
 	Stage    *url.URL `json:"stage"`
