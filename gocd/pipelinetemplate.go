@@ -43,7 +43,7 @@ type PipelineTemplatesResponse struct {
 	} `json:"_embedded,omitempty"`
 }
 
-// PipelineTemplate 
+// PipelineTemplate
 type PipelineTemplate struct {
 	Links    *PipelineTemplateLinks `json:"_links,omitempty"`
 	Name     string                 `json:"name"`
