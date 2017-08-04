@@ -6,6 +6,7 @@ import (
 	"github.com/urfave/cli"
 )
 
+// List of command name and descriptions
 const (
 	GetPipelineHistoryCommandName  = "get-pipeline-history"
 	GetPipelineHistoryCommandUsage = "Get Pipeline History"

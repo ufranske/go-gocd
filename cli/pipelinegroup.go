@@ -5,6 +5,7 @@ import (
 	"github.com/urfave/cli"
 )
 
+// List of command name and descriptions
 const (
 	ListPipelineGroupsCommandName  = "list-pipeline-groups"
 	ListPipelineGroupsCommandUsage = "List Pipeline Groups"

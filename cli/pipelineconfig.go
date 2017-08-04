@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 )
 
+// List of command name and descriptions
 const (
 	CreatePipelineConfigCommandName  = "create-pipeline-config"
 	CreatePipelineConfigCommandUsage = "Create Pipeline config"

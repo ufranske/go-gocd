@@ -9,8 +9,8 @@ import (
 // AgentsService describes the HAL _link resource for the api response object for an agent objects.
 type AgentsService service
 
-//go:generate gocd-response-links-generator -type=AgentsLinks,AgentLinks
 // AgentsLinks describes the HAL _link resource for the api response object for a collection of agent objects.
+//go:generate gocd-response-links-generator -type=AgentsLinks,AgentLinks
 type AgentsLinks struct {
 	Self *url.URL `json:"self"`
 	Doc  *url.URL `json:"doc"`
@@ -33,10 +33,10 @@ type AgentsResponse struct {
 
 // Agent describes a single agent object.
 type Agent struct {
-	Uuid             string        `json:"uuid",required:"true"`
+	UUID             string        `json:"uuid",required:"true"`
 	Hostname         string        `json:"hostname"`
-	ElasticAgentId   string        `json:"elastic_agent_id"`
-	ElasticPluginId  string        `json:"elastic_plugin_id"`
+	ElasticAgentID   string        `json:"elastic_agent_id"`
+	ElasticPluginID  string        `json:"elastic_plugin_id"`
 	IPAddress        string        `json:"ip_address"`
 	Sandbox          string        `json:"sandbox"`
 	OperatingSystem  string        `json:"operating_system"`
@@ -53,7 +53,7 @@ type Agent struct {
 
 // JobRunHistory retrieves the list of jobs run on this agent
 func (a *Agent) JobRunHistory(ctx context.Context) ([]*Job, error) {
-	jobs, _, err := a.client.Agents.JobRunHistory(ctx, a.Uuid)
+	jobs, _, err := a.client.Agents.JobRunHistory(ctx, a.UUID)
 	if err != nil {
 		return nil, err
 	}
