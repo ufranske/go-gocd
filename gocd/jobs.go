@@ -7,27 +7,27 @@ type JobsService service
 
 // Job describes a job object.
 type Job struct {
-	AgentUUID            string                `json:"agent_uuid,omitempty"`
-	Name                 string                `json:"name"`
-	JobStateTransitions  []*JobStateTransition `json:"job_state_transitions,omitempty"`
-	ScheduledDate        int64                 `json:"scheduled_date,omitempty"`
-	OrginalJobID         string                `json:"orginal_job_id,omitempty"`
-	PipelineCounter      int64                 `json:"pipeline_counter,omitempty"`
-	Rerun                bool                  `json:"rerun,omitempty"`
-	PipelineName         string                `json:"pipeline_name,omitempty"`
-	Result               string                `json:"result,omitempty"`
-	State                string                `json:"state,omitempty"`
-	ID                   int64                 `json:"id,omitempty"`
-	StageCounter         string                `json:"stage_counter,omitempty"`
-	StageName            string                `json:"stage_name,omitempty"`
-	RunInstanceCount     int64                 `json:"run_instance_count,omitempty"`
-	Timeout              int64                 `json:"timeout,omitempty"`
-	EnvironmentVariables []*EnvironmentVariable              `json:"environment_variables,omitempty"`
-	Properties           []*JobProperty `json:"properties,omitempty"`
-	Resources            []string              `json:"resources,omitempty"`
-	Tasks                []Task                `json:"tasks,omitempty"`
-	Tabs                 []string `json:"tabs,omitempty"`
-	Artifacts            []string `json:"artifacts,omitempty"`
+	AgentUUID            string                 `json:"agent_uuid,omitempty"`
+	Name                 string                 `json:"name"`
+	JobStateTransitions  []*JobStateTransition  `json:"job_state_transitions,omitempty"`
+	ScheduledDate        int64                  `json:"scheduled_date,omitempty"`
+	OrginalJobID         string                 `json:"orginal_job_id,omitempty"`
+	PipelineCounter      int64                  `json:"pipeline_counter,omitempty"`
+	Rerun                bool                   `json:"rerun,omitempty"`
+	PipelineName         string                 `json:"pipeline_name,omitempty"`
+	Result               string                 `json:"result,omitempty"`
+	State                string                 `json:"state,omitempty"`
+	ID                   int64                  `json:"id,omitempty"`
+	StageCounter         string                 `json:"stage_counter,omitempty"`
+	StageName            string                 `json:"stage_name,omitempty"`
+	RunInstanceCount     int64                  `json:"run_instance_count,omitempty"`
+	Timeout              int64                  `json:"timeout,omitempty"`
+	EnvironmentVariables []*EnvironmentVariable `json:"environment_variables,omitempty"`
+	Properties           []*JobProperty         `json:"properties,omitempty"`
+	Resources            []string               `json:"resources,omitempty"`
+	Tasks                []Task                 `json:"tasks,omitempty"`
+	Tabs                 []string               `json:"tabs,omitempty"`
+	Artifacts            []string               `json:"artifacts,omitempty"`
 }
 
 type JobProperty struct {
@@ -40,7 +40,7 @@ type EnvironmentVariable struct {
 	Name           string `json:"name"`
 	Value          string `json:"value,omitempty"`
 	EncryptedValue string `json:"encrypted_value,omitempty"`
-	Secure         bool `json:"secure"`
+	Secure         bool   `json:"secure"`
 }
 
 // PluginConfiguration describes how to reference a plugin.
