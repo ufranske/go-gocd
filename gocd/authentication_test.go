@@ -3,6 +3,7 @@ package gocd
 import (
 	"context"
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -16,7 +17,7 @@ func TestAuthentication_Login(t *testing.T) {
 	mockCookie := "JSESSIONID=hash;Path=/go;Expires=Mon, 15-Jun-2015 10:16:20 GMT"
 
 	mux.HandleFunc("/api/api/agents", func(w http.ResponseWriter, r *http.Request) {
-		testStringInSlice(t, r.Header["Accept"], "application/vnd.go.cd.v2+json")
+		assert.Contains(t, r.Header["Accept"], "application/vnd.go.cd.v2+json")
 		testMethod(t, r, "GET")
 		testAuth(t, r, mockAuthorization)
 
@@ -28,8 +29,6 @@ func TestAuthentication_Login(t *testing.T) {
 
 	client.Login(context.Background())
 
-	if client.cookie != mockCookie {
-		t.Errorf("Expected '%s'. Got '%s'.", mockCookie, client.cookie)
-	}
+	assert.Equal(t, client.cookie, mockCookie)
 
 }

@@ -25,10 +25,7 @@ func TestAgent_Get(t *testing.T) {
 		t.Error(err)
 	}
 
-	for _, attribute := range []struct {
-		got    string
-		wanted string
-	}{
+	for _, attribute := range []EqualityTest{
 		{agent.BuildDetails.Links.Job.String(), "https://ci.example.com/go/tab/build/detail/up42/1/up42_stage/1/up42_job"},
 		{agent.BuildDetails.Links.Stage.String(), "https://ci.example.com/go/pipelines/up42/1/up42_stage/1"},
 		{agent.BuildDetails.Links.Pipeline.String(), "https://ci.example.com/go/tab/pipeline/history/up42"},
@@ -64,10 +61,7 @@ func TestAgent_List(t *testing.T) {
 
 func testAgent(t *testing.T, agent *Agent) {
 
-	for _, attribute := range []struct {
-		got    string
-		wanted string
-	}{
+	for _, attribute := range []EqualityTest{
 		{agent.Links.Self.String(), "https://ci.example.com/go/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da"},
 		{agent.Links.Doc.String(), "https://api.gocd.org/#agents"},
 		{agent.Links.Find.String(), "https://ci.example.com/go/api/agents/:uuid"},

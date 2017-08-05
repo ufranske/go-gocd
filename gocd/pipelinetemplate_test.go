@@ -3,6 +3,7 @@ package gocd
 import (
 	"context"
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -22,18 +23,15 @@ func TestPipelineTemplateService_ListPipelineTemplates(t *testing.T) {
 
 	templates, _, err := client.PipelineTemplates.List(context.Background())
 
-	if err != nil {
-		t.Error(err)
-	}
+	assert.Nil(t, err)
+	assert.Len(t, templates, 1)
 
-	if len(templates) != 1 {
-		t.Errorf("Expected '1' template, got '%d'", len(templates))
-	}
-
-	testGotStringSlice(t, []TestStringSlice{
+	for _, attribute := range []EqualityTest{
 		{templates[0].Name, "template0"},
 		{templates[0].Embedded.Pipelines[0].Name, "up42"},
-	})
+	} {
+		assert.Equal(t, attribute.got, attribute.wanted)
+	}
 }
 
 func TestPipelineTemplateService_GetPipelineTemplate(t *testing.T) {
@@ -52,17 +50,14 @@ func TestPipelineTemplateService_GetPipelineTemplate(t *testing.T) {
 		"template1",
 	)
 
-	if err != nil {
-		t.Error(err)
-	}
+	assert.Nil(t, err)
+	assert.Len(t, template.Stages, 1)
 
-	if len(template.Stages) != 1 {
-		t.Errorf("Expected '1' template, got '%d'", len(template.Stages))
-	}
-
-	testGotStringSlice(t, []TestStringSlice{
+	for _, attribute := range []EqualityTest{
 		{template.Name, "template1"},
 		{template.Stages[0].Name, "up42_stage"},
 		{template.Stages[0].Approval.Type, "success"},
-	})
+	} {
+		assert.Equal(t, attribute.got, attribute.wanted)
+	}
 }
