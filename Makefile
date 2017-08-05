@@ -1,5 +1,5 @@
 .DEFAULT: test
-
+SHELL:=/bin/bash
 
 
 format: fmt
@@ -12,7 +12,7 @@ fmt: lint
 	$(MAKE) -C ./gocd/ format
 
 lint:
-	gofmt -d -s .
+	diff -u <(echo -n) <(gofmt -d -s .)
 	golint . ./cli ./gocd
 
 test: lint

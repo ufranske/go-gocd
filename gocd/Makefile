@@ -1,5 +1,6 @@
 .DEFAULT_GOAL := gocd
 
+SHELL:=/bin/bash
 CWD:=$(CURDIR)
 TRAVIS_TAG ?= dev
 
