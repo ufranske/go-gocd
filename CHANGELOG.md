@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.1] - 05-07-2017
+### Changed
+ - All testcases and intergration tests passing.
+
 ## [0.3.0] - 04-07-2017
 ### Changed
  - Did a lot of code cleanup, mainly around the build process, linting, and made sure godoc build works.
