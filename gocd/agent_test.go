@@ -3,10 +3,125 @@ package gocd
 import (
 	"context"
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"testing"
 )
+
+func TestAgent_JobRunHistory(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/agents/5c5c318f-e6d3-4299-9120-7faff6e6030b/job_run_history", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
+		bdy, err := ioutil.ReadAll(r.Body)
+		assert.Nil(t, err)
+		assert.Empty(t, string(bdy))
+
+		j, _ := ioutil.ReadFile("test/resources/agents-job-history.0.json")
+		fmt.Fprint(w, string(j))
+	})
+	jobs, _, err := client.Agents.JobRunHistory(context.Background(), "5c5c318f-e6d3-4299-9120-7faff6e6030b")
+	assert.Nil(t, err)
+	assert.NotEmpty(t, jobs)
+	assert.Len(t, jobs, 1)
+
+	job := jobs[0]
+	assert.Equal(t, "5c5c318f-e6d3-4299-9120-7faff6e6030b", job.AgentUUID)
+	assert.Equal(t, "upload", job.Name)
+	assert.Equal(t, 1435631497131, job.ScheduledDate)
+	assert.Empty(t, job.OrginalJobID)
+	assert.Equal(t, 251, job.PipelineCounter)
+	assert.Equal(t, false, job.Rerun)
+	assert.Equal(t, "distributions-all", job.PipelineName)
+	assert.Equal(t, "Passed", job.Result)
+	assert.Equal(t, "Completed", job.State)
+	assert.Equal(t, 100129, job.ID)
+	assert.Equal(t, "1", job.StageCounter)
+	assert.Equal(t, "upload-installers", job.StageName)
+	assert.Len(t, job.JobStateTransitions, 1)
+
+	transition := job.JobStateTransitions[0]
+	assert.Equal(t, 1435631497131, transition.StateChangeTime)
+	assert.Equal(t, 539906, transition.ID)
+	assert.Equal(t, JobStateTransitionScheduled, transition.State)
+
+}
+
+func TestAgent_BulkUpdate(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/agents", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "PATCH", "Unexpected HTTP method")
+		bdy, err := ioutil.ReadAll(r.Body)
+		assert.Nil(t, err)
+		assert.Equal(t, `{"uuids":["adb9540a-b954-4571-9d9b-2f330739d4da"],"operations":{"environments":{"add":["new-env","new-env1"]}}}
+`, string(bdy))
+
+		j, _ := ioutil.ReadFile("test/resources/agents.2.json")
+		fmt.Fprint(w, string(j))
+	})
+	bulkUpdate := AgentBulkUpdate{
+		Uuids: []string{"adb9540a-b954-4571-9d9b-2f330739d4da"},
+		Operations: &AgentBulkOperationsUpdate{
+			Environments: &AgentBulkOperationUpdate{
+				Add: []string{"new-env", "new-env1"},
+			},
+		},
+	}
+	message, _, err := client.Agents.BulkUpdate(context.Background(), bulkUpdate)
+	assert.Nil(t, err)
+	assert.NotEmpty(t, message)
+	assert.Equal(t, "Updated agent(s) with uuid(s): [adb9540a-b954-4571-9d9b-2f330739d4da, adb528b2-b954-1234-9d9b-b27ag4h568e1].", message)
+}
+
+func TestAgent_Delete(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "DELETE", "Unexpected HTTP method")
+		fmt.Fprint(w, `{"message":"Deleted this resource"}`)
+	})
+
+	message, _, err := client.Agents.Delete(context.Background(), "adb9540a-b954-4571-9d9b-2f330739d4da")
+	assert.Nil(t, err)
+	assert.NotEmpty(t, message)
+
+	assert.Equal(t, message, "Deleted this resource")
+}
+
+func TestAgent_RemoveLinks(t *testing.T) {
+	a := Agent{
+		Links: &AgentLinks{},
+	}
+
+	assert.NotNil(t, a.Links)
+	a.RemoveLinks()
+	assert.Nil(t, a.Links)
+}
+
+func TestAgent_Update(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "PATCH", "Unexpected HTTP method")
+		j, _ := ioutil.ReadFile("test/resources/agent.1.json")
+		fmt.Fprint(w, string(j))
+	})
+
+	agentUpdate := AgentUpdate{
+		Resources: []string{"other"},
+	}
+	agent, _, err := client.Agents.Update(context.Background(), "adb9540a-b954-4571-9d9b-2f330739d4da", agentUpdate)
+	assert.Nil(t, err)
+	assert.NotNil(t, *agent)
+
+	assert.Equal(t, agent.Resources[0], "other")
+}
 
 func TestAgent_Get(t *testing.T) {
 
@@ -14,27 +129,24 @@ func TestAgent_Get(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, "GET")
+		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
 		j, _ := ioutil.ReadFile("test/resources/agent.0.json")
 		fmt.Fprint(w, string(j))
 	})
 
 	agent, _, err := client.Agents.Get(context.Background(), "adb9540a-b954-4571-9d9b-2f330739d4da")
-	if err != nil {
-		t.Error(err)
-	}
+	assert.Nil(t, err)
 
-	testAgent(t, agent)
-
-	testGotStringSlice(t, []TestStringSlice{
+	for _, attribute := range []EqualityTest{
 		{agent.BuildDetails.Links.Job.String(), "https://ci.example.com/go/tab/build/detail/up42/1/up42_stage/1/up42_job"},
 		{agent.BuildDetails.Links.Stage.String(), "https://ci.example.com/go/pipelines/up42/1/up42_stage/1"},
 		{agent.BuildDetails.Links.Pipeline.String(), "https://ci.example.com/go/tab/pipeline/history/up42"},
-	})
-
-	if agent.BuildDetails == nil {
-		t.Error("Expected 'build_agents'. Got 'nil'.")
+	} {
+		assert.Equal(t, attribute.wanted, attribute.got)
 	}
+
+	assert.NotNil(t, agent.BuildDetails)
+	testAgent(t, agent)
 }
 
 func TestAgent_List(t *testing.T) {
@@ -43,26 +155,22 @@ func TestAgent_List(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/api/agents", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, "GET")
-		testAuth(t, r, mockAuthorization)
+		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
 		j, _ := ioutil.ReadFile("test/resources/agents.1.json")
 		fmt.Fprint(w, string(j))
 	})
 
 	agents, _, err := client.Agents.List(context.Background())
-	if err != nil {
-		t.Error(err)
-	}
 
-	if len(agents) != 1 {
-		t.Errorf("Expected '1' agents. Got '%d'", len(agents))
-	}
+	assert.Nil(t, err)
+	assert.Len(t, agents, 1)
 
 	testAgent(t, agents[0])
 }
 
 func testAgent(t *testing.T, agent *Agent) {
-	testGotStringSlice(t, []TestStringSlice{
+
+	for _, attribute := range []EqualityTest{
 		{agent.Links.Self.String(), "https://ci.example.com/go/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da"},
 		{agent.Links.Doc.String(), "https://api.gocd.org/#agents"},
 		{agent.Links.Find.String(), "https://ci.example.com/go/api/agents/:uuid"},
@@ -79,10 +187,9 @@ func testAgent(t *testing.T, agent *Agent) {
 		{agent.Environments[0], "perf"},
 		{agent.Environments[1], "UAT"},
 		{agent.BuildState, "Idle"},
-	})
-
-	if agent.FreeSpace != 84983328768 {
-		t.Errorf("Expected '84983328768'. Got '%d'.", agent.FreeSpace)
+	} {
+		assert.Equal(t, attribute.wanted, attribute.got)
 	}
 
+	assert.Equal(t, 84983328768, agent.FreeSpace)
 }

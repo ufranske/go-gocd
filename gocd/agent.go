@@ -40,7 +40,7 @@ type Agent struct {
 	IPAddress        string        `json:"ip_address"`
 	Sandbox          string        `json:"sandbox"`
 	OperatingSystem  string        `json:"operating_system"`
-	FreeSpace        int64         `json:"free_space"`
+	FreeSpace        int           `json:"free_space"`
 	AgentConfigState string        `json:"agent_config_state"`
 	AgentState       string        `json:"agent_state"`
 	Resources        []string      `json:"resources"`

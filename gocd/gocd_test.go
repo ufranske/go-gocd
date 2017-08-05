@@ -3,10 +3,10 @@ package gocd
 import (
 	"context"
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
-	"strings"
 	"testing"
 )
 
@@ -25,9 +25,9 @@ var (
 	server *httptest.Server
 )
 
-type TestStringSlice struct {
-	got  string
-	want string
+type EqualityTest struct {
+	got    string
+	wanted string
 }
 
 // setup sets up a test HTTP server along with a gocd.Client that is
@@ -51,39 +51,9 @@ func teardown() {
 	server.Close()
 }
 
-func testMethod(t *testing.T, r *http.Request, want string) {
-
-	if got := r.Method; got != want {
-		t.Errorf("Request method: %v, want %v", got, want)
-	}
-}
-
 func testAuth(t *testing.T, r *http.Request, want string) {
-
-	if val, ok := r.Header["Authorization"]; ok {
-		if got := val[0]; got != want {
-			t.Errorf("Auth expected: %v, want %v", got, want)
-		}
-	} else {
-		t.Error("'Authorization' header not found")
-	}
-}
-
-func testStringInSlice(t *testing.T, s []string, e string) {
-	for _, a := range s {
-		if a == e {
-			return
-		}
-	}
-	t.Errorf("Expected '%s' in '%s'.", e, strings.Join(s, ","))
-}
-
-func testGotStringSlice(t *testing.T, gotWant []TestStringSlice) {
-	for index, test := range gotWant {
-		if test.got != test.want {
-			t.Errorf("Expected '%s'. Got '%s' in '%d'", test.want, test.got, index)
-		}
-	}
+	assert.Contains(t, r.Header, "Authorization")
+	assert.Contains(t, r.Header["Authorization"], want)
 }
 
 func TestNewClient(t *testing.T) {
@@ -94,25 +64,22 @@ func TestNewClient(t *testing.T) {
 		Password: "mockPassword",
 	}, nil)
 
-	testGotStringSlice(t, []TestStringSlice{
+	// Make sure expected values are present.
+	for _, attribute := range []EqualityTest{
 		{c.BaseURL.String(), server.URL},
 		{c.UserAgent, userAgent},
-	})
-
-	if c.PipelineGroups == nil {
-		t.Error("`PipelineGroups` missing from `client`.")
+	} {
+		assert.Equal(t, attribute.got, attribute.wanted)
 	}
 
-	if c.Stages == nil {
-		t.Error("`Stages` missing from `client`.")
-	}
-
-	if c.Jobs == nil {
-		t.Error("`Jobs` missing from `client`.")
-	}
-
-	if c.PipelineTemplates == nil {
-		t.Error("`PipelineTemplates` missing from `client`.")
+	// Make sure values expected to have nil, have nil.
+	for _, attribute := range []interface{}{
+		c.PipelineGroups,
+		c.Stages,
+		c.Jobs,
+		c.PipelineTemplates,
+	} {
+		assert.NotNil(t, attribute)
 	}
 }
 
@@ -125,9 +92,7 @@ func TestDo(t *testing.T) {
 	}
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if m := "GET"; m != r.Method {
-			t.Errorf("Request method = %v, want %v", r.Method, m)
-		}
+		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
 		fmt.Fprint(w, `{"A":"a"}`)
 	})
 
