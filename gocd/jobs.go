@@ -30,12 +30,14 @@ type Job struct {
 	Artifacts            []string               `json:"artifacts,omitempty"`
 }
 
+// JobProperty describes the property for a job
 type JobProperty struct {
 	Name   string `json:"name"`
 	Source string `json:"source"`
 	XPath  string `json:"xpath"`
 }
 
+// EnvironmentVariable describes an environment variable key/pair.
 type EnvironmentVariable struct {
 	Name           string `json:"name"`
 	Value          string `json:"value,omitempty"`
