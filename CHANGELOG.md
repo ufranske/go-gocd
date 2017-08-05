@@ -4,12 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [0.3.2] - 05-07-2017
 ### Changed
  - Refactored tests so that duplicate code is handled by common functions
-
-## [0.3.1] - 05-07-2017
-### Changed
  - All testcases and integration tests passing.
 
 ## [0.3.0] - 04-07-2017
