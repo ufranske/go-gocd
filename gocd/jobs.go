@@ -22,9 +22,25 @@ type Job struct {
 	StageName            string                `json:"stage_name,omitempty"`
 	RunInstanceCount     int64                 `json:"run_instance_count,omitempty"`
 	Timeout              int64                 `json:"timeout,omitempty"`
-	EnvironmentVariables []string              `json:"environment_variables,omitempty"`
+	EnvironmentVariables []*EnvironmentVariable              `json:"environment_variables,omitempty"`
+	Properties           []*JobProperty `json:"properties,omitempty"`
 	Resources            []string              `json:"resources,omitempty"`
 	Tasks                []Task                `json:"tasks,omitempty"`
+	Tabs                 []string `json:"tabs,omitempty"`
+	Artifacts            []string `json:"artifacts,omitempty"`
+}
+
+type JobProperty struct {
+	Name   string `json:"name"`
+	Source string `json:"source"`
+	XPath  string `json:"xpath"`
+}
+
+type EnvironmentVariable struct {
+	Name           string `json:"name"`
+	Value          string `json:"value,omitempty"`
+	EncryptedValue string `json:"encrypted_value,omitempty"`
+	Secure         bool `json:"secure"`
 }
 
 // PluginConfiguration describes how to reference a plugin.
