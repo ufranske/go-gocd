@@ -1,5 +1,7 @@
 .DEFAULT: test
 
+
+
 format: fmt
 	git add .
 	git commit -m "Autocommit for 'gofmt -w'."
@@ -10,12 +12,13 @@ fmt: lint
 	$(MAKE) -C ./gocd/ format
 
 lint:
-	$(shell diff -u <(echo -n) <(gofmt -d -s .))
+	gofmt -d -s .
 	golint . ./cli ./gocd
 
 test: lint
-	cd ./gocd
 	go tool vet .
 	bash ./go.test.sh
+	$(MAKE) -C ./gocd test
+	$(MAKE) -C ./cli test
 
 

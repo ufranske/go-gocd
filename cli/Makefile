@@ -8,3 +8,7 @@ fmt:
 
 lint:
 	golint .
+
+test: lint
+	go tool vet .
+
