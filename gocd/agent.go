@@ -25,7 +25,7 @@ type AgentLinks struct {
 
 // AgentsResponse describes the structure of the API response when listing collections of agent object.
 type AgentsResponse struct {
-	Links    *AgentsLinks `json:"_links,omitempty"`
+	Links *AgentsLinks `json:"_links,omitempty"`
 	Embedded *struct {
 		Agents []*Agent `json:"agents"`
 	} `json:"_embedded,omitempty"`

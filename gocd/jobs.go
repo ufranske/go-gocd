@@ -2,6 +2,13 @@ package gocd
 
 import "errors"
 
+const (
+	// JobStateTransitionPassed "Passed"
+	JobStateTransitionPassed = "Passed"
+	// JobStateTransitionScheduled "Scheduled"
+	JobStateTransitionScheduled = "Scheduled"
+)
+
 // JobsService describes the HAL _link resource for the api response object for a job
 type JobsService service
 
@@ -10,18 +17,18 @@ type Job struct {
 	AgentUUID            string                 `json:"agent_uuid,omitempty"`
 	Name                 string                 `json:"name"`
 	JobStateTransitions  []*JobStateTransition  `json:"job_state_transitions,omitempty"`
-	ScheduledDate        int64                  `json:"scheduled_date,omitempty"`
+	ScheduledDate        int                    `json:"scheduled_date,omitempty"`
 	OrginalJobID         string                 `json:"orginal_job_id,omitempty"`
-	PipelineCounter      int64                  `json:"pipeline_counter,omitempty"`
+	PipelineCounter      int                    `json:"pipeline_counter,omitempty"`
 	Rerun                bool                   `json:"rerun,omitempty"`
 	PipelineName         string                 `json:"pipeline_name,omitempty"`
 	Result               string                 `json:"result,omitempty"`
 	State                string                 `json:"state,omitempty"`
-	ID                   int64                  `json:"id,omitempty"`
+	ID                   int                    `json:"id,omitempty"`
 	StageCounter         string                 `json:"stage_counter,omitempty"`
 	StageName            string                 `json:"stage_name,omitempty"`
-	RunInstanceCount     int64                  `json:"run_instance_count,omitempty"`
-	Timeout              int64                  `json:"timeout,omitempty"`
+	RunInstanceCount     int                    `json:"run_instance_count,omitempty"`
+	Timeout              int                    `json:"timeout,omitempty"`
 	EnvironmentVariables []*EnvironmentVariable `json:"environment_variables,omitempty"`
 	Properties           []*JobProperty         `json:"properties,omitempty"`
 	Resources            []string               `json:"resources,omitempty"`
@@ -132,8 +139,8 @@ func (t *TaskAttributes) ValidateAnt() error {
 
 // JobStateTransition describes a State Transition object in a GoCD api response
 type JobStateTransition struct {
-	StateChangeTime int64  `json:"state_change_time,omitempty"`
-	ID              int64  `json:"id,omitempty"`
+	StateChangeTime int    `json:"state_change_time,omitempty"`
+	ID              int    `json:"id,omitempty"`
 	State           string `json:"state,omitempty"`
 }
 
