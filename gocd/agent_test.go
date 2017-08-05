@@ -3,6 +3,7 @@ package gocd
 import (
 	"context"
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -24,17 +25,19 @@ func TestAgent_Get(t *testing.T) {
 		t.Error(err)
 	}
 
-	testAgent(t, agent)
-
-	testGotStringSlice(t, []TestStringSlice{
+	for _, attribute := range []struct {
+		got    string
+		wanted string
+	}{
 		{agent.BuildDetails.Links.Job.String(), "https://ci.example.com/go/tab/build/detail/up42/1/up42_stage/1/up42_job"},
 		{agent.BuildDetails.Links.Stage.String(), "https://ci.example.com/go/pipelines/up42/1/up42_stage/1"},
 		{agent.BuildDetails.Links.Pipeline.String(), "https://ci.example.com/go/tab/pipeline/history/up42"},
-	})
-
-	if agent.BuildDetails == nil {
-		t.Error("Expected 'build_agents'. Got 'nil'.")
+	} {
+		assert.Equal(t, attribute.wanted, attribute.got)
 	}
+
+	assert.NotNil(t, agent.BuildDetails)
+	testAgent(t, agent)
 }
 
 func TestAgent_List(t *testing.T) {
@@ -54,15 +57,17 @@ func TestAgent_List(t *testing.T) {
 		t.Error(err)
 	}
 
-	if len(agents) != 1 {
-		t.Errorf("Expected '1' agents. Got '%d'", len(agents))
-	}
+	assert.Len(t, agents, 1)
 
 	testAgent(t, agents[0])
 }
 
 func testAgent(t *testing.T, agent *Agent) {
-	testGotStringSlice(t, []TestStringSlice{
+
+	for _, attribute := range []struct {
+		got    string
+		wanted string
+	}{
 		{agent.Links.Self.String(), "https://ci.example.com/go/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da"},
 		{agent.Links.Doc.String(), "https://api.gocd.org/#agents"},
 		{agent.Links.Find.String(), "https://ci.example.com/go/api/agents/:uuid"},
@@ -79,10 +84,9 @@ func testAgent(t *testing.T, agent *Agent) {
 		{agent.Environments[0], "perf"},
 		{agent.Environments[1], "UAT"},
 		{agent.BuildState, "Idle"},
-	})
-
-	if agent.FreeSpace != 84983328768 {
-		t.Errorf("Expected '84983328768'. Got '%d'.", agent.FreeSpace)
+	} {
+		assert.Equal(t, attribute.wanted, attribute.got)
 	}
 
+	assert.Equal(t, 84983328768, agent.FreeSpace)
 }
