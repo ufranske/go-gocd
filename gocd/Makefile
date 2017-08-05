@@ -1,33 +1,9 @@
-.DEFAULT_GOAL := gocd
-
 SHELL:=/bin/bash
-CWD:=$(CURDIR)
-TRAVIS_TAG ?= dev
+.PHONY: test format
 
-format: fmt
-	git add .
-	git commit -m "Autocommit for 'gofmt -w'."
-
-fmt:
+format:
+	golint .
 	gofmt -w -s .
 
-gocd.%: init
-	(cd $(CWD)/cli && \
-		mkdir -p $(CWD)/build/$*/ && \
-		GOOS=$* go build -o $(CWD)/build/$*/gocd && \
-		cd $(CWD)/build/$* && \
-		tar -czvf $(CWD)/target/gocd-$*-$(TRAVIS_TAG).tgz ./gocd)
-
-init:
-	mkdir -p $(CWD)/target/
-	mkdir -p $(CWD)/build/
-
-clean:
-	rm -rf $(CWD)/target
-	rm -rf $(CWD)/build
-
-lint:
-	golint .
-
-test: lint
+test:
 	go tool vet .
