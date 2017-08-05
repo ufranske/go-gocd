@@ -1,16 +1,9 @@
 SHELL:=/bin/bash
+.PHONY: test format
 
-format: fmt
-	git add .
-	git commit -m "Autocommit for 'gofmt -w'."
-
-fmt:
-	golint
+format:
+	golint .
 	gofmt -w -s .
 
-lint:
-	golint .
-
-test: lint
+test:
 	go tool vet .
-

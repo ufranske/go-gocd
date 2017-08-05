@@ -1,12 +1,7 @@
 .DEFAULT: test
 SHELL:=/bin/bash
 
-
-format: fmt
-	git add .
-	git commit -m "Autocommit for 'gofmt -w'."
-
-fmt:
+format:
 	gofmt -w -s .
 	$(MAKE) -C ./cli/ format
 	$(MAKE) -C ./gocd/ format
