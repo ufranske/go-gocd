@@ -18,7 +18,7 @@ func TestAuthentication_Login(t *testing.T) {
 
 	mux.HandleFunc("/api/api/agents", func(w http.ResponseWriter, r *http.Request) {
 		assert.Contains(t, r.Header["Accept"], "application/vnd.go.cd.v2+json")
-		testMethod(t, r, "GET")
+		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
 		testAuth(t, r, mockAuthorization)
 
 		w.Header().Set("Set-Cookie", mockCookie)

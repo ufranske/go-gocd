@@ -15,7 +15,7 @@ func TestPipelineTemplateService_ListPipelineTemplates(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/api/admin/templates", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, "GET")
+		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
 		testAuth(t, r, mockAuthorization)
 		j, _ := ioutil.ReadFile("test/resources/pipelinetemplates.0.json")
 		fmt.Fprint(w, string(j))
@@ -39,7 +39,7 @@ func TestPipelineTemplateService_GetPipelineTemplate(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/api/admin/templates/template1", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, "GET")
+		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
 		testAuth(t, r, mockAuthorization)
 		j, _ := ioutil.ReadFile("test/resources/pipelinetemplate.0.json")
 		fmt.Fprint(w, string(j))

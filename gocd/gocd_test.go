@@ -51,10 +51,6 @@ func teardown() {
 	server.Close()
 }
 
-func testMethod(t *testing.T, r *http.Request, want string) {
-	assert.Equal(t, r.Method, want, "Unexpected HTTP method")
-}
-
 func testAuth(t *testing.T, r *http.Request, want string) {
 	assert.Contains(t, r.Header, "Authorization")
 	assert.Contains(t, r.Header["Authorization"], want)
@@ -96,7 +92,7 @@ func TestDo(t *testing.T) {
 	}
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, "GET")
+		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
 		fmt.Fprint(w, `{"A":"a"}`)
 	})
 
