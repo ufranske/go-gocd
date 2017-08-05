@@ -126,7 +126,7 @@ func DeletePipelineTemplateCommand() *cli.Command {
 		Usage:    DeletePipelineTemplateCommandUsage,
 		Category: "Pipeline Templates",
 		Flags: []cli.Flag{
-			cli.StringFlag{			Name: "template-name", Usage: "Pipeline Template name."},},
+			cli.StringFlag{Name: "template-name", Usage: "Pipeline Template name."}},
 		Action: func(c *cli.Context) error {
 			if c.String("template-name") == "" {
 				return handleOutput(nil, nil, "DeletePipelineTemplate", errors.New("'--template-name' is missing"))
