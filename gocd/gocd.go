@@ -71,9 +71,9 @@ type Client struct {
 
 // PaginationResponse is a struct used to handle paging through resposnes.
 type PaginationResponse struct {
-	Offset   int64 `json:"offset"`
-	Total    int64 `json:"total"`
-	PageSize int64 `json:"page_size"`
+	Offset   int `json:"offset"`
+	Total    int `json:"total"`
+	PageSize int `json:"page_size"`
 }
 
 // service is a generic service encapsulating the client for talking to the GoCD server.
@@ -275,11 +275,6 @@ func sanitizeURL(uri *url.URL) *url.URL {
 // must be a struct whose fields may contain "url" tags.
 //func addOptions(s string, opt interface{}) (string, error) {
 func addOptions(s string) (string, error) {
-	//v := reflect.ValueOf(opt)
-	//if v.Kind() == reflect.Ptr && v.IsNil() {
-	//	return s, nil
-	//}
-
 	u, err := url.Parse(s)
 	if err != nil {
 		return s, err
