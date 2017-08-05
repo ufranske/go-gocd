@@ -37,6 +37,6 @@ func GetPipelineHistoryCommand() *cli.Command {
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
-		Action:   GetPipelineHistoryAction,
+		Action: GetPipelineHistoryAction,
 	}
 }

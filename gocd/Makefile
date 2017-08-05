@@ -1,5 +1,6 @@
 .DEFAULT_GOAL := gocd
 
+SHELL:=/bin/bash
 CWD:=$(CURDIR)
 TRAVIS_TAG ?= dev
 
@@ -9,7 +10,6 @@ format: fmt
 
 fmt:
 	gofmt -w -s .
-	golint
 
 gocd.%: init
 	(cd $(CWD)/cli && \
@@ -28,3 +28,6 @@ clean:
 
 lint:
 	golint .
+
+test: lint
+	go tool vet .
