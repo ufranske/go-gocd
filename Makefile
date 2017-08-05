@@ -6,7 +6,7 @@ format: fmt
 	git add .
 	git commit -m "Autocommit for 'gofmt -w'."
 
-fmt: lint
+fmt:
 	gofmt -w -s .
 	$(MAKE) -C ./cli/ format
 	$(MAKE) -C ./gocd/ format

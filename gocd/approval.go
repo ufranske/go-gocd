@@ -2,7 +2,7 @@ package gocd
 
 // Approval represents a request/response object describing the approval configuration for a GoCD Job
 type Approval struct {
-	Type   string         `json:"type"`
+	Type          string         `json:"type"`
 	Authorization *Authorization `json:"authorization,omitempty"`
 }
 
