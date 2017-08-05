@@ -15,36 +15,47 @@ func TestJob_ValidateSuccess(t *testing.T) {
 }
 
 func job_ValidateExecSuccess(t *testing.T) {
-	err := TaskAttributes{}.ValidateExec()
+	err := (&TaskAttributes{
+		RunIf:            []string{"runif-exec"},
+		Command:          "my-test-command",
+		Arguments:        []string{"arg1", "arg2"},
+		WorkingDirectory: "test-working-diretory",
+	}).ValidateExec()
 	assert.Nil(t, err)
 }
 
 func job_ValidateAntSuccess(t *testing.T) {
-	err := TaskAttributes{}.ValidateAnt()
+	err := (&TaskAttributes{
+		RunIf:            []string{"runif-ant"},
+		BuildFile:        "test-build-file",
+		Target:           "test-target",
+		WorkingDirectory: "test-working-directory",
+	}).ValidateAnt()
 	assert.Nil(t, err)
-
 }
 
 func job_ValidateNantSuccess(t *testing.T) {
-	err := TaskAttributes{}.ValidateNant()
+	err := (&TaskAttributes{
+
+	}).ValidateNant()
 	assert.Nil(t, err)
 
 }
 
 func job_ValidateRakeSuccess(t *testing.T) {
-	err := TaskAttributes{}.ValidateRake()
+	err := (&TaskAttributes{}).ValidateRake()
 	assert.Nil(t, err)
 
 }
 
 func job_ValidateFetchSuccess(t *testing.T) {
-	err := TaskAttributes{}.ValidateFetch()
+	err := (&TaskAttributes{}).ValidateFetch()
 	assert.Nil(t, err)
 
 }
 
 func job_ValidatePluggableTaskSuccess(t *testing.T) {
-	err := TaskAttributes{}.ValidatePluggableTask()
+	err := (&TaskAttributes{}).ValidatePluggableTask()
 	assert.Nil(t, err)
 
 }

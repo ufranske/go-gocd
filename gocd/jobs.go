@@ -101,42 +101,6 @@ type TaskAttributes struct {
 	Configuration       []PluginConfigurationKVPair `json:"configuration,omitempty"`
 }
 
-// ValidateExec checks that the specified values for the Task struct are correct for a cli exec task
-func (t *TaskAttributes) ValidateExec() error {
-	if len(t.RunIf) == 0 {
-		return errors.New("'run_if' must not be empty")
-	}
-	if t.Command == "" {
-		return errors.New("'command' must not be empty")
-	}
-	if len(t.Arguments) == 0 {
-		return errors.New("'arguments' must not be empty")
-	}
-	if t.WorkingDirectory == "" {
-		return errors.New("'working_directory' must not empty")
-	}
-
-	return nil
-}
-
-// ValidateAnt checks that the specified values for the Task struct are correct for a an Ant task
-func (t *TaskAttributes) ValidateAnt() error {
-	if len(t.RunIf) == 0 {
-		return errors.New("'run_if' must not be empty")
-	}
-	if t.BuildFile == "" {
-		return errors.New("'build_file' must not be empty")
-	}
-	if t.Target == "" {
-		return errors.New("'target' must not be empty")
-	}
-	if t.WorkingDirectory == "" {
-		return errors.New("'working_directory' must not empty")
-	}
-
-	return nil
-}
-
 // JobStateTransition describes a State Transition object in a GoCD api response
 type JobStateTransition struct {
 	StateChangeTime int    `json:"state_change_time,omitempty"`
