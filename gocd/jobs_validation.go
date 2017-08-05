@@ -82,21 +82,21 @@ func (t *TaskAttributes) ValidateAnt() error {
 }
 
 // ValidateNant checks that the specified values for the Task struct are correct for a a Nant task
-func (t *TaskAttributes) ValidateNant() error {
-	return errors.New("Not Implemented")
-}
+//func (t *TaskAttributes) ValidateNant() error {
+//	return errors.New("Not Implemented")
+//}
 
 // ValidateRake checks that the specified values for the Task struct are correct for a a Rake task
-func (t *TaskAttributes) ValidateRake() error {
-	return errors.New("Not Implemented")
-}
+//func (t *TaskAttributes) ValidateRake() error {
+//	return errors.New("Not Implemented")
+//}
 
 // ValidateRake checks that the specified values for the Task struct are correct for a a Rake task
-func (t *TaskAttributes) ValidateFetch() error {
-	return errors.New("Not Implemented")
-}
+//func (t *TaskAttributes) ValidateFetch() error {
+//	return errors.New("Not Implemented")
+//}
 
 // ValidatePluggableTask checks that the specified values for the Task struct are correct for a a Plugin task
-func (t *TaskAttributes) ValidatePluggableTask() error {
-	return errors.New("Not Implemented")
-}
+//func (t *TaskAttributes) ValidatePluggableTask() error {
+//	return errors.New("Not Implemented")
+//}
