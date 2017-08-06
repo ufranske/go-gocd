@@ -1,15 +1,15 @@
 package gocd
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
-	"bytes"
-	"io"
 )
 
 const (

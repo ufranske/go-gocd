@@ -1,12 +1,12 @@
 package gocd
 
 import (
+	"context"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
-	"fmt"
-	"testing"
 	"net/http"
-	"context"
+	"testing"
 )
 
 func TestPipelineGroupsService_List(t *testing.T) {
