@@ -1,6 +1,9 @@
 package gocd
 
-import "errors"
+import (
+	"encoding/json"
+	"errors"
+)
 
 // StagesService exposes calls for interacting with Stage objects in the GoCD API.
 type StagesService service
@@ -14,6 +17,17 @@ type Stage struct {
 	Approval              *Approval `json:"approval,omitempty"`
 	EnvironmentVariables  []string  `json:"environment_variables,omitempty"`
 	Jobs                  []*Job    `json:"jobs,omitempty"`
+}
+
+// JSONString returns a string of this stage as a JSON object.
+func (s *Stage) JSONString() (string, error) {
+	s.Clean()
+	bdy, err := json.MarshalIndent(s, "", "  ")
+	if err != nil {
+		return "", err
+	}
+
+	return string(bdy), nil
 }
 
 // Validate ensures the attributes attached to this structure are ready for submission to the GoCD API.
@@ -33,4 +47,9 @@ func (s *Stage) Validate() error {
 	}
 
 	return nil
+}
+
+// Clean the approvel step.
+func (s *Stage) Clean() {
+	s.Approval.Clean()
 }

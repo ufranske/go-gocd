@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-const command_template = `package main
+const commandTemplate = `package main
 
 import (
 	"github.com/urfave/cli"
@@ -42,18 +42,18 @@ func main() {
 	flag.BoolVar(&stdout, "stdout", false, "If true, print to stdout.")
 	flag.Parse()
 
-	name_capitalised := strings.Replace(strings.Title(cn), "-", "", -1)
-	name_lower := strings.ToLower(cn)
+	nameCapitalised := strings.Replace(strings.Title(cn), "-", "", -1)
+	nameLower := strings.ToLower(cn)
 
 	if stdout {
-		fmt.Printf(command_template, name_capitalised, name_lower, dsc)
+		fmt.Printf(commandTemplate, nameCapitalised, nameLower, dsc)
 	} else {
 		f, err := os.Create(fmt.Sprintf("./%s.go", cn))
 		if err != nil {
 			panic(err)
 		}
 		defer f.Close()
-		_, err = f.WriteString(fmt.Sprintf(command_template, name_capitalised, name_lower, dsc))
+		_, err = f.WriteString(fmt.Sprintf(commandTemplate, nameCapitalised, nameLower, dsc))
 		if err != nil {
 			panic(err)
 		}

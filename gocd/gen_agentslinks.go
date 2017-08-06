@@ -7,7 +7,6 @@ import (
 	"net/url"
 )
 
-// MarshalJSON converts _links objects to json objects
 func (l AgentsLinks) MarshalJSON() ([]byte, error) {
 	type h struct {
 		H string `json:"href"`
@@ -50,8 +49,6 @@ func (l *AgentsLinks) UnmarshalJSON(j []byte) error {
 	}
 	return nil
 }
-
-// MarshalJSON converts _links objects to json objects
 func (l AgentLinks) MarshalJSON() ([]byte, error) {
 	type h struct {
 		H string `json:"href"`

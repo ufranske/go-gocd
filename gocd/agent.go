@@ -112,13 +112,7 @@ func (a *Agent) RemoveLinks() {
 
 // List will retrieve all agents, their status, and metadata from the GoCD Server.
 func (s *AgentsService) List(ctx context.Context) ([]*Agent, *APIResponse, error) {
-	u, err := addOptions("agents")
-
-	if err != nil {
-		return nil, nil, err
-	}
-
-	req, err := s.client.NewRequest("GET", u, nil, apiV4)
+	req, err := s.client.NewRequest("GET", "agents", nil, apiV4)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -148,12 +142,7 @@ func (s *AgentsService) Update(ctx context.Context, uuid string, agent AgentUpda
 
 // Delete will remove an existing agent. Note: The agent must be disabled, and not currently building to be deleted.
 func (s *AgentsService) Delete(ctx context.Context, uuid string) (string, *APIResponse, error) {
-	u, err := addOptions(fmt.Sprintf("agents/%s", uuid))
-	if err != nil {
-		return "", nil, err
-	}
-
-	req, err := s.client.NewRequest("DELETE", u, nil, apiV4)
+	req, err := s.client.NewRequest("DELETE", "agents/"+uuid, nil, apiV4)
 	if err != nil {
 		return "", nil, err
 	}
@@ -169,15 +158,11 @@ func (s *AgentsService) Delete(ctx context.Context, uuid string) (string, *APIRe
 
 // BulkUpdate will change the configuration for multiple agents in a single request.
 func (s *AgentsService) BulkUpdate(ctx context.Context, agents AgentBulkUpdate) (string, *APIResponse, error) {
-	u, err := addOptions("agents")
+	req, err := s.client.NewRequest("PATCH", "agents", agents, apiV4)
 	if err != nil {
 		return "", nil, err
 	}
 
-	req, err := s.client.NewRequest("PATCH", u, agents, apiV4)
-	if err != nil {
-		return "", nil, err
-	}
 	a := StringResponse{}
 	resp, err := s.client.Do(ctx, req, &a)
 	if err != nil {
@@ -189,11 +174,7 @@ func (s *AgentsService) BulkUpdate(ctx context.Context, agents AgentBulkUpdate) 
 
 // JobRunHistory will return a list of Jobs run on this agent.
 func (s *AgentsService) JobRunHistory(ctx context.Context, uuid string) ([]*Job, *APIResponse, error) {
-	u, err := addOptions(fmt.Sprintf("agents/%s/job_run_history", uuid))
-	if err != nil {
-		return nil, nil, err
-	}
-	req, err := s.client.NewRequest("GET", u, nil, apiV4)
+	req, err := s.client.NewRequest("GET", fmt.Sprintf("agents/%s/job_run_history", uuid), nil, apiV4)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -209,12 +190,8 @@ func (s *AgentsService) JobRunHistory(ctx context.Context, uuid string) ([]*Job,
 
 // handleAgentRequest handles the flow to perform an HTTP action on an agent resource.
 func (s *AgentsService) handleAgentRequest(ctx context.Context, action string, uuid string, body *AgentUpdate) (*Agent, *APIResponse, error) {
-	u, err := addOptions(fmt.Sprintf("agents/%s", uuid))
-	if err != nil {
-		return nil, nil, err
-	}
 
-	req, err := s.client.NewRequest(action, u, body, apiV4)
+	req, err := s.client.NewRequest(action, "agents/"+uuid, body, apiV4)
 	if err != nil {
 		return nil, nil, err
 	}

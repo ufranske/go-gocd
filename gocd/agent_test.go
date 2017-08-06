@@ -57,7 +57,19 @@ func TestAgent_BulkUpdate(t *testing.T) {
 		assert.Equal(t, r.Method, "PATCH", "Unexpected HTTP method")
 		bdy, err := ioutil.ReadAll(r.Body)
 		assert.Nil(t, err)
-		assert.Equal(t, `{"uuids":["adb9540a-b954-4571-9d9b-2f330739d4da"],"operations":{"environments":{"add":["new-env","new-env1"]}}}
+		assert.Equal(t, `{
+  "uuids": [
+    "adb9540a-b954-4571-9d9b-2f330739d4da"
+  ],
+  "operations": {
+    "environments": {
+      "add": [
+        "new-env",
+        "new-env1"
+      ]
+    }
+  }
+}
 `, string(bdy))
 
 		j, _ := ioutil.ReadFile("test/resources/agents.2.json")

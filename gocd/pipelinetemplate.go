@@ -77,13 +77,8 @@ func (pts *PipelineTemplatesService) Exists(ctx context.Context, name string) (b
 
 // Get a single PipelineTemplate object in the GoCD API.
 func (pts *PipelineTemplatesService) Get(ctx context.Context, name string) (*PipelineTemplate, *APIResponse, error) {
-	u, err := addOptions(fmt.Sprintf("admin/templates/%s", name))
 
-	if err != nil {
-		return nil, nil, err
-	}
-
-	req, err := pts.client.NewRequest("GET", u, nil, apiV3)
+	req, err := pts.client.NewRequest("GET", "admin/templates/"+name, nil, apiV3)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -102,13 +97,8 @@ func (pts *PipelineTemplatesService) Get(ctx context.Context, name string) (*Pip
 
 // List all PipelineTemplate objects in the GoCD API.
 func (pts *PipelineTemplatesService) List(ctx context.Context) ([]*PipelineTemplate, *APIResponse, error) {
-	u, err := addOptions("admin/templates")
 
-	if err != nil {
-		return nil, nil, err
-	}
-
-	req, err := pts.client.NewRequest("GET", u, nil, apiV3)
+	req, err := pts.client.NewRequest("GET", "admin/templates", nil, apiV3)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -124,17 +114,13 @@ func (pts *PipelineTemplatesService) List(ctx context.Context) ([]*PipelineTempl
 
 // Create a new PipelineTemplate object in the GoCD API.
 func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st []*Stage) (*PipelineTemplate, *APIResponse, error) {
-	u, err := addOptions("admin/templates")
-	if err != nil {
-		return nil, nil, err
-	}
 
 	pt := PipelineTemplateRequest{
 		Name:   name,
 		Stages: st,
 	}
 
-	req, err := pts.client.NewRequest("POST", u, pt, apiV3)
+	req, err := pts.client.NewRequest("POST", "admin/templates", pt, apiV3)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -153,17 +139,12 @@ func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st
 
 // Update an PipelineTemplate object in the GoCD API.
 func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, version string, st []*Stage) (*PipelineTemplate, *APIResponse, error) {
-	u, err := addOptions(fmt.Sprintf("admin/templates/%s", name))
-	if err != nil {
-		return nil, nil, err
-	}
-
 	pt := &PipelineTemplateRequest{
 		Name:   name,
 		Stages: st,
 	}
 
-	req, err := pts.client.NewRequest("PUT", u, pt, apiV3)
+	req, err := pts.client.NewRequest("PUT", "admin/templates/"+name, pt, apiV3)
 	if err != nil {
 		return nil, nil, err
 	}

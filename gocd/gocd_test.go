@@ -1,9 +1,11 @@
 package gocd
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -49,6 +51,50 @@ func setup() {
 // teardown closes the test HTTP server.
 func teardown() {
 	server.Close()
+}
+
+func TestCheckResponse(t *testing.T) {
+	t.Run("ValidHTTP", testCheckResponseValid)
+	t.Run("FailHTTP", testCheckResponseInvalid)
+}
+
+type closingbuffer struct {
+	*bytes.Buffer
+}
+
+func (cb *closingbuffer) Close() error {
+	return nil
+}
+
+func testCheckResponseInvalid(t *testing.T) {
+	var rc1, rc2 io.ReadCloser
+
+	cb1 := &closingbuffer{bytes.NewBufferString("Hi!")}
+	cb2 := &closingbuffer{bytes.NewBufferString("Hi!")}
+	rc1 = cb1
+	rc2 = cb2
+
+	err := CheckResponse(&http.Response{
+		StatusCode: 199,
+		Status:     "Failed",
+		Body:       rc1,
+	})
+	assert.NotNil(t, err)
+
+	err = CheckResponse(&http.Response{
+		StatusCode: 400,
+		Status:     "Failed",
+		Body:       rc2,
+	})
+	assert.NotNil(t, err)
+
+}
+
+func testCheckResponseValid(t *testing.T) {
+	err := CheckResponse(&http.Response{
+		StatusCode: 200,
+	})
+	assert.Nil(t, err)
 }
 
 func testAuth(t *testing.T, r *http.Request, want string) {

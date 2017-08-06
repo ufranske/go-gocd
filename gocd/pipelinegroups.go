@@ -24,13 +24,8 @@ type PipelineGroup struct {
 
 // List Pipeline groups
 func (pgs *PipelineGroupsService) List(ctx context.Context) ([]*PipelineGroup, *APIResponse, error) {
-	u, err := addOptions("config/pipeline_groups")
 
-	if err != nil {
-		return nil, nil, err
-	}
-
-	req, err := pgs.client.NewRequest("GET", u, nil, "")
+	req, err := pgs.client.NewRequest("GET", "config/pipeline_groups", nil, "")
 	if err != nil {
 		return nil, nil, err
 	}

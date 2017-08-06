@@ -116,6 +116,7 @@ type Generator struct {
 	pkg *Package     // Package we are scanning.
 }
 
+// Printf write a formatted stirng to the generator buffer.
 func (g *Generator) Printf(format string, args ...interface{}) {
 	fmt.Fprintf(&g.buf, format, args...)
 }
@@ -129,6 +130,7 @@ type File struct {
 	values   []string // Accumulator for constant values of that type.
 }
 
+// Package holds a collection of File structs
 type Package struct {
 	dir      string
 	name     string
@@ -238,15 +240,12 @@ func (g *Generator) generate(typeName string) {
 	g.buildUnmarshalling(values, typeName)
 }
 
-const marshall_header = `// MarshalJSON converts _links objects to json objects
-func (l %s) MarshalJSON() ([]byte, error) {
-type h struct {
-	H string ` + "`json:\"href\"`" + `
-}
+const marshallHeader = `func (l %s) MarshalJSON() ([]byte, error) {
+type h struct {	H string ` + "`json:\"href\"`" + ` }
 ls := struct {
 `
 
-const marshall_footer = `j, e := json.Marshal(ls)
+const marshallFooter = `j, e := json.Marshal(ls)
 if e != nil {
 	return nil, e
 }
@@ -254,7 +253,7 @@ return j, nil
 	`
 
 func (g *Generator) buildMarshalling(values []string, typeName string) {
-	g.Printf(marshall_header, typeName)
+	g.Printf(marshallHeader, typeName)
 	for _, field := range values {
 		g.Printf(fmt.Sprintf("%s *h `json:\"%s,omitempty\"`\n", field, strings.ToLower(field)))
 	}
@@ -263,11 +262,11 @@ func (g *Generator) buildMarshalling(values []string, typeName string) {
 	for _, field := range values {
 		g.Printf(fmt.Sprintf("if l.%s != nil {ls.%s = &h{H:l.%s.String()}}\n", field, field, field))
 	}
-	g.Printf(marshall_footer)
+	g.Printf(marshallFooter)
 	g.Printf("}\n")
 }
 
-const unmarshall_header = `
+const unmarshallHeader = `
 func (l *%s) UnmarshalJSON(j []byte) error {
 	var d map[string]map[string]string
 	e := json.Unmarshal(j, &d)
@@ -276,7 +275,7 @@ func (l *%s) UnmarshalJSON(j []byte) error {
 	}
 `
 
-const unmarshall_field = `
+const unmarshallField = `
 if d["%s"]["href"] != "" {
 	l.%s, e = url.Parse(d["%s"]["href"])
 	if e != nil {
@@ -284,17 +283,17 @@ if d["%s"]["href"] != "" {
 	}
 }`
 
-const unmarshall_footer = `
+const unmarshallFooter = `
 return nil
 }
 `
 
 func (g *Generator) buildUnmarshalling(values []string, typeName string) {
-	g.Printf(unmarshall_header, typeName)
+	g.Printf(unmarshallHeader, typeName)
 	for _, field := range values {
-		g.Printf(fmt.Sprintf(unmarshall_field, strings.ToLower(field), field, strings.ToLower(field)))
+		g.Printf(fmt.Sprintf(unmarshallField, strings.ToLower(field), field, strings.ToLower(field)))
 	}
-	g.Printf(unmarshall_footer)
+	g.Printf(unmarshallFooter)
 }
 
 // format returns the gofmt-ed contents of the Generator's buffer.
@@ -348,8 +347,8 @@ func (f *File) genDecl(node ast.Node) bool {
 				log.Fatalf("no value for constant %s", name)
 			}
 
-			link_name := obj.Name()
-			f.values = append(f.values, link_name)
+			linkName := obj.Name()
+			f.values = append(f.values, linkName)
 
 		}
 	}

@@ -9,7 +9,11 @@ import (
 	"testing"
 )
 
-func TestAuthentication_Login(t *testing.T) {
+func TestAuthentication(t *testing.T) {
+	t.Run("Login", testAuthenticationLogin)
+}
+
+func testAuthenticationLogin(t *testing.T) {
 
 	setup()
 	defer teardown()

@@ -50,13 +50,8 @@ func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset
 	if offset > 0 {
 		stub = fmt.Sprintf("%s/%d", stub, offset)
 	}
-	u, err := addOptions(stub)
 
-	if err != nil {
-		return nil, nil, err
-	}
-
-	req, err := pgs.client.NewRequest("GET", u, nil, apiV3)
+	req, err := pgs.client.NewRequest("GET", stub, nil, apiV3)
 	if err != nil {
 		return nil, nil, err
 	}
