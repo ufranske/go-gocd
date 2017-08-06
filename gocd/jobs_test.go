@@ -6,12 +6,23 @@ import (
 )
 
 func TestJob_ValidateSuccess(t *testing.T) {
+	t.Run("Validate", jobValidateSuccess)
 	t.Run("Exec", jobValidateExecSuccess)
 	t.Run("Ant", jobValidateAntSuccess)
 	//t.Run("Nant", job_ValidateNantSuccess)
 	//t.Run("Rake", job_ValidateRakeSuccess)
 	//t.Run("Fetch", job_ValidateFetchSuccess)
 	//t.Run("PluggableTask", job_ValidatePluggableTaskSuccess)
+}
+
+func jobValidateSuccess(t *testing.T) {
+	j := Job{}
+	err := j.Validate()
+	assert.NotNil(t, err)
+
+	j.Name = "job-name"
+	err = j.Validate()
+	assert.Nil(t, err)
 }
 
 func jobValidateExecSuccess(t *testing.T) {
