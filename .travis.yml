@@ -18,6 +18,10 @@ matrix:
     - go: tip
   fast_finish: true
 
+jobs:
+  include:
+    - stage:
+
 before_install:
   - go get -t -v ./...
   - go get github.com/golang/lint/golint

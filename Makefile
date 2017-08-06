@@ -1,5 +1,6 @@
 .DEFAULT: test
 SHELL:=/bin/bash
+TEST?=$$(go list ./... |grep -v 'vendor')
 
 format:
 	gofmt -w -s .
