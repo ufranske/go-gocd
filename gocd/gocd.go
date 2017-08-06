@@ -270,25 +270,3 @@ func sanitizeURL(uri *url.URL) *url.URL {
 	}
 	return uri
 }
-
-// addOptions adds the parameters in opt as URL query parameters to s. opt
-// must be a struct whose fields may contain "url" tags.
-//func addOptions(s string, opt interface{}) (string, error) {
-func addOptions(s string) (string, error) {
-	u, err := url.Parse(s)
-	if err != nil {
-		return s, err
-	}
-
-	return u.String(), nil
-}
-
-//type ResourceNotFound struct {
-//	When     time.Time
-//	Resource string
-//}
-//
-//func (e ResourceNotFound) Error() string {
-//	return fmt.Sprintf("Could not find '%s'.", e.Resource)
-//	error.
-//}

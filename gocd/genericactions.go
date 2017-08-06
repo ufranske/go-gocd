@@ -6,12 +6,7 @@ import (
 
 // Handles any call to HEAD by returning whether or not we got a 2xx code.
 func (c *Client) genericHeadAction(ctx context.Context, path string, apiversion string) (bool, *APIResponse, error) {
-	u, err := addOptions(path)
-	if err != nil {
-		return false, nil, err
-	}
-
-	req, err := c.NewRequest("HEAD", u, nil, apiversion)
+	req, err := c.NewRequest("HEAD", path, nil, apiversion)
 	if err != nil {
 		return false, nil, err
 	}
@@ -29,12 +24,7 @@ func (c *Client) genericHeadAction(ctx context.Context, path string, apiversion 
 
 // Returns a message from the DELETE action on the provided HTTP resource.
 func (c *Client) genericDeleteAction(ctx context.Context, path string, apiversion string) (string, *APIResponse, error) {
-	u, err := addOptions(path)
-	if err != nil {
-		return "", nil, err
-	}
-
-	req, err := c.NewRequest("DELETE", u, nil, apiversion)
+	req, err := c.NewRequest("DELETE", path, nil, apiversion)
 	if err != nil {
 		return "", nil, err
 	}

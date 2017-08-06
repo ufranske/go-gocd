@@ -20,17 +20,13 @@ type PipelineConfigRequest struct {
 
 // Update a pipeline configuration
 func (pcs *PipelineConfigsService) Update(ctx context.Context, group string, name string, version string, p *Pipeline) (*Pipeline, *APIResponse, error) {
-	u, err := addOptions(fmt.Sprintf("admin/pipelines/%s", name))
-	if err != nil {
-		return nil, nil, err
-	}
 
 	pt := &PipelineConfigRequest{
 		Group:    group,
 		Pipeline: p,
 	}
 
-	req, err := pcs.client.NewRequest("PUT", u, pt, apiV4)
+	req, err := pcs.client.NewRequest("PUT", "admin/pipelines/"+name, pt, apiV4)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -49,17 +45,12 @@ func (pcs *PipelineConfigsService) Update(ctx context.Context, group string, nam
 
 // Create a pipeline configuration
 func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *Pipeline) (*Pipeline, *APIResponse, error) {
-	u, err := addOptions("admin/pipelines")
-	if err != nil {
-		return nil, nil, err
-	}
-
 	pt := &PipelineConfigRequest{
 		Group:    group,
 		Pipeline: p,
 	}
 
-	req, err := pcs.client.NewRequest("POST", u, pt, apiV4)
+	req, err := pcs.client.NewRequest("POST", "admin/pipelines", pt, apiV4)
 	if err != nil {
 		return nil, nil, err
 	}
