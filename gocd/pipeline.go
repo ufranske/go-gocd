@@ -21,7 +21,7 @@ type Pipeline struct {
 
 // Material describes an artifact dependency for a pipeline object.
 type Material struct {
-	Type string `json:"type"`
+	Type       string `json:"type"`
 	Attributes struct {
 		URL             string      `json:"url"`
 		Destination     string      `json:"destination,omitempty"`

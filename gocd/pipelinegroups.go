@@ -7,9 +7,9 @@ type PipelineGroupsService service
 
 // PipelineGroup describes a pipeline group API response.
 type PipelineGroup struct {
-	Name string `json:"name"`
+	Name      string `json:"name"`
 	Pipelines []struct {
-		Name string `json:"name"`
+		Name   string `json:"name"`
 		Stages []struct {
 			Name string `json:"name"`
 		} `json:"stages"`
