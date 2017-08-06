@@ -11,13 +11,13 @@ import (
 	"go/format"
 )
 
-const test_input = `type BuildDetails_ResponseLinks struct {
+const testInput = `type BuildDetails_ResponseLinks struct {
 	Doc    *url.URL
 	Find   *url.URL
 }
 `
 
-const test_output = `package test
+const testOutput = `package test
 import "encoding/json"
 func (l BuildDetails_ResponseLinks) MarshalJSON() ([]byte, error) {
 	type h struct {
@@ -67,10 +67,10 @@ func TestGenerator(t *testing.T) {
 	var g Generator
 	name := "test"
 	file := name + ".go"
-	input := "package " + name + "\nimport \"net/url\"\n" + test_input
+	input := "package " + name + "\nimport \"net/url\"\n" + testInput
 	g.parsePackage(".", []string{file}, input)
 	// Extract the name and type of the constant from the first line.
-	tokens := strings.SplitN(test_input, " ", 3)
+	tokens := strings.SplitN(testInput, " ", 3)
 	if len(tokens) != 3 {
 		t.Fatalf("%s: need type declaration on first line", name)
 	}
@@ -82,7 +82,7 @@ func TestGenerator(t *testing.T) {
 
 	got := "package " + name + "\nimport \"encoding/json\"\n" + string(src)
 
-	if got != test_output {
-		t.Errorf("%s: got\n====\n%s\n====\nexpected\n====\n%s\n====", name, got, test_output)
+	if got != testOutput {
+		t.Errorf("%s: got\n====\n%s\n====\nexpected\n====\n%s\n====", name, got, testOutput)
 	}
 }

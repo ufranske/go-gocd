@@ -6,10 +6,12 @@ format:
 	gofmt -w -s .
 	$(MAKE) -C ./cli/ format
 	$(MAKE) -C ./gocd/ format
+	$(MAKE) -C ./gocd-cli-action-generator/ format
+	$(MAKE) -C ./gocd-response-links-generator/ format
 
 lint:
 	diff -u <(echo -n) <(gofmt -d -s .)
-	golint . ./cli ./gocd
+	golint . ./cli ./gocd ./gocd-*-generator
 
 test: lint
 	go tool vet .
