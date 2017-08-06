@@ -19,6 +19,7 @@ type Stage struct {
 	Jobs                  []*Job    `json:"jobs,omitempty"`
 }
 
+// JSONString returns a string of this stage as a JSON object.
 func (s *Stage) JSONString() (string, error) {
 	s.Clean()
 	bdy, err := json.MarshalIndent(s, "", "  ")
@@ -48,6 +49,7 @@ func (s *Stage) Validate() error {
 	return nil
 }
 
+// Clean the approvel step.
 func (s *Stage) Clean() {
 	s.Approval.Clean()
 }
