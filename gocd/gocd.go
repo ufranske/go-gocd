@@ -159,7 +159,11 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 	var buf io.ReadWriter
 	if body != nil {
 		buf = new(bytes.Buffer)
-		err := json.NewEncoder(buf).Encode(body)
+
+		enc := json.NewEncoder(buf)
+		enc.SetIndent("", "  ")
+		err := enc.Encode(body)
+
 		if err != nil {
 			return nil, err
 		}
@@ -167,7 +171,10 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 		request.Body = string(bdy)
 
 		buf = new(bytes.Buffer)
-		err = json.NewEncoder(buf).Encode(body)
+		enc = json.NewEncoder(buf)
+		enc.SetIndent("", "  ")
+		err = enc.Encode(body)
+
 		if err != nil {
 			return nil, err
 		}

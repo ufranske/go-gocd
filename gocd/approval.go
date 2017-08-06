@@ -12,3 +12,9 @@ type Authorization struct {
 	Users []string `json:"users,omitempty"`
 	Roles []string `json:"roles,omitempty"`
 }
+
+func (a *Approval) Clean() {
+	if a.Type == "success" {
+		a.Authorization = nil
+	}
+}
