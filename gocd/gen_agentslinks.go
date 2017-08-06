@@ -53,9 +53,7 @@ func (l *AgentsLinks) UnmarshalJSON(j []byte) error {
 
 // MarshalJSON converts _links objects to json objects
 func (l AgentLinks) MarshalJSON() ([]byte, error) {
-	type h struct {
-		H string `json:"href"`
-	}
+	type h struct{ H string `json:"href"` }
 	ls := struct {
 		Self *h `json:"self,omitempty"`
 		Doc  *h `json:"doc,omitempty"`
