@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.3] - 07-07-2017
+### Added
+ - Added missing structure definitions for pipeline history
+
 ## [0.3.2] - 05-07-2017
 ### Changed
  - Refactored tests so that duplicate code is handled by common functions
