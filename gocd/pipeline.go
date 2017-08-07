@@ -50,6 +50,7 @@ type PipelineInstance struct {
 	Stages       []Stage    `json:"stages"`
 }
 
+// BuildCause describes the triggers which caused the build to start.
 type BuildCause struct {
 	Approver          string             `json:"approver,omitempty"`
 	MaterialRevisions []MaterialRevision `json:"material_revisions"`
@@ -57,6 +58,7 @@ type BuildCause struct {
 	TriggerMessage    string             `json:"trigger_message"`
 }
 
+// MaterialRevision describes the uniquely identifiable version for the material which was pulled for this build
 type MaterialRevision struct {
 	Modifications []Modification `json:"modifications"`
 	Material      struct {
@@ -68,6 +70,7 @@ type MaterialRevision struct {
 	Changed bool `json:"changed"`
 }
 
+// Modification describes the commit/revision for the material which kicked off the build.
 type Modification struct {
 	EmailAddress string `json:"email_address"`
 	ID           int    `json:"id"`
