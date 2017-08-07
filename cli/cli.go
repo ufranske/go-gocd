@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/drewsonne/go-gocd/gocd"
 	"os"
+	"github.com/urfave/cli"
 )
 
 // GoCDUtilityDefaultVersion is the default version if no environmnet variables are set
@@ -20,11 +21,27 @@ func Version() string {
 	return GoCDUtilityDefaultVersion
 }
 
-func cliAgent() *gocd.Client {
+func cliAgent(c *cli.Context) *gocd.Client {
+
 	cfg, err := loadConfig()
 	if err != nil {
 		panic(err)
 	}
+
+	if server := c.String("server"); server != "" {
+		cfg.Server = server
+	}
+
+	if username := c.String("username"); username != "" {
+		cfg.Username = username
+	}
+
+	if password := c.String("password"); password != "" {
+		cfg.Password = password
+	}
+
+	cfg.SslCheck = !c.Bool("skip_ssl");
+
 
 	return cfg.Client()
 }

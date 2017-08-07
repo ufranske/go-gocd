@@ -24,7 +24,7 @@ const (
 
 // ListPipelineTemplatesAction lists all pipeline templates.
 func ListPipelineTemplatesAction(c *cli.Context) error {
-	ts, r, err := cliAgent().PipelineTemplates.List(context.Background())
+	ts, r, err := cliAgent(c).PipelineTemplates.List(context.Background())
 	if err != nil {
 		return handleOutput(nil, r, "ListPipelineTemplates", err)
 	}

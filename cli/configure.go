@@ -25,6 +25,7 @@ const (
 	EnvVarServer   = "GOCD_SERVER"
 	EnvVarUsername = "GOCD_USERNAME"
 	EnvVarPassword = "GOCD_PASSWORD"
+	EnvVarSkipSsl  = "GOCD_SKIP_SSL_CHECK"
 )
 
 //
@@ -61,6 +62,7 @@ func generateConfigFile() (string, error) {
 
 	return string(s), nil
 }
+
 func configFilePath() string {
 	// @TODO Make it work for windows. Maybe...
 	usr, _ := user.Current()
@@ -68,15 +70,19 @@ func configFilePath() string {
 }
 
 func loadConfig() (*gocd.Configuration, error) {
-	s, err := ioutil.ReadFile(configFilePath())
-	if err != nil {
-		return nil, err
-	}
+	cfg := &gocd.Configuration{}
 
-	cfg := gocd.Configuration{}
-	err = yaml.Unmarshal(s, &cfg)
-	if err != nil {
-		return nil, err
+	p := configFilePath()
+	if _, err := os.Stat(p); !os.IsNotExist(err) {
+		s, err := ioutil.ReadFile(configFilePath())
+		if err != nil {
+			return nil, err
+		}
+
+		err = yaml.Unmarshal(s, &cfg)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if server := os.Getenv(EnvVarServer); server != "" {
@@ -91,7 +97,7 @@ func loadConfig() (*gocd.Configuration, error) {
 		cfg.Password = password
 	}
 
-	return &cfg, nil
+	return cfg, nil
 }
 
 // ConfigureCommand handles the interaction between the cli flags and the action handler for configure
