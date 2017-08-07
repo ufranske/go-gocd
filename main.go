@@ -41,6 +41,10 @@ func main() {
 		*gocli.GetPipelineCommand(),
 		*gocli.CreatePipelineConfigCommand(),
 		*gocli.GenerateJSONSchemaCommand(),
+		*gocli.GetPipelineStatusCommand(),
+		*gocli.PausePipelineCommand(),
+		*gocli.UnpausePipelineCommand(),
+		*gocli.ReleasePipelineLockCommand(),
 	}
 
 	app.Flags = []cli.Flag{

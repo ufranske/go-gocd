@@ -23,7 +23,7 @@ type PipelineGroup struct {
 }
 
 // List Pipeline groups
-func (pgs *PipelineGroupsService) List(ctx context.Context) ([]*PipelineGroup, *APIResponse, error) {
+func (pgs *PipelineGroupsService) List(ctx context.Context, name string) ([]*PipelineGroup, *APIResponse, error) {
 
 	req, err := pgs.client.NewRequest("GET", "config/pipeline_groups", nil, "")
 	if err != nil {
@@ -36,5 +36,14 @@ func (pgs *PipelineGroupsService) List(ctx context.Context) ([]*PipelineGroup, *
 		return nil, resp, err
 	}
 
-	return pg, resp, nil
+	filtered := []*PipelineGroup{}
+	if name != "" {
+		for _, pipelineGroup := range pg {
+			if pipelineGroup.Name == name {
+				filtered = append(filtered, pipelineGroup)
+			}
+		}
+	}
+
+	return filtered, resp, nil
 }
