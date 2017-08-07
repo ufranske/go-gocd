@@ -21,7 +21,7 @@ type Pipeline struct {
 
 // Material describes an artifact dependency for a pipeline object.
 type Material struct {
-	Type       string `json:"type"`
+	Type string `json:"type"`
 	Attributes struct {
 		URL             string      `json:"url"`
 		Destination     string      `json:"destination,omitempty"`
@@ -61,7 +61,7 @@ type BuildCause struct {
 // MaterialRevision describes the uniquely identifiable version for the material which was pulled for this build
 type MaterialRevision struct {
 	Modifications []Modification `json:"modifications"`
-	Material      struct {
+	Material struct {
 		Description string `json:"description"`
 		Fingerprint string `json:"fingerprint"`
 		Type        string `json:"type"`
@@ -78,6 +78,87 @@ type Modification struct {
 	UserName     string `json:"user_name"`
 	Comment      string `json:"comment"`
 	Revision     string `json:"revision"`
+}
+
+type PipelineStatus struct {
+	Locked      bool `json:"locked"`
+	Paused      bool `json:"paused"`
+	Schedulable bool `json:"schedulable"`
+}
+
+// Get returns a list of pipeline instanves describing the pipeline history.
+func (pgs *PipelinesService) GetStatus(ctx context.Context, name string, offset int) (*PipelineStatus, *APIResponse, error) {
+	stub := fmt.Sprintf("pipelines/%s/status", name)
+
+	req, err := pgs.client.NewRequest("GET", stub, nil, "")
+	if err != nil {
+		return nil, nil, err
+	}
+
+	ps := PipelineStatus{}
+	resp, err := pgs.client.Do(ctx, req, &ps)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &ps, resp, nil
+}
+
+// Pause allows a pipeline to handle new build events
+func (pgs *PipelinesService) Pause(ctx context.Context, name string) (bool, *APIResponse, error) {
+	stub := fmt.Sprintf("pipelines/%s/pause", name)
+
+	req, err := pgs.client.NewRequest("POST", stub, nil, "")
+	if err != nil {
+		return false, nil, err
+	}
+
+	req.HTTP.Header.Set("Confirm", "true")
+
+	resp, err := pgs.client.Do(ctx, req, nil)
+	if err != nil {
+		return false, resp, err
+	}
+
+	return resp.HTTP.StatusCode == 200, resp, nil
+}
+
+// Unpause allows a pipeline to handle new build events
+func (pgs *PipelinesService) Unpause(ctx context.Context, name string) (bool, *APIResponse, error) {
+	stub := fmt.Sprintf("pipelines/%s/unpause", name)
+
+	req, err := pgs.client.NewRequest("POST", stub, nil, "")
+	if err != nil {
+		return false, nil, err
+	}
+
+	req.HTTP.Header.Set("Confirm", "true")
+
+	resp, err := pgs.client.Do(ctx, req, nil)
+	if err != nil {
+		return false, resp, err
+	}
+
+	return resp.HTTP.StatusCode == 200, resp, nil
+}
+
+// ReleaseLock frees a pipeline to handle new build events
+func (pgs *PipelinesService) ReleaseLock(ctx context.Context, name string) (bool, *APIResponse, error) {
+	stub := fmt.Sprintf("pipelines/%s/releaseLock", name)
+
+	req, err := pgs.client.NewRequest("POST", stub, nil, "")
+	if err != nil {
+		return false, nil, err
+	}
+
+	req.HTTP.Header.Set("Confirm", "true")
+
+	resp, err := pgs.client.Do(ctx, req, nil)
+	if err != nil {
+		return false, resp, err
+	}
+
+	return resp.HTTP.StatusCode == 200, resp, nil
 }
 
 // Get returns a list of pipeline instanves describing the pipeline history.

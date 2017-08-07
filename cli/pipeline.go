@@ -69,7 +69,7 @@ func PausePipelineAction(c *cli.Context) error {
 		return handleOutput(nil, nil, "PausePipeline", errors.New("'--name' is missing"))
 	}
 
-	pgs, r, err := cliAgent().Pipelines.Pause(context.Background(), c.String("name"), -1)
+	pgs, r, err := cliAgent().Pipelines.Pause(context.Background(), c.String("name"))
 	if err != nil {
 		return handleOutput(nil, r, "PausePipeline", err)
 	}
@@ -83,7 +83,7 @@ func UnpausePipelineAction(c *cli.Context) error {
 		return handleOutput(nil, nil, "UnpausePipeline", errors.New("'--name' is missing"))
 	}
 
-	pgs, r, err := cliAgent().Pipelines.Unpause(context.Background(), c.String("name"), -1)
+	pgs, r, err := cliAgent().Pipelines.Unpause(context.Background(), c.String("name"))
 	if err != nil {
 		return handleOutput(nil, r, "UnpausePipeline", err)
 	}
@@ -97,7 +97,7 @@ func ReleasePipelineLockAction(c *cli.Context) error {
 		return handleOutput(nil, nil, "ReleasePipelinelock", errors.New("'--name' is missing"))
 	}
 
-	pgs, r, err := cliAgent().Pipelines.ReleaseLock(context.Background(), c.String("name"), -1)
+	pgs, r, err := cliAgent().Pipelines.ReleaseLock(context.Background(), c.String("name"))
 	if err != nil {
 		return handleOutput(nil, r, "ReleasePipelinelock", err)
 	}
