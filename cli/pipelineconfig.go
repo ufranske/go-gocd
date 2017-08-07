@@ -174,10 +174,10 @@ func UpdatePipelineConfigCommand() *cli.Command {
 // DeletePipelineConfigCommand handles the interaction between the cli flags and the action handler for delete-pipeline-config
 func DeletePipelineConfigCommand() *cli.Command {
 	return &cli.Command{
-		Name:   DeletePipelineConfigCommandName,
-		Usage:  DeletePipelineConfigCommandUsage,
+		Name:     DeletePipelineConfigCommandName,
+		Usage:    DeletePipelineConfigCommandUsage,
 		Category: "Pipeline Configs",
-		Action: DeletePipelineConfigAction,
+		Action:   DeletePipelineConfigAction,
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},

@@ -5,6 +5,7 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -26,6 +27,12 @@ const (
 	apiV3 = "application/vnd.go.cd.v3+json"
 	// Version 4 of the GoCD API.
 	apiV4 = "application/vnd.go.cd.v4+json"
+)
+
+//Body Response Types
+const (
+	responseTypeXML  = "xml"
+	responseTypeJSON = "json"
 )
 
 // StringResponse handles the unmarshaling of the single string response from DELETE requests.
@@ -64,6 +71,7 @@ type Client struct {
 	PipelineTemplates *PipelineTemplatesService
 	Pipelines         *PipelinesService
 	PipelineConfigs   *PipelineConfigsService
+	Configuration     *ConfigurationService
 
 	common service
 	cookie string
@@ -141,6 +149,7 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 	c.PipelineTemplates = (*PipelineTemplatesService)(&c.common)
 	c.Pipelines = (*PipelinesService)(&c.common)
 	c.PipelineConfigs = (*PipelineConfigsService)(&c.common)
+	c.Configuration = (*ConfigurationService)(&c.common)
 
 	return c
 }
@@ -206,7 +215,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 }
 
 // Do takes an HTTP request and resposne the response from the GoCD API endpoint.
-func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}) (*APIResponse, error) {
+func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}, responseType string) (*APIResponse, error) {
 
 	req.HTTP = req.HTTP.WithContext(ctx)
 
@@ -237,7 +246,11 @@ func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}) (*APIRe
 			io.Copy(w, resp.Body)
 		} else {
 			bdy, err := ioutil.ReadAll(resp.Body)
-			err = json.Unmarshal(bdy, v)
+			if responseType == responseTypeXML {
+				err = xml.Unmarshal(bdy, v)
+			} else {
+				err = json.Unmarshal(bdy, v)
+			}
 			response.Body = string(bdy)
 			if err == io.EOF {
 				err = nil // ignore EOF errors caused by empty response body

@@ -144,7 +144,7 @@ func TestDo(t *testing.T) {
 
 	req, _ := client.NewRequest("GET", "/", nil, "api-version")
 	body := new(foo)
-	client.Do(context.Background(), req, body)
+	client.Do(context.Background(), req, body, responseTypeJSON)
 
 	want := &foo{"a"}
 	if !reflect.DeepEqual(body, want) {

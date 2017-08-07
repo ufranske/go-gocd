@@ -11,7 +11,7 @@ func (c *Client) genericHeadAction(ctx context.Context, path string, apiversion 
 		return false, nil, err
 	}
 
-	resp, err := c.Do(ctx, req, nil)
+	resp, err := c.Do(ctx, req, nil, responseTypeJSON)
 	if err != nil {
 		return false, resp, err
 	}
@@ -30,7 +30,7 @@ func (c *Client) genericDeleteAction(ctx context.Context, path string, apiversio
 	}
 
 	a := StringResponse{}
-	resp, err := c.Do(ctx, req, &a)
+	resp, err := c.Do(ctx, req, &a, responseTypeJSON)
 	if err != nil {
 		return "", resp, err
 	}

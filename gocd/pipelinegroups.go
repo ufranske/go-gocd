@@ -31,7 +31,7 @@ func (pgs *PipelineGroupsService) List(ctx context.Context, name string) ([]*Pip
 	}
 
 	pg := []*PipelineGroup{}
-	resp, err := pgs.client.Do(ctx, req, &pg)
+	resp, err := pgs.client.Do(ctx, req, &pg, responseTypeJSON)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -43,6 +43,8 @@ func (pgs *PipelineGroupsService) List(ctx context.Context, name string) ([]*Pip
 				filtered = append(filtered, pipelineGroup)
 			}
 		}
+	} else {
+		filtered = pg
 	}
 
 	return filtered, resp, nil

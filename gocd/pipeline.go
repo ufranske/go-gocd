@@ -21,7 +21,7 @@ type Pipeline struct {
 
 // Material describes an artifact dependency for a pipeline object.
 type Material struct {
-	Type string `json:"type"`
+	Type       string `json:"type"`
 	Attributes struct {
 		URL             string      `json:"url"`
 		Destination     string      `json:"destination,omitempty"`
@@ -61,7 +61,7 @@ type BuildCause struct {
 // MaterialRevision describes the uniquely identifiable version for the material which was pulled for this build
 type MaterialRevision struct {
 	Modifications []Modification `json:"modifications"`
-	Material struct {
+	Material      struct {
 		Description string `json:"description"`
 		Fingerprint string `json:"fingerprint"`
 		Type        string `json:"type"`
@@ -80,13 +80,14 @@ type Modification struct {
 	Revision     string `json:"revision"`
 }
 
+// PipelineStatus describes whether a pipeline can be run or scheduled.
 type PipelineStatus struct {
 	Locked      bool `json:"locked"`
 	Paused      bool `json:"paused"`
 	Schedulable bool `json:"schedulable"`
 }
 
-// Get returns a list of pipeline instanves describing the pipeline history.
+// GetStatus returns a list of pipeline instanves describing the pipeline history.
 func (pgs *PipelinesService) GetStatus(ctx context.Context, name string, offset int) (*PipelineStatus, *APIResponse, error) {
 	stub := fmt.Sprintf("pipelines/%s/status", name)
 
@@ -96,7 +97,7 @@ func (pgs *PipelinesService) GetStatus(ctx context.Context, name string, offset 
 	}
 
 	ps := PipelineStatus{}
-	resp, err := pgs.client.Do(ctx, req, &ps)
+	resp, err := pgs.client.Do(ctx, req, &ps, responseTypeJSON)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -115,7 +116,7 @@ func (pgs *PipelinesService) Pause(ctx context.Context, name string) (bool, *API
 
 	req.HTTP.Header.Set("Confirm", "true")
 
-	resp, err := pgs.client.Do(ctx, req, nil)
+	resp, err := pgs.client.Do(ctx, req, nil, responseTypeJSON)
 	if err != nil {
 		return false, resp, err
 	}
@@ -134,7 +135,7 @@ func (pgs *PipelinesService) Unpause(ctx context.Context, name string) (bool, *A
 
 	req.HTTP.Header.Set("Confirm", "true")
 
-	resp, err := pgs.client.Do(ctx, req, nil)
+	resp, err := pgs.client.Do(ctx, req, nil, responseTypeJSON)
 	if err != nil {
 		return false, resp, err
 	}
@@ -153,7 +154,7 @@ func (pgs *PipelinesService) ReleaseLock(ctx context.Context, name string) (bool
 
 	req.HTTP.Header.Set("Confirm", "true")
 
-	resp, err := pgs.client.Do(ctx, req, nil)
+	resp, err := pgs.client.Do(ctx, req, nil, responseTypeJSON)
 	if err != nil {
 		return false, resp, err
 	}
@@ -174,7 +175,7 @@ func (pgs *PipelinesService) Get(ctx context.Context, name string, offset int) (
 	}
 
 	pt := PipelineInstance{}
-	resp, err := pgs.client.Do(ctx, req, &pt)
+	resp, err := pgs.client.Do(ctx, req, &pt, responseTypeJSON)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -195,7 +196,7 @@ func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset
 	}
 
 	pt := PipelineHistory{}
-	resp, err := pgs.client.Do(ctx, req, &pt)
+	resp, err := pgs.client.Do(ctx, req, &pt, responseTypeJSON)
 	if err != nil {
 		return nil, resp, err
 	}

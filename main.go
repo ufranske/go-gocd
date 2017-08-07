@@ -45,6 +45,7 @@ func main() {
 		*gocli.PausePipelineCommand(),
 		*gocli.UnpausePipelineCommand(),
 		*gocli.ReleasePipelineLockCommand(),
+		*gocli.GetConfigurationCommand(),
 	}
 
 	app.Flags = []cli.Flag{

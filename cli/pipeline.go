@@ -22,7 +22,7 @@ const (
 	GetPipelineStatusCommandUsage   = "Get Pipeline Status"
 )
 
-// GetPipelineStatus handles the business logic between the command objects and the go-gocd library.
+// GetPipelineStatusAction handles the business logic between the command objects and the go-gocd library.
 func GetPipelineStatusAction(c *cli.Context) error {
 	if c.String("name") == "" {
 		return handleOutput(nil, nil, "GetPipelineStatus", errors.New("'--name' is missing"))
@@ -91,7 +91,7 @@ func UnpausePipelineAction(c *cli.Context) error {
 	return handleOutput(pgs, r, "UnpausePipeline", err)
 }
 
-// ReleasePipelinelockAction handles the business logic between the command objects and the go-gocd library.
+// ReleasePipelineLockAction handles the business logic between the command objects and the go-gocd library.
 func ReleasePipelineLockAction(c *cli.Context) error {
 	if c.String("name") == "" {
 		return handleOutput(nil, nil, "ReleasePipelinelock", errors.New("'--name' is missing"))
@@ -112,7 +112,7 @@ func GetPipelineStatusCommand() *cli.Command {
 		Name:     GetPipelineStatusCommandName,
 		Usage:    GetPipelineStatusCommandUsage,
 		Category: "Pipelines",
-		Flags: [] cli.Flag{
+		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
 		Action: GetPipelineStatusAction,
@@ -126,7 +126,7 @@ func PausePipelineCommand() *cli.Command {
 		Name:     PausePipelineCommandName,
 		Usage:    PausePipelineCommandUsage,
 		Category: "Pipelines",
-		Flags: [] cli.Flag{
+		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
 		Action: PausePipelineAction,
@@ -140,7 +140,7 @@ func UnpausePipelineCommand() *cli.Command {
 		Name:     UnpausePipelineCommandName,
 		Usage:    UnpausePipelineCommandUsage,
 		Category: "Pipelines",
-		Flags: [] cli.Flag{
+		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
 		Action: UnpausePipelineAction,
@@ -154,7 +154,7 @@ func ReleasePipelineLockCommand() *cli.Command {
 		Name:     ReleasePipelineLockCommandName,
 		Usage:    ReleasePipelineLockCommandUsage,
 		Category: "Pipelines",
-		Flags: [] cli.Flag{
+		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
 		Action: ReleasePipelineLockAction,
@@ -168,7 +168,7 @@ func GetPipelineCommand() *cli.Command {
 		Name:     GetPipelineCommandName,
 		Usage:    GetPipelineCommandUsage,
 		Category: "Pipelines",
-		Flags: [] cli.Flag{
+		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
 		Action: GetPipelineAction,
