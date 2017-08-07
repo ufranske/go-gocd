@@ -59,7 +59,7 @@ func CreatePipelineConfigAction(c *cli.Context) error {
 		return handeErrOutput("CreatePipelineConfig", err)
 	}
 
-	pc, r, err := cliAgent().PipelineConfigs.Create(context.Background(), group, p)
+	pc, r, err := cliAgent(c).PipelineConfigs.Create(context.Background(), group, p)
 	if err != nil {
 		return handeErrOutput("CreatePipelineConfig", err)
 	}
@@ -116,7 +116,7 @@ func UpdatePipelineConfigAction(c *cli.Context) error {
 		return handeErrOutput("CreatePipelineConfig", err)
 	}
 
-	pc, r, err := cliAgent().PipelineConfigs.Update(context.Background(), group, name, version, p)
+	pc, r, err := cliAgent(c).PipelineConfigs.Update(context.Background(), group, name, version, p)
 	if err != nil {
 		return handeErrOutput("CreatePipelineConfig", err)
 	}
@@ -132,7 +132,7 @@ func DeletePipelineConfigAction(c *cli.Context) error {
 		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--name' is missing"))
 	}
 
-	deleteResponse, r, err := cliAgent().PipelineConfigs.Delete(context.Background(), name)
+	deleteResponse, r, err := cliAgent(c).PipelineConfigs.Delete(context.Background(), name)
 	if r.HTTP.StatusCode == 406 {
 		err = errors.New(deleteResponse)
 	}
