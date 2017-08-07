@@ -42,6 +42,42 @@ type PipelineHistory struct {
 
 // PipelineInstance describes a single pipeline run
 type PipelineInstance struct {
+	BuildCause   BuildCause `json:"build_cause"`
+	CanRun       bool       `json:"can_run"`
+	Name         string     `json:"name"`
+	NaturalOrder int        `json:"natural_order"`
+	Comment      string     `json:"comment"`
+	Stages       []Stage    `json:"stages"`
+}
+
+// BuildCause describes the triggers which caused the build to start.
+type BuildCause struct {
+	Approver          string             `json:"approver,omitempty"`
+	MaterialRevisions []MaterialRevision `json:"material_revisions"`
+	TriggerForced     bool               `json:"trigger_forced"`
+	TriggerMessage    string             `json:"trigger_message"`
+}
+
+// MaterialRevision describes the uniquely identifiable version for the material which was pulled for this build
+type MaterialRevision struct {
+	Modifications []Modification `json:"modifications"`
+	Material      struct {
+		Description string `json:"description"`
+		Fingerprint string `json:"fingerprint"`
+		Type        string `json:"type"`
+		ID          int    `json:"id"`
+	} `json:"material"`
+	Changed bool `json:"changed"`
+}
+
+// Modification describes the commit/revision for the material which kicked off the build.
+type Modification struct {
+	EmailAddress string `json:"email_address"`
+	ID           int    `json:"id"`
+	ModifiedTime int    `json:"modified_time"`
+	UserName     string `json:"user_name"`
+	Comment      string `json:"comment"`
+	Revision     string `json:"revision"`
 }
 
 // GetHistory returns a list of pipeline instanves describing the pipeline history.
@@ -51,7 +87,7 @@ func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset
 		stub = fmt.Sprintf("%s/%d", stub, offset)
 	}
 
-	req, err := pgs.client.NewRequest("GET", stub, nil, apiV3)
+	req, err := pgs.client.NewRequest("GET", stub, nil, "")
 	if err != nil {
 		return nil, nil, err
 	}
