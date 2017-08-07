@@ -15,7 +15,7 @@ const (
 	CreatePipelineConfigCommandUsage = "Create Pipeline config"
 	UpdatePipelineConfigCommandName  = "update-pipeline-config"
 	UpdatePipelineConfigCommandUsage = "Update Pipeline config"
-	DeletePipelineConfigCommandName  = "deletepipelineconfig"
+	DeletePipelineConfigCommandName  = "delete-pipeline-config"
 	DeletePipelineConfigCommandUsage = "Remove Pipeline. This will not delete the pipeline history, which will be stored in the database"
 )
 
@@ -176,6 +176,7 @@ func DeletePipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:   DeletePipelineConfigCommandName,
 		Usage:  DeletePipelineConfigCommandUsage,
+		Category: "Pipeline Configs",
 		Action: DeletePipelineConfigAction,
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},

@@ -38,6 +38,7 @@ func main() {
 		*gocli.DeletePipelineConfigCommand(),
 		*gocli.ListPipelineGroupsCommand(),
 		*gocli.GetPipelineHistoryCommand(),
+		*gocli.GetPipelineCommand(),
 		*gocli.CreatePipelineConfigCommand(),
 		*gocli.GenerateJSONSchemaCommand(),
 	}

@@ -80,6 +80,27 @@ type Modification struct {
 	Revision     string `json:"revision"`
 }
 
+// Get returns a list of pipeline instanves describing the pipeline history.
+func (pgs *PipelinesService) Get(ctx context.Context, name string, offset int) (*PipelineInstance, *APIResponse, error) {
+	stub := fmt.Sprintf("pipelines/%s/instance", name)
+	if offset > 0 {
+		stub = fmt.Sprintf("%s/%d", stub, offset)
+	}
+
+	req, err := pgs.client.NewRequest("GET", stub, nil, "")
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pt := PipelineInstance{}
+	resp, err := pgs.client.Do(ctx, req, &pt)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &pt, resp, nil
+}
+
 // GetHistory returns a list of pipeline instanves describing the pipeline history.
 func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset int) (*PipelineHistory, *APIResponse, error) {
 	stub := fmt.Sprintf("pipelines/%s/history", name)
