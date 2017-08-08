@@ -9,23 +9,22 @@ import (
 type ConfigurationService service
 
 type ConfigXML struct {
-	XMLName xml.Name `xml:"cruise"`
+	XMLName xml.Name     `xml:"cruise"`
 	Server  ConfigServer `xml:"server"`
 }
 
 type ConfigServer struct {
 	Elastic                   ConfigElastic `xml:"elastic"`
-	
-	ArtifactsDir              string `xml:"artifactsdir,attr"`
-	SiteUrl                   string `xml:"siteUrl,attr"`
-	SecureSiteUrl             string `xml:"secureSiteUrl,attr"`
-	PurgeStart                string `xml:"purgeStart,attr"`
-	PurgeUpTo                 string `xml:"purgeUpto,attr"`
-	JobTimeout                int `xml:"jobTimeout,attr"`
-	AgentAutoRegisterKey      string `xml:"agentAutoRegisterKey,attr"`
-	webhookSecret             string `xml:"webhookSecret,attr"`
-	CommandRepositoryLocation string `xml:"commandRepositoryLocation,attr"`
-	ServerId                  string `xml:"serverId,attr"`
+	ArtifactsDir              string        `xml:"artifactsdir,attr"`
+	SiteUrl                   string        `xml:"siteUrl,attr"`
+	SecureSiteUrl             string        `xml:"secureSiteUrl,attr"`
+	PurgeStart                string        `xml:"purgeStart,attr"`
+	PurgeUpTo                 string        `xml:"purgeUpto,attr"`
+	JobTimeout                int           `xml:"jobTimeout,attr"`
+	AgentAutoRegisterKey      string        `xml:"agentAutoRegisterKey,attr"`
+	WebhookSecret             string        `xml:"webhookSecret,attr"`
+	CommandRepositoryLocation string        `xml:"commandRepositoryLocation,attr"`
+	ServerId                  string        `xml:"serverId,attr"`
 }
 
 type ConfigElastic struct {
@@ -33,13 +32,13 @@ type ConfigElastic struct {
 }
 
 type ConfigElasticProfile struct {
-	ID         string `xml:"id,attr"`
-	PluginID   string `xml:"pluginId,attr"`
+	ID         string           `xml:"id,attr"`
+	PluginID   string           `xml:"pluginId,attr"`
 	Properties []ConfigProperty `xml:"property"`
 }
 
-type ConfigProperty struct{
-	Key string `xml:"key"`
+type ConfigProperty struct {
+	Key   string `xml:"key"`
 	Value string `xml:"value"`
 }
 

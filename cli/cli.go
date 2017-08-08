@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/drewsonne/go-gocd/gocd"
-	"os"
 	"github.com/urfave/cli"
+	"os"
 )
 
 // GoCDUtilityDefaultVersion is the default version if no environmnet variables are set
@@ -40,8 +40,7 @@ func cliAgent(c *cli.Context) *gocd.Client {
 		cfg.Password = password
 	}
 
-	cfg.SslCheck = !c.Bool("skip_ssl");
-
+	cfg.SslCheck = !c.Bool("skip_ssl")
 
 	return cfg.Client()
 }
