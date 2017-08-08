@@ -124,7 +124,7 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 	if strings.HasPrefix(cfg.Server, "https") {
 		if !cfg.SslCheck {
 			httpClient.Transport = &http.Transport{
-				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: !cfg.SslCheck},
 			}
 		}
 	}
