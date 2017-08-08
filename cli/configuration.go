@@ -8,7 +8,7 @@ import (
 // List of command name and descriptions
 const (
 	GetConfigurationCommandName  = "get-configuration"
-	GetConfigurationCommandUsage = "Get GoCD server config.xml"
+	GetConfigurationCommandUsage = "Get GoCD server configuration. This is the cruise-config.xml file. It is exposed in a json format to enable a consistent format. This API is for read-only purposes and not intended as an interface to modify the config."
 )
 
 // GetConfigurationAction gets a list of agents and return them.
