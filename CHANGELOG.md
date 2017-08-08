@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [unreleased]
+### Added
+ - Expanded test cases for jobs and tasks
+ - Added Pipeline status querying and pipeline history structure
+ 
+### Changed
+ - Fixed a bug where if the config file was not found the cli tool would crash.
+
 ## [0.3.3] - 07-07-2017
 ### Added
  - Added missing structure definitions for pipeline history
