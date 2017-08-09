@@ -276,8 +276,8 @@ func (l *%s) UnmarshalJSON(j []byte) error {
 `
 
 const unmarshallField = `
-if d["%s"]["href"] != "" {
-	l.%s, e = url.Parse(d["%s"]["href"])
+if h := d["%s"]["href"]; h != "" {
+	l.%s, e = url.Parse(h)
 	if e != nil {
 		return e
 	}
