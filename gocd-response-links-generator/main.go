@@ -291,7 +291,7 @@ return nil
 func (g *Generator) buildUnmarshalling(values []string, typeName string) {
 	g.Printf(unmarshallHeader, typeName)
 	for _, field := range values {
-		g.Printf(fmt.Sprintf(unmarshallField, strings.ToLower(field), field, strings.ToLower(field)))
+		g.Printf(fmt.Sprintf(unmarshallField, strings.ToLower(field), field))
 	}
 	g.Printf(unmarshallFooter)
 }
