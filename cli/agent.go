@@ -26,7 +26,7 @@ const (
 
 // ListAgentsAction gets a list of agents and return them.
 func ListAgentsAction(c *cli.Context) error {
-	agents, r, err := cliAgent().Agents.List(context.Background())
+	agents, r, err := cliAgent(c).Agents.List(context.Background())
 	if err != nil {
 		return handleOutput(nil, r, "ListAgents", err)
 	}
@@ -38,7 +38,7 @@ func ListAgentsAction(c *cli.Context) error {
 
 // GetAgentAction retrieves a single agent object.
 func GetAgentAction(c *cli.Context) error {
-	agent, r, err := cliAgent().Agents.Get(context.Background(), c.String("uuid"))
+	agent, r, err := cliAgent(c).Agents.Get(context.Background(), c.String("uuid"))
 	if r.HTTP.StatusCode != 404 {
 		agent.RemoveLinks()
 	}
@@ -62,7 +62,7 @@ func UpdateAgentAction(c *cli.Context) error {
 		return handleOutput(nil, nil, "UpdateAgent", err)
 	}
 
-	agent, r, err := cliAgent().Agents.Update(context.Background(), c.String("uuid"), a)
+	agent, r, err := cliAgent(c).Agents.Update(context.Background(), c.String("uuid"), a)
 	if r.HTTP.StatusCode != 404 {
 		agent.RemoveLinks()
 	}
@@ -75,7 +75,7 @@ func DeleteAgentAction(c *cli.Context) error {
 		return handleOutput(nil, nil, "DeleteAgent", errors.New("'--uuid' is missing"))
 	}
 
-	deleteResponse, r, err := cliAgent().Agents.Delete(context.Background(), c.String("uuid"))
+	deleteResponse, r, err := cliAgent(c).Agents.Delete(context.Background(), c.String("uuid"))
 	if r.HTTP.StatusCode == 406 {
 		err = errors.New(deleteResponse)
 	}
@@ -105,7 +105,7 @@ func UpdateAgentsAction(c *cli.Context) error {
 		u.AgentConfigState = c.String("state")
 	}
 
-	updateResponse, r, err := cliAgent().Agents.BulkUpdate(context.Background(), u)
+	updateResponse, r, err := cliAgent(c).Agents.BulkUpdate(context.Background(), u)
 	if r.HTTP.StatusCode == 406 {
 		err = errors.New(updateResponse)
 	}

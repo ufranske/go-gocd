@@ -24,7 +24,7 @@ const (
 
 // ListPipelineTemplatesAction lists all pipeline templates.
 func ListPipelineTemplatesAction(c *cli.Context) error {
-	ts, r, err := cliAgent().PipelineTemplates.List(context.Background())
+	ts, r, err := cliAgent(c).PipelineTemplates.List(context.Background())
 	if err != nil {
 		return handleOutput(nil, r, "ListPipelineTemplates", err)
 	}
@@ -59,7 +59,7 @@ func GetPipelineTemplateAction(c *cli.Context) error {
 		return handleOutput(nil, nil, "GetPipelineTemplate", errors.New("'--template-name' is missing"))
 	}
 
-	pt, r, err := cliAgent().PipelineTemplates.Get(context.Background(), c.String("template-name"))
+	pt, r, err := cliAgent(c).PipelineTemplates.Get(context.Background(), c.String("template-name"))
 	if r.HTTP.StatusCode != 404 {
 		pt.RemoveLinks()
 	}
@@ -86,7 +86,7 @@ func CreatePipelineTemplateAction(c *cli.Context) error {
 		stages = append(stages, &st)
 	}
 
-	pt, r, err := cliAgent().PipelineTemplates.Create(context.Background(), c.String("template-name"), stages)
+	pt, r, err := cliAgent(c).PipelineTemplates.Create(context.Background(), c.String("template-name"), stages)
 	return handleOutput(pt, r, "CreatePipelineTemplate", err)
 }
 
@@ -114,7 +114,7 @@ func UpdatePipelineTemplateAction(c *cli.Context) error {
 		stages = append(stages, &st)
 	}
 
-	pt, r, err := cliAgent().PipelineTemplates.Update(context.Background(), c.String("template-name"), c.String("template-version"), stages)
+	pt, r, err := cliAgent(c).PipelineTemplates.Update(context.Background(), c.String("template-name"), c.String("template-version"), stages)
 	return handleOutput(pt, r, "UpdatePipelineTemplate", err)
 }
 
@@ -132,7 +132,7 @@ func DeletePipelineTemplateCommand() *cli.Command {
 				return handleOutput(nil, nil, "DeletePipelineTemplate", errors.New("'--template-name' is missing"))
 			}
 
-			deleteResponse, r, err := cliAgent().PipelineTemplates.Delete(context.Background(), c.String("template-name"))
+			deleteResponse, r, err := cliAgent(c).PipelineTemplates.Delete(context.Background(), c.String("template-name"))
 			if r.HTTP.StatusCode == 406 {
 				err = errors.New(deleteResponse)
 			}

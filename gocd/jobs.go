@@ -73,6 +73,8 @@ type Task struct {
 // Validate each of the possible task types.
 func (t *Task) Validate() error {
 	switch t.Type {
+	case "":
+		return errors.New("Missing `gocd.TaskAttribute` type")
 	case "exec":
 		return t.Attributes.ValidateExec()
 	case "ant":
