@@ -4,15 +4,17 @@ import (
 	"encoding/xml"
 )
 
+// ConfigTasks part of cruise-control.xml. @TODO better documentation
 type ConfigTasks struct {
 	Tasks []ConfigTask `xml:",any"`
 }
 
+// ConfigTask part of cruise-control.xml. @TODO better documentation
 type ConfigTask struct {
 	// Because we need to preserve the order of tasks, and we have an array of elements with mixed types,
 	// we need to use this generic xml type for tasks.
-	XMLName  TaskTypeName `json:",omitempty"`
-	Type     string `xml:"type,omitempty"`
+	XMLName  xml.Name        `json:",omitempty"`
+	Type     string          `xml:"type,omitempty"`
 	RunIf    ConfigTaskRunIf `xml:"runif"`
 	Command  string          `xml:"command,attr,omitempty"  json:",omitempty"`
 	Args     []string        `xml:"arg,omitempty"  json:",omitempty"`
@@ -23,21 +25,7 @@ type ConfigTask struct {
 	SrcDir   string          `xml:"srcdir,attr,omitempty"  json:",omitempty"`
 }
 
+// ConfigTaskRunIf part of cruise-control.xml. @TODO better documentation
 type ConfigTaskRunIf struct {
 	Status string `xml:"status,attr"`
 }
-
-type TaskTypeName xml.Name
-
-//func (ttn *ConfigTask) MarshalJSON() ([]byte, error) {
-//	ttn.Type = ttn.XMLName.Local
-//	j, e := json.Marshal(ttn)
-//	if e != nil {
-//		return nil, e
-//	}
-//	return j, nil
-//}
-//
-//func (ttn *TaskTypeName) UnmarshalJSON(j []byte) error {
-//	return nil
-//}

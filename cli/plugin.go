@@ -1,10 +1,11 @@
 package cli
 
 import (
-	"github.com/urfave/cli"
 	"context"
+	"github.com/urfave/cli"
 )
 
+// List of command name and descriptions
 const (
 	ListPluginsCommandName  = "list-plugins"
 	ListPluginsCommandUsage = "List all the Plugins"
@@ -12,6 +13,7 @@ const (
 	GetPluginCommandUsage   = "Get a Plugin"
 )
 
+// GetPluginAction retrieves a single plugin by name
 func GetPluginAction(c *cli.Context) error {
 	pgs, r, err := cliAgent(c).Plugins.Get(context.Background(), c.String("name"))
 	if err != nil {
@@ -21,6 +23,7 @@ func GetPluginAction(c *cli.Context) error {
 	return handleOutput(pgs, r, "ListPipelineTemplates", err)
 }
 
+// ListPluginsAction retrieves all plugin configurations
 func ListPluginsAction(c *cli.Context) error {
 	pgs, r, err := cliAgent(c).Plugins.List(context.Background())
 	if err != nil {
@@ -30,6 +33,7 @@ func ListPluginsAction(c *cli.Context) error {
 	return handleOutput(pgs, r, "ListPlugins", err)
 }
 
+// GetPluginCommand Describes the cli interface for the GetPluginAction
 func GetPluginCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetPluginCommandName,
@@ -42,6 +46,7 @@ func GetPluginCommand() *cli.Command {
 	}
 }
 
+// ListPluginsCommand Describes the cli interface for the ListPluginsCommand
 func ListPluginsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     ListPluginsCommandName,
