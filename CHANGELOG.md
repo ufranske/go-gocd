@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.3.4] - 09-07-2017
+## [0.3.5] - 09-07-2017
 ### Added
  - Expanded test cases for jobs and tasks
  - Added Pipeline status querying and pipeline history structure
