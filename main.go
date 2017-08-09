@@ -50,6 +50,7 @@ func main() {
 		*gocli.EncryptCommand(),
 		*gocli.GetVersionCommand(),
 		*gocli.ListPluginsCommand(),
+		*gocli.GetPluginCommand(),
 	}
 
 	app.Flags = []cli.Flag{
