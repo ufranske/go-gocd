@@ -1,10 +1,5 @@
 package gocd
 
-import (
-	"github.com/h2non/gock"
-	"testing"
-)
-
 type MockClient struct {
 }
 
