@@ -3,6 +3,7 @@ package cli
 import (
 	"github.com/urfave/cli"
 	"context"
+	"errors"
 )
 
 // List of command name and descriptions
@@ -13,7 +14,12 @@ const (
 
 // EncryptAction gets a list of agents and return them.
 func EncryptAction(c *cli.Context) error {
-	encryptedValue, r, err := cliAgent(c).Encryption.Encrypt(context.Background())
+	value := c.String("value")
+	if value == "" {
+		return handleOutput(nil, nil, "Encrypt", errors.New("'--value' is missing"))
+	}
+
+	encryptedValue, r, err := cliAgent(c).Encryption.Encrypt(context.Background(), value)
 	if err != nil {
 		return handleOutput(nil, r, "Encrypt", err)
 	}
@@ -27,5 +33,8 @@ func EncryptCommand() *cli.Command {
 		Usage:    EncryptCommandUsage,
 		Action:   EncryptAction,
 		Category: "Encryption",
+		Flags: []cli.Flag{
+			cli.StringFlag{Name: "value"},
+		},
 	}
 }
