@@ -34,7 +34,7 @@ func (pcs *PipelineConfigsService) Update(ctx context.Context, group string, nam
 	req.HTTP.Header.Set("If-Match", fmt.Sprintf("\"%s\"", version))
 
 	pc := Pipeline{}
-	resp, err := pcs.client.Do(ctx, req, &pc)
+	resp, err := pcs.client.Do(ctx, req, &pc, responseTypeJSON)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -56,7 +56,7 @@ func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *
 	}
 
 	pc := Pipeline{}
-	resp, err := pcs.client.Do(ctx, req, &pc)
+	resp, err := pcs.client.Do(ctx, req, &pc, responseTypeJSON)
 	if err != nil {
 		return nil, resp, err
 	}

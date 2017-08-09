@@ -84,7 +84,7 @@ func (pts *PipelineTemplatesService) Get(ctx context.Context, name string) (*Pip
 	}
 
 	pt := PipelineTemplate{}
-	resp, err := pts.client.Do(ctx, req, &pt)
+	resp, err := pts.client.Do(ctx, req, &pt, responseTypeJSON)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -104,7 +104,7 @@ func (pts *PipelineTemplatesService) List(ctx context.Context) ([]*PipelineTempl
 	}
 
 	ptr := PipelineTemplatesResponse{}
-	resp, err := pts.client.Do(ctx, req, &ptr)
+	resp, err := pts.client.Do(ctx, req, &ptr, responseTypeJSON)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -126,7 +126,7 @@ func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st
 	}
 
 	ptr := PipelineTemplate{}
-	resp, err := pts.client.Do(ctx, req, &ptr)
+	resp, err := pts.client.Do(ctx, req, &ptr, responseTypeJSON)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -152,7 +152,7 @@ func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, ve
 	req.HTTP.Header.Set("If-Match", fmt.Sprintf("\"%s\"", version))
 
 	ptr := PipelineTemplate{}
-	resp, err := pts.client.Do(ctx, req, &ptr)
+	resp, err := pts.client.Do(ctx, req, &ptr, responseTypeJSON)
 	if err != nil {
 		return nil, resp, err
 	}
