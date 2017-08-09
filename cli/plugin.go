@@ -15,7 +15,7 @@ const (
 func GetPluginAction(c *cli.Context) error {
 	pgs, r, err := cliAgent(c).Plugins.Get(context.Background(), c.String("name"))
 	if err != nil {
-		return handleOutput(nil, r, "getPlugin", err)
+		return handleOutput(nil, r, "GetPlugin", err)
 	}
 
 	return handleOutput(pgs, r, "ListPipelineTemplates", err)
