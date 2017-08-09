@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
  - Expanded test cases for jobs and tasks
  - Added Pipeline status querying and pipeline history structure
+ - Added Basic get-configuration command.
  
 ### Changed
  - Fixed a bug where if the config file was not found the cli tool would crash.
