@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/drewsonne/go-gocd/gocd"
+	"github.com/urfave/cli"
 	"os"
 )
 
@@ -20,11 +21,26 @@ func Version() string {
 	return GoCDUtilityDefaultVersion
 }
 
-func cliAgent() *gocd.Client {
+func cliAgent(c *cli.Context) *gocd.Client {
+
 	cfg, err := loadConfig()
 	if err != nil {
 		panic(err)
 	}
+
+	if server := c.String("server"); server != "" {
+		cfg.Server = server
+	}
+
+	if username := c.String("username"); username != "" {
+		cfg.Username = username
+	}
+
+	if password := c.String("password"); password != "" {
+		cfg.Password = password
+	}
+
+	cfg.SslCheck = cfg.SslCheck || c.Bool("ssl_check")
 
 	return cfg.Client()
 }
