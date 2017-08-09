@@ -38,7 +38,7 @@ type ConfigJob struct {
 	EnvironmentVariables []ConfigEnvironmentVariable `xml:"environmentvariables>variable" json:",omitempty"`
 	Tasks                ConfigTasks                 `xml:"tasks"`
 	Resources            []string                    `xml:"resources>resource" json:",omitempty"`
-	Artifacts            []ConfigArtifact `xml:"artifacts>artifact" json:",omitempty"`
+	Artifacts            []ConfigArtifact            `xml:"artifacts>artifact" json:",omitempty"`
 }
 
 type ConfigArtifact struct {
@@ -176,11 +176,11 @@ type VersionLinks struct {
 
 type Version struct {
 	Links       VersionLinks `json:"_links"`
-	Version     string `json:"version"`
-	BuildNumber string `json:"build_number"`
-	GitSHA      string `json:"git_sha"`
-	FullVersion string `json:"full_version"`
-	CommitURL   string `json:"commit_url"`
+	Version     string       `json:"version"`
+	BuildNumber string       `json:"build_number"`
+	GitSHA      string       `json:"git_sha"`
+	FullVersion string       `json:"full_version"`
+	CommitURL   string       `json:"commit_url"`
 }
 
 // Get will retrieve all agents, their status, and metadata from the GoCD Server.

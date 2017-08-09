@@ -9,7 +9,7 @@ import (
 type EncryptionService service
 
 type CipherText struct {
-	EncryptedValue string `json:"encrypted_value"`
+	EncryptedValue string       `json:"encrypted_value"`
 	Links          EncryptLinks `json:"_links"`
 }
 
