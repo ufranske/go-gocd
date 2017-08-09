@@ -6,6 +6,7 @@ import (
 	gocli "github.com/drewsonne/go-gocd/cli"
 	"github.com/urfave/cli"
 	"os"
+	"sort"
 )
 
 // GoCDUtilityName is used in help text to identify the gocd cli util by name
@@ -38,15 +39,28 @@ func main() {
 		*gocli.DeletePipelineConfigCommand(),
 		*gocli.ListPipelineGroupsCommand(),
 		*gocli.GetPipelineHistoryCommand(),
+		*gocli.GetPipelineCommand(),
 		*gocli.CreatePipelineConfigCommand(),
 		*gocli.GenerateJSONSchemaCommand(),
+		*gocli.GetPipelineStatusCommand(),
+		*gocli.PausePipelineCommand(),
+		*gocli.UnpausePipelineCommand(),
+		*gocli.ReleasePipelineLockCommand(),
+		*gocli.GetConfigurationCommand(),
+		*gocli.EncryptCommand(),
+		*gocli.GetVersionCommand(),
+		*gocli.ListPluginsCommand(),
+		*gocli.GetPluginCommand(),
 	}
 
 	app.Flags = []cli.Flag{
 		cli.StringFlag{Name: "server", EnvVar: gocli.EnvVarServer},
 		cli.StringFlag{Name: "username", EnvVar: gocli.EnvVarUsername},
 		cli.StringFlag{Name: "password", EnvVar: gocli.EnvVarPassword},
+		cli.BoolFlag{Name: "ssl_check", EnvVar: gocli.EnvVarSkipSsl},
 	}
+
+	sort.Sort(cli.CommandsByName(app.Commands))
 
 	app.Run(os.Args)
 }

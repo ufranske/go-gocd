@@ -11,7 +11,7 @@ func (c *Client) Login(ctx context.Context) error {
 	}
 	req.HTTP.SetBasicAuth(c.Username, c.Password)
 
-	resp, err := c.Do(ctx, req, nil)
+	resp, err := c.Do(ctx, req, nil, responseTypeJSON)
 	if err != nil {
 		return err
 	}

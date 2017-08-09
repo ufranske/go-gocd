@@ -18,7 +18,7 @@ func TestPipelineGroupsService_List(t *testing.T) {
 		j, _ := ioutil.ReadFile("test/resources/pipelinegroups.0.json")
 		fmt.Fprint(w, string(j))
 	})
-	pgs, _, err := client.PipelineGroups.List(context.Background())
+	pgs, _, err := client.PipelineGroups.List(context.Background(), "")
 
 	assert.Nil(t, err)
 	assert.Len(t, pgs, 1)

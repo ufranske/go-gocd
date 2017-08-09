@@ -118,7 +118,7 @@ func (s *AgentsService) List(ctx context.Context) ([]*Agent, *APIResponse, error
 	}
 
 	r := AgentsResponse{}
-	resp, err := s.client.Do(ctx, req, &r)
+	resp, err := s.client.Do(ctx, req, &r, responseTypeJSON)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -148,7 +148,7 @@ func (s *AgentsService) Delete(ctx context.Context, uuid string) (string, *APIRe
 	}
 
 	a := StringResponse{}
-	resp, err := s.client.Do(ctx, req, &a)
+	resp, err := s.client.Do(ctx, req, &a, responseTypeJSON)
 	if err != nil {
 		return "", resp, err
 	}
@@ -164,7 +164,7 @@ func (s *AgentsService) BulkUpdate(ctx context.Context, agents AgentBulkUpdate) 
 	}
 
 	a := StringResponse{}
-	resp, err := s.client.Do(ctx, req, &a)
+	resp, err := s.client.Do(ctx, req, &a, responseTypeJSON)
 	if err != nil {
 		return "", resp, err
 	}
@@ -179,7 +179,7 @@ func (s *AgentsService) JobRunHistory(ctx context.Context, uuid string) ([]*Job,
 		return nil, nil, err
 	}
 	a := JobRunHistoryResponse{}
-	resp, err := s.client.Do(ctx, req, &a)
+	resp, err := s.client.Do(ctx, req, &a, responseTypeJSON)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -197,7 +197,7 @@ func (s *AgentsService) handleAgentRequest(ctx context.Context, action string, u
 	}
 
 	a := Agent{client: s.client}
-	resp, err := s.client.Do(ctx, req, &a)
+	resp, err := s.client.Do(ctx, req, &a, responseTypeJSON)
 	if err != nil {
 		return nil, resp, err
 	}
