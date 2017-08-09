@@ -2,6 +2,7 @@ package gocd
 
 import (
 	"context"
+	"net/url"
 )
 
 // ConfigurationService describes the HAL _link resource for the api response object for a pipelineconfig
@@ -166,6 +167,22 @@ type ConfigProperty struct {
 	Value string `xml:"value"`
 }
 
+// AgentsLinks describes the HAL _link resource for the api response object for a collection of agent objects.
+//go:generate gocd-response-links-generator -type=VersionLinks
+type VersionLinks struct {
+	Self *url.URL `json:"self"`
+	Doc  *url.URL `json:"doc"`
+}
+
+type Version struct {
+	Links       VersionLinks `json:"_links"`
+	Version     string `json:"version"`
+	BuildNumber string `json:"build_number"`
+	GitSHA      string `json:"git_sha"`
+	FullVersion string `json:"full_version"`
+	CommitURL   string `json:"commit_url"`
+}
+
 // Get will retrieve all agents, their status, and metadata from the GoCD Server.
 // Get returns a list of pipeline instanves describing the pipeline history.
 func (cd *ConfigurationService) Get(ctx context.Context) (*ConfigXML, *APIResponse, error) {
@@ -181,4 +198,20 @@ func (cd *ConfigurationService) Get(ctx context.Context) (*ConfigXML, *APIRespon
 	}
 
 	return &cx, resp, nil
+}
+
+// GetVersion will return version information about the GoCD server.
+func (cd *ConfigurationService) GetVersion(ctx context.Context) (*Version, *APIResponse, error) {
+	req, err := cd.client.NewRequest("GET", "version", nil, apiV1)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	v := Version{}
+	resp, err := cd.client.Do(ctx, req, &v, responseTypeJSON)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return &v, resp, nil
 }
