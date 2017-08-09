@@ -39,20 +39,20 @@ func (l *PipelineTemplatesLinks) UnmarshalJSON(j []byte) error {
 		return e
 	}
 
-	if d["self"]["href"] != "" {
-		l.Self, e = url.Parse(d["self"]["href"])
+	if h := d["self"]["href"]; h != "" {
+		l.Self, e = url.Parse(h)
 		if e != nil {
 			return e
 		}
 	}
-	if d["doc"]["href"] != "" {
-		l.Doc, e = url.Parse(d["doc"]["href"])
+	if h := d["doc"]["href"]; h != "" {
+		l.Doc, e = url.Parse(h)
 		if e != nil {
 			return e
 		}
 	}
-	if d["find"]["href"] != "" {
-		l.Find, e = url.Parse(d["find"]["href"])
+	if h := d["find"]["href"]; h != "" {
+		l.Find, e = url.Parse(h)
 		if e != nil {
 			return e
 		}
@@ -91,20 +91,20 @@ func (l *PipelineTemplateLinks) UnmarshalJSON(j []byte) error {
 		return e
 	}
 
-	if d["self"]["href"] != "" {
-		l.Self, e = url.Parse(d["self"]["href"])
+	if h := d["self"]["href"]; h != "" {
+		l.Self, e = url.Parse(h)
 		if e != nil {
 			return e
 		}
 	}
-	if d["doc"]["href"] != "" {
-		l.Doc, e = url.Parse(d["doc"]["href"])
+	if h := d["doc"]["href"]; h != "" {
+		l.Doc, e = url.Parse(h)
 		if e != nil {
 			return e
 		}
 	}
-	if d["find"]["href"] != "" {
-		l.Find, e = url.Parse(d["find"]["href"])
+	if h := d["find"]["href"]; h != "" {
+		l.Find, e = url.Parse(h)
 		if e != nil {
 			return e
 		}
