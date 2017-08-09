@@ -39,20 +39,20 @@ func (l *BuildDetailsLinks) UnmarshalJSON(j []byte) error {
 		return e
 	}
 
-	if d["job"]["href"] != "" {
-		l.Job, e = url.Parse(d["job"]["href"])
+	if h := d["job"]["href"]; h != "" {
+		l.Job, e = url.Parse(h)
 		if e != nil {
 			return e
 		}
 	}
-	if d["stage"]["href"] != "" {
-		l.Stage, e = url.Parse(d["stage"]["href"])
+	if h := d["stage"]["href"]; h != "" {
+		l.Stage, e = url.Parse(h)
 		if e != nil {
 			return e
 		}
 	}
-	if d["pipeline"]["href"] != "" {
-		l.Pipeline, e = url.Parse(d["pipeline"]["href"])
+	if h := d["pipeline"]["href"]; h != "" {
+		l.Pipeline, e = url.Parse(h)
 		if e != nil {
 			return e
 		}
