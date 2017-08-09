@@ -1,6 +1,8 @@
 package gocd
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+)
 
 type ConfigTasks struct {
 	Tasks []ConfigTask `xml:",any"`
@@ -9,7 +11,8 @@ type ConfigTasks struct {
 type ConfigTask struct {
 	// Because we need to preserve the order of tasks, and we have an array of elements with mixed types,
 	// we need to use this generic xml type for tasks.
-	XMLName  xml.Name
+	XMLName  TaskTypeName `json:",omitempty"`
+	Type     string `xml:"type,omitempty"`
 	RunIf    ConfigTaskRunIf `xml:"runif"`
 	Command  string          `xml:"command,attr,omitempty"  json:",omitempty"`
 	Args     []string        `xml:"arg,omitempty"  json:",omitempty"`
@@ -23,3 +26,18 @@ type ConfigTask struct {
 type ConfigTaskRunIf struct {
 	Status string `xml:"status,attr"`
 }
+
+type TaskTypeName xml.Name
+
+//func (ttn *ConfigTask) MarshalJSON() ([]byte, error) {
+//	ttn.Type = ttn.XMLName.Local
+//	j, e := json.Marshal(ttn)
+//	if e != nil {
+//		return nil, e
+//	}
+//	return j, nil
+//}
+//
+//func (ttn *TaskTypeName) UnmarshalJSON(j []byte) error {
+//	return nil
+//}
