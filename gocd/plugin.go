@@ -23,25 +23,25 @@ type PluginLinks struct {
 }
 
 type PluginsResponse struct {
-	Links PluginsResponseLinks `json:"_links"`
+	Links    PluginsResponseLinks `json:"_links"`
 	Embedded struct {
 		PluginInfo []*Plugin `json:"plugin_info"`
 	} `json:"_embedded"`
 }
 
 type Plugin struct {
-	Links                     PluginLinks `json:"_links"`
-	ID                        string `json:"id"`
-	Name                      string `json:"name"`
-	DisplayName               string `json:"display_name"`
-	Version                   string `json:"version"`
-	Type                      string `json:"type"`
+	Links                     PluginLinks               `json:"_links"`
+	ID                        string                    `json:"id"`
+	Name                      string                    `json:"name"`
+	DisplayName               string                    `json:"display_name"`
+	Version                   string                    `json:"version"`
+	Type                      string                    `json:"type"`
 	PluggableInstanceSettings PluggableInstanceSettings `json:"pluggable_instance_settings"`
 }
 
 type PluggableInstanceSettings struct {
 	Configurations []PluginConfiguration `json:"configurations"`
-	View           PluginView `json:"view"`
+	View           PluginView            `json:"view"`
 }
 
 type PluginView struct {

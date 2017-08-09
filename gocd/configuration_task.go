@@ -11,8 +11,8 @@ type ConfigTasks struct {
 type ConfigTask struct {
 	// Because we need to preserve the order of tasks, and we have an array of elements with mixed types,
 	// we need to use this generic xml type for tasks.
-	XMLName  TaskTypeName `json:",omitempty"`
-	Type     string `xml:"type,omitempty"`
+	XMLName  TaskTypeName    `json:",omitempty"`
+	Type     string          `xml:"type,omitempty"`
 	RunIf    ConfigTaskRunIf `xml:"runif"`
 	Command  string          `xml:"command,attr,omitempty"  json:",omitempty"`
 	Args     []string        `xml:"arg,omitempty"  json:",omitempty"`
