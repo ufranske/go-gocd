@@ -26,29 +26,27 @@ type ConfigPipeline struct {
 	Stages               []ConfigStage               `xml:"stage"`
 }
 
-type ConfigTasks struct {
-	Exec []ConfigExecTask `xml:"exec"`
-}
-
-type ConfigExecTask struct {
-	Command    string `xml:"command,attr"`
-	WorkingDir string `xml:"workingdir"`
-}
-
 type ConfigStage struct {
 	Name     string         `xml:"name,attr"`
-	Approval ConfigApproval `xml:"approval"`
+	Approval ConfigApproval `xml:"approval,omitempty" json:",omitempty"`
 	Jobs     []ConfigJob    `xml:"jobs>job"`
 }
 
 type ConfigJob struct {
 	Name                 string                      `xml:"name,attr"`
-	EnvironmentVariables []ConfigEnvironmentVariable `xml:"environmentvariables>variable"`
+	EnvironmentVariables []ConfigEnvironmentVariable `xml:"environmentvariables>variable" json:",omitempty"`
 	Tasks                ConfigTasks                 `xml:"tasks"`
+	Resources            []string                    `xml:"resources>resource" json:",omitempty"`
+	Artifacts            []ConfigArtifact `xml:"artifacts>artifact" json:",omitempty"`
+}
+
+type ConfigArtifact struct {
+	Src         string `xml:"src,attr"`
+	Destination string `xml:"dest,attr,omitempty" json:",omitempty"`
 }
 
 type ConfigApproval struct {
-	Type string `xml:"type,attr"`
+	Type string `xml:"type,attr,omitempty" json:",omitempty"`
 }
 
 type ConfigEnvironmentVariable struct {
@@ -63,12 +61,12 @@ type PipelineMaterial struct {
 }
 
 type GitRepositoryMaterial struct {
-	URL    string         `xml:"url,attr"`
-	Filter []ConfigFilter `xml:"filter>ignore"`
+	URL     string         `xml:"url,attr"`
+	Filters []ConfigFilter `xml:"filter>ignore,omitempty"`
 }
 
 type ConfigFilter struct {
-	Ignore string `xml:"pattern,attr"`
+	Ignore string `xml:"pattern,attr,omitempty"`
 }
 
 type ConfigParam struct {
