@@ -5,18 +5,17 @@
 [![codecov](https://codecov.io/gh/drewsonne/go-gocd/branch/master/graph/badge.svg)](https://codecov.io/gh/drewsonne/go-gocd)
 [![Go Report Card](https://goreportcard.com/badge/github.com/drewsonne/go-gocd)](https://goreportcard.com/report/github.com/drewsonne/go-gocd)
 
-## Library
-
-Go library to interact with GoCD server.
-
-
 ## CLI
 
 CLI tool to interace with GoCD Server.
 
 ### Usage
 
-#### List agents
+#### Installation
+Download the latest release from [https://github.com/drewsonne/go-gocd/releases](https://github.com/drewsonne/go-gocd/releases),
+and place the binary in your `$PATH`.
+
+#### Quickstart
 
     $ export GOCD_PASSWORD=mypassword
     $ gocd \
@@ -28,6 +27,58 @@ CLI tool to interace with GoCD Server.
 
     $ gocd -help
 
-## To Do
+## Library
 
- - Allow raw `--json` arguments in `gocd` cli tool..
+### Usage
+
+```go
+package main
+import "github.com/drewsonne/go-gocd/gocd"
+```
+
+Construct a new GoCD client and supply the URL to your GoCD server and if required, username and password. Then use the
+various services on the client to access different parts of the GoCD API.
+For example:
+
+```go
+package main
+import (
+    "github.com/drewsonne/go-gocd/gocd"
+    "context"
+)
+
+func main() {
+    cfg := gocd.Configuration{
+        Server: "https://my_gocd/go/",
+        Username: "ApiUser",
+        Password: "MySecretPassword",
+    }
+    
+    client := gocd.NewClient(&cfg,nil)
+    
+    // list all agents in use by the GoCD Server
+    agents, _, err := client.Agents.List(context.Background())
+
+    ...
+}
+```
+
+### Usage
+
+## Roadmap ##
+This library is still in pre-release. It was initially developed to be an interface for a [gocd terraform provider](https://github.com/drewsonne/terraform-provider-gocd),
+which, at this stage, will heavily influence the direction of this library. A list of new features and the expected release
+schedule for those features can be found in the project for this github repository.
+
+## Background ##
+This library's structure was initially inspired by [https://github.com/google/go-github](https://github.com/google/go-github).
+There may still be some vestigial code and structures from this library which will be removed in future revisions and 
+before v1.0.0 of this library.
+
+## To Do ##
+
+ - Allow installation via homebrew.
+ 
+## License ##
+
+This library is distributed under the LGPL-style license found in [LICENSE](./LICENSE) file.
