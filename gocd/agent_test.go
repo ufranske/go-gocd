@@ -31,7 +31,7 @@ func TestAgent_JobRunHistory(t *testing.T) {
 	assert.Equal(t, "5c5c318f-e6d3-4299-9120-7faff6e6030b", job.AgentUUID)
 	assert.Equal(t, "upload", job.Name)
 	assert.Equal(t, 1435631497131, job.ScheduledDate)
-	assert.Empty(t, job.OrginalJobID)
+	assert.Empty(t, job.OriginalJobID)
 	assert.Equal(t, 251, job.PipelineCounter)
 	assert.Equal(t, false, job.Rerun)
 	assert.Equal(t, "distributions-all", job.PipelineName)

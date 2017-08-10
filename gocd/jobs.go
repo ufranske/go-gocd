@@ -18,7 +18,7 @@ type Job struct {
 	Name                 string                 `json:"name"`
 	JobStateTransitions  []*JobStateTransition  `json:"job_state_transitions,omitempty"`
 	ScheduledDate        int                    `json:"scheduled_date,omitempty"`
-	OriginalJobID         string                `json:"original_job_id,omitempty"`
+	OriginalJobID        string                 `json:"original_job_id,omitempty"`
 	PipelineCounter      int                    `json:"pipeline_counter,omitempty"`
 	Rerun                bool                   `json:"rerun,omitempty"`
 	PipelineName         string                 `json:"pipeline_name,omitempty"`
