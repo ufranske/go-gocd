@@ -23,6 +23,34 @@ and place the binary in your `$PATH`.
         -username admin \
         list-agents
 
+#### Configuration
+The library can either be configured using environment variables, cli flags, or a yaml config file.
+
+##### Environment Variables
+
+ - `$GOCD_SERVER`
+ - `$GOCD_USERNAME`
+ - `$GOCD_PASSWORD`
+ - `$GOCD_SSL_CHECK`
+ 
+##### CLI Flags
+
+ - `--server`
+ - `--username`
+ - `--password`
+ - `--ssl_check`
+ 
+##### YAML Config File
+
+Run `gocd configure` to launch a wizard which will create a file at `~/.gocd.conf`, or create the file manually:
+
+```yaml
+server: https://goserver:8154/go
+username: admin
+password: mypassword
+ssl_check: false
+```
+
 #### Help
 
     $ gocd -help
