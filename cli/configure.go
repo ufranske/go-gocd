@@ -20,7 +20,7 @@ const (
 // ConfigDirectoryPath is the location where the authentication information is stored
 const ConfigDirectoryPath = "~/.gocd.conf"
 
-// Environmnet variables for configuration.
+// Environment variables for configuration.
 const (
 	EnvVarServer   = "GOCD_SERVER"
 	EnvVarUsername = "GOCD_USERNAME"

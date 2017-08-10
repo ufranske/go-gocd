@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-// GoCDUtilityDefaultVersion is the default version if no environmnet variables are set
+// GoCDUtilityDefaultVersion is the default version if no environment variables are set
 const GoCDUtilityDefaultVersion = "dev"
 
 // Version calculates the version of this cli tool.
@@ -69,7 +69,7 @@ func handleOutput(r interface{}, hr *gocd.APIResponse, reqType string, err error
 		b1, _ := json.Marshal(hr.HTTP.Header)
 		b2, _ := json.Marshal(hr.Request.HTTP.Header)
 		o = map[string]interface{}{
-			"Error":           "An error occured while retrieving the resource.",
+			"Error":           "An error occurred while retrieving the resource.",
 			"Status":          hr.HTTP.StatusCode,
 			"ResponseHeader":  string(b1),
 			"ResponseBody":    hr.Body,
