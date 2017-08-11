@@ -67,5 +67,5 @@ func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *
 
 // Delete a pipeline configuration
 func (pcs *PipelineConfigsService) Delete(ctx context.Context, name string) (string, *APIResponse, error) {
-	return pcs.client.genericDeleteAction(ctx, "admin/pipelines/"+name, apiV3)
+	return pcs.client.deleteAction(ctx, "admin/pipelines/"+name, apiV3)
 }
