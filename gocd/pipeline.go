@@ -21,7 +21,7 @@ type Pipeline struct {
 
 // Material describes an artifact dependency for a pipeline object.
 type Material struct {
-	Type string `json:"type"`
+	Type       string `json:"type"`
 	Attributes struct {
 		URL             string      `json:"url"`
 		Destination     string      `json:"destination,omitempty"`
@@ -61,7 +61,7 @@ type BuildCause struct {
 // MaterialRevision describes the uniquely identifiable version for the material which was pulled for this build
 type MaterialRevision struct {
 	Modifications []Modification `json:"modifications"`
-	Material struct {
+	Material      struct {
 		Description string `json:"description"`
 		Fingerprint string `json:"fingerprint"`
 		Type        string `json:"type"`
