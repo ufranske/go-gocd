@@ -28,6 +28,10 @@ func (c *Client) genericHeadAction(ctx context.Context, path string, apiversion 
 	return exists, resp, err
 
 }
+func (c *Client) patchAction(ctx context.Context, r *APIClientRequest) (interface{}, *APIResponse, error) {
+	r.Method = "PATCH"
+	return c.httpAction(ctx, r)
+}
 
 func (c *Client) getAction(ctx context.Context, r *APIClientRequest) (interface{}, *APIResponse, error) {
 	r.Method = "GET"

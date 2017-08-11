@@ -25,7 +25,7 @@ type AgentLinks struct {
 
 // AgentsResponse describes the structure of the API response when listing collections of agent object.
 type AgentsResponse struct {
-	Links    *AgentsLinks `json:"_links,omitempty"`
+	Links *AgentsLinks `json:"_links,omitempty"`
 	Embedded *struct {
 		Agents []*Agent `json:"agents"`
 	} `json:"_embedded,omitempty"`
@@ -138,65 +138,41 @@ func (s *AgentsService) Update(ctx context.Context, uuid string, agent AgentUpda
 
 // Delete will remove an existing agent. Note: The agent must be disabled, and not currently building to be deleted.
 func (s *AgentsService) Delete(ctx context.Context, uuid string) (string, *APIResponse, error) {
-	req, err := s.client.NewRequest("DELETE", "agents/"+uuid, nil, apiV4)
-	if err != nil {
-		return "", nil, err
-	}
-
-	a := StringResponse{}
-	resp, err := s.client.Do(ctx, req, &a, responseTypeJSON)
-	if err != nil {
-		return "", resp, err
-	}
-
-	return a.Message, resp, nil
+	return s.client.deleteAction(ctx, "agents/"+uuid, apiV4)
 }
 
 // BulkUpdate will change the configuration for multiple agents in a single request.
 func (s *AgentsService) BulkUpdate(ctx context.Context, agents AgentBulkUpdate) (string, *APIResponse, error) {
-	req, err := s.client.NewRequest("PATCH", "agents", agents, apiV4)
-	if err != nil {
-		return "", nil, err
-	}
-
 	a := StringResponse{}
-	resp, err := s.client.Do(ctx, req, &a, responseTypeJSON)
-	if err != nil {
-		return "", resp, err
-	}
-
-	return a.Message, resp, nil
+	_, resp, err := s.client.patchAction(ctx, &APIClientRequest{
+		Path:         "agents",
+		APIVersion:   apiV4,
+		ResponseBody: &a,
+	})
+	return a.Message, resp, err
 }
 
 // JobRunHistory will return a list of Jobs run on this agent.
 func (s *AgentsService) JobRunHistory(ctx context.Context, uuid string) ([]*Job, *APIResponse, error) {
-	req, err := s.client.NewRequest("GET", fmt.Sprintf("agents/%s/job_run_history", uuid), nil, apiV4)
-	if err != nil {
-		return nil, nil, err
-	}
 	a := JobRunHistoryResponse{}
-	resp, err := s.client.Do(ctx, req, &a, responseTypeJSON)
-	if err != nil {
-		return nil, resp, err
-	}
-
-	return a.Jobs, resp, nil
-
+	_, resp, err := s.client.getAction(ctx, &APIClientRequest{
+		Path:         fmt.Sprintf("agents/%s/job_run_history", uuid),
+		APIVersion:   apiV4,
+		ResponseBody: &a,
+	})
+	return a.Jobs, resp, err
 }
 
 // handleAgentRequest handles the flow to perform an HTTP action on an agent resource.
 func (s *AgentsService) handleAgentRequest(ctx context.Context, action string, uuid string, body *AgentUpdate) (*Agent, *APIResponse, error) {
-
-	req, err := s.client.NewRequest(action, "agents/"+uuid, body, apiV4)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	a := Agent{client: s.client}
-	resp, err := s.client.Do(ctx, req, &a, responseTypeJSON)
-	if err != nil {
-		return nil, resp, err
-	}
+	_, resp, err := s.client.httpAction(ctx, &APIClientRequest{
+		Method:       action,
+		Path:         "agents/" + uuid,
+		APIVersion:   apiV4,
+		RequestBody:  body,
+		ResponseBody: &a,
+	})
 
-	return &a, resp, nil
+	return &a, resp, err
 }
