@@ -70,7 +70,7 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface
 
 	// Build the request
 	var reqBody interface{}
-	if r.RequestBody == nil {
+	if r.RequestBody != nil {
 		reqBody = r.RequestBody
 	} else {
 		reqBody = nil

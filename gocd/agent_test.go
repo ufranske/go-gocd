@@ -10,20 +10,19 @@ import (
 )
 
 func TestAgent(t *testing.T) {
+	setup()
+	defer teardown()
+
 	t.Run("JobRunHistory", testAgentJobRunHistory)
 	t.Run("BulkUpdate", testAgentBulkUpdate)
 	t.Run("Delete", testAgentDelete)
 	t.Run("Get", testAgentGet)
 	t.Run("Update", testAgentUpdate)
-	t.Run("List", testAgentList)
 	t.Run("RemoveLinks", testAgentRemoveLinks)
 }
 
 func testAgentJobRunHistory(t *testing.T) {
-	setup()
-	defer teardown()
-
-	mux.HandleFunc("/api/agents/5c5c318f-e6d3-4299-9120-7faff6e6030b/job_run_history", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/agents/testAgentJobRunHistory-e6d3-4299-9120-7faff6e6030b/job_run_history", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
 		bdy, err := ioutil.ReadAll(r.Body)
 		assert.Nil(t, err)
@@ -32,7 +31,7 @@ func testAgentJobRunHistory(t *testing.T) {
 		j, _ := ioutil.ReadFile("test/resources/agents-job-history.0.json")
 		fmt.Fprint(w, string(j))
 	})
-	jobs, _, err := client.Agents.JobRunHistory(context.Background(), "5c5c318f-e6d3-4299-9120-7faff6e6030b")
+	jobs, _, err := client.Agents.JobRunHistory(context.Background(), "testAgentJobRunHistory-e6d3-4299-9120-7faff6e6030b")
 	assert.Nil(t, err)
 	assert.NotEmpty(t, jobs)
 	assert.Len(t, jobs, 1)
@@ -60,8 +59,6 @@ func testAgentJobRunHistory(t *testing.T) {
 }
 
 func testAgentBulkUpdate(t *testing.T) {
-	setup()
-	defer teardown()
 
 	mux.HandleFunc("/api/agents", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "PATCH", "Unexpected HTTP method")
@@ -100,15 +97,13 @@ func testAgentBulkUpdate(t *testing.T) {
 }
 
 func testAgentDelete(t *testing.T) {
-	setup()
-	defer teardown()
 
-	mux.HandleFunc("/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/agents/testAgentDelete-b954-4571-9d9b-2f330739d4da", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "DELETE", "Unexpected HTTP method")
 		fmt.Fprint(w, `{"message":"Deleted this resource"}`)
 	})
 
-	message, _, err := client.Agents.Delete(context.Background(), "adb9540a-b954-4571-9d9b-2f330739d4da")
+	message, _, err := client.Agents.Delete(context.Background(), "testAgentDelete-b954-4571-9d9b-2f330739d4da")
 	assert.Nil(t, err)
 	assert.NotEmpty(t, message)
 
@@ -126,10 +121,8 @@ func testAgentRemoveLinks(t *testing.T) {
 }
 
 func testAgentUpdate(t *testing.T) {
-	setup()
-	defer teardown()
 
-	mux.HandleFunc("/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/agents/testAgentUpdate-b954-4571-9d9b-2f330739d4da", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "PATCH", "Unexpected HTTP method")
 		j, _ := ioutil.ReadFile("test/resources/agent.1.json")
 		fmt.Fprint(w, string(j))
@@ -138,7 +131,7 @@ func testAgentUpdate(t *testing.T) {
 	agentUpdate := AgentUpdate{
 		Resources: []string{"other"},
 	}
-	agent, _, err := client.Agents.Update(context.Background(), "adb9540a-b954-4571-9d9b-2f330739d4da", agentUpdate)
+	agent, _, err := client.Agents.Update(context.Background(), "testAgentUpdate-b954-4571-9d9b-2f330739d4da", agentUpdate)
 	assert.Nil(t, err)
 	assert.NotNil(t, *agent)
 
@@ -147,16 +140,13 @@ func testAgentUpdate(t *testing.T) {
 
 func testAgentGet(t *testing.T) {
 
-	setup()
-	defer teardown()
-
-	mux.HandleFunc("/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/agents/testAgentGet-b954-4571-9d9b-2f330739d4da", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
 		j, _ := ioutil.ReadFile("test/resources/agent.0.json")
 		fmt.Fprint(w, string(j))
 	})
 
-	agent, _, err := client.Agents.Get(context.Background(), "adb9540a-b954-4571-9d9b-2f330739d4da")
+	agent, _, err := client.Agents.Get(context.Background(), "testAgentGet-b954-4571-9d9b-2f330739d4da")
 	assert.Nil(t, err)
 
 	for _, attribute := range []EqualityTest{
@@ -171,8 +161,7 @@ func testAgentGet(t *testing.T) {
 	testAgent(t, agent)
 }
 
-func testAgentList(t *testing.T) {
-
+func TestAgent_List(t *testing.T) {
 	setup()
 	defer teardown()
 
