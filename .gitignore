@@ -61,3 +61,4 @@ Temporary Items
 /.idea
 /go-gocd
 /gocd-cli-action-generator/gocd-cli-action-generator
+*.out
