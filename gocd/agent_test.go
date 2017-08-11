@@ -9,7 +9,17 @@ import (
 	"testing"
 )
 
-func TestAgent_JobRunHistory(t *testing.T) {
+func TestAgent(t *testing.T) {
+	t.Run("JobRunHistory", testAgentJobRunHistory)
+	t.Run("BulkUpdate", testAgentBulkUpdate)
+	t.Run("Delete", testAgentDelete)
+	t.Run("Get", testAgentGet)
+	t.Run("Update", testAgentUpdate)
+	t.Run("List", testAgentList)
+	t.Run("RemoveLinks", testAgentRemoveLinks)
+}
+
+func testAgentJobRunHistory(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -49,7 +59,7 @@ func TestAgent_JobRunHistory(t *testing.T) {
 
 }
 
-func TestAgent_BulkUpdate(t *testing.T) {
+func testAgentBulkUpdate(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -89,7 +99,7 @@ func TestAgent_BulkUpdate(t *testing.T) {
 	assert.Equal(t, "Updated agent(s) with uuid(s): [adb9540a-b954-4571-9d9b-2f330739d4da, adb528b2-b954-1234-9d9b-b27ag4h568e1].", message)
 }
 
-func TestAgent_Delete(t *testing.T) {
+func testAgentDelete(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -105,7 +115,7 @@ func TestAgent_Delete(t *testing.T) {
 	assert.Equal(t, message, "Deleted this resource")
 }
 
-func TestAgent_RemoveLinks(t *testing.T) {
+func testAgentRemoveLinks(t *testing.T) {
 	a := Agent{
 		Links: &AgentLinks{},
 	}
@@ -115,7 +125,7 @@ func TestAgent_RemoveLinks(t *testing.T) {
 	assert.Nil(t, a.Links)
 }
 
-func TestAgent_Update(t *testing.T) {
+func testAgentUpdate(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -135,7 +145,7 @@ func TestAgent_Update(t *testing.T) {
 	assert.Equal(t, agent.Resources[0], "other")
 }
 
-func TestAgent_Get(t *testing.T) {
+func testAgentGet(t *testing.T) {
 
 	setup()
 	defer teardown()
@@ -161,7 +171,7 @@ func TestAgent_Get(t *testing.T) {
 	testAgent(t, agent)
 }
 
-func TestAgent_List(t *testing.T) {
+func testAgentList(t *testing.T) {
 
 	setup()
 	defer teardown()

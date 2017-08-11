@@ -9,7 +9,11 @@ import (
 	"testing"
 )
 
-func TestPipelineGroupsService_List(t *testing.T) {
+func TestPipelineGroupsService(t *testing.T) {
+	t.Run("List", testPipelineGroupsServiceList)
+}
+
+func testPipelineGroupsServiceList(t *testing.T) {
 	setup()
 	defer teardown()
 

@@ -80,7 +80,7 @@ func (pts *PipelineTemplatesService) Get(ctx context.Context, name string) (*Pip
 	pt := PipelineTemplate{}
 	_, resp, err := pts.client.getAction(ctx, &APIClientRequest{
 		Path:         "admin/templates/" + name,
-		ApiVersion:   apiV3,
+		APIVersion:   apiV3,
 		ResponseBody: &pt,
 	})
 	return &pt, resp, err
@@ -92,7 +92,7 @@ func (pts *PipelineTemplatesService) List(ctx context.Context) ([]*PipelineTempl
 
 	_, resp, err := pts.client.getAction(ctx, &APIClientRequest{
 		Path:         "admin/templates",
-		ApiVersion:   apiV3,
+		APIVersion:   apiV3,
 		ResponseBody: &ptr,
 	})
 
@@ -110,7 +110,7 @@ func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st
 
 	_, resp, err := pts.client.putAction(ctx, &APIClientRequest{
 		Path:         "admin/templates",
-		ApiVersion:   apiV3,
+		APIVersion:   apiV3,
 		RequestBody:  pt,
 		ResponseBody: &ptr,
 	})
@@ -131,7 +131,7 @@ func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, ve
 
 	_, resp, err := pts.client.putAction(ctx, &APIClientRequest{
 		Path:         "admin/templates/" + name,
-		ApiVersion:   apiV3,
+		APIVersion:   apiV3,
 		RequestBody:  pt,
 		ResponseBody: &ptr,
 	})

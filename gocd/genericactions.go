@@ -4,10 +4,11 @@ import (
 	"context"
 )
 
+// APIClientRequest helper struct to reduce amount of code.
 type APIClientRequest struct {
 	Method       string
 	Path         string
-	ApiVersion   string
+	APIVersion   string
 	RequestBody  interface{}
 	ResponseType string
 	ResponseBody interface{}
@@ -18,7 +19,7 @@ func (c *Client) genericHeadAction(ctx context.Context, path string, apiversion 
 	_, resp, err := c.httpAction(ctx, &APIClientRequest{
 		Method:       "HEAD",
 		Path:         path,
-		ApiVersion:   apiversion,
+		APIVersion:   apiversion,
 		ResponseType: responseTypeJSON,
 	})
 
@@ -49,7 +50,7 @@ func (c *Client) deleteAction(ctx context.Context, path string, apiversion strin
 	_, resp, err := c.httpAction(ctx, &APIClientRequest{
 		Method:       "DELETE",
 		Path:         path,
-		ApiVersion:   apiversion,
+		APIVersion:   apiversion,
 		ResponseType: responseTypeJSON,
 		ResponseBody: &a,
 	})
@@ -71,7 +72,7 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface
 		reqBody = nil
 	}
 
-	req, err := c.NewRequest(r.Method, r.Path, reqBody, r.ApiVersion)
+	req, err := c.NewRequest(r.Method, r.Path, reqBody, r.APIVersion)
 	if err != nil {
 		return false, nil, err
 	}
