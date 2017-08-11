@@ -3,7 +3,7 @@
 [![GoDoc](https://godoc.org/github.com/drewsonne/go-gocd/gocd?status.svg)](https://godoc.org/github.com/drewsonne/go-gocd/gocd)
 [![Build Status](https://travis-ci.org/drewsonne/go-gocd.svg?branch=master)](https://travis-ci.org/drewsonne/go-gocd)
 [![codecov](https://codecov.io/gh/drewsonne/go-gocd/branch/master/graph/badge.svg)](https://codecov.io/gh/drewsonne/go-gocd)
-[![Go Report Card](https://goreportcard.com/badge/github.com/drewsonne/go-gocd)](https://goreportcard.com/report/github.com/drewsonne/go-gocd)
+[![codebeat badge](https://codebeat.co/badges/1ea74899-2337-4ea6-aaeb-2cc8037fe362)](https://codebeat.co/projects/github-com-drewsonne-go-gocd-master)
 
 ## CLI
 

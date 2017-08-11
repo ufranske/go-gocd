@@ -10,7 +10,10 @@ addons:
 
 env:
   global:
+    - CODECLIMATE_API_HOST=https://codebeat.co/webhooks/code_coverage
     - secure: ax6R000Lq+b4jbOKXxXBFyWKAQdPQkdwxSqy7qukPKk9fOh5mXI/gEX7ep6JHRvcBqbq5LavXgNCQpyGdTevhdi8eQBhvOE79one/bLbDYj4mCbDu2rHtk3Dln3+xWTIhe2HFembCxcVHLHK8zAv8vSadJN/bDEGGTdfkZS+h3GW5LKhtcD3j3prJ6baJUkmGiiOt7kDcYEYkXMDaS13fM9E/G8GD0hI7YrwUJ5HY1EMBcUjHiFUDwSLM6OqF4bKbDxVcsVNwh5SLSTG4PDMmdKDP3suTgQZauGuzCL51KjsYIdC9wGkFnUK2BLM++7CkYjsrVAAGEWoQhPhjIi5psuQbaGYrvtbSbjb6Zx2jjtbzTJJ1KtIRcjzkiFKF6EhG8+HAlfSubBSMov+geoj5VXbMgCT7Pwnzf7I4kKd+xUYvKZ8Zda3OrXk2iY9qJ+WGCgtb38rHsgE1bLIVcdZyX0cNcTQZmCvTny81teZNuIS5zWbOyZxwnRVaDv51uvs+YL1+zwgBmSR2dzef5NN4eUxzip93/FhBDmqYxpu7XWtMMrI5roWsmpWNL0DACf8qIDRYtGR2Wr+oC+uadG8aqEiCp5vPmgsPmOwvatOqAScuR5J2bYylDqtseFKUuWoYPNT6BfTk+ZMLv9r08230+W5SmF2/KIzJm0OjRc/OLw=
+    - secure: e1OjKwBr9jtINiTfoZMSSVuwjdTX+jbzL0Q5/GPCHi4uBRHF7AnmWEsWDFizYx0qOrwSnStq8L0o6q26jVK9rWduTAqAdpMyP1IjhdCI7v2KRPVf38oCegU3CACkl3quhTeGZZQMQ23O81Vzo9BmEUKpFTEhjmYtwXNoZfmoN/4s94rW2lE0h0bZdUDhk4FaXsnLYRt3m6D/jvPYI34nPjBpgvcoO1XUZkAabQBF3KB8+z2M3PtPvK3AaSbjcwCleg23cHYdlVRorQfbZgBrhdlm4CpR16RD1csivYKZgOsE2N9Gf+6YMl8uuBLq6lvuND2DVT1mJ2vVBT+MCSVMROb9+6+1eAG+wdqV/p2kWyZZrJW+c8h/1bvHz9SsJjpqU46y4r11tmewbLB7KOLSlTtPLWy0GaYH/eQorNDvFyxeMc0rHXJGzak2I+Eh2SCISelQk/r0GITN3A2IG9aWUsPDQOjeXOop5oMo2irkluCHrOSKq79Gm4EmiqrhYtPaCtRdrZXxCzzD743EEY1+h5sGwUXz+DWAJf5+aE4ARc9LeKin94/TdncwY3o9FRS0aXDRzkSbPfPmblVbS96qzpEsWnqt3+is8NccGlFju+WBl4Pwfvpo7PIoevdVOtOeB0/cDtd6tUOoOBtRTbXsqMfu1A6+JH7/1VmW2K9JYtc=
+
 
 matrix:
   allow_failures:
@@ -31,7 +34,9 @@ script:
   - make test
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - npm install -g codeclimate-test-reporter
+  - codeclimate-test-reporter < coverage.txt
+#  - bash <(curl -s https://codecov.io/bash)
   - go get github.com/goreleaser/goreleaser
 
 deploy:
