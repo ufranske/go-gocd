@@ -25,7 +25,7 @@ type AgentLinks struct {
 
 // AgentsResponse describes the structure of the API response when listing collections of agent object.
 type AgentsResponse struct {
-	Links    *AgentsLinks `json:"_links,omitempty"`
+	Links *AgentsLinks `json:"_links,omitempty"`
 	Embedded *struct {
 		Agents []*Agent `json:"agents"`
 	} `json:"_embedded,omitempty"`
@@ -112,22 +112,18 @@ func (a *Agent) RemoveLinks() {
 
 // List will retrieve all agents, their status, and metadata from the GoCD Server.
 func (s *AgentsService) List(ctx context.Context) ([]*Agent, *APIResponse, error) {
-	req, err := s.client.NewRequest("GET", "agents", nil, apiV4)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	r := AgentsResponse{}
-	resp, err := s.client.Do(ctx, req, &r, responseTypeJSON)
-	if err != nil {
-		return nil, resp, err
-	}
+	_, resp, err := s.client.getAction(ctx, &APIClientRequest{
+		Path:         "agents",
+		ResponseBody: &r,
+		APIVersion:   apiV4,
+	})
 
 	for _, agent := range r.Embedded.Agents {
 		agent.client = s.client
 	}
 
-	return r.Embedded.Agents, resp, nil
+	return r.Embedded.Agents, resp, err
 }
 
 // Get will retrieve a single agent based on the provided UUID.
