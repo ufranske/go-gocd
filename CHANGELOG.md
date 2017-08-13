@@ -4,8 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased] - 11-09-2017
+## [0.3.6] - 12-08-2017
 ### Changed
+ - Fixed a bug where version was not being set on build
  - Reduced the amount of duplicate code.
 
 ## [0.3.5] - 09-07-2017
