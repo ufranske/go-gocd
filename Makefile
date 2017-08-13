@@ -31,4 +31,4 @@ deploy_on_develop:
 	go get github.com/goreleaser/goreleaser
 	gem install --no-ri --no-rdoc fpm
 	go get
-	goreleaser --snapshot
+	goreleaser --rm-dist --snapshot
