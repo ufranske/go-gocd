@@ -15,12 +15,14 @@ const GoCDUtilityName = "gocd"
 // GoCDUtilityUsageInstructions providers user facing support on operation of the gocd cli tool. @TODO Expand this content.
 const GoCDUtilityUsageInstructions = "CLI Tool to interact with GoCD server"
 
+var Version string
+
 func main() {
 
 	app := cli.NewApp()
 	app.Name = GoCDUtilityName
 	app.Usage = GoCDUtilityUsageInstructions
-	app.Version = gocli.Version()
+	app.Version = Version
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
 		*gocli.ConfigureCommand(),
