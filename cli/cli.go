@@ -5,21 +5,7 @@ import (
 	"fmt"
 	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/urfave/cli"
-	"os"
 )
-
-// GoCDUtilityDefaultVersion is the default version if no environment variables are set
-const GoCDUtilityDefaultVersion = "dev"
-
-// Version calculates the version of this cli tool.
-func Version() string {
-	if tag := os.Getenv("TAG"); tag != "" {
-		return tag
-	} else if commit := os.Getenv("COMMIT"); commit != "" {
-		return commit[0:8]
-	}
-	return GoCDUtilityDefaultVersion
-}
 
 func cliAgent(c *cli.Context) *gocd.Client {
 
