@@ -16,6 +16,9 @@ func TestPipelineService(t *testing.T) {
 	t.Run("Get", testPipelineServiceGet)
 	t.Run("GetHistory", testPipelineServiceGetHistory)
 	t.Run("GetStatus", testPipelineServiceGetStatus)
+	t.Run("Pause", testPipelineServicePause)
+	t.Run("Unpause", testPipelineServiceUnpause)
+	t.Run("ReleaseLock", testPipelineServiceReleaseLock)
 }
 
 func testPipelineServiceGetStatus(t *testing.T) {
