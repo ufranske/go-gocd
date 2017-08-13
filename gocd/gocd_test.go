@@ -8,9 +8,9 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"reflect"
 	"testing"
-	"net/url"
 )
 
 const (

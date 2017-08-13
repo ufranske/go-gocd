@@ -1,12 +1,12 @@
 package gocd
 
 import (
-	"testing"
 	"context"
-	"io/ioutil"
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"io/ioutil"
 	"net/http"
+	"testing"
 )
 
 func TestPipelineService(t *testing.T) {
