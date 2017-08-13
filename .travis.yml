@@ -26,8 +26,7 @@ jobs:
     - stage:
 
 before_install:
-  - go get -t -v ./...
-  - go get github.com/golang/lint/golint
+  - make before_install
 
 script:
   - go generate -x ./... && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)

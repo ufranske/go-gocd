@@ -1,8 +1,0 @@
-version: '3'
-services:
-  travis:
-    image: travisci/ci-go:packer-1494864792
-    tty: true
-    command: ["/sbin/init"]
-    volumes:
-       - ./:/go-gocd
