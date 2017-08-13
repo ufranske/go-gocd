@@ -15,6 +15,7 @@ const GoCDUtilityName = "gocd"
 // GoCDUtilityUsageInstructions providers user facing support on operation of the gocd cli tool. @TODO Expand this content.
 const GoCDUtilityUsageInstructions = "CLI Tool to interact with GoCD server"
 
+// Version for the cli tool
 var Version string
 
 func main() {
