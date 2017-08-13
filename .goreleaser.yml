@@ -5,12 +5,27 @@ project_name: go-gocd
 
 builds:
   - binary: gocd
+    ldflags: -w -s -X main.Version={{ .Version }}
     goos:
       - windows
       - darwin
       - linux
+
     goarch:
       - amd64
+      - arm64
+      - arm
+
+    goarm:
+      - 6
+      - 7
+
+    ignore:
+      - goos: darwin
+        goarch: 386
+      - goos: linux
+        goarch: arm
+        goarm: 7
 
 archive:
   name_template: "gocd-{{ .Version }}-{{ .Os }}-{{ .Arch }}"
