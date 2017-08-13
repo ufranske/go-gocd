@@ -1,11 +1,11 @@
 package gocd
 
 import (
-	"testing"
-	"github.com/stretchr/testify/assert"
-	"fmt"
-	"net/http"
 	"context"
+	"fmt"
+	"github.com/stretchr/testify/assert"
+	"net/http"
+	"testing"
 )
 
 func testPipelineServicePause(t *testing.T) {
