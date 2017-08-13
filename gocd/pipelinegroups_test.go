@@ -10,12 +10,12 @@ import (
 )
 
 func TestPipelineGroupsService(t *testing.T) {
+	setup()
+	defer teardown()
 	t.Run("List", testPipelineGroupsServiceList)
 }
 
 func testPipelineGroupsServiceList(t *testing.T) {
-	setup()
-	defer teardown()
 
 	mux.HandleFunc("/api/config/pipeline_groups", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")

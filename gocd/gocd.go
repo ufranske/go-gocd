@@ -186,11 +186,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 		buf = new(bytes.Buffer)
 		enc = json.NewEncoder(buf)
 		enc.SetIndent("", "  ")
-		err = enc.Encode(body)
-
-		if err != nil {
-			return nil, err
-		}
+		enc.Encode(body)
 	}
 
 	req, err := http.NewRequest(method, u.String(), buf)
