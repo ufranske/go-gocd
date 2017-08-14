@@ -51,7 +51,7 @@ fpm:
   maintainer: Drew J. Sonne <drew.sonne@gmail.com>
   license: LGPLv3
   formats:
-    - deb
+#    - deb
     - rpm
   dependencies:
     - git
