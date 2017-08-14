@@ -1,6 +1,9 @@
 package gocd
 
-import "errors"
+import (
+	"context"
+	"errors"
+)
 
 const (
 	// JobStateTransitionPassed "Passed"
@@ -116,10 +119,50 @@ type JobRunHistoryResponse struct {
 	Pagination *PaginationResponse `json:"pagination,omitempty"`
 }
 
+type JobScheduleResponse struct {
+	Jobs []*JobSchedule `xml:"job"`
+}
+
+type JobSchedule struct {
+	Name                 string               `xml:"name,attr"`
+	ID                   string               `xml:"id,attr"`
+	Link                 JobScheduleLink      `xml:"link"`
+	BuildLocator         string               `xml:"buildLocator"`
+	Resources            []string             `xml:"resources>resource"`
+	EnvironmentVariables *[]JobScheduleEnvVar `xml:"environmentVariables,omitempty>variable"`
+}
+
+type JobScheduleEnvVar struct {
+	Name  string `xml:"name,attr"`
+	Value string `xml:",innerxml"`
+}
+
+type JobScheduleLink struct {
+	Rel  string `xml:"rel,attr"`
+	HRef string `xml:"href,attr"`
+}
+
 // Validate a job structure has non-nil values on correct attributes
 func (j *Job) Validate() error {
 	if j.Name == "" {
 		return errors.New("`gocd.Jobs.Name` is empty")
 	}
 	return nil
+}
+
+// List Pipeline groups
+func (js *JobsService) ListScheduled(ctx context.Context) ([]*JobSchedule, *APIResponse, error) {
+
+	req, err := js.client.NewRequest("GET", "jobs/scheduled.xml", nil, "")
+	if err != nil {
+		return nil, nil, err
+	}
+
+	jobs := JobScheduleResponse{}
+	resp, err := js.client.Do(ctx, req, &jobs, responseTypeXML)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return jobs.Jobs, resp, nil
 }
