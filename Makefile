@@ -19,11 +19,15 @@ test: lint
 	$(MAKE) -C ./gocd test
 	$(MAKE) -C ./cli test
 
+before_install:
+	go get -t -v ./...
+	go get github.com/golang/lint/golint
+
 build: deploy_on_develop
 
 deploy_on_tag:
 	go get github.com/goreleaser/goreleaser
-	gem install --no-ri --no-rdoc fpm
+	gem install --no-ri --no-rdoc -v "1.8.1" fpm
 	go get
 	goreleaser
 

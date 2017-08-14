@@ -94,5 +94,5 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface
 		return false, resp, err
 	}
 
-	return r.ResponseBody, nil, nil
+	return r.ResponseBody, resp, nil
 }

@@ -45,6 +45,7 @@ archive:
     - LICENSE
     - README.md
     - CHANGELOG.md
+
 fpm:
   homepage: https://github.com/drewsonne/go-gocd
   maintainer: Drew J. Sonne <drew.sonne@gmail.com>
@@ -53,13 +54,13 @@ fpm:
     - deb
     - rpm
   dependencies:
-      - git
+    - git
 
-brew:
-  github:
-    owner: drewsonne
-    name: homebrew-devops
-  folder: Formula
-  homepage: https://github.com/drewsonne/gocdsdk
-  test: |
-    system "#{bin}/gocd --version"
+#brew:
+#  github:
+#    owner: drewsonne
+#    name: homebrew-devops
+#  folder: Formula
+#  homepage: https://github.com/drewsonne/gocdsdk
+#  test: |
+#    system "#{bin}/gocd --version"
