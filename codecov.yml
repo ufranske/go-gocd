@@ -1,0 +1,3 @@
+ignore:
+  - gocd/gen_*.go
+  - gen_*.go

@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"reflect"
 	"testing"
 )
@@ -56,6 +57,9 @@ func teardown() {
 func TestCheckResponse(t *testing.T) {
 	t.Run("ValidHTTP", testCheckResponseValid)
 	t.Run("FailHTTP", testCheckResponseInvalid)
+	t.Run("NewRequestWithCookie", testNewRequestWithCookie)
+	t.Run("NewRequestFailBodyDecode", testNewRequestFailDecode)
+	t.Run("NewRequestFailBadMethod", testNewRequestFailBadMethod)
 }
 
 type closingbuffer struct {
@@ -64,6 +68,37 @@ type closingbuffer struct {
 
 func (cb *closingbuffer) Close() error {
 	return nil
+}
+
+func testNewRequestWithCookie(t *testing.T) {
+	mockCookie := "MockCookie"
+	c := Client{
+		BaseURL: &url.URL{},
+		cookie:  mockCookie,
+	}
+	r, err := c.NewRequest("GET", "mock", nil, "")
+	assert.Nil(t, err)
+	h := r.HTTP.Header
+	cookie := h.Get("Cookie")
+	assert.Equal(t, mockCookie, string(cookie))
+}
+
+func testNewRequestFailBadMethod(t *testing.T) {
+	c := Client{
+		BaseURL: &url.URL{},
+	}
+	_, err := c.NewRequest("GET/W", "mock", nil, "")
+	assert.Error(t, err)
+
+}
+
+func testNewRequestFailDecode(t *testing.T) {
+	c := Client{
+		BaseURL: &url.URL{},
+	}
+	i := map[interface{}]string{}
+	_, err := c.NewRequest("GET", "mock", i, "")
+	assert.Error(t, err)
 }
 
 func testCheckResponseInvalid(t *testing.T) {

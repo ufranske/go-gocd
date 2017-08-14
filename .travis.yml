@@ -26,8 +26,7 @@ jobs:
     - stage:
 
 before_install:
-  - go get -t -v ./...
-  - go get github.com/golang/lint/golint
+  - make before_install
 
 script:
   - go generate -x ./... && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
@@ -36,18 +35,19 @@ script:
 after_success:
   - npm install -g codeclimate-test-reporter
   - codeclimate-test-reporter < coverage.txt
+  - bash <(curl -s https://codecov.io/bash)
   - go get github.com/goreleaser/goreleaser
 
 deploy:
   - provider: script
     skip_cleanup: true
-    script: gem install --no-ri --no-rdoc fpm && cd $TRAVIS_BUILD_DIR && go get && goreleaser
+    script: make deploy_on_tag
     on:
       tags: true
       condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
   - provider: script
     skip_cleanup: true
-    script: gem install --no-ri --no-rdoc fpm && cd $TRAVIS_BUILD_DIR && go get && goreleaser --snapshot
+    script: make deploy_on_develop
     on:
       branch: develop
       condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
