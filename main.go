@@ -54,6 +54,7 @@ func main() {
 		*gocli.GetVersionCommand(),
 		*gocli.ListPluginsCommand(),
 		*gocli.GetPluginCommand(),
+		*gocli.ListScheduledJobsCommand(),
 	}
 
 	app.Flags = []cli.Flag{
