@@ -1,12 +1,12 @@
 package gocd
 
 import (
-	"testing"
-	"github.com/stretchr/testify/assert"
-	"fmt"
-	"net/http"
 	"context"
+	"fmt"
+	"github.com/stretchr/testify/assert"
 	"io/ioutil"
+	"net/http"
+	"testing"
 )
 
 func TestEncryption(t *testing.T) {

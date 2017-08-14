@@ -1,12 +1,12 @@
 package gocd
 
 import (
-	"testing"
-	"github.com/stretchr/testify/assert"
 	"context"
-	"net/http"
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"io/ioutil"
+	"net/http"
+	"testing"
 )
 
 func TestPluginApi(t *testing.T) {
@@ -45,7 +45,7 @@ func testPluginApiList(t *testing.T) {
 	assert.Equal(t, "https://api.gocd.org/#plugin-info", pi.Links.Doc.String())
 	assert.Equal(t, "https://ci.example.com/go/api/admin/plugin_info/:id", pi.Links.Find.String())
 
-	assert.Equal(t, "plugin_id", pi.ID, )
+	assert.Equal(t, "plugin_id", pi.ID)
 	assert.Equal(t, "SCM Plugin", pi.Name)
 	assert.Equal(t, "SCM Plugin For HG", pi.DisplayName)
 	assert.Equal(t, "1.2.3", pi.Version)

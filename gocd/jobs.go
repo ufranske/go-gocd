@@ -1,8 +1,8 @@
 package gocd
 
 import (
-	"errors"
 	"context"
+	"errors"
 )
 
 const (
@@ -124,11 +124,11 @@ type JobScheduleResponse struct {
 }
 
 type JobSchedule struct {
-	Name                 string `xml:"name,attr"`
-	ID                   string `xml:"id,attr"`
-	Link                 JobScheduleLink `xml:"link"`
-	BuildLocator         string `xml:"buildLocator"`
-	Resources            []string `xml:"resources>resource"`
+	Name                 string               `xml:"name,attr"`
+	ID                   string               `xml:"id,attr"`
+	Link                 JobScheduleLink      `xml:"link"`
+	BuildLocator         string               `xml:"buildLocator"`
+	Resources            []string             `xml:"resources>resource"`
 	EnvironmentVariables *[]JobScheduleEnvVar `xml:"environmentVariables,omitempty>variable"`
 }
 
