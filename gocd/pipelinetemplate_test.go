@@ -17,6 +17,22 @@ func TestPipelineTemplate(t *testing.T) {
 	t.Run("List", testListPipelineTemplates)
 	t.Run("Get", testGetPipelineTemplate)
 	t.Run("Delete", testDeletePipelineTemplate)
+	t.Run("RemoveLinks", tesPipelineTemplateRemoveLinks)
+	t.Run("Pipelines", testPipelineTemplatePipelines)
+}
+
+func testPipelineTemplatePipelines(t *testing.T) {
+	p := []*Pipeline{}
+	pt := PipelineTemplate{Embedded: &embeddedPipelineTemplate{Pipelines: p}}
+
+	assert.Exactly(t, p, pt.Pipelines())
+}
+
+func tesPipelineTemplateRemoveLinks(t *testing.T) {
+	pt := PipelineTemplate{Links: &PipelineTemplateLinks{}}
+	assert.NotNil(t, pt.Links)
+	pt.RemoveLinks()
+	assert.Nil(t, pt.Links)
 }
 
 func testDeletePipelineTemplate(t *testing.T) {
