@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.8] - 14-08-2017
+### Changed
+ - Fixed a bug where fpm was not building deb's on release
+
 ## [0.3.7] - 12-08-2017
 ### Changed
  - Fixed a bug where version was not being set on build
