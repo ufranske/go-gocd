@@ -1,8 +1,8 @@
 package gocd
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestStages(t *testing.T) {
