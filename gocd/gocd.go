@@ -283,10 +283,5 @@ func sanitizeURL(uri *url.URL) *url.URL {
 	if uri == nil {
 		return nil
 	}
-	params := uri.Query()
-	if len(params.Get("client_secret")) > 0 {
-		params.Set("client_secret", "REDACTED")
-		uri.RawQuery = params.Encode()
-	}
 	return uri
 }

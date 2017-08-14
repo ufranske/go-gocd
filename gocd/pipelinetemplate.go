@@ -49,15 +49,17 @@ type PipelineTemplatesResponse struct {
 	} `json:"_embedded,omitempty"`
 }
 
+type embeddedPipelineTemplate struct {
+	Pipelines []*Pipeline `json:"pipelines,omitempty"`
+}
+
 // PipelineTemplate describes a response from the API for a pipeline template object.
 type PipelineTemplate struct {
-	Links    *PipelineTemplateLinks `json:"_links,omitempty"`
-	Name     string                 `json:"name"`
-	Embedded *struct {
-		Pipelines []*Pipeline `json:"pipelines,omitempty"`
-	} `json:"_embedded,omitempty"`
-	Version string   `json:"template_version"`
-	Stages  []*Stage `json:"stages,omitempty"`
+	Links    *PipelineTemplateLinks    `json:"_links,omitempty"`
+	Name     string                    `json:"name"`
+	Embedded *embeddedPipelineTemplate `json:"_embedded,omitempty"`
+	Version  string                    `json:"template_version"`
+	Stages   []*Stage                  `json:"stages,omitempty"`
 }
 
 // RemoveLinks gets the PipelineTemplate ready to be submitted to the GoCD API.
