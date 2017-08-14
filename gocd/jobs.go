@@ -1,8 +1,8 @@
 package gocd
 
 import (
-	"errors"
 	"context"
+	"errors"
 )
 
 const (
@@ -119,24 +119,28 @@ type JobRunHistoryResponse struct {
 	Pagination *PaginationResponse `json:"pagination,omitempty"`
 }
 
+// JobScheduleResponse contains a collection of jobs
 type JobScheduleResponse struct {
 	Jobs []*JobSchedule `xml:"job"`
 }
 
+// JobSchedule describes the event causes for a job
 type JobSchedule struct {
-	Name                 string `xml:"name,attr"`
-	ID                   string `xml:"id,attr"`
-	Link                 JobScheduleLink `xml:"link"`
-	BuildLocator         string `xml:"buildLocator"`
-	Resources            []string `xml:"resources>resource"`
+	Name                 string               `xml:"name,attr"`
+	ID                   string               `xml:"id,attr"`
+	Link                 JobScheduleLink      `xml:"link"`
+	BuildLocator         string               `xml:"buildLocator"`
+	Resources            []string             `xml:"resources>resource"`
 	EnvironmentVariables *[]JobScheduleEnvVar `xml:"environmentVariables,omitempty>variable"`
 }
 
+// JobScheduleEnvVar describes the environmnet variables for a job schedule
 type JobScheduleEnvVar struct {
 	Name  string `xml:"name,attr"`
 	Value string `xml:",innerxml"`
 }
 
+// JobScheduleLink describes the HAL links for a job schedule
 type JobScheduleLink struct {
 	Rel  string `xml:"rel,attr"`
 	HRef string `xml:"href,attr"`
@@ -150,7 +154,7 @@ func (j *Job) Validate() error {
 	return nil
 }
 
-// List Pipeline groups
+// ListScheduled lists Pipeline groups
 func (js *JobsService) ListScheduled(ctx context.Context) ([]*JobSchedule, *APIResponse, error) {
 
 	req, err := js.client.NewRequest("GET", "jobs/scheduled.xml", nil, "")
