@@ -10,13 +10,13 @@ import (
 )
 
 func TestAuthentication(t *testing.T) {
+	setup()
+	defer teardown()
+
 	t.Run("Login", testAuthenticationLogin)
 }
 
 func testAuthenticationLogin(t *testing.T) {
-
-	setup()
-	defer teardown()
 
 	mockCookie := "JSESSIONID=hash;Path=/go;Expires=Mon, 15-Jun-2015 10:16:20 GMT"
 
