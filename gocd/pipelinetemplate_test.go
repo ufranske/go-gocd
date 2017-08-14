@@ -2,6 +2,7 @@ package gocd
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
@@ -9,10 +10,38 @@ import (
 	"testing"
 )
 
-func TestPipelineTemplateService_ListPipelineTemplates(t *testing.T) {
-
+func TestPipelineTemplate(t *testing.T) {
 	setup()
 	defer teardown()
+
+	t.Run("List", testListPipelineTemplates)
+	t.Run("Get", testGetPipelineTemplate)
+	t.Run("Delete", testDeletePipelineTemplate)
+}
+
+func testDeletePipelineTemplate(t *testing.T) {
+
+	b, err := json.Marshal(map[string]string{
+		"message": "The template 'template2' was deleted successfully.",
+	})
+	if err != nil {
+		t.Error(err)
+	}
+
+	mux.HandleFunc("/api/admin/templates/template2", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "DELETE", "Unexpected HTTP method")
+		fmt.Fprint(w, string(b))
+	})
+
+	message, _, err := client.PipelineTemplates.Delete(context.Background(), "template2")
+	if err != nil {
+		t.Error(err)
+	}
+	assert.Equal(t, "The template 'template2' was deleted successfully.", message)
+
+}
+
+func testListPipelineTemplates(t *testing.T) {
 
 	mux.HandleFunc("/api/admin/templates", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
@@ -34,9 +63,7 @@ func TestPipelineTemplateService_ListPipelineTemplates(t *testing.T) {
 	}
 }
 
-func TestPipelineTemplateService_GetPipelineTemplate(t *testing.T) {
-	setup()
-	defer teardown()
+func testGetPipelineTemplate(t *testing.T) {
 
 	mux.HandleFunc("/api/admin/templates/template1", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
