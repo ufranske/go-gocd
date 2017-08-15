@@ -21,11 +21,6 @@ matrix:
     - go: tip
   fast_finish: true
 
-before_cache:
-  - bash <(curl -s https://codecov.io/bash)
-  - rm -rf $GOPATH/src/github.com/drewsonne/*
-  - rm -rf $GOPATH/pkg/**/github.com/drewsonne/*
-
 cache:
   directories:
     - $GOPATH/src
@@ -36,6 +31,8 @@ jobs:
     - stage:
 
 before_install:
+  - rm -rf $GOPATH/src/github.com/drewsonne/*
+  - rm -rf $GOPATH/pkg/**/github.com/drewsonne/*
   - make before_install
 
 script:
@@ -43,6 +40,7 @@ script:
   - make test
 
 after_success:
+  - bash <(curl -s https://codecov.io/bash)
   - go get github.com/goreleaser/goreleaser
 
 deploy:
