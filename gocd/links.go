@@ -9,7 +9,7 @@ type linkHref struct {
 
 func unmarshallLinkField(d linkField, field string, destination **url.URL) error {
 	var e error
-	if h := d[field]["href"]; h != "" {
+	if h, ok := d[field]["href"]; ok && h != "" {
 		*destination, e = url.Parse(h)
 		return e
 	}

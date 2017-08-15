@@ -45,7 +45,7 @@ func testPluginApiList(t *testing.T) {
 	assert.Equal(t, "https://api.gocd.org/#plugin-info", pi.Links.Doc.String())
 	assert.Equal(t, "https://ci.example.com/go/api/admin/plugin_info/:id", pi.Links.Find.String())
 
-	assert.Equal(t, "plugin_id", pi.ID)
+	assert.Equal(t, "test-plugin", pi.ID)
 	assert.Equal(t, "SCM Plugin", pi.Name)
 	assert.Equal(t, "SCM Plugin For HG", pi.DisplayName)
 	assert.Equal(t, "1.2.3", pi.Version)
@@ -53,5 +53,48 @@ func testPluginApiList(t *testing.T) {
 }
 
 func testPluginApiGet(t *testing.T) {
-	assert.Nil(t, nil)
+	mux.HandleFunc("/api/admin/plugin_info/test-plugin", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Unexpected HTTP method")
+		j, _ := ioutil.ReadFile("test/resources/plugin.1.json")
+		fmt.Fprint(w, string(j))
+	})
+
+	plugin, _, err := client.Plugins.Get(context.Background(), "test-plugin")
+	if err != nil {
+		t.Error(err)
+	}
+	assert.NotNil(t, plugin)
+
+	assert.Equal(t, "test-plugin", plugin.ID)
+	assert.Equal(t, "My SCM Plugin", plugin.Name)
+	assert.Equal(t, "SCM Plugin For HG", plugin.DisplayName)
+	assert.Equal(t, "1.2.3", plugin.Version)
+	assert.Equal(t, "scm", plugin.Type)
+	assert.NotNil(t, plugin.PluggableInstanceSettings)
+
+	assert.Len(t, plugin.PluggableInstanceSettings.Configurations, 3)
+
+	cfg0 := plugin.PluggableInstanceSettings.Configurations[0]
+	assert.Equal(t, "url", cfg0.Key)
+	assert.False(t, cfg0.Metadata.Secure)
+	assert.True(t, cfg0.Metadata.Required)
+	assert.True(t, cfg0.Metadata.PartOfIdentity)
+
+	cfg1 := plugin.PluggableInstanceSettings.Configurations[1]
+	assert.Equal(t, "username", cfg1.Key)
+	assert.False(t, cfg1.Metadata.Secure)
+	assert.False(t, cfg1.Metadata.Required)
+	assert.False(t, cfg1.Metadata.PartOfIdentity)
+
+	cfg2 := plugin.PluggableInstanceSettings.Configurations[2]
+	assert.Equal(t, "password", cfg2.Key)
+	assert.True(t, cfg2.Metadata.Secure)
+	assert.False(t, cfg2.Metadata.Required)
+	assert.False(t, cfg2.Metadata.PartOfIdentity)
+
+	assert.Equal(t,
+		"<div>Plugin view template </div>",
+		plugin.PluggableInstanceSettings.View.Template,
+	)
+
 }
