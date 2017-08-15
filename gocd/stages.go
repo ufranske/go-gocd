@@ -21,6 +21,10 @@ type Stage struct {
 
 // JSONString returns a string of this stage as a JSON object.
 func (s *Stage) JSONString() (string, error) {
+	err := s.Validate()
+	if err != nil {
+		return "", err
+	}
 	s.Clean()
 	bdy, err := json.MarshalIndent(s, "", "  ")
 	if err != nil {
