@@ -13,11 +13,11 @@ func TestPluginApi(t *testing.T) {
 	setup()
 	defer teardown()
 
-	t.Run("List", testPluginApiList)
-	t.Run("Get", testPluginApiGet)
+	t.Run("List", testPluginAPIList)
+	t.Run("Get", testPluginAPIGet)
 }
 
-func testPluginApiList(t *testing.T) {
+func testPluginAPIList(t *testing.T) {
 	mux.HandleFunc("/api/admin/plugin_info", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "GET", r.Method, "Unexpected HTTP method")
 		j, _ := ioutil.ReadFile("test/resources/plugin.0.json")
@@ -52,7 +52,7 @@ func testPluginApiList(t *testing.T) {
 	assert.Equal(t, "scm", pi.Type)
 }
 
-func testPluginApiGet(t *testing.T) {
+func testPluginAPIGet(t *testing.T) {
 	mux.HandleFunc("/api/admin/plugin_info/test-plugin", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "GET", r.Method, "Unexpected HTTP method")
 		j, _ := ioutil.ReadFile("test/resources/plugin.1.json")
