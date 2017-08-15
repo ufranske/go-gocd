@@ -21,6 +21,15 @@ matrix:
     - go: tip
   fast_finish: true
 
+before_cache:
+- rm -rf $GOPATH/src/github.com/drewsonne/*
+- rm -rf $GOPATH/pkg/**/github.com/drewsonne/*
+
+cache:
+  directories:
+    - $GOPATH/src
+    - $GOPATH/pkg
+
 jobs:
   include:
     - stage:
