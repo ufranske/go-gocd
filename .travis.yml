@@ -21,6 +21,11 @@ matrix:
     - go: tip
   fast_finish: true
 
+cache:
+  directories:
+    - $GOPATH/src
+    - $GOPATH/pkg
+
 jobs:
   include:
     - stage:
@@ -33,8 +38,6 @@ script:
   - make test
 
 after_success:
-  - npm install -g codeclimate-test-reporter
-  - codeclimate-test-reporter < coverage.txt
   - bash <(curl -s https://codecov.io/bash)
   - go get github.com/goreleaser/goreleaser
 

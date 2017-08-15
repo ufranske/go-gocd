@@ -1,14 +1,54 @@
 package gocd
 
 import (
+	"context"
+	"fmt"
 	"github.com/stretchr/testify/assert"
+	"io/ioutil"
+	"net/http"
 	"testing"
 )
 
 func TestTaskValidate(t *testing.T) {
+	setup()
+	defer teardown()
+
+	t.Run("ListScheduled", taskTaskValidateListScheduled)
 	t.Run("Fail", taskValidateFail)
 	t.Run("SuccessExec", taskValidateSuccessExec)
 	t.Run("SuccessAnt", taskValidateSuccessAnt)
+}
+
+func taskTaskValidateListScheduled(t *testing.T) {
+	mux.HandleFunc("/api/jobs/scheduled.xml", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
+		j, _ := ioutil.ReadFile("test/resources/jobs.0.xml")
+		fmt.Fprint(w, string(j))
+	})
+	sj, _, err := client.Jobs.ListScheduled(context.Background())
+	if err != nil {
+		assert.Nil(t, err)
+	}
+	assert.NotNil(t, sj)
+
+	assert.Len(t, sj, 2)
+
+	j1 := sj[0]
+	assert.Equal(t, j1.Name, "job1")
+	assert.Equal(t, j1.ID, "6")
+	assert.NotNil(t, j1.Link)
+	assert.Equal(t, j1.Link.HRef, "https://ci.example.com/go/tab/build/detail/mypipeline/5/defaultStage/1/job1")
+	assert.Equal(t, j1.Link.Rel, "self")
+	assert.Equal(t, j1.BuildLocator, "mypipeline/5/defaultStage/1/job1")
+
+	j2 := sj[1]
+	assert.Equal(t, j2.Name, "job2")
+	assert.Equal(t, j2.ID, "7")
+	assert.NotNil(t, j2.Link)
+	assert.Equal(t, j2.Link.HRef, "https://ci.example.com/go/tab/build/detail/mypipeline/5/defaultStage/1/job2")
+	assert.Equal(t, j2.Link.Rel, "self")
+	assert.Equal(t, j2.BuildLocator, "mypipeline/5/defaultStage/1/job2")
+
 }
 
 func taskValidateSuccessAnt(t *testing.T) {
