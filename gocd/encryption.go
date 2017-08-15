@@ -28,8 +28,10 @@ func (es *EncryptionService) Encrypt(ctx context.Context, value string) (*Cipher
 	_, resp, err := es.client.postAction(ctx, &APIClientRequest{
 		Path:         "admin/encrypt",
 		ResponseBody: &c,
-		RequestBody:  &struct{ Value string `json:"value"` }{Value: value},
-		APIVersion:   apiV1,
+		RequestBody: &struct {
+			Value string `json:"value"`
+		}{Value: value},
+		APIVersion: apiV1,
 	})
 
 	return &c, resp, err
