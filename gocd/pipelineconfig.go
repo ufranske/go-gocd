@@ -35,11 +35,7 @@ func (pcs *PipelineConfigsService) Update(ctx context.Context, group string, nam
 
 	pc := Pipeline{}
 	resp, err := pcs.client.Do(ctx, req, &pc, responseTypeJSON)
-	if err != nil {
-		return nil, resp, err
-	}
-
-	return &pc, resp, nil
+	return &pc, resp, err
 
 }
 
@@ -67,5 +63,5 @@ func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *
 
 // Delete a pipeline configuration
 func (pcs *PipelineConfigsService) Delete(ctx context.Context, name string) (string, *APIResponse, error) {
-	return pcs.client.deleteAction(ctx, "admin/pipelines/"+name, apiV3)
+	return pcs.client.deleteAction(ctx, "admin/pipelines/"+name, apiV4)
 }
