@@ -14,6 +14,25 @@ func TestPipelineConfig(t *testing.T) {
 	defer teardown()
 	t.Run("Create", testPipelineConfigCreate)
 	t.Run("Update", testPipelineConfigUpdate)
+	t.Run("Delete", testPipelineConfigDelete)
+}
+
+func testPipelineConfigDelete(t *testing.T) {
+
+	mux.HandleFunc("/api/admin/pipelines/test-pipeline", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "DELETE", "Unexpected HTTP method")
+		assert.Equal(t, r.Header.Get("Accept"), apiV4)
+
+		fmt.Fprint(w, `{
+  "message": "Pipeline 'test-pipeline' was deleted successfully."
+}`)
+	})
+	message, resp, err := client.PipelineConfigs.Delete(context.Background(), "test-pipeline")
+	if err != nil {
+		assert.Error(t, err)
+	}
+	assert.NotNil(t, resp)
+	assert.Equal(t, "Pipeline 'test-pipeline' was deleted successfully.", message)
 }
 
 func testPipelineConfigCreate(t *testing.T) {
