@@ -22,20 +22,15 @@ type EncryptLinks struct {
 }
 
 // Encrypt takes a plaintext value and returns a cipher text.
-func (e *EncryptionService) Encrypt(ctx context.Context, value string) (*CipherText, *APIResponse, error) {
-	v := &struct {
-		Value string `json:"value"`
-	}{Value: value}
-	req, err := e.client.NewRequest("POST", "admin/encrypt", v, apiV1)
-	if err != nil {
-		return nil, nil, err
-	}
+func (es *EncryptionService) Encrypt(ctx context.Context, value string) (*CipherText, *APIResponse, error) {
 
 	c := CipherText{}
-	resp, err := e.client.Do(ctx, req, &c, responseTypeJSON)
-	if err != nil {
-		return nil, resp, err
-	}
+	_, resp, err := es.client.postAction(ctx, &APIClientRequest{
+		Path:         "admin/encrypt",
+		ResponseBody: &c,
+		RequestBody:  &struct{ Value string `json:"value"` }{Value: value},
+		APIVersion:   apiV1,
+	})
 
-	return &c, resp, nil
+	return &c, resp, err
 }
