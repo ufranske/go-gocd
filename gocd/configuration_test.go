@@ -17,6 +17,27 @@ func TestConfiguration(t *testing.T) {
 	t.Run("New", testConfigurationNew)
 	t.Run("SanitizeURL", testConfigurationSantizieURL)
 	t.Run("GetVersion", testConfigurationGetVersion)
+	t.Run("Get", testConfigurationGet)
+}
+
+func testConfigurationGet(t *testing.T) {
+	mux.HandleFunc("/api/admin/config.xml", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
+		j, _ := ioutil.ReadFile("test/resources/config.0.xml")
+		fmt.Fprint(w, string(j))
+
+		w.Header().Set("X-CRUISE-CONFIG-MD5", "c21b6c9f1b24a816cddf457548a987a9")
+		w.Header().Set("Content-Type", "text/xml")
+	})
+	cfg, _, err := client.Configuration.Get(context.Background())
+	if err != nil {
+		t.Error(err)
+	}
+
+	assert.Equal(t, cfg.Server.ServerID, "9C0C0282-A554-457D-A0F8-9CF8A754B4AB")
+	assert.Equal(t, cfg.Server.Security.PasswordFile.Path, "/etc/go/password.properties")
+	assert.Equal(t, "defaultGroup", cfg.PipelineGroups[0].Name)
+	assert.Len(t, cfg.PipelineGroups, 1)
 }
 
 func testConfigurationGetVersion(t *testing.T) {
