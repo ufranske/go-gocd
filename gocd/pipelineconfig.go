@@ -53,12 +53,11 @@ func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *
 
 	pc := Pipeline{}
 	resp, err := pcs.client.Do(ctx, req, &pc, responseTypeJSON)
-	if err != nil {
-		return nil, resp, err
+	if err == nil {
+		pc.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
 	}
-	pc.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
 
-	return &pc, resp, nil
+	return &pc, resp, err
 }
 
 // Delete a pipeline configuration
