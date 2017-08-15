@@ -54,6 +54,21 @@ func teardown() {
 	server.Close()
 }
 
+func TestClient(t *testing.T) {
+	t.Run("NewHTTPS", testClientNewHTTPS)
+}
+
+func testClientNewHTTPS(t *testing.T) {
+	c := NewClient(&Configuration{
+		Server:   "https://my-goserver:8154/go/",
+		SslCheck: false,
+	}, nil)
+	assert.NotNil(t, c)
+
+	transport := c.client.Transport.(*http.Transport)
+	assert.True(t, transport.TLSClientConfig.InsecureSkipVerify)
+}
+
 func TestCheckResponse(t *testing.T) {
 	t.Run("ValidHTTP", testCheckResponseValid)
 	t.Run("FailHTTP", testCheckResponseInvalid)
