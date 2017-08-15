@@ -22,7 +22,9 @@ matrix:
   fast_finish: true
 
 before_cache:
-- rm -rf $GOPATH/src/github.com/drewsonne/*
+  - bash <(curl -s https://codecov.io/bash)
+  - rm -rf $GOPATH/src/github.com/drewsonne/*
+  - rm -rf $GOPATH/pkg/**/github.com/drewsonne/*
 
 cache:
   directories:
@@ -41,9 +43,6 @@ script:
   - make test
 
 after_success:
-  - npm install -g codeclimate-test-reporter
-  - codeclimate-test-reporter < coverage.txt
-  - bash <(curl -s https://codecov.io/bash)
   - go get github.com/goreleaser/goreleaser
 
 deploy:
