@@ -120,18 +120,13 @@ func (pgs *PipelinesService) Get(ctx context.Context, name string, offset int) (
 		stub = fmt.Sprintf("%s/%d", stub, offset)
 	}
 
-	req, err := pgs.client.NewRequest("GET", stub, nil, "")
-	if err != nil {
-		return nil, nil, err
-	}
-
 	pt := PipelineInstance{}
-	resp, err := pgs.client.Do(ctx, req, &pt, responseTypeJSON)
-	if err != nil {
-		return nil, resp, err
-	}
+	_, resp, err := pgs.client.getAction(ctx, &APIClientRequest{
+		Path:         stub,
+		ResponseBody: &pt,
+	})
 
-	return &pt, resp, nil
+	return &pt, resp, err
 }
 
 // GetHistory returns a list of pipeline instanves describing the pipeline history.
@@ -141,18 +136,13 @@ func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset
 		stub = fmt.Sprintf("%s/%d", stub, offset)
 	}
 
-	req, err := pgs.client.NewRequest("GET", stub, nil, "")
-	if err != nil {
-		return nil, nil, err
-	}
-
 	pt := PipelineHistory{}
-	resp, err := pgs.client.Do(ctx, req, &pt, responseTypeJSON)
-	if err != nil {
-		return nil, resp, err
-	}
+	_, resp, err := pgs.client.getAction(ctx, &APIClientRequest{
+		Path:         stub,
+		ResponseBody: &pt,
+	})
 
-	return &pt, resp, nil
+	return &pt, resp, err
 }
 
 func (pgs *PipelinesService) pipelineAction(ctx context.Context, name string, action string) (bool, *APIResponse, error) {

@@ -163,17 +163,12 @@ func (j *Job) Validate() error {
 
 // ListScheduled lists Pipeline groups
 func (js *JobsService) ListScheduled(ctx context.Context) ([]*JobSchedule, *APIResponse, error) {
-
-	req, err := js.client.NewRequest("GET", "jobs/scheduled.xml", nil, "")
-	if err != nil {
-		return nil, nil, err
-	}
-
 	jobs := JobScheduleResponse{}
-	resp, err := js.client.Do(ctx, req, &jobs, responseTypeXML)
-	if err != nil {
-		return nil, resp, err
-	}
+	_, resp, err := js.client.getAction(ctx, &APIClientRequest{
+		Path:         "jobs/scheduled.xml",
+		ResponseBody: &jobs,
+		ResponseType: responseTypeXML,
+	})
 
-	return jobs.Jobs, resp, nil
+	return jobs.Jobs, resp, err
 }

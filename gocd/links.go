@@ -1,6 +1,9 @@
 package gocd
 
-import "net/url"
+import (
+	"fmt"
+	"net/url"
+)
 
 type linkField map[string]map[string]string
 type linkHref struct {
@@ -13,5 +16,5 @@ func unmarshallLinkField(d linkField, field string, destination **url.URL) error
 		*destination, e = url.Parse(h)
 		return e
 	}
-	return nil
+	return fmt.Errorf("'%s' was not present in `%s`", field, d)
 }

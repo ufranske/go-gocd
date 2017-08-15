@@ -21,10 +21,10 @@ matrix:
     - go: tip
   fast_finish: true
 
-cache:
-  directories:
-    - $GOPATH/src
-    - $GOPATH/pkg
+#cache:
+#  directories:
+#    - $GOPATH/src
+#    - $GOPATH/pkg
 
 jobs:
   include:
