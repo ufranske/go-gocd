@@ -23,7 +23,6 @@ matrix:
 
 before_cache:
 - rm -rf $GOPATH/src/github.com/drewsonne/*
-- rm -rf $GOPATH/pkg/**/github.com/drewsonne/*
 
 cache:
   directories:
