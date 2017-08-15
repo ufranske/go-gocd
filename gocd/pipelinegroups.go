@@ -9,18 +9,6 @@ type PipelineGroupsService service
 type PipelineGroup struct {
 	Name      string      `json:"name"`
 	Pipelines []*Pipeline `json:"pipelines"`
-	//Pipelines []struct {
-	//	Name   string `json:"name"`
-	//	Stages []struct {
-	//		Name string `json:"name"`
-	//	} `json:"stages"`
-	//	Materials []struct {
-	//		Description string `json:"description"`
-	//		Fingerprint string `json:"fingerprint"`
-	//		Type        string `json:"type"`
-	//	} `json:"materials"`
-	//	Label string `json:"label"`
-	//} `json:"pipelines"`
 }
 
 // List Pipeline groups
