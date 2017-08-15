@@ -4,9 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.3.9] - 14-08-2017
+
+## [0.3.10] - 15-08-2017
 ### Changed
  - Disabled fpm build
+ - Expanding test coverage
+ - Removed version as a specific arg to SDK for pipeline configs.
 
 ## [0.3.8] - 14-08-2017
 ### Changed
