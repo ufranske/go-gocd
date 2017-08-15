@@ -117,7 +117,8 @@ func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st
 		ResponseBody: &ptr,
 	})
 
-	ptr.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
+	etag := resp.HTTP.Header.Get("Etag")
+	ptr.Version = strings.Replace(etag, "\"", "", -1)
 
 	return &ptr, resp, err
 

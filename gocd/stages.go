@@ -16,6 +16,7 @@ type Stage struct {
 	NeverCleanupArtifacts bool      `json:"never_cleanup_artifacts"`
 	Approval              *Approval `json:"approval,omitempty"`
 	EnvironmentVariables  []string  `json:"environment_variables,omitempty"`
+	Resources             []string  `json:"resource,omitempty"`
 	Jobs                  []*Job    `json:"jobs,omitempty"`
 }
 
