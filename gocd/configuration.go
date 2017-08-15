@@ -14,7 +14,13 @@ type ConfigXML struct {
 	Server             ConfigServer               `xml:"server"`
 	SCMS               []ConfigSCM                `xml:"scms>scm"`
 	ConfigRepositories []ConfigRepository         `xml:"config-repos>config-repo"`
-	Pipelines          []ConfigPipeline           `xml:"pipelines>pipeline"`
+	PipelineGroups     []ConfigPipelineGroup      `xml:"pipelines"`
+}
+
+// ConfigPipelineGroup contains a single pipeline groups
+type ConfigPipelineGroup struct {
+	Name      string           `xml:"group,attr"`
+	Pipelines []ConfigPipeline `xml:"pipeline"`
 }
 
 // ConfigPipeline part of cruise-control.xml. @TODO better documentation
@@ -156,9 +162,15 @@ type MailHost struct {
 
 // ConfigSecurity part of cruise-control.xml. @TODO better documentation
 type ConfigSecurity struct {
-	AuthConfigs []ConfigAuthConfig `xml:"authConfigs>authConfig"`
-	Roles       []ConfigRole       `xml:"roles>role"`
-	Admins      []string           `xml:"admins>user"`
+	AuthConfigs  []ConfigAuthConfig `xml:"authConfigs>authConfig"`
+	Roles        []ConfigRole       `xml:"roles>role"`
+	Admins       []string           `xml:"admins>user"`
+	PasswordFile PasswordFilePath   `xml:"passwordFile"`
+}
+
+// PasswordFilePath describes the location to set of user/passwords on disk
+type PasswordFilePath struct {
+	Path string `xml:"path,attr"`
 }
 
 // ConfigRole part of cruise-control.xml. @TODO better documentation

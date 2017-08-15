@@ -16,11 +16,16 @@ type Stage struct {
 	NeverCleanupArtifacts bool      `json:"never_cleanup_artifacts"`
 	Approval              *Approval `json:"approval,omitempty"`
 	EnvironmentVariables  []string  `json:"environment_variables,omitempty"`
+	Resources             []string  `json:"resource,omitempty"`
 	Jobs                  []*Job    `json:"jobs,omitempty"`
 }
 
 // JSONString returns a string of this stage as a JSON object.
 func (s *Stage) JSONString() (string, error) {
+	err := s.Validate()
+	if err != nil {
+		return "", err
+	}
 	s.Clean()
 	bdy, err := json.MarshalIndent(s, "", "  ")
 	if err != nil {

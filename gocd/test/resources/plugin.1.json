@@ -10,7 +10,7 @@
       "href": "https://ci.example.com/go/api/admin/plugin_info/:id"
     }
   },
-  "id": "my_plugin",
+  "id": "test-plugin",
   "name": "My SCM Plugin",
   "display_name": "SCM Plugin For HG",
   "version": "1.2.3",

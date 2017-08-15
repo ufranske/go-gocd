@@ -19,6 +19,67 @@ func TestPipelineTemplate(t *testing.T) {
 	t.Run("Delete", testDeletePipelineTemplate)
 	t.Run("RemoveLinks", tesPipelineTemplateRemoveLinks)
 	t.Run("Pipelines", testPipelineTemplatePipelines)
+	t.Run("Update", testPipelineTemplateUpdate)
+}
+
+// TestPipelineTemplateCreate is a seperate test to avoid overlapping mock HandleFunc's.
+func TestPipelineTemplateCreate(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/admin/templates", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "PUT", "Unexpected HTTP method")
+		assert.Equal(t, apiV3, r.Header.Get("Accept"))
+
+		j, _ := ioutil.ReadFile("test/resources/pipelinetemplate.2.json")
+		w.Header().Set("Etag", "mock-etag")
+
+		fmt.Fprint(w, string(j))
+	})
+	pt, _, err := client.PipelineTemplates.Create(context.Background(),
+		"test-config2",
+		[]*Stage{{}},
+	)
+	if err != nil {
+		t.Error(err)
+	}
+
+	assert.NotNil(t, pt)
+
+	assert.Equal(t, "mock-etag", pt.Version)
+}
+
+func testPipelineTemplateUpdate(t *testing.T) {
+	mux.HandleFunc("/api/admin/templates/test-config", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "PUT", "Unexpected HTTP method")
+		//j, _ := ioutil.ReadAll(r.Body)
+		//assert.Equal(t, "", string(j))
+		j, _ := ioutil.ReadFile("test/resources/pipelinetemplate.1.json")
+		fmt.Fprint(w, string(j))
+	})
+
+	pt, _, err := client.PipelineTemplates.Update(context.Background(),
+		"test-config",
+		"test-version",
+		[]*Stage{{}},
+	)
+	if err != nil {
+		t.Error(err)
+	}
+
+	assert.NotNil(t, pt)
+
+	assert.Equal(t, "template", pt.Name)
+	assert.Len(t, pt.Stages, 1)
+
+	s := pt.Stages[0]
+	assert.Equal(t, "defaultStage", s.Name)
+	assert.True(t, s.FetchMaterials)
+	assert.False(t, s.CleanWorkingDirectory)
+	assert.False(t, s.NeverCleanupArtifacts)
+
+	assert.Len(t, s.EnvironmentVariables, 0)
+	assert.Len(t, s.Resources, 0)
 }
 
 func testPipelineTemplatePipelines(t *testing.T) {
