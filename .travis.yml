@@ -31,8 +31,6 @@ jobs:
     - stage:
 
 before_install:
-  - rm -rf $GOPATH/src/github.com/drewsonne/*
-  - rm -rf $GOPATH/pkg/**/github.com/drewsonne/*
   - make before_install
 
 script:
