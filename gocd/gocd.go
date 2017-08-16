@@ -7,10 +7,12 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"github.com/pkg/errors"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 )
 
@@ -160,14 +162,21 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 
 // NewRequest creates an HTTP requests to the GoCD API endpoints.
 func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion string) (*APIRequest, error) {
+	request := &APIRequest{}
+
+	// I'm not sure how to get this method to return an error intentionally for testing. For testing purposes, I've
+	// added a switch so that the error handling in dependent methods can be tested.
+	if os.Getenv("GOCD_RAISE_ERROR_NEW_REQUEST") == "yes" {
+		return request, errors.New("Mock Testing Error")
+	}
+
 	rel, err := url.Parse("api/" + urlStr)
 
 	if err != nil {
-		return nil, err
+		return request, err
 	}
 
 	u := c.BaseURL.ResolveReference(rel)
-	request := &APIRequest{}
 
 	var buf io.ReadWriter
 	if body != nil {
@@ -192,7 +201,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 	req, err := http.NewRequest(method, u.String(), buf)
 	request.HTTP = req
 	if err != nil {
-		return nil, err
+		return request, err
 	}
 
 	if body != nil {
