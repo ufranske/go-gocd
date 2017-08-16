@@ -72,11 +72,6 @@ func (pt *PipelineTemplate) Pipelines() []*Pipeline {
 	return pt.Embedded.Pipelines
 }
 
-// Exists ensures whether or not a PipelineTemplate is present in the API.
-func (pts *PipelineTemplatesService) Exists(ctx context.Context, name string) (bool, *APIResponse, error) {
-	return pts.client.genericHeadAction(ctx, fmt.Sprintf("admin/templates/%s", name), apiV3)
-}
-
 // Get a single PipelineTemplate object in the GoCD API.
 func (pts *PipelineTemplatesService) Get(ctx context.Context, name string) (*PipelineTemplate, *APIResponse, error) {
 	pt := PipelineTemplate{}
