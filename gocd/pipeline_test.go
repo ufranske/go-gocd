@@ -19,6 +19,18 @@ func TestPipelineService(t *testing.T) {
 	t.Run("Pause", testPipelineServicePause)
 	t.Run("Unpause", testPipelineServiceUnpause)
 	t.Run("ReleaseLock", testPipelineServiceReleaseLock)
+	t.Run("PaginationStub", testPipelineServicePaginationStub)
+}
+
+func testPipelineServicePaginationStub(t *testing.T) {
+	pgs := PipelinesService{}
+
+	assert.Equal(t, "a/b/c/4",
+		pgs.buildPaginatedStub("a/%s/c", "b", 4))
+
+	assert.Equal(t, "a/b/c",
+		pgs.buildPaginatedStub("a/%s/c", "b", 0))
+
 }
 
 func testPipelineServiceGetStatus(t *testing.T) {
