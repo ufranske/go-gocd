@@ -15,7 +15,6 @@ func TestConfiguration(t *testing.T) {
 
 	t.Run("HasAuth", testConfigurationHasAuth)
 	t.Run("New", testConfigurationNew)
-	t.Run("SanitizeURL", testConfigurationSantizieURL)
 	t.Run("GetVersion", testConfigurationGetVersion)
 	t.Run("Get", testConfigurationGet)
 }
@@ -58,11 +57,6 @@ func testConfigurationGetVersion(t *testing.T) {
 	assert.Equal(t, "a7a5717cbd60c30006314fb8dd529796c93adaf0", v.GitSHA)
 	assert.Equal(t, "16.6.0 (3348-a7a5717cbd60c30006314fb8dd529796c93adaf0)", v.FullVersion)
 	assert.Equal(t, "https://github.com/gocd/gocd/commits/a7a5717cbd60c30006314fb8dd529796c93adaf0", v.CommitURL)
-}
-
-func testConfigurationSantizieURL(t *testing.T) {
-	u := sanitizeURL(nil)
-	assert.Nil(t, u)
 }
 
 func testConfigurationNew(t *testing.T) {

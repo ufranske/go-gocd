@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"testing"
 )
 
@@ -14,6 +15,17 @@ func TestAuthentication(t *testing.T) {
 	defer teardown()
 
 	t.Run("Login", testAuthenticationLogin)
+	t.Run("LoginFail", testAuthenticationLoginFail)
+}
+
+func testAuthenticationLoginFail(t *testing.T) {
+	env := os.Getenv("GOCD_RAISE_ERROR_NEW_REQUEST")
+	os.Setenv("GOCD_RAISE_ERROR_NEW_REQUEST", "yes")
+
+	err := client.Login(context.Background())
+	assert.EqualError(t, err, "Mock Testing Error")
+
+	os.Setenv("GOCD_RAISE_ERROR_NEW_REQUEST", env)
 }
 
 func testAuthenticationLogin(t *testing.T) {

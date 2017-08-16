@@ -149,19 +149,14 @@ func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset
 }
 
 func (pgs *PipelinesService) pipelineAction(ctx context.Context, name string, action string) (bool, *APIResponse, error) {
-	stub := fmt.Sprintf("pipelines/%s/%s", name, action)
 
-	req, err := pgs.client.NewRequest("POST", stub, nil, "")
-	if err != nil {
-		return false, nil, err
-	}
+	_, resp, err := pgs.client.postAction(ctx, &APIClientRequest{
+		Path:         fmt.Sprintf("pipelines/%s/%s", name, action),
+		ResponseType: responseTypeJSON,
+		Headers: map[string]string{
+			"Confirm": "true",
+		},
+	})
 
-	req.HTTP.Header.Set("Confirm", "true")
-
-	resp, err := pgs.client.Do(ctx, req, nil, responseTypeJSON)
-	if err != nil {
-		return false, resp, err
-	}
-
-	return resp.HTTP.StatusCode == 200, resp, nil
+	return resp.HTTP.StatusCode == 200, resp, err
 }

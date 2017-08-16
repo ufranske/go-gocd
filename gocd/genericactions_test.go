@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"net/http"
+	"os"
 	"testing"
 )
 
@@ -15,7 +16,33 @@ func TestGenericActions(t *testing.T) {
 	t.Run("HeadSuccess", funcTestGenericHeadActionSuccess)
 	t.Run("HeadFail", funcTestGenericHeadActionFail)
 	t.Run("Post", funcTestGenericPost)
+	t.Run("HTTPFail", funcTestActionsHTTPFail)
+	t.Run("DefaultAcceptHeader", testGenericActionDefaultAcceptHeader)
 }
+
+func testGenericActionDefaultAcceptHeader(t *testing.T) {
+	mux.HandleFunc("/api/mock-default-header", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
+		fmt.Fprint(w, "")
+	})
+	_, _, err := client.httpAction(context.Background(), &APIClientRequest{
+		Path: "mock-default-header",
+	})
+	assert.Nil(t, err)
+}
+
+func funcTestActionsHTTPFail(t *testing.T) {
+	env := os.Getenv("GOCD_RAISE_ERROR_NEW_REQUEST")
+	os.Setenv("GOCD_RAISE_ERROR_NEW_REQUEST", "yes")
+
+	b, resp, err := client.httpAction(context.Background(), &APIClientRequest{})
+	assert.False(t, b.(bool))
+	assert.Nil(t, resp)
+	assert.EqualError(t, err, "Mock Testing Error")
+
+	os.Setenv("GOCD_RAISE_ERROR_NEW_REQUEST", env)
+}
+
 func funcTestGenericPost(t *testing.T) {
 	mux.HandleFunc("/api/mock-post", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "POST", "Unexpected HTTP method")
