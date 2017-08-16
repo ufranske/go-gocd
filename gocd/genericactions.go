@@ -81,14 +81,6 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface
 		return false, nil, err
 	}
 
-	// Build the response
-	var reqType string
-	if r.ResponseType == "" {
-		reqType = responseTypeJSON
-	} else {
-		reqType = r.ResponseType
-	}
-
-	resp, err := c.Do(ctx, req, &r.ResponseBody, reqType)
+	resp, err := c.Do(ctx, req, &r.ResponseBody, r.ResponseType)
 	return r.ResponseBody, resp, err
 }
