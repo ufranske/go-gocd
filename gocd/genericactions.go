@@ -12,6 +12,7 @@ type APIClientRequest struct {
 	RequestBody  interface{}
 	ResponseType string
 	ResponseBody interface{}
+	Headers      map[string]string
 }
 
 // Handles any call to HEAD by returning whether or not we got a 2xx code.
@@ -79,6 +80,12 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface
 	req, err := c.NewRequest(r.Method, r.Path, reqBody, r.APIVersion)
 	if err != nil {
 		return false, nil, err
+	}
+
+	if len(r.Headers) > 0 {
+		for key, value := range r.Headers {
+			req.HTTP.Header.Set(key, value)
+		}
 	}
 
 	resp, err := c.Do(ctx, req, &r.ResponseBody, r.ResponseType)

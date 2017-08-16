@@ -171,7 +171,6 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 	}
 
 	rel, err := url.Parse("api/" + urlStr)
-
 	if err != nil {
 		return request, err
 	}
