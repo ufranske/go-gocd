@@ -118,10 +118,7 @@ func (pgs *PipelinesService) ReleaseLock(ctx context.Context, name string) (bool
 
 // Get returns a list of pipeline instanves describing the pipeline history.
 func (pgs *PipelinesService) Get(ctx context.Context, name string, offset int) (*PipelineInstance, *APIResponse, error) {
-	stub := fmt.Sprintf("pipelines/%s/instance", name)
-	if offset > 0 {
-		stub = fmt.Sprintf("%s/%d", stub, offset)
-	}
+	stub := pgs.buildPaginatedStub("pipelines/%s/instance", name, offset)
 
 	pt := PipelineInstance{}
 	_, resp, err := pgs.client.getAction(ctx, &APIClientRequest{
@@ -132,12 +129,9 @@ func (pgs *PipelinesService) Get(ctx context.Context, name string, offset int) (
 	return &pt, resp, err
 }
 
-// GetHistory returns a list of pipeline instanves describing the pipeline history.
+// GetHistory returns a list of pipeline instances describing the pipeline history.
 func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset int) (*PipelineHistory, *APIResponse, error) {
-	stub := fmt.Sprintf("pipelines/%s/history", name)
-	if offset > 0 {
-		stub = fmt.Sprintf("%s/%d", stub, offset)
-	}
+	stub := pgs.buildPaginatedStub("pipelines/%s/history", name, offset)
 
 	pt := PipelineHistory{}
 	_, resp, err := pgs.client.getAction(ctx, &APIClientRequest{
@@ -159,4 +153,12 @@ func (pgs *PipelinesService) pipelineAction(ctx context.Context, name string, ac
 	})
 
 	return resp.HTTP.StatusCode == 200, resp, err
+}
+
+func (pgs *PipelinesService) buildPaginatedStub(format string, name string, offset int) string {
+	stub := fmt.Sprintf(format, name)
+	if offset > 0 {
+		stub = fmt.Sprintf("%s/%d", stub, offset)
+	}
+	return stub
 }
