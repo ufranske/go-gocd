@@ -28,11 +28,7 @@ func (s *Stage) JSONString() (string, error) {
 	}
 	s.Clean()
 	bdy, err := json.MarshalIndent(s, "", "  ")
-	if err != nil {
-		return "", err
-	}
-
-	return string(bdy), nil
+	return string(bdy), err
 }
 
 // Validate ensures the attributes attached to this structure are ready for submission to the GoCD API.
