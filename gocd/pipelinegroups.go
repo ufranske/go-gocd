@@ -22,7 +22,7 @@ func (pgs *PipelineGroupsService) List(ctx context.Context, name string) ([]*Pip
 	})
 
 	filtered := []*PipelineGroup{}
-	if name != "" && err != nil {
+	if name != "" && err == nil {
 		for _, pipelineGroup := range pg {
 			if pipelineGroup.Name == name {
 				filtered = append(filtered, pipelineGroup)
