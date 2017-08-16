@@ -234,13 +234,6 @@ func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}, respons
 
 	resp, err := c.client.Do(req.HTTP)
 	if err != nil {
-		if e, ok := err.(*url.Error); ok {
-			if url, err := url.Parse(e.URL); err == nil {
-				e.URL = sanitizeURL(url).String()
-				return nil, e
-			}
-		}
-
 		return nil, err
 	}
 
@@ -275,7 +268,7 @@ func CheckResponse(response *http.Response) error {
 	if response.StatusCode < 200 || response.StatusCode >= 400 {
 		bdy, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		return fmt.Errorf(
 			"Received HTTP Status '%s': '%s'",
@@ -284,13 +277,4 @@ func CheckResponse(response *http.Response) error {
 		)
 	}
 	return nil
-}
-
-// sanitizeURL redacts the client_secret parameter from the URL which may be
-// exposed to the user.
-func sanitizeURL(uri *url.URL) *url.URL {
-	if uri == nil {
-		return nil
-	}
-	return uri
 }
