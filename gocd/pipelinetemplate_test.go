@@ -28,7 +28,7 @@ func TestPipelineTemplateCreate(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/api/admin/templates", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Unexpected HTTP method")
+		assert.Equal(t, r.Method, "POST", "Unexpected HTTP method")
 		assert.Equal(t, apiV3, r.Header.Get("Accept"))
 
 		j, _ := ioutil.ReadFile("test/resources/pipelinetemplate.2.json")
