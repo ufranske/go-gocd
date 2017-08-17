@@ -105,7 +105,7 @@ func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st
 	}
 	ptr := PipelineTemplate{}
 
-	_, resp, err := pts.client.putAction(ctx, &APIClientRequest{
+	_, resp, err := pts.client.postAction(ctx, &APIClientRequest{
 		Path:         "admin/templates",
 		APIVersion:   apiV3,
 		RequestBody:  pt,

@@ -25,7 +25,7 @@ const (
 )
 
 // ListAgentsAction gets a list of agents and return them.
-func ListAgentsAction(c *cli.Context) error {
+func listAgentsAction(c *cli.Context) error {
 	agents, r, err := cliAgent(c).Agents.List(context.Background())
 	if err != nil {
 		return handleOutput(nil, r, "ListAgents", err)
@@ -37,7 +37,7 @@ func ListAgentsAction(c *cli.Context) error {
 }
 
 // GetAgentAction retrieves a single agent object.
-func GetAgentAction(c *cli.Context) error {
+func getAgentAction(c *cli.Context) error {
 	agent, r, err := cliAgent(c).Agents.Get(context.Background(), c.String("uuid"))
 	if r.HTTP.StatusCode != 404 {
 		agent.RemoveLinks()
@@ -46,7 +46,7 @@ func GetAgentAction(c *cli.Context) error {
 }
 
 // UpdateAgentAction updates a single agent.
-func UpdateAgentAction(c *cli.Context) error {
+func updateAgentAction(c *cli.Context) error {
 
 	if c.String("uuid") == "" {
 		return handleOutput(nil, nil, "UpdateAgent", errors.New("'--uuid' is missing"))
@@ -70,7 +70,7 @@ func UpdateAgentAction(c *cli.Context) error {
 }
 
 // DeleteAgentAction delets an agent. Note: The agent must be disabled.
-func DeleteAgentAction(c *cli.Context) error {
+func deleteAgentAction(c *cli.Context) error {
 	if c.String("uuid") == "" {
 		return handleOutput(nil, nil, "DeleteAgent", errors.New("'--uuid' is missing"))
 	}
@@ -83,7 +83,7 @@ func DeleteAgentAction(c *cli.Context) error {
 }
 
 // UpdateAgentsAction updates a single agent.
-func UpdateAgentsAction(c *cli.Context) error {
+func updateAgentsAction(c *cli.Context) error {
 
 	u := gocd.AgentBulkUpdate{}
 	if o := c.String("operations"); o != "" {
@@ -113,7 +113,7 @@ func UpdateAgentsAction(c *cli.Context) error {
 }
 
 // DeleteAgentsAction must be implemented.
-func DeleteAgentsAction(c *cli.Context) error {
+func deleteAgentsAction(c *cli.Context) error {
 	return nil
 }
 
@@ -122,7 +122,7 @@ func ListAgentsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     ListAgentsCommandName,
 		Usage:    ListAgentsCommandUsage,
-		Action:   ListAgentsAction,
+		Action:   listAgentsAction,
 		Category: "Agents",
 	}
 }
@@ -132,7 +132,7 @@ func GetAgentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetAgentCommandName,
 		Usage:    GetAgentCommandUsage,
-		Action:   GetAgentAction,
+		Action:   getAgentAction,
 		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
@@ -145,7 +145,7 @@ func UpdateAgentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     UpdateAgentCommandName,
 		Usage:    UpdateAgentCommandUsage,
-		Action:   UpdateAgentAction,
+		Action:   updateAgentAction,
 		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
@@ -159,7 +159,7 @@ func DeleteAgentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     DeleteAgentCommandName,
 		Usage:    DeleteAgentCommandUsage,
-		Action:   DeleteAgentAction,
+		Action:   deleteAgentAction,
 		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
@@ -172,7 +172,7 @@ func UpdateAgentsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     UpdateAgentsCommandName,
 		Usage:    UpdateAgentsCommandUsage,
-		Action:   UpdateAgentsAction,
+		Action:   updateAgentsAction,
 		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringSliceFlag{Name: "uuid", Usage: "GoCD Agent UUIDs"},
@@ -187,7 +187,7 @@ func DeleteAgentsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     DeleteAgentsCommandName,
 		Usage:    DeleteAgentsCommandUsage,
-		Action:   DeleteAgentsAction,
+		Action:   deleteAgentsAction,
 		Category: "Agents",
 		Flags: []cli.Flag{
 			cli.StringSliceFlag{Name: "uuid", Usage: "GoCD Agent UUIDs"},
