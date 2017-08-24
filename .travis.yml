@@ -20,17 +20,19 @@ matrix:
 
 jobs:
   include:
+
     - stage: initialise
-      script:
-        - make before_install
+      script: make before_install
+
     - stage: test
-      script:
-        - go generate -x ./... && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
-        - make test
+      script: go generate -x ./... && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
+    - stage: make test
+
     - stage: record-coverage
-      script:
-        - bash <(curl -s https://codecov.io/bash)
-        - go get github.com/goreleaser/goreleaser
+      script: bash <(curl -s https://codecov.io/bash)
+
+    - stage: prepare-release
+      script: go get github.com/goreleaser/goreleaser
 
 deploy:
   - provider: script
