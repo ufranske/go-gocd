@@ -55,11 +55,12 @@ func ListPipelineTemplatesAction(c *cli.Context) error {
 
 // GetPipelineTemplateAction checks template-name is provided, and that the response is 2xx.
 func GetPipelineTemplateAction(c *cli.Context) error {
-	if c.String("template-name") == "" {
+	var name string
+	if name = c.String("template-name"); name == "" {
 		return handleOutput(nil, nil, "GetPipelineTemplate", errors.New("'--template-name' is missing"))
 	}
 
-	pt, r, err := cliAgent(c).PipelineTemplates.Get(context.Background(), c.String("template-name"))
+	pt, r, err := cliAgent(c).PipelineTemplates.Get(context.Background(), name)
 	if r.HTTP.StatusCode != 404 {
 		pt.RemoveLinks()
 	}
