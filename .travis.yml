@@ -21,36 +21,32 @@ matrix:
     - go: tip
   fast_finish: true
 
-#cache:
-#  directories:
-#    - $GOPATH/src
-#    - $GOPATH/pkg
-
 jobs:
   include:
-    - stage:
+    - stage: test
+      script:
+        - go generate -x ./... && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
+        - make test
+    - stage: record-coverage
+      script:
+        - bash <(curl -s https://codecov.io/bash)
+        - go get github.com/goreleaser/goreleaser
+    - stage: deploy
+      deploy:
+        - provider: script
+          skip_cleanup: true
+          script: make deploy_on_tag
+          on:
+            tags: true
+            condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
+        - provider: script
+          skip_cleanup: true
+          script: make deploy_on_develop
+          on:
+            branch: develop
+            condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
 
 before_install:
   - make before_install
 
-script:
-  - go generate -x ./... && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
-  - make test
 
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
-  - go get github.com/goreleaser/goreleaser
-
-deploy:
-  - provider: script
-    skip_cleanup: true
-    script: make deploy_on_tag
-    on:
-      tags: true
-      condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
-  - provider: script
-    skip_cleanup: true
-    script: make deploy_on_develop
-    on:
-      branch: develop
-      condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
