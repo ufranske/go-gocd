@@ -23,6 +23,9 @@ jobs:
 
     - stage: initialise
       script: make before_install
+      go: 1.7.x
+    - script: make before_install
+      go: 1.8.x
 
     - stage: format
       script: go generate -x ./... && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
@@ -39,18 +42,18 @@ jobs:
     - stage: prepare-release
       script: go get github.com/goreleaser/goreleaser
 
-deploy:
-  - provider: script
-    skip_cleanup: true
-    script: make deploy_on_tag
-    on:
-      tags: true
-      condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
-  - provider: script
-    skip_cleanup: true
-    script: make deploy_on_develop
-    on:
-      branch: develop
-      condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
+    - stage: deploy
+      go: 1.8.x
+      deploy:
+        - provider: script
+          skip_cleanup: true
+          script: make deploy_on_tag
+          on:
+            tags: true
+        - provider: script
+          skip_cleanup: true
+          script: make deploy_on_develop
+          on:
+            branch: develop
 
 
