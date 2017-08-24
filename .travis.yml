@@ -24,9 +24,14 @@ jobs:
     - stage: initialise
       script: make before_install
 
-    - stage: test
+    - stage: format
       script: go generate -x ./... && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
-    - stage: make test
+
+    - stage: test
+      script: make test
+      go: 1.7.x
+    - script: make test
+      go: 1.8.x
 
     - stage: record-coverage
       script: bash <(curl -s https://codecov.io/bash)
