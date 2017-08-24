@@ -23,6 +23,9 @@ matrix:
 
 jobs:
   include:
+    - stage: initialise
+      script:
+        - make before_install
     - stage: test
       script:
         - go generate -x ./... && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
@@ -45,8 +48,5 @@ jobs:
           on:
             branch: develop
             condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
-
-before_install:
-  - make before_install
 
 
