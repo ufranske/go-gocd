@@ -16,9 +16,6 @@ env:
 
 
 matrix:
-  allow_failures:
-    - go: release
-    - go: tip
   fast_finish: true
 
 jobs:
@@ -34,19 +31,19 @@ jobs:
       script:
         - bash <(curl -s https://codecov.io/bash)
         - go get github.com/goreleaser/goreleaser
-    - stage: deploy
-      deploy:
-        - provider: script
-          skip_cleanup: true
-          script: make deploy_on_tag
-          on:
-            tags: true
-            condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
-        - provider: script
-          skip_cleanup: true
-          script: make deploy_on_develop
-          on:
-            branch: develop
-            condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: make deploy_on_tag
+    on:
+      tags: true
+      condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
+  - provider: script
+    skip_cleanup: true
+    script: make deploy_on_develop
+    on:
+      branch: develop
+      condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
 
 
