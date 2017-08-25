@@ -14,6 +14,7 @@ func TestPipelineService(t *testing.T) {
 	defer teardown()
 
 	t.Run("Get", testPipelineServiceGet)
+	t.Run("Create", testPipelineServiceCreate)
 	t.Run("GetHistory", testPipelineServiceGetHistory)
 	t.Run("GetStatus", testPipelineServiceGetStatus)
 	t.Run("Pause", testPipelineServicePause)
@@ -36,8 +37,8 @@ func testPipelineServicePaginationStub(t *testing.T) {
 func testPipelineServiceGetStatus(t *testing.T) {
 	mux.HandleFunc("/api/pipelines/test-pipeline/status", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
-		j, _ := ioutil.ReadFile("test/resources/pipeline.2.json")
-		fmt.Fprint(w, string(j))
+		b, _ := ioutil.ReadFile("test/resources/pipeline.2.json")
+		fmt.Fprint(w, string(b))
 	})
 
 	ps, _, err := client.Pipelines.GetStatus(context.Background(), "test-pipeline", 0)
@@ -51,8 +52,80 @@ func testPipelineServiceGetStatus(t *testing.T) {
 	assert.False(t, ps.Schedulable)
 }
 
+func testPipelineServiceCreate(t *testing.T) {
+	mux.HandleFunc("/api/admin/pipelines", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Unexpected HTTP method")
+		expectedBody, _ := ioutil.ReadFile("test/request/pipeline.0.json")
+
+		actual, _ := ioutil.ReadAll(r.Body)
+		assert.Equal(t, string(expectedBody), string(actual))
+
+		j, _ := ioutil.ReadFile("test/resources/pipeline.0.json")
+		fmt.Fprint(w, string(j))
+	})
+
+	p := Pipeline{
+		LabelTemplate:         "${COUNT}",
+		EnablePipelineLocking: true,
+		Name: "new_pipeline",
+		Materials: []Material{
+			{
+				Type: "git", Attributes: MaterialAttributes{
+					URL:          "git@github.com:sample_repo/example.git",
+					Destination:  "dest",
+					InvertFilter: false,
+					AutoUpdate:   true,
+					Branch:       "master",
+					ShallowClone: true,
+				},
+			},
+		},
+		Stages: []Stage{
+			{
+				Name:           "defaultStage",
+				FetchMaterials: true,
+				Approval: &Approval{
+					Type: "success",
+					Authorization: &Authorization{
+						Roles: []string{},
+						Users: []string{},
+					},
+				},
+				Jobs: []*Job{
+					{
+						Name: "defaultJob",
+						Tasks: []Task{
+							{
+								Type: "exec",
+								Attributes: TaskAttributes{
+									RunIf:   []string{"passed"},
+									Command: "ls",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+	pr, _, err := client.Pipelines.Create(context.Background(), &p, "first")
+	if err != nil {
+		t.Error(err)
+	}
+
+	assert.NotNil(t, pr)
+	assert.Equal(t, "test-pipeline", pr.Name)
+	assert.Equal(t, 1, pr.NaturalOrder)
+	assert.False(t, pr.CanRun)
+
+	assert.Len(t, pr.Stages, 1)
+
+	stage := pr.Stages[0]
+	assert.Equal(t, "stage1", stage.Name)
+}
+
 func testPipelineServiceGet(t *testing.T) {
-	mux.HandleFunc("/api/pipelines/test-pipeline/instance", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/admin/pipelines/test-pipeline/instance", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
 		j, _ := ioutil.ReadFile("test/resources/pipeline.0.json")
 		fmt.Fprint(w, string(j))
