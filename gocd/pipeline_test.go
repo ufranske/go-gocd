@@ -115,8 +115,6 @@ func testPipelineServiceCreate(t *testing.T) {
 
 	assert.NotNil(t, pr)
 	assert.Equal(t, "test-pipeline", pr.Name)
-	assert.Equal(t, 1, pr.NaturalOrder)
-	assert.False(t, pr.CanRun)
 
 	assert.Len(t, pr.Stages, 1)
 
