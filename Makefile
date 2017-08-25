@@ -15,7 +15,7 @@ lint:
 
 test: lint
 	go tool vet .
-	bash ./go.test.sh
+	bash -x ./go.test.sh
 	$(MAKE) -C ./gocd test
 	$(MAKE) -C ./cli test
 

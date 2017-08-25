@@ -10,12 +10,9 @@
         "attributes": {
           "url": "git@github.com:sample_repo/example.git",
           "destination": "dest",
-          "filter": null,
           "invert_filter": false,
-          "name": null,
           "auto_update": true,
           "branch": "master",
-          "submodule_folder": null,
           "shallow_clone": true
         }
       }
@@ -28,19 +25,11 @@
         "never_cleanup_artifacts": false,
         "approval": {
           "type": "success",
-          "authorization": {
-            "roles": [],
-            "users": []
-          }
+          "authorization": {}
         },
-        "environment_variables": [],
         "jobs": [
           {
             "name": "defaultJob",
-            "run_instance_count": null,
-            "timeout": 0,
-            "environment_variables": [],
-            "resources": [],
             "tasks": [
               {
                 "type": "exec",
@@ -48,8 +37,7 @@
                   "run_if": [
                     "passed"
                   ],
-                  "command": "ls",
-                  "working_directory": null
+                  "command": "ls"
                 }
               }
             ]

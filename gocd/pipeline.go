@@ -39,7 +39,7 @@ type MaterialAttributes struct {
 	URL             string      `json:"url"`
 	Destination     string      `json:"destination,omitempty"`
 	Filter          interface{} `json:"filter,omitempty"`
-	InvertFilter    bool        `json:"invert_filter,omitempty"`
+	InvertFilter    bool        `json:"invert_filter"`
 	Name            string      `json:"name,omitempty"`
 	AutoUpdate      bool        `json:"auto_update,omitempty"`
 	Branch          string      `json:"branch,omitempty"`

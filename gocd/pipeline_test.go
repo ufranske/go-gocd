@@ -3,7 +3,6 @@ package gocd
 import (
 	"context"
 	"fmt"
-	"github.com/drewsonne/terraform-provider-gocd/gocd"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
@@ -70,7 +69,43 @@ func testPipelineServiceCreate(t *testing.T) {
 		EnablePipelineLocking: true,
 		Name: "new_pipeline",
 		Materials: []Material{
-			{Type: "git", Attributes: gocd.Attribute},
+			{
+				Type: "git", Attributes: MaterialAttributes{
+					URL:          "git@github.com:sample_repo/example.git",
+					Destination:  "dest",
+					InvertFilter: false,
+					AutoUpdate:   true,
+					Branch:       "master",
+					ShallowClone: true,
+				},
+			},
+		},
+		Stages: []Stage{
+			{
+				Name:           "defaultStage",
+				FetchMaterials: true,
+				Approval: &Approval{
+					Type: "success",
+					Authorization: &Authorization{
+						Roles: []string{},
+						Users: []string{},
+					},
+				},
+				Jobs: []*Job{
+					{
+						Name: "defaultJob",
+						Tasks: []Task{
+							{
+								Type: "exec",
+								Attributes: TaskAttributes{
+									RunIf:   []string{"passed"},
+									Command: "ls",
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 	pr, _, err := client.Pipelines.Create(context.Background(), &p, "first")
