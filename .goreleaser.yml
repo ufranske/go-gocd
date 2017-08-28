@@ -29,33 +29,33 @@ builds:
       - goos: linux
         goarch: arm
         goarm: 7
-#
-#archive:
-#  name_template: "gocd-{{ .Version }}-{{ .Os }}-{{ .Arch }}"
-#  replacements:
-#    386: i386
-#    amd64: x86_64
-#
-#  format_overrides:
-#    - goos: windows
-#      format: zip
-#    - goos: darwin
-#      format: zip
-#  files:
-#    - LICENSE
-#    - README.md
-#    - CHANGELOG.md
-#
-#fpm:
-#  homepage: https://github.com/drewsonne/go-gocd
-#  maintainer: Drew J. Sonne <drew.sonne@gmail.com>
-#  license: LGPLv3
-#  formats:
-##    - deb
-#    - rpm
-#  dependencies:
-#    - git
-#
+
+archive:
+  name_template: "gocd-{{ .Version }}-{{ .Os }}-{{ .Arch }}"
+  replacements:
+    386: i386
+    amd64: x86_64
+
+  format_overrides:
+    - goos: windows
+      format: zip
+    - goos: darwin
+      format: zip
+  files:
+    - LICENSE
+    - README.md
+    - CHANGELOG.md
+
+fpm:
+  homepage: https://github.com/drewsonne/go-gocd
+  maintainer: Drew J. Sonne <drew.sonne@gmail.com>
+  license: LGPLv3
+  formats:
+#    - deb
+    - rpm
+  dependencies:
+    - git
+
 brew:
   github:
     owner: drewsonne
