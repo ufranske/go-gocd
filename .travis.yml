@@ -2,6 +2,9 @@ language: go
 go:
   - 1.7.x
   - 1.8.x
+  - 1.9.x
+  - release
+  - tip
 
 addons:
   apt:
@@ -17,6 +20,7 @@ env:
 
 matrix:
   allow_failures:
+    - go: 1.9.x
     - go: release
     - go: tip
   fast_finish: true

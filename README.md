@@ -12,6 +12,13 @@ CLI tool to interace with GoCD Server.
 ### Usage
 
 #### Installation
+
+##### Homebrew
+
+    $ brew tap drewsonne/devops
+    $ brew install go-gocd
+
+##### Manual
 Download the latest release from [https://github.com/drewsonne/go-gocd/releases](https://github.com/drewsonne/go-gocd/releases),
 and place the binary in your `$PATH`.
 
