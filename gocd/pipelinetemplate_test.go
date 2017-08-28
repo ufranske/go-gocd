@@ -146,6 +146,7 @@ func testGetPipelineTemplate(t *testing.T) {
 		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
 		testAuth(t, r, mockAuthorization)
 		j, _ := ioutil.ReadFile("test/resources/pipelinetemplate.0.json")
+		w.Header().Set("Etag", "mock-etag")
 		fmt.Fprint(w, string(j))
 	})
 
@@ -156,6 +157,8 @@ func testGetPipelineTemplate(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Len(t, template.Stages, 1)
+
+	assert.Equal(t, "mock-etag", template.Version)
 
 	for _, attribute := range []EqualityTest{
 		{template.Name, "template1"},
