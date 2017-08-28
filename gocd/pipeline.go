@@ -36,15 +36,15 @@ type Material struct {
 
 // MaterialAttributes describes a material type
 type MaterialAttributes struct {
-	URL             string         `json:"url"`
-	Destination     string         `json:"destination,omitempty"`
-	Filter          MaterialFilter `json:"filter,omitempty"`
-	InvertFilter    bool           `json:"invert_filter"`
-	Name            string         `json:"name,omitempty"`
-	AutoUpdate      bool           `json:"auto_update,omitempty"`
-	Branch          string         `json:"branch,omitempty"`
-	SubmoduleFolder string         `json:"submodule_folder,omitempty"`
-	ShallowClone    bool           `json:"shallow_clone,omitempty"`
+	URL             string          `json:"url"`
+	Destination     string          `json:"destination,omitempty"`
+	Filter          *MaterialFilter `json:"filter,omitempty"`
+	InvertFilter    bool            `json:"invert_filter"`
+	Name            string          `json:"name,omitempty"`
+	AutoUpdate      bool            `json:"auto_update,omitempty"`
+	Branch          string          `json:"branch,omitempty"`
+	SubmoduleFolder string          `json:"submodule_folder,omitempty"`
+	ShallowClone    bool            `json:"shallow_clone,omitempty"`
 }
 
 // MaterialFilter describes which globs to ignore
