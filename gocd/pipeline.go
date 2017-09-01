@@ -22,7 +22,7 @@ type Pipeline struct {
 	Template              string     `json:"template,omitempty"`
 	Materials             []Material `json:"materials,omitempty"`
 	Label                 string     `json:"label,omitempty"`
-	Stages                []Stage    `json:"stages"`
+	Stages                []*Stage   `json:"stages"`
 	Version               string     `json:"version,omitempty"`
 }
 

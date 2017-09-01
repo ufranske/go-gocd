@@ -80,7 +80,7 @@ func testPipelineServiceCreate(t *testing.T) {
 				},
 			},
 		},
-		Stages: []Stage{
+		Stages: []*Stage{
 			{
 				Name:           "defaultStage",
 				FetchMaterials: true,
