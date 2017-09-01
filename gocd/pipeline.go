@@ -3,7 +3,6 @@ package gocd
 import (
 	"context"
 	"fmt"
-	"github.com/pkg/errors"
 )
 
 // PipelinesService describes the HAL _link resource for the api response object for a pipelineconfig
