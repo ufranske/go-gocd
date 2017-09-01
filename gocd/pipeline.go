@@ -3,6 +3,7 @@ package gocd
 import (
 	"context"
 	"fmt"
+	"github.com/pkg/errors"
 )
 
 // PipelinesService describes the HAL _link resource for the api response object for a pipelineconfig
@@ -22,7 +23,7 @@ type Pipeline struct {
 	Template              string     `json:"template,omitempty"`
 	Materials             []Material `json:"materials,omitempty"`
 	Label                 string     `json:"label,omitempty"`
-	Stages                []*Stage   `json:"stages"`
+	Stages                []*Stage    `json:"stages"`
 	Version               string     `json:"version,omitempty"`
 }
 
@@ -64,7 +65,7 @@ type PipelineInstance struct {
 	Name         string     `json:"name"`
 	NaturalOrder int        `json:"natural_order"`
 	Comment      string     `json:"comment"`
-	Stages       []Stage    `json:"stages"`
+	Stages       []*Stage    `json:"stages"`
 }
 
 // BuildCause describes the triggers which caused the build to start.
@@ -147,7 +148,7 @@ func (pgs *PipelinesService) Create(ctx context.Context, p *Pipeline, group stri
 }
 
 // Get returns a list of pipeline instanves describing the pipeline history.
-func (pgs *PipelinesService) Get(ctx context.Context, name string, offset int) (*PipelineInstance, *APIResponse, error) {
+func (pgs *PipelinesService) GetInstance(ctx context.Context, name string, offset int) (*PipelineInstance, *APIResponse, error) {
 	stub := pgs.buildPaginatedStub("admin/pipelines/%s/instance", name, offset)
 
 	pt := PipelineInstance{}

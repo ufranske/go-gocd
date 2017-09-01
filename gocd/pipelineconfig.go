@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"github.com/pkg/errors"
 )
 
 // PipelineConfigsService describes the HAL _link resource for the api response object for a pipelineconfig
@@ -14,15 +15,19 @@ type PipelineConfig struct{}
 
 // PipelineConfigRequest describes a request object for creating or updating pipelines
 type PipelineConfigRequest struct {
-	Group    string    `json:"group"`
+	Group    string    `json:"group,omitempty"`
 	Pipeline *Pipeline `json:"pipeline"`
 }
 
+// Get a single PipelineTemplate object in the GoCD API.
+func (pcs *PipelineConfigsService) Get(ctx context.Context, name string) (*Pipeline, *APIResponse, error) {
+	return nil, nil, errors.New("Not Implemented.")
+}
+
 // Update a pipeline configuration
-func (pcs *PipelineConfigsService) Update(ctx context.Context, group string, name string, p *Pipeline) (*Pipeline, *APIResponse, error) {
+func (pcs *PipelineConfigsService) Update(ctx context.Context, name string, p *Pipeline) (*Pipeline, *APIResponse, error) {
 
 	pt := &PipelineConfigRequest{
-		Group:    group,
 		Pipeline: p,
 	}
 
