@@ -1,10 +1,10 @@
 language: go
-#go:
-#  - 1.7.x
-#  - 1.8.x
-#  - 1.9.x
-#  - release
-#  - tip
+go:
+  - 1.7.x
+  - 1.8.x
+  - 1.9.x
+  - release
+  - tip
 
 addons:
   apt:
@@ -18,43 +18,27 @@ matrix:
     - go: tip
   fast_finish: true
 
-jobs:
-  include:
-    - stage: initialise
-      script: make before_install
-      go: 1.7.x
-    - script: make before_install
-      go: 1.8.x
+before_install:
+  - make before_install
 
-    - stage: format
-      script: go generate -x $(go list ./... | grep -v vendor/) && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
+script:
+  - go generate -x $(go list ./... | grep -v vendor/) && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
+  - make test
 
-    - stage: test
-      script: make test
-      go: 1.7.x
-    - script: make test
-      go: 1.8.x
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+  - go get github.com/goreleaser/goreleaser
 
-    - stage: record-coverage
-      script: bash <(curl -s https://codecov.io/bash)
-
-    - stage: prepare-release
-      script: go get github.com/goreleaser/goreleaser
-
-    - stage: deploy
-      go: 1.8.x
-      deploy:
-        - provider: script
-          skip_cleanup: true
-          script: make deploy_on_tag
-          on:
-            tags: true
-            condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
-        - provider: script
-          skip_cleanup: true
-          script: make deploy_on_develop
-          on:
-            branch: develop
-            condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
-
-
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: make deploy_on_tag
+    on:
+      tags: true
+      condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
+  - provider: script
+    skip_cleanup: true
+    script: make deploy_on_develop
+    on:
+      branch: develop
+      condition: $TRAVIS_GO_VERSION =~ ^1\.8\.[0-9]+$
