@@ -26,7 +26,7 @@ func TestPipelineService(t *testing.T) {
 
 func testPipelineStageContainer(t *testing.T) {
 
-	p = &Pipeline{
+	p := &Pipeline{
 		Name:   "mock-name",
 		Stages: []*Stage{{}, {}},
 	}
