@@ -2,6 +2,8 @@
 SHELL:=/bin/bash
 TEST?=$$(go list ./... |grep -v 'vendor')
 
+GO_TARGETS= ./cli ./gocd ./gocd-*generator
+
 format:
 	gofmt -w -s .
 	$(MAKE) -C ./cli/ format
@@ -10,11 +12,12 @@ format:
 	$(MAKE) -C ./gocd-response-links-generator/ format
 
 lint:
-	diff -u <(echo -n) <(gofmt -d -s .)
-	golint -set_exit_status main.go ./cli ./gocd ./gocd-*-generator
+	diff -u <(echo -n) <(gofmt -d -s main.go $(GO_TARGETS))
+	golint -set_exit_status . ./cli ./gocd ./gocd-*-generator
 
 test: lint
-	go tool vet .
+	go tool vet $(GO_TARGETS)
+	go tool vet main.go
 	bash -x ./go.test.sh
 	$(MAKE) -C ./gocd test
 	$(MAKE) -C ./cli test
