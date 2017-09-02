@@ -8,6 +8,7 @@ import (
 // StageContainer describes structs which contain stages
 type StageContainer interface {
 	GetStages() []*Stage
+	GetName() string
 }
 
 // PipelinesService describes the HAL _link resource for the api response object for a pipelineconfig
@@ -34,6 +35,11 @@ type Pipeline struct {
 // GetStages from the pipeline
 func (p *Pipeline) GetStages() []*Stage {
 	return p.Stages
+}
+
+// GetName of the pipeline
+func (p *Pipeline) GetName() string {
+	return p.Name
 }
 
 // Material describes an artifact dependency for a pipeline object.
