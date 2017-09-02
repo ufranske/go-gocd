@@ -11,7 +11,7 @@ format:
 
 lint:
 	diff -u <(echo -n) <(gofmt -d -s .)
-	golint -set_exit_status . ./cli ./gocd ./gocd-*-generator
+	golint -set_exit_status main.go ./cli ./gocd ./gocd-*-generator
 
 test: lint
 	go tool vet .
