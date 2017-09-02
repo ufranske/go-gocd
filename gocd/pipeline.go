@@ -5,6 +5,11 @@ import (
 	"fmt"
 )
 
+// StageContainer describes structs which contain stages
+type StageContainer interface {
+	GetStages() []*Stage
+}
+
 // PipelinesService describes the HAL _link resource for the api response object for a pipelineconfig
 type PipelinesService service
 
@@ -22,8 +27,13 @@ type Pipeline struct {
 	Template              string     `json:"template,omitempty"`
 	Materials             []Material `json:"materials,omitempty"`
 	Label                 string     `json:"label,omitempty"`
-	Stages                []*Stage    `json:"stages"`
+	Stages                []*Stage   `json:"stages"`
 	Version               string     `json:"version,omitempty"`
+}
+
+// GetStages from the pipeline
+func (p *Pipeline) GetStages() []*Stage {
+	return p.Stages
 }
 
 // Material describes an artifact dependency for a pipeline object.
@@ -64,7 +74,7 @@ type PipelineInstance struct {
 	Name         string     `json:"name"`
 	NaturalOrder int        `json:"natural_order"`
 	Comment      string     `json:"comment"`
-	Stages       []*Stage    `json:"stages"`
+	Stages       []*Stage   `json:"stages"`
 }
 
 // BuildCause describes the triggers which caused the build to start.
@@ -146,7 +156,7 @@ func (pgs *PipelinesService) Create(ctx context.Context, p *Pipeline, group stri
 	return &pt, resp, err
 }
 
-// Get returns a list of pipeline instanves describing the pipeline history.
+// GetInstance of a pipeline run.
 func (pgs *PipelinesService) GetInstance(ctx context.Context, name string, offset int) (*PipelineInstance, *APIResponse, error) {
 	stub := pgs.buildPaginatedStub("admin/pipelines/%s/instance", name, offset)
 

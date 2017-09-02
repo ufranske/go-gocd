@@ -3,8 +3,8 @@ package gocd
 import (
 	"context"
 	"fmt"
-	"strings"
 	"github.com/pkg/errors"
+	"strings"
 )
 
 // PipelineConfigsService describes the HAL _link resource for the api response object for a pipelineconfig
@@ -21,7 +21,7 @@ type PipelineConfigRequest struct {
 
 // Get a single PipelineTemplate object in the GoCD API.
 func (pcs *PipelineConfigsService) Get(ctx context.Context, name string) (*Pipeline, *APIResponse, error) {
-	return nil, nil, errors.New("Not Implemented.")
+	return nil, nil, errors.New("Not Implemented")
 }
 
 // Update a pipeline configuration
