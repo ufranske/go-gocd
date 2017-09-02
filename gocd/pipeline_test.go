@@ -21,7 +21,7 @@ func TestPipelineService(t *testing.T) {
 	t.Run("Unpause", testPipelineServiceUnpause)
 	t.Run("ReleaseLock", testPipelineServiceReleaseLock)
 	t.Run("PaginationStub", testPipelineServicePaginationStub)
-	t.Run("StageContainer",testPipelineStageContainer)
+	t.Run("StageContainer", testPipelineStageContainer)
 }
 
 func testPipelineStageContainer(t *testing.T) {
