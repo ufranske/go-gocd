@@ -72,6 +72,16 @@ func (pt *PipelineTemplate) GetName() string {
 	return pt.Name
 }
 
+// SetStages overwrites any existing stages
+func (pt *PipelineTemplate) SetStages(stages []*Stage) {
+	pt.Stages = stages
+}
+
+// AddStage appends a stage to this pipeline
+func (pt *PipelineTemplate) AddStage(stage *Stage) {
+	pt.Stages = append(pt.Stages, stage)
+}
+
 // RemoveLinks gets the PipelineTemplate ready to be submitted to the GoCD API.
 func (pt *PipelineTemplate) RemoveLinks() {
 	pt.Links = nil
