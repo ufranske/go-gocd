@@ -15,6 +15,14 @@ func TestPipelineConfig(t *testing.T) {
 	t.Run("Create", testPipelineConfigCreate)
 	t.Run("Update", testPipelineConfigUpdate)
 	t.Run("Delete", testPipelineConfigDelete)
+	t.Run("Get", testPipelineConfigGet)
+}
+
+func testPipelineConfigGet(t *testing.T) {
+	p, resp, err := client.PipelineConfigs.Get(context.Background(), "mock-pipeline")
+	assert.Nil(t, p)
+	assert.Nil(t, resp)
+	assert.EqualError(t, err, "Not Implemented")
 }
 
 func testPipelineConfigDelete(t *testing.T) {
