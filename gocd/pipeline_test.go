@@ -21,6 +21,20 @@ func TestPipelineService(t *testing.T) {
 	t.Run("Unpause", testPipelineServiceUnpause)
 	t.Run("ReleaseLock", testPipelineServiceReleaseLock)
 	t.Run("PaginationStub", testPipelineServicePaginationStub)
+	t.Run("StageContainer",testPipelineStageContainer)
+}
+
+func testPipelineStageContainer(t *testing.T) {
+
+	p = &Pipeline{
+		Name:   "mock-name",
+		Stages: []*Stage{{}, {}},
+	}
+
+	i := StageContainer(p)
+
+	assert.Equal(t, "mock-name", i.GetName())
+	assert.Len(t, i.GetStages(), 2)
 }
 
 func testPipelineServicePaginationStub(t *testing.T) {
