@@ -65,16 +65,17 @@ func TestPipelineTemplateCreate(t *testing.T) {
 func testPipelineTemplateUpdate(t *testing.T) {
 	mux.HandleFunc("/api/admin/templates/test-config", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "PUT", "Unexpected HTTP method")
-		//j, _ := ioutil.ReadAll(r.Body)
-		//assert.Equal(t, "", string(j))
 		j, _ := ioutil.ReadFile("test/resources/pipelinetemplate.1.json")
 		fmt.Fprint(w, string(j))
 	})
 
 	pt, _, err := client.PipelineTemplates.Update(context.Background(),
 		"test-config",
-		"test-version",
-		[]*Stage{{}},
+		&PipelineTemplate{
+			Stages: []*Stage{
+				{},
+			},
+		},
 	)
 	if err != nil {
 		t.Error(err)
