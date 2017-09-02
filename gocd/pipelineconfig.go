@@ -30,17 +30,19 @@ func (pcs *PipelineConfigsService) Update(ctx context.Context, name string, p *P
 	pt := &PipelineConfigRequest{
 		Pipeline: p,
 	}
+	pr := Pipeline{}
 
-	req, err := pcs.client.NewRequest("PUT", "admin/pipelines/"+name, pt, apiV4)
-	if err != nil {
-		return nil, nil, err
-	}
+	_, resp, err := pcs.client.putAction(ctx, &APIClientRequest{
+		Path:         "admin/pipelines/" + name,
+		APIVersion:   apiV4,
+		RequestBody:  pt,
+		ResponseBody: &pr,
+		Headers: map[string]string{
+			"If-Match": fmt.Sprintf("\"%s\"", p.Version),
+		},
+	})
 
-	req.HTTP.Header.Set("If-Match", fmt.Sprintf("\"%s\"", p.Version))
-
-	pc := Pipeline{}
-	resp, err := pcs.client.Do(ctx, req, &pc, responseTypeJSON)
-	return &pc, resp, err
+	return &pr, resp, err
 
 }
 
