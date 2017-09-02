@@ -68,7 +68,7 @@ func testPipelineConfigUpdate(t *testing.T) {
 		}
 		assert.Equal(
 			t,
-			"{\n  \"group\": \"test-group\",\n  \"pipeline\": {\n    \"name\": \"\",\n    \"stages\": null,\n    \"version\": \"test-version\"\n  }\n}\n",
+			"{\n  \"pipeline\": {\n    \"name\": \"\",\n    \"stages\": null,\n    \"version\": \"test-version\"\n  }\n}\n",
 			string(b))
 		j, _ := ioutil.ReadFile("test/resources/pipelineconfig.0.json")
 		fmt.Fprint(w, string(j))
@@ -78,7 +78,7 @@ func testPipelineConfigUpdate(t *testing.T) {
 		Version: "test-version",
 	}
 	pcs, _, err := client.PipelineConfigs.Update(context.Background(),
-		"test-group", "test-name", &p)
+		"test-name", &p)
 	if err != nil {
 		t.Error(t, err)
 	}

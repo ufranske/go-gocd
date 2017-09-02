@@ -129,7 +129,7 @@ func testPipelineServiceGet(t *testing.T) {
 		fmt.Fprint(w, string(j))
 	})
 
-	p, _, err := client.Pipelines.Get(context.Background(), "test-pipeline", 0)
+	p, _, err := client.Pipelines.GetInstance(context.Background(), "test-pipeline", 0)
 	if err != nil {
 		t.Error(err)
 	}
