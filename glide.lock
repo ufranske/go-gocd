@@ -1,5 +1,5 @@
-hash: 981331068d758f07f36e67befd852868180e527f39c85e6910a77195c955a8aa
-updated: 2017-09-02T16:16:57.274861146+01:00
+hash: aa85d0fe2c7fa4ef6b493125da1e6f99b3302a9536ef2a47d8837a0507c3e43b
+updated: 2017-09-02T16:20:18.977193301+01:00
 imports:
 - name: github.com/AlecAivazis/survey
   version: 89dab5040dc4cf726ba34725f18b0e32ad9608aa
@@ -17,7 +17,7 @@ imports:
 - name: github.com/urakozz/go-json-schema-generator
   version: 645b0ded705ed7cec8c301e3bf11df8a4e544551
 - name: github.com/urfave/cli
-  version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
+  version: cfb38830724cc34fedffe9a2a29fb54fa9169cd1
 - name: golang.org/x/sys
   version: 7ddbeae9ae08c6a06a59597f0c9edbc5ff2444ce
   subpackages:
