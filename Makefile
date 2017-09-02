@@ -20,8 +20,8 @@ test: lint
 	$(MAKE) -C ./cli test
 
 before_install:
-	go get -t -v ./...
-	go get github.com/golang/lint/golint
+	@go get -t -v $$(go list ./... | grep -v vendor/)
+	@go get github.com/golang/lint/golint
 
 build: deploy_on_develop
 
