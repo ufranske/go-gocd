@@ -132,10 +132,10 @@ func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st
 }
 
 // Update an PipelineTemplate object in the GoCD API.
-func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, version string, st []*Stage) (*PipelineTemplate, *APIResponse, error) {
+func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, template *PipelineTemplate) (*PipelineTemplate, *APIResponse, error) {
 	pt := &PipelineTemplateRequest{
 		Name:   name,
-		Stages: st,
+		Stages: template.Stages,
 	}
 	ptr := &PipelineTemplate{}
 
@@ -145,7 +145,7 @@ func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, ve
 		RequestBody:  pt,
 		ResponseBody: &ptr,
 		Headers: map[string]string{
-			"If-Match": fmt.Sprintf("\"%s\"", version),
+			"If-Match": fmt.Sprintf("\"%s\"", template.Version),
 		},
 	})
 

@@ -73,8 +73,11 @@ func testPipelineTemplateUpdate(t *testing.T) {
 
 	pt, _, err := client.PipelineTemplates.Update(context.Background(),
 		"test-config",
-		"test-version",
-		[]*Stage{{}},
+		&PipelineTemplate{
+			Stages: []*Stage{
+				{},
+			},
+		},
 	)
 	if err != nil {
 		t.Error(err)
