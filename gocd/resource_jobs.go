@@ -1,8 +1,8 @@
 package gocd
 
 import (
-	"errors"
 	"encoding/json"
+	"errors"
 )
 
 // JSONString returns a string of this stage as a JSON object.

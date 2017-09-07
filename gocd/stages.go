@@ -1,6 +1,5 @@
 package gocd
 
-
 // StagesService exposes calls for interacting with Stage objects in the GoCD API.
 type StagesService service
 
@@ -15,4 +14,3 @@ type Stage struct {
 	Resources             []string  `json:"resource,omitempty"`
 	Jobs                  []*Job    `json:"jobs,omitempty"`
 }
-
