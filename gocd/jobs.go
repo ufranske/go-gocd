@@ -2,8 +2,6 @@ package gocd
 
 import (
 	"context"
-	"encoding/json"
-	"errors"
 )
 
 const (

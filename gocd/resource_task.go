@@ -15,4 +15,3 @@ func (t *Task) Validate() error {
 		return errors.New("Unexpected `gocd.Task.Attribute` types")
 	}
 }
-
