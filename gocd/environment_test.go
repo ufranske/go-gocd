@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"fmt"
 	"net/http"
+	"context"
 )
 
 func TestEnvironment(t *testing.T) {
@@ -63,10 +64,10 @@ func testEnvironmentList(t *testing.T) {
 
 	a := env.Agents[0]
 	assert.NotNil(t, a.Links)
-	assert.Equal(t, "https://ci.example.com/go/api/admin/pipelines/up42",a.Links.Self.String())
-	assert.Equal(t,  "https://api.gocd.org/#pipeline-config",a.Links.Doc.String())
-	assert.Equal(t, "https://ci.example.com/go/api/admin/pipelines/:pipeline_name",a.Links.Find.String())
-	assert.Equal(t, "up42", a.UUID)
+	assert.Equal(t, "https://ci.example.com/go/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da",a.Links.Self.String())
+	assert.Equal(t,  "https://api.gocd.org/#agents",a.Links.Doc.String())
+	assert.Equal(t, "https://ci.example.com/go/api/agents/:uuid",a.Links.Find.String())
+	assert.Equal(t, "12345678-e2f6-4c78-123456789012", a.UUID)
 
 	assert.NotNil(t, env.EnvironmentVariables)
 	assert.Len(t, env.EnvironmentVariables,2)
