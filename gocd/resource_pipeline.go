@@ -29,3 +29,14 @@ func (p *Pipeline) SetStages(stages []*Stage) {
 func (p *Pipeline) AddStage(stage *Stage) {
 	p.Stages = append(p.Stages, stage)
 }
+
+// SetStage replaces a stage if it already exists
+func (p *Pipeline) SetStage(newStage *Stage) {
+	for i, stage := range p.Stages {
+		if stage.Name == newStage.Name {
+			p.Stages[i] = newStage
+			return
+		}
+	}
+	return
+}

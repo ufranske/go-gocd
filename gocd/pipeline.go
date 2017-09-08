@@ -5,15 +5,6 @@ import (
 	"fmt"
 )
 
-// StageContainer describes structs which contain stages
-type StageContainer interface {
-	GetName() string
-	GetStages() []*Stage
-	GetStage(string) *Stage
-	SetStages(stages []*Stage)
-	AddStage(stage *Stage)
-}
-
 // PipelinesService describes the HAL _link resource for the api response object for a pipelineconfig
 type PipelinesService service
 
