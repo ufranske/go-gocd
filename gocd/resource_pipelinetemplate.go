@@ -39,3 +39,14 @@ func (pt *PipelineTemplate) RemoveLinks() {
 func (pt *PipelineTemplate) Pipelines() []*Pipeline {
 	return pt.Embedded.Pipelines
 }
+
+// SetStage replaces a stage if it already exists
+func (pt *PipelineTemplate) SetStage(newStage *Stage) {
+	for i, stage := range pt.Stages {
+		if stage.Name == newStage.Name {
+			pt.Stages[i] = newStage
+			return
+		}
+	}
+	return
+}
