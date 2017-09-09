@@ -9,9 +9,6 @@ import (
 // PipelineConfigsService describes the HAL _link resource for the api response object for a pipelineconfig
 type PipelineConfigsService service
 
-// PipelineConfig describes the configuration for a pipeline
-type PipelineConfig struct{}
-
 // PipelineConfigRequest describes a request object for creating or updating pipelines
 type PipelineConfigRequest struct {
 	Group    string    `json:"group,omitempty"`
@@ -26,7 +23,6 @@ func (pcs *PipelineConfigsService) Get(ctx context.Context, name string) (*Pipel
 		APIVersion:   apiV4,
 		ResponseBody: &p,
 	})
-
 	if err == nil {
 		p.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
 	}
