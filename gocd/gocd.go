@@ -78,7 +78,7 @@ type Client struct {
 	Configuration     *ConfigurationService
 	Encryption        *EncryptionService
 	Plugins           *PluginsService
-	Environments *EnvironmentsService
+	Environments      *EnvironmentsService
 
 	common service
 	cookie string
