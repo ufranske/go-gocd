@@ -1,6 +1,6 @@
 package gocd
 
-// GetGroupByPipelineName filters pipeline groups by their contained pipelines
+// GetGroupByPipelineName finds the pipeline group for the name of the pipeline supplied
 func (pg *PipelineGroups) GetGroupByPipelineName(pipelineName string) *PipelineGroup {
 	for _, pipelineGroup := range *pg {
 		for _, pipeline := range pipelineGroup.Pipelines {
@@ -10,4 +10,9 @@ func (pg *PipelineGroups) GetGroupByPipelineName(pipelineName string) *PipelineG
 		}
 	}
 	return nil
+}
+
+// GetGroupByPipeline finds the pipeline group for the pipeline supplied
+func (pg *PipelineGroups) GetGroupByPipeline(pipeline *Pipeline) *PipelineGroup {
+	return pg.GetGroupByPipelineName(pipeline.Name)
 }
