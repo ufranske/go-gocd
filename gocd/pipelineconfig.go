@@ -3,7 +3,6 @@ package gocd
 import (
 	"context"
 	"fmt"
-	"github.com/pkg/errors"
 	"strings"
 )
 
@@ -21,7 +20,14 @@ type PipelineConfigRequest struct {
 
 // Get a single PipelineTemplate object in the GoCD API.
 func (pcs *PipelineConfigsService) Get(ctx context.Context, name string) (*Pipeline, *APIResponse, error) {
-	return nil, nil, errors.New("Not Implemented")
+	p := Pipeline{}
+	_, resp, err := pcs.client.getAction(ctx, &APIClientRequest{
+		Path:         "admin/pipelines/" + name,
+		APIVersion:   apiV4,
+		ResponseBody: &p,
+	})
+
+	return &p, resp, err
 }
 
 // Update a pipeline configuration
