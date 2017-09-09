@@ -134,7 +134,7 @@ func testPipelineServiceCreate(t *testing.T) {
 			},
 		},
 	}
-	pr, _, err := client.Pipelines.Create(context.Background(), &p, "first")
+	pr, _, err := client.PipelineConfigs.Create(context.Background(), "first", &p)
 	if err != nil {
 		t.Error(err)
 	}
