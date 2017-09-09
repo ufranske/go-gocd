@@ -29,4 +29,9 @@ func testResourcePipelineGroups(t *testing.T) {
 
 	p = pgs.GetGroupByPipelineName("pipeline5")
 	assert.Nil(t, p)
+
+	p = pgs.GetGroupByPipeline(&Pipeline{
+		Name: "pipeline1",
+	})
+	assert.Equal(t, "test-group1", p.Name)
 }
