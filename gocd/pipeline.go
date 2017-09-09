@@ -152,22 +152,6 @@ func (pgs *PipelinesService) ReleaseLock(ctx context.Context, name string) (bool
 	return pgs.pipelineAction(ctx, name, "releaseLock")
 }
 
-// Create a pipeline
-func (pgs *PipelinesService) Create(ctx context.Context, p *Pipeline, group string) (*Pipeline, *APIResponse, error) {
-	pt := Pipeline{}
-	_, resp, err := pgs.client.postAction(ctx, &APIClientRequest{
-		Path:       "admin/pipelines",
-		APIVersion: apiV4,
-		RequestBody: PipelineRequest{
-			Group:    group,
-			Pipeline: p,
-		},
-		ResponseBody: &pt,
-	})
-
-	return &pt, resp, err
-}
-
 // GetInstance of a pipeline run.
 func (pgs *PipelinesService) GetInstance(ctx context.Context, name string, offset int) (*PipelineInstance, *APIResponse, error) {
 	stub := pgs.buildPaginatedStub("admin/pipelines/%s/instance", name, offset)
