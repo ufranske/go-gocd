@@ -5,7 +5,7 @@ import (
 	"errors"
 )
 
-// StageContainer describes structs which contain stages
+// StageContainer describes structs which contain stages, eg Pipelines and PipelineTemplates
 type StageContainer interface {
 	GetName() string
 	SetStage(stage *Stage)

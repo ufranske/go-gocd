@@ -48,5 +48,5 @@ func (pt *PipelineTemplate) SetStage(newStage *Stage) {
 			return
 		}
 	}
-	return
+	pt.AddStage(newStage)
 }
