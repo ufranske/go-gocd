@@ -1,12 +1,12 @@
 package gocd
 
 import (
-	"testing"
+	"context"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
-	"fmt"
 	"net/http"
-	"context"
+	"testing"
 )
 
 func TestEnvironment(t *testing.T) {
@@ -37,9 +37,9 @@ func testEnvironmentList(t *testing.T) {
 	assert.NotNil(t, envs.Links.Doc)
 	assert.Equal(t, "https://api.gocd.org/#environment-config", envs.Links.Doc.String())
 
-	assert.NotNil(t,envs.Embedded)
-	assert.NotNil(t,envs.Embedded.Environments)
-	assert.Len(t, envs.Embedded.Environments,1)
+	assert.NotNil(t, envs.Embedded)
+	assert.NotNil(t, envs.Embedded.Environments)
+	assert.Len(t, envs.Embedded.Environments, 1)
 
 	env := envs.Embedded.Environments[0]
 	assert.NotNil(t, env.Links)
@@ -54,9 +54,9 @@ func testEnvironmentList(t *testing.T) {
 
 	p := env.Pipelines[0]
 	assert.NotNil(t, p.Links)
-	assert.Equal(t, "https://ci.example.com/go/api/admin/pipelines/up42",p.Links.Self.String())
-	assert.Equal(t,  "https://api.gocd.org/#pipeline-config",p.Links.Doc.String())
-	assert.Equal(t, "https://ci.example.com/go/api/admin/pipelines/:pipeline_name",p.Links.Find.String())
+	assert.Equal(t, "https://ci.example.com/go/api/admin/pipelines/up42", p.Links.Self.String())
+	assert.Equal(t, "https://api.gocd.org/#pipeline-config", p.Links.Doc.String())
+	assert.Equal(t, "https://ci.example.com/go/api/admin/pipelines/:pipeline_name", p.Links.Find.String())
 	assert.Equal(t, "up42", p.Name)
 
 	assert.NotNil(t, env.Agents)
@@ -64,21 +64,21 @@ func testEnvironmentList(t *testing.T) {
 
 	a := env.Agents[0]
 	assert.NotNil(t, a.Links)
-	assert.Equal(t, "https://ci.example.com/go/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da",a.Links.Self.String())
-	assert.Equal(t,  "https://api.gocd.org/#agents",a.Links.Doc.String())
-	assert.Equal(t, "https://ci.example.com/go/api/agents/:uuid",a.Links.Find.String())
+	assert.Equal(t, "https://ci.example.com/go/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da", a.Links.Self.String())
+	assert.Equal(t, "https://api.gocd.org/#agents", a.Links.Doc.String())
+	assert.Equal(t, "https://ci.example.com/go/api/agents/:uuid", a.Links.Find.String())
 	assert.Equal(t, "12345678-e2f6-4c78-123456789012", a.UUID)
 
 	assert.NotNil(t, env.EnvironmentVariables)
-	assert.Len(t, env.EnvironmentVariables,2)
+	assert.Len(t, env.EnvironmentVariables, 2)
 
 	ev1 := env.EnvironmentVariables[0]
-	assert.Equal(t, "username",ev1.Name)
+	assert.Equal(t, "username", ev1.Name)
 	assert.False(t, ev1.Secure)
-	assert.Equal(t, "admin",ev1.Value)
+	assert.Equal(t, "admin", ev1.Value)
 
 	ev2 := env.EnvironmentVariables[1]
-	assert.Equal(t, "password",ev2.Name)
+	assert.Equal(t, "password", ev2.Name)
 	assert.True(t, ev2.Secure)
 	assert.Equal(t, "LSd1TI0eLa+DjytHjj0qjA==", ev2.EncryptedValue)
 }

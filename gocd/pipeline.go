@@ -18,21 +18,21 @@ type PipelineRequest struct {
 // Pipeline describes a pipeline object
 type Pipeline struct {
 	Links                 *PipelineLinks `json:"_links,omitempty"`
-	Name                  string     `json:"name"`
-	LabelTemplate         string     `json:"label_template,omitempty"`
-	EnablePipelineLocking bool       `json:"enable_pipeline_locking,omitempty"`
-	Template              string     `json:"template,omitempty"`
-	Materials             []Material `json:"materials,omitempty"`
-	Label                 string     `json:"label,omitempty"`
-	Stages                []*Stage   `json:"stages"`
-	Version               string     `json:"version,omitempty"`
+	Name                  string         `json:"name"`
+	LabelTemplate         string         `json:"label_template,omitempty"`
+	EnablePipelineLocking bool           `json:"enable_pipeline_locking,omitempty"`
+	Template              string         `json:"template,omitempty"`
+	Materials             []Material     `json:"materials,omitempty"`
+	Label                 string         `json:"label,omitempty"`
+	Stages                []*Stage       `json:"stages"`
+	Version               string         `json:"version,omitempty"`
 }
 
 // PipelineLinks describes the HAL _link resource for the api response object for a collection of pipeline objects.
 //go:generate gocd-response-links-generator -type=PipelineLinks
 type PipelineLinks struct {
 	Self *url.URL `json:"self"`
-	Doc *url.URL `json:"doc"`
+	Doc  *url.URL `json:"doc"`
 	Find *url.URL `json:"find"`
 }
 
@@ -88,7 +88,7 @@ type BuildCause struct {
 // MaterialRevision describes the uniquely identifiable version for the material which was pulled for this build
 type MaterialRevision struct {
 	Modifications []Modification `json:"modifications"`
-	Material struct {
+	Material      struct {
 		Description string `json:"description"`
 		Fingerprint string `json:"fingerprint"`
 		Type        string `json:"type"`
