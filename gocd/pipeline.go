@@ -108,7 +108,7 @@ type BuildCause struct {
 // MaterialRevision describes the uniquely identifiable version for the material which was pulled for this build
 type MaterialRevision struct {
 	Modifications []Modification `json:"modifications"`
-	Material struct {
+	Material      struct {
 		Description string `json:"description"`
 		Fingerprint string `json:"fingerprint"`
 		Type        string `json:"type"`
