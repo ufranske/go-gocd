@@ -37,7 +37,7 @@ type Job struct {
 	Tasks                []*Task                `json:"tasks,omitempty"`
 	Tabs                 []*Tab                 `json:"tabs,omitempty"`
 	Artifacts            []*Artifact            `json:"artifacts,omitempty"`
-	ElasticProfileId     string                 `json:"elastic_profile_id,omitempty"`
+	ElasticProfileID     string                 `json:"elastic_profile_id,omitempty"`
 }
 
 // Artifact describes the result of a job
