@@ -26,7 +26,7 @@ type EnvironmentLinks struct {
 
 // EnvironmentsResponse describes the response obejct for a plugin API call.
 type EnvironmentsResponse struct {
-	Links *EnvironmentsResponseLinks `json:"_links"`
+	Links    *EnvironmentsResponseLinks `json:"_links"`
 	Embedded struct {
 		Environments []*Environment `json:"environments"`
 	} `json:"_embedded"`
