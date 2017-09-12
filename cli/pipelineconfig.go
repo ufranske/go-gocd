@@ -202,6 +202,7 @@ func GetPipelineConfigCommand() *cli.Command {
 		Name:   GetPipelineConfigCommandName,
 		Usage:  GetPipelineConfigCommandUsage,
 		Action: GetPipelineConfigAction,
+		Category: "Pipeline Configs",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
