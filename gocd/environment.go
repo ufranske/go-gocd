@@ -88,11 +88,16 @@ func (es *EnvironmentsService) Get(ctx context.Context, name string) (*Environme
 	return &e, resp, err
 }
 
+// Delete an environment
+func (es *EnvironmentsService) Delete(ctx context.Context, name string) (string, *APIResponse, error) {
+	return es.client.deleteAction(ctx, name, apiV2)
+}
+
 // Create an environment
 func (es *EnvironmentsService) Create(ctx context.Context, name string) (*Environment, *APIResponse, error) {
 	e := Environment{}
 	_, resp, err := es.client.postAction(ctx, &APIClientRequest{
-		Path: "admin/environments",
+		Path: "admin/environments/" + name,
 		RequestBody: Environment{
 			Name: name,
 		},
