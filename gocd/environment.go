@@ -25,7 +25,7 @@ type EnvironmentLinks struct {
 
 // EnvironmentsResponse describes the response obejct for a plugin API call.
 type EnvironmentsResponse struct {
-	Links    EnvironmentsResponseLinks `json:"_links"`
+	Links    *EnvironmentsResponseLinks `json:"_links"`
 	Embedded struct {
 		Environments []*Environment `json:"environments"`
 	} `json:"_embedded"`
@@ -33,11 +33,11 @@ type EnvironmentsResponse struct {
 
 // Environment describes a group of pipelines and agents
 type Environment struct {
-	Links                EnvironmentLinks       `json:"_links"`
+	Links                *EnvironmentLinks       `json:"_links,omitempty"`
 	Name                 string                 `json:"name"`
-	Pipelines            []*Pipeline            `json:"pipelines"`
-	Agents               []*Agent               `json:"agents"`
-	EnvironmentVariables []*EnvironmentVariable `json:"environment_variables"`
+	Pipelines            []*Pipeline            `json:"pipelines,omitempty"`
+	Agents               []*Agent               `json:"agents,omitempty"`
+	EnvironmentVariables []*EnvironmentVariable `json:"environment_variables,omitempty"`
 }
 
 // List all environments
