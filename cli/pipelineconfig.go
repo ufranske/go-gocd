@@ -138,6 +138,7 @@ func DeletePipelineConfigAction(c *cli.Context) error {
 	return handleOutput(deleteResponse, r, "DeletePipelineTemplate", err)
 }
 
+// GetPipelineConfigAction handles the interaction between the cli flags and the action handler for get-pipeline-config
 func GetPipelineConfigAction(c *cli.Context) error {
 	name := c.String("name")
 	if name == "" {
@@ -199,9 +200,9 @@ func DeletePipelineConfigCommand() *cli.Command {
 // GetPipelineConfigCommand handles the interaction between the cli flags and the action handler for get-pipeline-config
 func GetPipelineConfigCommand() *cli.Command {
 	return &cli.Command{
-		Name:   GetPipelineConfigCommandName,
-		Usage:  GetPipelineConfigCommandUsage,
-		Action: GetPipelineConfigAction,
+		Name:     GetPipelineConfigCommandName,
+		Usage:    GetPipelineConfigCommandUsage,
+		Action:   GetPipelineConfigAction,
 		Category: "Pipeline Configs",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},

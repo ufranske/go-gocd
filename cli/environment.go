@@ -1,13 +1,14 @@
 package cli
 
 import (
-	"github.com/urfave/cli"
 	"context"
 	"errors"
 	"github.com/drewsonne/go-gocd/gocd"
+	"github.com/urfave/cli"
 	"strings"
 )
 
+// List of command name and descriptions
 const (
 	ListEnvironmentsCommandName                = "list-environments"
 	ListEnvironmentsCommandUsage               = "List all environments"
@@ -19,6 +20,7 @@ const (
 	RemovePipelinesFromEnvironmentCommandUsage = "Remove one or more pipelines from an environment"
 )
 
+// ListEnvironmentsAction handles the listing of environments
 func ListEnvironmentsAction(c *cli.Context) error {
 	es, r, err := cliAgent(c).Environments.List(context.Background())
 	if err != nil {
@@ -30,6 +32,7 @@ func ListEnvironmentsAction(c *cli.Context) error {
 	return handleOutput(es, r, "ListEnvironments", err)
 }
 
+// GetEnvironmentAction handles the retrieval of environments
 func GetEnvironmentAction(c *cli.Context) error {
 	if c.String("name") == "" {
 		return handleOutput(nil, nil, "GetEnvironment", errors.New("'--name' is missing"))
@@ -42,6 +45,7 @@ func GetEnvironmentAction(c *cli.Context) error {
 	return handleOutput(e, r, "GetEnvironment", err)
 }
 
+// AddPipelinesToEnvironmentAction handles the adding of a pipeline to an environment
 func AddPipelinesToEnvironmentAction(c *cli.Context) error {
 	if c.String("environment-name") == "" {
 		return handleOutput(nil, nil, "AddPipelinesToEnvironment", errors.New("'--environment-name' is missing"))
@@ -64,6 +68,7 @@ func AddPipelinesToEnvironmentAction(c *cli.Context) error {
 	return nil
 }
 
+// RemovePipelinesFromEnvironmentAction handles the removing of a pipeline from an environment
 func RemovePipelinesFromEnvironmentAction(c *cli.Context) error {
 	if c.String("environment-name") == "" {
 		return handleOutput(nil, nil, "RemovePipelinesFromEnvironment", errors.New("'--environment-name' is missing"))
@@ -86,6 +91,7 @@ func RemovePipelinesFromEnvironmentAction(c *cli.Context) error {
 	return nil
 }
 
+// ListEnvironmentsCommand handles definition of cli command
 func ListEnvironmentsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     ListEnvironmentsCommandName,
@@ -95,6 +101,7 @@ func ListEnvironmentsCommand() *cli.Command {
 	}
 }
 
+// GetEnvironmentCommand handles definition of cli command
 func GetEnvironmentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetEnvironmentCommandName,
@@ -107,6 +114,7 @@ func GetEnvironmentCommand() *cli.Command {
 	}
 }
 
+// AddPipelinesToEnvironmentCommand handles definition of cli command
 func AddPipelinesToEnvironmentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     AddPipelinesToEnvironmentCommandName,
@@ -123,6 +131,7 @@ func AddPipelinesToEnvironmentCommand() *cli.Command {
 	}
 }
 
+// RemovePipelinesFromEnvironmentCommand handles definition of cli command
 func RemovePipelinesFromEnvironmentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     RemovePipelinesFromEnvironmentCommandName,
