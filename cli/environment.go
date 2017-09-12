@@ -64,8 +64,6 @@ func AddPipelinesToEnvironmentAction(c *cli.Context) error {
 	}
 	e.RemoveLinks()
 	return handleOutput(e, r, "AddPipelinesToEnvironment", err)
-
-	return nil
 }
 
 // RemovePipelinesFromEnvironmentAction handles the removing of a pipeline from an environment
@@ -87,8 +85,6 @@ func RemovePipelinesFromEnvironmentAction(c *cli.Context) error {
 	}
 	e.RemoveLinks()
 	return handleOutput(e, r, "RemovePipelinesFromEnvironment", err)
-
-	return nil
 }
 
 // ListEnvironmentsCommand handles definition of cli command
