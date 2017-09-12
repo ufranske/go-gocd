@@ -26,7 +26,7 @@ type EnvironmentLinks struct {
 
 // EnvironmentsResponse describes the response obejct for a plugin API call.
 type EnvironmentsResponse struct {
-	Links    *EnvironmentsResponseLinks `json:"_links"`
+	Links *EnvironmentsResponseLinks `json:"_links"`
 	Embedded struct {
 		Environments []*Environment `json:"environments"`
 	} `json:"_embedded"`
@@ -85,6 +85,23 @@ func (es *EnvironmentsService) Get(ctx context.Context, name string) (*Environme
 		e.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
 	}
 
+	return &e, resp, err
+}
+
+// Create an environment
+func (es *EnvironmentsService) Create(ctx context.Context, name string) (*Environment, *APIResponse, error) {
+	e := Environment{}
+	_, resp, err := es.client.postAction(ctx, &APIClientRequest{
+		Path: "admin/environments",
+		RequestBody: Environment{
+			Name: name,
+		},
+		ResponseBody: &e,
+		APIVersion:   apiV2,
+	})
+	if err == nil {
+		e.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
+	}
 	return &e, resp, err
 }
 
