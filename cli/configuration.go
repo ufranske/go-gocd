@@ -14,22 +14,20 @@ const (
 )
 
 // GetConfigurationAction gets a list of agents and return them.
-func GetConfigurationAction(c *cli.Context) error {
-	pgs, r, err := cliAgent(c).Configuration.Get(context.Background())
-	if err != nil {
-		return handleErrOutput("GetConfiguration", err)
-	} else {
+func GetConfigurationAction(c *cli.Context) (err error) {
+	var err error
+	if pgs, r, err := cliAgent(c).Configuration.Get(context.Background()); err == nil {
 		return handleOutput(pgs, r, "GetConfiguration", err)
 	}
+	return handleErrOutput("GetConfiguration", err)
 }
 
 // GetVersionAction returns version information about GoCD
-func GetVersionAction(c *cli.Context) error {
-	if v, r, err := cliAgent(c).Configuration.GetVersion(context.Background()); err != nil {
-		return handleErrOutput("GetVersion", err)
-	} else {
+func GetVersionAction(c *cli.Context) (err error) {
+	if v, r, err := cliAgent(c).Configuration.GetVersion(context.Background()); err == nil {
 		return handleOutput(v, r, "GetVersion", err)
 	}
+	return handleErrOutput("GetVersion", err)
 }
 
 // GetConfigurationCommand handles the interaction between the cli flags and the action handler for delete-agents
