@@ -7,6 +7,46 @@ import (
 	"github.com/urfave/cli"
 )
 
+// Return a list of all CLI Command structs
+func GetCliCommands() []cli.Command {
+	return []cli.Command{
+		*configureCommand(),
+		*listAgentsCommand(),
+		*listPipelineTemplatesCommand(),
+		*getAgentCommand(),
+		*getPipelineTemplateCommand(),
+		*createPipelineTemplateCommand(),
+		*updateAgentCommand(),
+		*updateAgentsCommand(),
+		*updatePipelineConfigCommand(),
+		*updatePipelineTemplateCommand(),
+		*deleteAgentCommand(),
+		*deleteAgentsCommand(),
+		*deletePipelineTemplateCommand(),
+		*deletePipelineConfigCommand(),
+		*listPipelineGroupsCommand(),
+		*getPipelineHistoryCommand(),
+		*getPipelineCommand(),
+		*createPipelineConfigCommand(),
+		*generateJSONSchemaCommand(),
+		*getPipelineStatusCommand(),
+		*pausePipelineCommand(),
+		*unpausePipelineCommand(),
+		*releasePipelineLockCommand(),
+		*getConfigurationCommand(),
+		*encryptCommand(),
+		*getVersionCommand(),
+		*listPluginsCommand(),
+		*getPluginCommand(),
+		*listScheduledJobsCommand(),
+		*getPipelineConfigCommand(),
+		*listEnvironmentsCommand(),
+		*getEnvironmentCommand(),
+		*addPipelinesToEnvironmentCommand(),
+		*removePipelinesFromEnvironmentCommand(),
+	}
+}
+
 // NewCliClient
 func cliAgent(c *cli.Context) *gocd.Client {
 	var cfg *gocd.Configuration

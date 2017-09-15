@@ -48,16 +48,16 @@ func generateConfigFile() (string, error) {
 			Prompt: &survey.Password{Message: "Client Password"},
 		},
 		{
-			Name:   "ssl_check",
-			Prompt: &survey.Confirm{Message: "Validate SSL Certificate?"},
+			Name:   "skip_ssl_check",
+			Prompt: &survey.Confirm{Message: "Skip SSL certificate validation?"},
 		},
 	}
 
 	a := struct {
-		GoCDServer string `survey:"gocd_server"`
-		Username   string
-		Password   string
-		SslCheck   bool `survey:"ssl_check"`
+		GoCDServer   string `survey:"gocd_server"`
+		Username     string
+		Password     string
+		SkipSslCheck bool   `survey:"ssl_check"`
 	}{}
 
 	survey.Ask(qs, &a)
@@ -65,7 +65,7 @@ func generateConfigFile() (string, error) {
 	cfg.Server = a.GoCDServer
 	cfg.Username = a.Username
 	cfg.Password = a.Password
-	cfg.SslCheck = a.SslCheck
+	cfg.SslCheck = !a.SkipSslCheck
 
 	s, err := yaml.Marshal(cfg)
 	if err != nil {
