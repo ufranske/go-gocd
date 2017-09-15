@@ -7,7 +7,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-// Return a list of all CLI Command structs
+// GetCliCommands returns a list of all CLI Command structs
 func GetCliCommands() []cli.Command {
 	return []cli.Command{
 		*configureCommand(),

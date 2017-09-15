@@ -15,7 +15,6 @@ const (
 
 // GetConfigurationAction gets a list of agents and return them.
 func GetConfigurationAction(c *cli.Context) (err error) {
-	var err error
 	if pgs, r, err := cliAgent(c).Configuration.Get(context.Background()); err == nil {
 		return handleOutput(pgs, r, "GetConfiguration", err)
 	}
