@@ -95,13 +95,13 @@ func CreatePipelineTemplateAction(c *cli.Context) error {
 // 2xx.
 func UpdatePipelineTemplateAction(c *cli.Context) error {
 	if c.String("template-name") == "" {
-		return handeErrOutput("UpdatePipelineTemplate", errors.New("'--template-name' is missing"))
+		return handleErrOutput("UpdatePipelineTemplate", errors.New("'--template-name' is missing"))
 	}
 	if c.String("template-version") == "" {
-		return handeErrOutput("UpdatePipelineTemplate", errors.New("'--version' is missing"))
+		return handleErrOutput("UpdatePipelineTemplate", errors.New("'--version' is missing"))
 	}
 	if len(c.StringSlice("stage")) < 1 {
-		return handeErrOutput("UpdatePipelineTemplate", errors.New("At least 1 '--stage' must be set"))
+		return handleErrOutput("UpdatePipelineTemplate", errors.New("At least 1 '--stage' must be set"))
 	}
 
 	stages := []*gocd.Stage{}
@@ -110,7 +110,7 @@ func UpdatePipelineTemplateAction(c *cli.Context) error {
 		json.Unmarshal([]byte(stage), &st)
 
 		if err := st.Validate(); err != nil {
-			return handeErrOutput("UpdatePipelineTemplate", err)
+			return handleErrOutput("UpdatePipelineTemplate", err)
 		}
 		stages = append(stages, &st)
 	}

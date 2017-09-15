@@ -24,7 +24,7 @@ const (
 func ListEnvironmentsAction(c *cli.Context) error {
 	es, r, err := cliAgent(c).Environments.List(context.Background())
 	if err != nil {
-		return handeErrOutput("ListEnvironments", err)
+		return handleErrOutput("ListEnvironments", err)
 	}
 
 	es.RemoveLinks()
@@ -39,7 +39,7 @@ func GetEnvironmentAction(c *cli.Context) error {
 	}
 	e, r, err := cliAgent(c).Environments.Get(context.Background(), c.String("name"))
 	if err != nil {
-		return handeErrOutput("GetEnvironment", err)
+		return handleErrOutput("GetEnvironment", err)
 	}
 	e.RemoveLinks()
 	return handleOutput(e, r, "GetEnvironment", err)
@@ -60,7 +60,7 @@ func AddPipelinesToEnvironmentAction(c *cli.Context) error {
 		},
 	})
 	if err != nil {
-		return handeErrOutput("AddPipelinesToEnvironment", err)
+		return handleErrOutput("AddPipelinesToEnvironment", err)
 	}
 	e.RemoveLinks()
 	return handleOutput(e, r, "AddPipelinesToEnvironment", err)
@@ -81,7 +81,7 @@ func RemovePipelinesFromEnvironmentAction(c *cli.Context) error {
 		},
 	})
 	if err != nil {
-		return handeErrOutput("RemovePipelinesFromEnvironment", err)
+		return handleErrOutput("RemovePipelinesFromEnvironment", err)
 	}
 	e.RemoveLinks()
 	return handleOutput(e, r, "RemovePipelinesFromEnvironment", err)
