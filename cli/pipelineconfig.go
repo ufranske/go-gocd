@@ -32,14 +32,14 @@ func CreatePipelineConfigAction(c *cli.Context) error {
 	pipeline := c.String("pipeline")
 	pipelineFile := c.String("pipeline-file")
 	if pipeline == "" && pipelineFile == "" {
-		return handeErrOutput(
+		return handleErrOutput(
 			"CreatePipelineConfig",
 			errors.New("One of '--pipeline-file' or '--pipeline' must be specified"),
 		)
 	}
 
 	if pipeline != "" && pipelineFile != "" {
-		return handeErrOutput(
+		return handleErrOutput(
 			"CreatePipelineConfig",
 			errors.New("Only one of '--pipeline-file' or '--pipeline' can be specified"),
 		)
@@ -50,7 +50,7 @@ func CreatePipelineConfigAction(c *cli.Context) error {
 	if pipelineFile != "" {
 		pf, err = ioutil.ReadFile(pipelineFile)
 		if err != nil {
-			return handeErrOutput("CreatePipelineConfig", err)
+			return handleErrOutput("CreatePipelineConfig", err)
 		}
 	} else {
 		pf = []byte(pipeline)
@@ -58,12 +58,12 @@ func CreatePipelineConfigAction(c *cli.Context) error {
 	p := &gocd.Pipeline{}
 	err = json.Unmarshal(pf, &p)
 	if err != nil {
-		return handeErrOutput("CreatePipelineConfig", err)
+		return handleErrOutput("CreatePipelineConfig", err)
 	}
 
 	pc, r, err := cliAgent(c).PipelineConfigs.Create(context.Background(), group, p)
 	if err != nil {
-		return handeErrOutput("CreatePipelineConfig", err)
+		return handleErrOutput("CreatePipelineConfig", err)
 	}
 	return handleOutput(pc, r, "CreatePipelineConfig", err)
 }
@@ -84,14 +84,14 @@ func UpdatePipelineConfigAction(c *cli.Context) error {
 	pipeline := c.String("pipeline")
 	pipelineFile := c.String("pipeline-file")
 	if pipeline == "" && pipelineFile == "" {
-		return handeErrOutput(
+		return handleErrOutput(
 			"UpdatePipelineConfig",
 			errors.New("One of '--pipeline-file' or '--pipeline' must be specified"),
 		)
 	}
 
 	if pipeline != "" && pipelineFile != "" {
-		return handeErrOutput(
+		return handleErrOutput(
 			"UpdatePipelineConfig",
 			errors.New("Only one of '--pipeline-file' or '--pipeline' can be specified"),
 		)
@@ -102,7 +102,7 @@ func UpdatePipelineConfigAction(c *cli.Context) error {
 	if pipelineFile != "" {
 		pf, err = ioutil.ReadFile(pipelineFile)
 		if err != nil {
-			return handeErrOutput("UpdatePipelineConfig", err)
+			return handleErrOutput("UpdatePipelineConfig", err)
 		}
 	} else {
 		pf = []byte(pipeline)
@@ -112,12 +112,12 @@ func UpdatePipelineConfigAction(c *cli.Context) error {
 	}
 	err = json.Unmarshal(pf, &p)
 	if err != nil {
-		return handeErrOutput("UpdatePipelineConfig", err)
+		return handleErrOutput("UpdatePipelineConfig", err)
 	}
 
 	pc, r, err := cliAgent(c).PipelineConfigs.Update(context.Background(), name, p)
 	if err != nil {
-		return handeErrOutput("CreatePipelineConfig", err)
+		return handleErrOutput("CreatePipelineConfig", err)
 	}
 	return handleOutput(pc, r, "CreatePipelineConfig", err)
 

@@ -32,7 +32,7 @@ func cliAgent(c *cli.Context) *gocd.Client {
 	return cfg.Client()
 }
 
-func handeErrOutput(reqType string, err error) error {
+func handleErrOutput(reqType string, err error) error {
 	return handleOutput(nil, nil, reqType, err)
 }
 

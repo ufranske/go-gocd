@@ -17,21 +17,19 @@ const (
 func GetConfigurationAction(c *cli.Context) error {
 	pgs, r, err := cliAgent(c).Configuration.Get(context.Background())
 	if err != nil {
-		return handleOutput(nil, r, "GetConfiguration", err)
+		return handleErrOutput("GetConfiguration", err)
+	} else {
+		return handleOutput(pgs, r, "GetConfiguration", err)
 	}
-
-	return handleOutput(pgs, r, "GetConfiguration", err)
 }
 
 // GetVersionAction returns version information about GoCD
 func GetVersionAction(c *cli.Context) error {
-	v, r, err := cliAgent(c).Configuration.GetVersion(context.Background())
-	if err != nil {
-		return handleOutput(nil, r, "GetVersion", err)
+	if v, r, err := cliAgent(c).Configuration.GetVersion(context.Background()); err != nil {
+		return handleErrOutput("GetVersion", err)
+	} else {
+		return handleOutput(v, r, "GetVersion", err)
 	}
-
-	return handleOutput(v, r, "GetVersion", err)
-
 }
 
 // GetConfigurationCommand handles the interaction between the cli flags and the action handler for delete-agents
