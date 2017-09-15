@@ -45,7 +45,7 @@ Run `gocd configure` to launch a wizard which will create a file at `~/.gocd.con
 server: https://goserver:8154/go
 username: admin
 password: mypassword
-skip_ssl_check: false
+skip_ssl_check: true
 ```
 
 #### Help
@@ -70,6 +70,7 @@ package main
 import (
     "github.com/drewsonne/go-gocd/gocd"
     "context"
+    "fmt"
 )
 
 func main() {
@@ -79,17 +80,46 @@ func main() {
         Password: "MySecretPassword",
     }
     
-    client := gocd.NewClient(&cfg,nil)
-    
-    // list all agents in use by the GoCD Server
-    agents, _, err := client.Agents.List(context.Background())
+    c := cfg.Client()
+    gocd.NewClient()
 
-    ...
+    // list all agents in use by the GoCD Server
+    var a []*gocd.Agent
+    var err error
+    var r *gocd.APIResponse
+    if a, r, err = c.Agents.List(context.Background()); err != nil {
+    	panic(err)
+    }
+    if r.HTTP.StatusCode == 404 {
+    	fmt.Println("Couldn't find agent")
+    }
+    
+    fmt.Println(a)
+}
+```
+
+If you wish to use your own http client, you can use the following idiom
+
+```go
+package main
+
+import (
+    "github.com/drewsonne/go-gocd/gocd"
+	"net/http"
+    "context"
+)
+
+func main() {
+    hc := http.Client{}
+    cfg := gocd.Configuration{}
+    
+    client := gocd.NewClient(&cfg, &hc)
+    client.Login(context.Background())
 }
 ```
 
 ### Usage
-
+lk
 ## Roadmap ##
 This library is still in pre-release. It was initially developed to be an interface for a [gocd terraform provider](https://github.com/drewsonne/terraform-provider-gocd),
 which, at this stage, will heavily influence the direction of this library. A list of new features and the expected release
