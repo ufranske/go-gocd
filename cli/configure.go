@@ -49,7 +49,7 @@ func generateConfigFile() (string, error) {
 		},
 		{
 			Name:   "ssl_check",
-			Prompt: &survey.Confirm{Message: "Validate SSL Certiicate?"},
+			Prompt: &survey.Confirm{Message: "Validate SSL Certificate?"},
 		},
 	}
 
