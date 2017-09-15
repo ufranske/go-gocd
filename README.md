@@ -91,10 +91,11 @@ func main() {
     var err error
     var r *gocd.APIResponse
     if a, r, err = c.Agents.List(context.Background()); err != nil {
-    	panic(err)
-    }
-    if r.HTTP.StatusCode == 404 {
-    	fmt.Println("Couldn't find agent")
+        if r.HTTP.StatusCode == 404 {
+            fmt.Println("Couldn't find agent")
+        } else {
+        	panic(err)
+        }
     }
     
     fmt.Println(a)
