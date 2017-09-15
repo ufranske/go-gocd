@@ -189,8 +189,7 @@ func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset
 func (pgs *PipelinesService) pipelineAction(ctx context.Context, name string, action string) (bool, *APIResponse, error) {
 
 	_, resp, err := pgs.client.postAction(ctx, &APIClientRequest{
-		Path:         fmt.Sprintf("pipelines/%s/%s", name, action),
-		ResponseType: responseTypeJSON,
+		Path: fmt.Sprintf("pipelines/%s/%s", name, action),
 		Headers: map[string]string{
 			"Confirm": "true",
 		},
