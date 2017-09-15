@@ -30,19 +30,12 @@ and place the binary in your `$PATH`.
 #### Configuration
 The library can either be configured using environment variables, cli flags, or a yaml config file.
 
-##### Environment Variables
-
- - `$GOCD_SERVER`
- - `$GOCD_USERNAME`
- - `$GOCD_PASSWORD`
- - `$GOCD_SSL_CHECK`
- 
-##### CLI Flags
-
- - `--server`
- - `--username`
- - `--password`
- - `--ssl_check`
+| Name | CLI Flag | YAML | Environment Variable |
+|------|----------|------|----------------------|
+| GoCD Server (with `/go/` suffix) | `--server` | `server` | `$GOCD_SERVER` |
+| Username | `--username` | `username` | `$GOCD_USERNAME` |
+| Password | `--password` | `password` | `$GOCD_PASSWORD` |
+| Skip HTTPS/SSL Certification Check | `--skip_ssl_check` | `skip_ssl_check` | `$GOCD_SKIP_SSL_CHECK` |
  
 ##### YAML Config File
 
@@ -52,7 +45,7 @@ Run `gocd configure` to launch a wizard which will create a file at `~/.gocd.con
 server: https://goserver:8154/go
 username: admin
 password: mypassword
-ssl_check: false
+skip_ssl_check: false
 ```
 
 #### Help
