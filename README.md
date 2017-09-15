@@ -84,7 +84,6 @@ func main() {
     }
     
     c := cfg.Client()
-    gocd.NewClient()
 
     // list all agents in use by the GoCD Server
     var a []*gocd.Agent
@@ -114,10 +113,10 @@ import (
 )
 
 func main() {
-    hc := http.Client{}
-    cfg := gocd.Configuration{}
-    
-    client := gocd.NewClient(&cfg, &hc)
+    client := gocd.NewClient(
+        &gocd.Configuration{},
+        &http.Client{},
+    )
     client.Login(context.Background())
 }
 ```
