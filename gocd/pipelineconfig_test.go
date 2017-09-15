@@ -24,6 +24,7 @@ func testPipelineConfigGet(t *testing.T) {
 		assert.Contains(t, r.Header["Accept"], "application/vnd.go.cd.v4+json")
 
 		j, _ := ioutil.ReadFile("test/resources/pipelineconfig.0.json")
+		w.Header().Set("Etag", "mock-etag")
 		fmt.Fprint(w, string(j))
 	})
 
@@ -33,6 +34,7 @@ func testPipelineConfigGet(t *testing.T) {
 	}
 
 	assert.NotNil(t, pc)
+	assert.Equal(t, "mock-etag", pc.Version)
 
 	assert.NotNil(t, pc.Links.Self)
 	assert.Equal(t, "https://ci.example.com/go/api/admin/pipelines/new_pipeline", pc.Links.Self.String())

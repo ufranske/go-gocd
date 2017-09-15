@@ -45,3 +45,13 @@ func (p *Pipeline) SetStage(newStage *Stage) {
 	}
 	p.AddStage(newStage)
 }
+
+// SetVersion sets a version string for this pipeline
+func (p *Pipeline) SetVersion(version string) {
+	p.Version = version
+}
+
+// GetVersion retrieves a version string for this pipeline
+func (p *Pipeline) GetVersion() (version string) {
+	return p.Version
+}
