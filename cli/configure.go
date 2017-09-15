@@ -57,7 +57,7 @@ func generateConfigFile() (string, error) {
 		GoCDServer   string `survey:"gocd_server"`
 		Username     string
 		Password     string
-		SkipSslCheck bool   `survey:"ssl_check"`
+		SkipSslCheck bool `survey:"ssl_check"`
 	}{}
 
 	survey.Ask(qs, &a)

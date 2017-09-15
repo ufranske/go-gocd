@@ -23,7 +23,7 @@ const (
 
 // CreatePipelineConfigAction handles the interaction between the cli flags and the action handler for
 // create-pipeline-config-action
-func CreatePipelineConfigAction(c *cli.Context) error {
+func createPipelineConfigAction(c *cli.Context) error {
 	group := c.String("group")
 	if group == "" {
 		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--group' is missing"))
@@ -70,7 +70,7 @@ func CreatePipelineConfigAction(c *cli.Context) error {
 
 // UpdatePipelineConfigAction handles the interaction between the cli flags and the action handler for
 // update-pipeline-config-action
-func UpdatePipelineConfigAction(c *cli.Context) error {
+func updatePipelineConfigAction(c *cli.Context) error {
 	name := c.String("name")
 	if name == "" {
 		return handleOutput(nil, nil, "UpdatePipelineConfig", errors.New("'--name' is missing"))
@@ -125,7 +125,7 @@ func UpdatePipelineConfigAction(c *cli.Context) error {
 
 // DeletePipelineConfigAction handles the interaction between the cli flags and the action handler for
 // delete-pipeline-config-action
-func DeletePipelineConfigAction(c *cli.Context) error {
+func deletePipelineConfigAction(c *cli.Context) error {
 	name := c.String("name")
 	if name == "" {
 		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--name' is missing"))
@@ -139,7 +139,7 @@ func DeletePipelineConfigAction(c *cli.Context) error {
 }
 
 // GetPipelineConfigAction handles the interaction between the cli flags and the action handler for get-pipeline-config
-func GetPipelineConfigAction(c *cli.Context) error {
+func getPipelineConfigAction(c *cli.Context) error {
 	name := c.String("name")
 	if name == "" {
 		return handleOutput(nil, nil, "GetPipelineConfig", errors.New("'--name' is missing"))
@@ -158,7 +158,7 @@ func createPipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:     CreatePipelineConfigCommandName,
 		Usage:    CreatePipelineConfigCommandUsage,
-		Action:   CreatePipelineConfigAction,
+		Action:   createPipelineConfigAction,
 		Category: "Pipeline Configs",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "group"},
@@ -173,7 +173,7 @@ func updatePipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:     UpdatePipelineConfigCommandName,
 		Usage:    UpdatePipelineConfigCommandUsage,
-		Action:   UpdatePipelineConfigAction,
+		Action:   updatePipelineConfigAction,
 		Category: "Pipeline Configs",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
@@ -190,7 +190,7 @@ func deletePipelineConfigCommand() *cli.Command {
 		Name:     DeletePipelineConfigCommandName,
 		Usage:    DeletePipelineConfigCommandUsage,
 		Category: "Pipeline Configs",
-		Action:   DeletePipelineConfigAction,
+		Action:   deletePipelineConfigAction,
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
@@ -202,7 +202,7 @@ func getPipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetPipelineConfigCommandName,
 		Usage:    GetPipelineConfigCommandUsage,
-		Action:   GetPipelineConfigAction,
+		Action:   getPipelineConfigAction,
 		Category: "Pipeline Configs",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
