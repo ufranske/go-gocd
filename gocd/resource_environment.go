@@ -18,3 +18,13 @@ func (env *Environment) RemoveLinks() {
 		a.RemoveLinks()
 	}
 }
+
+// SetVersion sets a version string for this pipeline
+func (env *Environment) SetVersion(version string) {
+	env.Version = version
+}
+
+// GetVersion retrieves a version string for this pipeline
+func (env *Environment) GetVersion() (version string) {
+	return env.Version
+}

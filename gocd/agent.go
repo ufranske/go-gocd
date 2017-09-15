@@ -147,13 +147,13 @@ func (s *AgentsService) JobRunHistory(ctx context.Context, uuid string) ([]*Job,
 }
 
 // handleAgentRequest handles the flow to perform an HTTP action on an agent resource.
-func (s *AgentsService) handleAgentRequest(ctx context.Context, action string, uuid string, body *Agent) (*Agent, *APIResponse, error) {
+func (s *AgentsService) handleAgentRequest(ctx context.Context, action string, uuid string, agent *Agent) (*Agent, *APIResponse, error) {
 	a := Agent{client: s.client}
 	_, resp, err := s.client.httpAction(ctx, &APIClientRequest{
 		Method:       action,
 		Path:         "agents/" + uuid,
 		APIVersion:   apiV4,
-		RequestBody:  body,
+		RequestBody:  agent,
 		ResponseBody: &a,
 	})
 

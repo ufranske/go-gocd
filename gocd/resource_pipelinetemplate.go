@@ -50,3 +50,13 @@ func (pt *PipelineTemplate) SetStage(newStage *Stage) {
 	}
 	pt.AddStage(newStage)
 }
+
+// SetVersion sets a version string for this pipeline
+func (pt *PipelineTemplate) SetVersion(version string) {
+	pt.Version = version
+}
+
+// GetVersion retrieves a version string for this pipeline
+func (pt *PipelineTemplate) GetVersion() (version string) {
+	return pt.Version
+}
