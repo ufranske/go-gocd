@@ -31,7 +31,7 @@ type AgentsResponse struct {
 	} `json:"_embedded,omitempty"`
 }
 
-// Agent describes a single agent object.
+// Agent represents agent in GoCD.
 type Agent struct {
 	UUID             string        `json:"uuid,omitempty"`
 	Hostname         string        `json:"hostname,omitempty"`
@@ -49,14 +49,6 @@ type Agent struct {
 	BuildDetails     *BuildDetails `json:"build_details,omitempty"`
 	Links            *AgentLinks   `json:"_links,omitempty,omitempty"`
 	client           *Client
-}
-
-// AgentUpdate describes the structure for the PUT payload when updating an agent
-type AgentUpdate struct {
-	Hostname         string   `json:"hostname,omitempty"`
-	Resources        []string `json:"resources,omitempty"`
-	Environments     []string `json:"environments,omitempty"`
-	AgentConfigState string   `json:"agent_config_state,omitempty"`
 }
 
 // AgentBulkUpdate describes the structure for the PUT payload when updating multiple agents
@@ -122,8 +114,8 @@ func (s *AgentsService) Get(ctx context.Context, uuid string) (*Agent, *APIRespo
 }
 
 // Update will modify the configuration for an existing agents.
-func (s *AgentsService) Update(ctx context.Context, uuid string, agent AgentUpdate) (*Agent, *APIResponse, error) {
-	return s.handleAgentRequest(ctx, "PATCH", uuid, &agent)
+func (s *AgentsService) Update(ctx context.Context, uuid string, agent *Agent) (*Agent, *APIResponse, error) {
+	return s.handleAgentRequest(ctx, "PATCH", uuid, agent)
 }
 
 // Delete will remove an existing agent. Note: The agent must be disabled, and not currently building to be deleted.
@@ -155,7 +147,7 @@ func (s *AgentsService) JobRunHistory(ctx context.Context, uuid string) ([]*Job,
 }
 
 // handleAgentRequest handles the flow to perform an HTTP action on an agent resource.
-func (s *AgentsService) handleAgentRequest(ctx context.Context, action string, uuid string, body *AgentUpdate) (*Agent, *APIResponse, error) {
+func (s *AgentsService) handleAgentRequest(ctx context.Context, action string, uuid string, body *Agent) (*Agent, *APIResponse, error) {
 	a := Agent{client: s.client}
 	_, resp, err := s.client.httpAction(ctx, &APIClientRequest{
 		Method:       action,
