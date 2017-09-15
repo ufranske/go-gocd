@@ -128,10 +128,10 @@ func testAgentUpdate(t *testing.T) {
 		fmt.Fprint(w, string(j))
 	})
 
-	agentUpdate := AgentUpdate{
+	agentUpdate := Agent{
 		Resources: []string{"other"},
 	}
-	agent, _, err := client.Agents.Update(context.Background(), "testAgentUpdate-b954-4571-9d9b-2f330739d4da", agentUpdate)
+	agent, _, err := client.Agents.Update(context.Background(), "testAgentUpdate-b954-4571-9d9b-2f330739d4da", &agentUpdate)
 	assert.Nil(t, err)
 	assert.NotNil(t, *agent)
 
