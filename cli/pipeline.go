@@ -107,7 +107,7 @@ func ReleasePipelineLockAction(c *cli.Context) error {
 
 // GetPipelineStatusCommand handles the interaction between the cli flags and the action handler for
 // get-pipeline
-func GetPipelineStatusCommand() *cli.Command {
+func getPipelineStatusCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetPipelineStatusCommandName,
 		Usage:    GetPipelineStatusCommandUsage,
@@ -121,7 +121,7 @@ func GetPipelineStatusCommand() *cli.Command {
 
 // PausePipelineCommand handles the interaction between the cli flags and the action handler for
 // get-pipeline
-func PausePipelineCommand() *cli.Command {
+func pausePipelineCommand() *cli.Command {
 	return &cli.Command{
 		Name:     PausePipelineCommandName,
 		Usage:    PausePipelineCommandUsage,
@@ -135,7 +135,7 @@ func PausePipelineCommand() *cli.Command {
 
 // UnpausePipelineCommand handles the interaction between the cli flags and the action handler for
 // get-pipeline
-func UnpausePipelineCommand() *cli.Command {
+func unpausePipelineCommand() *cli.Command {
 	return &cli.Command{
 		Name:     UnpausePipelineCommandName,
 		Usage:    UnpausePipelineCommandUsage,
@@ -149,7 +149,7 @@ func UnpausePipelineCommand() *cli.Command {
 
 // ReleasePipelineLockCommand handles the interaction between the cli flags and the action handler for
 // get-pipeline
-func ReleasePipelineLockCommand() *cli.Command {
+func releasePipelineLockCommand() *cli.Command {
 	return &cli.Command{
 		Name:     ReleasePipelineLockCommandName,
 		Usage:    ReleasePipelineLockCommandUsage,
@@ -163,7 +163,7 @@ func ReleasePipelineLockCommand() *cli.Command {
 
 // GetPipelineCommand handles the interaction between the cli flags and the action handler for
 // get-pipeline
-func GetPipelineCommand() *cli.Command {
+func getPipelineCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetPipelineCommandName,
 		Usage:    GetPipelineCommandUsage,
@@ -177,7 +177,7 @@ func GetPipelineCommand() *cli.Command {
 
 // GetPipelineHistoryCommand handles the interaction between the cli flags and the action handler for
 // get-pipeline-history-action
-func GetPipelineHistoryCommand() *cli.Command {
+func getPipelineHistoryCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetPipelineHistoryCommandName,
 		Usage:    GetPipelineHistoryCommandUsage,

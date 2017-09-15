@@ -43,7 +43,7 @@ func GenerateJSONSchemaAction(c *cli.Context) error {
 }
 
 // GenerateJSONSchemaCommand handles the interaction between the cli flags and the action handler for generate-json
-func GenerateJSONSchemaCommand() *cli.Command {
+func generateJSONSchemaCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GenerateJSONSchemaCommandName,
 		Usage:    GenerateJSONSchemaCommandUsage,

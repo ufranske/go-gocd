@@ -34,7 +34,7 @@ func ListPluginsAction(c *cli.Context) error {
 }
 
 // GetPluginCommand Describes the cli interface for the GetPluginAction
-func GetPluginCommand() *cli.Command {
+func getPluginCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetPluginCommandName,
 		Usage:    GetPluginCommandUsage,
@@ -47,7 +47,7 @@ func GetPluginCommand() *cli.Command {
 }
 
 // ListPluginsCommand Describes the cli interface for the ListPluginsCommand
-func ListPluginsCommand() *cli.Command {
+func listPluginsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     ListPluginsCommandName,
 		Usage:    ListPluginsCommandUsage,
