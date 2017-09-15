@@ -28,7 +28,7 @@ func listPipelineGroupsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     ListPipelineGroupsCommandName,
 		Usage:    ListPipelineGroupsCommandUsage,
-		Action:   ListPipelineGroupsAction,
+		Action:   listPipelineGroupsAction,
 		Category: "Pipeline Groups",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "group-name"},

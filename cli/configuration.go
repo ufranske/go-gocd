@@ -14,7 +14,7 @@ const (
 )
 
 // GetConfigurationAction gets a list of agents and return them.
-func GetConfigurationAction(c *cli.Context) (err error) {
+func getConfigurationAction(c *cli.Context) (err error) {
 	if pgs, r, err := cliAgent(c).Configuration.Get(context.Background()); err == nil {
 		return handleOutput(pgs, r, "GetConfiguration", err)
 	}
@@ -22,7 +22,7 @@ func GetConfigurationAction(c *cli.Context) (err error) {
 }
 
 // GetVersionAction returns version information about GoCD
-func GetVersionAction(c *cli.Context) (err error) {
+func getVersionAction(c *cli.Context) (err error) {
 	if v, r, err := cliAgent(c).Configuration.GetVersion(context.Background()); err == nil {
 		return handleOutput(v, r, "GetVersion", err)
 	}
@@ -34,7 +34,7 @@ func getConfigurationCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetConfigurationCommandName,
 		Usage:    GetConfigurationCommandUsage,
-		Action:   GetConfigurationAction,
+		Action:   getConfigurationAction,
 		Category: "Configuration",
 	}
 }
@@ -44,7 +44,7 @@ func getVersionCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetVersionCommandName,
 		Usage:    GetVersionCommandUsage,
-		Action:   GetVersionAction,
+		Action:   getVersionAction,
 		Category: "Configuration",
 	}
 }
