@@ -126,7 +126,7 @@ func UpdatePipelineTemplateAction(c *cli.Context) error {
 
 // DeletePipelineTemplateCommand handles the interaction between the cli flags and the action handler for
 // delete-pipeline-template and checks a template-name is provided and that the response is a 2xx response.
-func DeletePipelineTemplateCommand() *cli.Command {
+func deletePipelineTemplateCommand() *cli.Command {
 	return &cli.Command{
 		Name:     DeletePipelineTemplateCommandName,
 		Usage:    DeletePipelineTemplateCommandUsage,
@@ -149,7 +149,7 @@ func DeletePipelineTemplateCommand() *cli.Command {
 
 // ListPipelineTemplatesCommand handles the interaction between the cli flags and the action handler for
 // list-pipeline-templates
-func ListPipelineTemplatesCommand() *cli.Command {
+func listPipelineTemplatesCommand() *cli.Command {
 	return &cli.Command{
 		Name:     ListPipelineTemplatesCommandName,
 		Usage:    ListPipelineTemplatesCommandUsage,
@@ -160,7 +160,7 @@ func ListPipelineTemplatesCommand() *cli.Command {
 
 // GetPipelineTemplateCommand handles the interaction between the cli flags and the action handler for
 // get-pipeline-template
-func GetPipelineTemplateCommand() *cli.Command {
+func getPipelineTemplateCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetPipelineTemplateCommandName,
 		Usage:    GetPipelineTemplateCommandUsage,
@@ -174,7 +174,7 @@ func GetPipelineTemplateCommand() *cli.Command {
 
 // CreatePipelineTemplateCommand handles the interaction between the cli flags and the action handler for
 // create-pipeline-template
-func CreatePipelineTemplateCommand() *cli.Command {
+func createPipelineTemplateCommand() *cli.Command {
 	return &cli.Command{
 		Name:     CreatePipelineTemplateCommandName,
 		Usage:    CreatePipelineTemplateCommandUsage,
@@ -189,7 +189,7 @@ func CreatePipelineTemplateCommand() *cli.Command {
 
 // UpdatePipelineTemplateCommand handles the interaction between the cli flags and the action handler for
 // update-pipeline-template
-func UpdatePipelineTemplateCommand() *cli.Command {
+func updatePipelineTemplateCommand() *cli.Command {
 	return &cli.Command{
 		Name:     UpdatePipelineTemplateCommandName,
 		Usage:    UpdatePipelineTemplateCommandUsage,

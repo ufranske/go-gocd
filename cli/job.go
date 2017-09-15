@@ -21,7 +21,7 @@ func ListScheduledJobsAction(c *cli.Context) error {
 }
 
 // ListScheduledJobsCommand provides interface between handler and action
-func ListScheduledJobsCommand() *cli.Command {
+func listScheduledJobsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     ListScheduledJobsCommandName,
 		Usage:    ListScheduledJobsCommandUsage,

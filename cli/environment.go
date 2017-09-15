@@ -88,7 +88,7 @@ func RemovePipelinesFromEnvironmentAction(c *cli.Context) error {
 }
 
 // ListEnvironmentsCommand handles definition of cli command
-func ListEnvironmentsCommand() *cli.Command {
+func listEnvironmentsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     ListEnvironmentsCommandName,
 		Usage:    ListEnvironmentsCommandUsage,
@@ -98,7 +98,7 @@ func ListEnvironmentsCommand() *cli.Command {
 }
 
 // GetEnvironmentCommand handles definition of cli command
-func GetEnvironmentCommand() *cli.Command {
+func getEnvironmentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetEnvironmentCommandName,
 		Usage:    GetEnvironmentCommandUsage,
@@ -111,7 +111,7 @@ func GetEnvironmentCommand() *cli.Command {
 }
 
 // AddPipelinesToEnvironmentCommand handles definition of cli command
-func AddPipelinesToEnvironmentCommand() *cli.Command {
+func addPipelinesToEnvironmentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     AddPipelinesToEnvironmentCommandName,
 		Usage:    AddPipelinesToEnvironmentCommandUsage,
@@ -128,7 +128,7 @@ func AddPipelinesToEnvironmentCommand() *cli.Command {
 }
 
 // RemovePipelinesFromEnvironmentCommand handles definition of cli command
-func RemovePipelinesFromEnvironmentCommand() *cli.Command {
+func removePipelinesFromEnvironmentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     RemovePipelinesFromEnvironmentCommandName,
 		Usage:    RemovePipelinesFromEnvironmentCommandUsage,

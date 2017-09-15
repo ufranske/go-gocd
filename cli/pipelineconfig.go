@@ -154,7 +154,7 @@ func GetPipelineConfigAction(c *cli.Context) error {
 }
 
 // CreatePipelineConfigCommand handles the interaction between the cli flags and the action handler for create-pipeline-config
-func CreatePipelineConfigCommand() *cli.Command {
+func createPipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:     CreatePipelineConfigCommandName,
 		Usage:    CreatePipelineConfigCommandUsage,
@@ -169,7 +169,7 @@ func CreatePipelineConfigCommand() *cli.Command {
 }
 
 // UpdatePipelineConfigCommand handles the interaction between the cli flags and the action handler for update-pipeline-config
-func UpdatePipelineConfigCommand() *cli.Command {
+func updatePipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:     UpdatePipelineConfigCommandName,
 		Usage:    UpdatePipelineConfigCommandUsage,
@@ -185,7 +185,7 @@ func UpdatePipelineConfigCommand() *cli.Command {
 }
 
 // DeletePipelineConfigCommand handles the interaction between the cli flags and the action handler for delete-pipeline-config
-func DeletePipelineConfigCommand() *cli.Command {
+func deletePipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:     DeletePipelineConfigCommandName,
 		Usage:    DeletePipelineConfigCommandUsage,
@@ -198,7 +198,7 @@ func DeletePipelineConfigCommand() *cli.Command {
 }
 
 // GetPipelineConfigCommand handles the interaction between the cli flags and the action handler for get-pipeline-config
-func GetPipelineConfigCommand() *cli.Command {
+func getPipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetPipelineConfigCommandName,
 		Usage:    GetPipelineConfigCommandUsage,

@@ -27,7 +27,7 @@ func EncryptAction(c *cli.Context) error {
 }
 
 // EncryptCommand checks a template-name is provided and that the response is a 2xx response.
-func EncryptCommand() *cli.Command {
+func encryptCommand() *cli.Command {
 	return &cli.Command{
 		Name:     EncryptCommandName,
 		Usage:    EncryptCommandUsage,

@@ -33,7 +33,7 @@ func GetVersionAction(c *cli.Context) error {
 }
 
 // GetConfigurationCommand handles the interaction between the cli flags and the action handler for delete-agents
-func GetConfigurationCommand() *cli.Command {
+func getConfigurationCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetConfigurationCommandName,
 		Usage:    GetConfigurationCommandUsage,
@@ -43,7 +43,7 @@ func GetConfigurationCommand() *cli.Command {
 }
 
 // GetVersionCommand handles the interaction between the cli flags and the action handler for delete-agents
-func GetVersionCommand() *cli.Command {
+func getVersionCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetVersionCommandName,
 		Usage:    GetVersionCommandUsage,

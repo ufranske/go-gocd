@@ -24,7 +24,7 @@ func ListPipelineGroupsAction(c *cli.Context) error {
 
 // ListPipelineGroupsCommand handles the interaction between the cli flags and the action handler for
 // list-pipeline-groups
-func ListPipelineGroupsCommand() *cli.Command {
+func listPipelineGroupsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     ListPipelineGroupsCommandName,
 		Usage:    ListPipelineGroupsCommandUsage,

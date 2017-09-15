@@ -76,7 +76,7 @@ func generateConfigFile() (string, error) {
 }
 
 // ConfigureCommand handles the interaction between the cli flags and the action handler for configure
-func ConfigureCommand() *cli.Command {
+func configureCommand() *cli.Command {
 	return &cli.Command{
 		Name:   ConfigureCommandName,
 		Usage:  ConfigureCommandUsage,
