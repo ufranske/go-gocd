@@ -15,8 +15,10 @@ CLI tool to interace with GoCD Server.
 
 ##### Homebrew
 
-    $ brew tap drewsonne/tap
-    $ brew install go-gocd
+``` bash
+brew tap drewsonne/tap
+brew install go-gocd
+```
 
 ##### Manual
 Download the latest release from [https://github.com/drewsonne/go-gocd/releases](https://github.com/drewsonne/go-gocd/releases),
@@ -24,8 +26,14 @@ and place the binary in your `$PATH`.
 
 #### Quickstart
 
-    $ gocd configure
-    $ gocd list-agents
+```
+$ gocd configure
+? GoCD Server (should contain '/go/' suffix) https://my-go-server:8154/go/
+? Client Username my_user
+? Client Password *****
+? Skip SSL certificate validation (y/N) N
+$ gocd list-agents
+```
 
 #### Configuration
 The library can either be configured using environment variables, cli flags, or a yaml config file.
@@ -55,11 +63,6 @@ skip_ssl_check: true
 ## Library
 
 ### Usage
-
-```go
-package main
-import "github.com/drewsonne/go-gocd/gocd"
-```
 
 Construct a new GoCD client and supply the URL to your GoCD server and if required, username and password. Then use the
 various services on the client to access different parts of the GoCD API.

@@ -49,7 +49,7 @@ func generateConfigFile() (string, error) {
 		},
 		{
 			Name:   "skip_ssl_check",
-			Prompt: &survey.Confirm{Message: "Skip SSL certificate validation?"},
+			Prompt: &survey.Confirm{Message: "Skip SSL certificate validation"},
 		},
 	}
 
