@@ -36,12 +36,12 @@ func testPipelineConfigGet(t *testing.T) {
 	assert.NotNil(t, pc)
 	assert.Equal(t, "mock-etag", pc.Version)
 
-	assert.NotNil(t, pc.Links.Self)
-	assert.Equal(t, "https://ci.example.com/go/api/admin/pipelines/new_pipeline", pc.Links.Self.String())
-	assert.NotNil(t, pc.Links.Doc)
-	assert.Equal(t, "https://api.gocd.org/#pipeline-config", pc.Links.Doc.String())
-	assert.NotNil(t, pc.Links.Find)
-	assert.Equal(t, "https://ci.example.com/go/api/admin/pipelines/:name", pc.Links.Find.String())
+	assert.NotNil(t, pc.Links.Get("Self"))
+	assert.Equal(t, "https://ci.example.com/go/api/admin/pipelines/new_pipeline", pc.Links.Get("Self").URL.String())
+	assert.NotNil(t, pc.Links.Get("Doc"))
+	assert.Equal(t, "https://api.gocd.org/#pipeline-config", pc.Links.Get("Doc").URL.String())
+	assert.NotNil(t, pc.Links.Get("Find"))
+	assert.Equal(t, "https://ci.example.com/go/api/admin/pipelines/:name", pc.Links.Get("Find").URL.String())
 
 	assert.Equal(t, "${COUNT}", pc.LabelTemplate)
 	assert.True(t, pc.EnablePipelineLocking)
