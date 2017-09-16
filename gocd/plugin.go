@@ -3,7 +3,6 @@ package gocd
 import (
 	"context"
 	"fmt"
-	"net/url"
 )
 
 // PluginsService exposes calls for interacting with Plugin objects in the GoCD API.
