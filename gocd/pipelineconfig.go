@@ -22,9 +22,6 @@ func (pcs *PipelineConfigsService) Get(ctx context.Context, name string) (*Pipel
 		APIVersion:   apiV4,
 		ResponseBody: &p,
 	})
-	//if err == nil {
-	//	p.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
-	//}
 
 	return &p, resp, err
 }
@@ -63,9 +60,6 @@ func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *
 		},
 		ResponseBody: &pc,
 	})
-	//if err == nil {
-	//	pc.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
-	//}
 
 	return &pc, resp, err
 }

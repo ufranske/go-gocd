@@ -72,9 +72,7 @@ func (es *EnvironmentsService) Create(ctx context.Context, name string) (*Enviro
 		ResponseBody: &e,
 		APIVersion:   apiV2,
 	})
-	//if err == nil {
-	//	e.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
-	//}
+
 	return &e, resp, err
 }
 
@@ -86,9 +84,6 @@ func (es *EnvironmentsService) Get(ctx context.Context, name string) (*Environme
 		ResponseBody: &e,
 		APIVersion:   apiV2,
 	})
-	//if err == nil {
-	//	e.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
-	//}
 
 	return &e, resp, err
 }
@@ -102,9 +97,6 @@ func (es *EnvironmentsService) Patch(ctx context.Context, name string, patch *En
 		ResponseBody: &env,
 		APIVersion:   apiV2,
 	})
-	//if err == nil {
-	//	env.Version = strings.Replace(resp.HTTP.Header.Get("Etag"), "\"", "", -1)
-	//}
 
 	return &env, resp, err
 }
