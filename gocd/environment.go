@@ -2,7 +2,6 @@ package gocd
 
 import (
 	"context"
-	"net/url"
 )
 
 // EnvironmentsService exposes calls for interacting with Environment objects in the GoCD API.

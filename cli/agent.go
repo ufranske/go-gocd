@@ -56,7 +56,7 @@ func updateAgentAction(c *cli.Context) error {
 		return handleOutput(nil, nil, "UpdateAgent", errors.New("'--config' is missing"))
 	}
 
-	a := gocd.AgentUpdate{}
+	a := &gocd.Agent{}
 	b := []byte(c.String("config"))
 	if err := json.Unmarshal(b, &a); err != nil {
 		return handleOutput(nil, nil, "UpdateAgent", err)
