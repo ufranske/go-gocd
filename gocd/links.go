@@ -40,8 +40,8 @@ func (al HALLinks) GetOk(name string) (*HALLink, bool) {
 // Keys returns a string list of link names
 func (al HALLinks) Keys() []string {
 	keys := make([]string, len(al.links))
-	for _, l := range al.links {
-		keys = append(keys, l.Name)
+	for i, l := range al.links {
+		keys[i] = l.Name
 	}
 	return keys
 }

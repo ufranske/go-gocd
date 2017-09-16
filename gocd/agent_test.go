@@ -19,6 +19,7 @@ func TestAgent(t *testing.T) {
 	t.Run("Get", testAgentGet)
 	t.Run("Update", testAgentUpdate)
 	t.Run("RemoveLinks", testAgentRemoveLinks)
+	t.Run("List", testAgentList)
 }
 
 func testAgentJobRunHistory(t *testing.T) {
@@ -161,7 +162,7 @@ func testAgentGet(t *testing.T) {
 	testAgent(t, agent)
 }
 
-func TestAgent_List(t *testing.T) {
+func testAgentList(t *testing.T) {
 	setup()
 	defer teardown()
 
