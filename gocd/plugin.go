@@ -3,25 +3,10 @@ package gocd
 import (
 	"context"
 	"fmt"
-	"net/url"
 )
 
 // PluginsService exposes calls for interacting with Plugin objects in the GoCD API.
 type PluginsService service
-
-// PluginsResponseLinks describes the HAL _link resource for the api response object for a collection of agent objects.
-//go:generate gocd-response-links-generator -type=PluginsResponseLinks,PluginLinks
-type PluginsResponseLinks struct {
-	Self *url.URL `json:"self"`
-	Doc  *url.URL `json:"doc"`
-}
-
-// PluginLinks describes the HAL _link resource for the api response object for a collection of agent objects.
-type PluginLinks struct {
-	Self *url.URL `json:"self"`
-	Doc  *url.URL `json:"doc"`
-	Find *url.URL `json:"find"`
-}
 
 // PluginsResponse describes the response obejct for a plugin API call.
 type PluginsResponse struct {
