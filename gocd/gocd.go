@@ -257,23 +257,29 @@ func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}, respons
 	}
 
 	if v != nil {
-		if w, ok := v.(io.Writer); ok {
-			io.Copy(w, resp.Body)
-		} else {
-			bdy, err := ioutil.ReadAll(resp.Body)
-			if responseType == responseTypeXML {
-				err = xml.Unmarshal(bdy, v)
-			} else {
-				err = json.Unmarshal(bdy, v)
-			}
-			response.Body = string(bdy)
-			if err == io.EOF {
-				err = nil // ignore EOF errors caused by empty response body
-			}
+		var bdy string
+		if bdy, err = readDoResponseBody(v, &response.HTTP.Body, responseType); err != nil {
+			return nil, err
 		}
+		response.Body = bdy
 	}
 
 	return response, err
+}
+
+func readDoResponseBody(v interface{}, body *io.ReadCloser, responseType string) (string, error) {
+	bdy, err := ioutil.ReadAll(*body)
+	if responseType == responseTypeXML {
+		err = xml.Unmarshal(bdy, v)
+	} else {
+		err = json.Unmarshal(bdy, v)
+	}
+	if err == io.EOF {
+		err = nil // ignore EOF errors caused by empty response body
+	} else if err != nil {
+		return "", nil
+	}
+	return string(bdy), nil
 }
 
 // CheckResponse asserts that the http response status code was 2xx.
