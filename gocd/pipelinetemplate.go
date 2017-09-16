@@ -3,26 +3,10 @@ package gocd
 import (
 	"context"
 	"fmt"
-	"net/url"
 )
 
 // PipelineTemplatesService describes the HAL _link resource for the api response object for a pipeline configuration objects.
 type PipelineTemplatesService service
-
-// PipelineTemplatesLinks describes a single pipeline template config object HAL links
-//go:generate gocd-response-links-generator -type=PipelineTemplatesLinks,PipelineTemplateLinks
-type PipelineTemplatesLinks struct {
-	Self *url.URL `json:"self"`
-	Doc  *url.URL `json:"doc"`
-	Find *url.URL `json:"find"`
-}
-
-// PipelineTemplateLinks describes multiple pipeline template config object HAL links
-type PipelineTemplateLinks struct {
-	Self *url.URL `json:"self"`
-	Doc  *url.URL `json:"doc"`
-	Find *url.URL `json:"find"`
-}
 
 // PipelineTemplateRequest describes a PipelineTemplate
 type PipelineTemplateRequest struct {
@@ -42,7 +26,7 @@ type PipelineTemplateResponse struct {
 
 // PipelineTemplatesResponse describes an api response for multiple pipeline templates
 type PipelineTemplatesResponse struct {
-	Links    PipelineTemplatesLinks `json:"_links,omitempty"`
+	Links    *HALLinks `json:"_links,omitempty"`
 	Embedded *struct {
 		Templates []*PipelineTemplate `json:"templates"`
 	} `json:"_embedded,omitempty"`
@@ -54,7 +38,7 @@ type embeddedPipelineTemplate struct {
 
 // PipelineTemplate describes a response from the API for a pipeline template object.
 type PipelineTemplate struct {
-	Links    *PipelineTemplateLinks    `json:"_links,omitempty"`
+	Links    *HALLinks                 `json:"_links,omitempty"`
 	Name     string                    `json:"name"`
 	Embedded *embeddedPipelineTemplate `json:"_embedded,omitempty"`
 	Version  string                    `json:"template_version"`

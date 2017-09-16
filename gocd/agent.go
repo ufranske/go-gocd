@@ -3,7 +3,6 @@ package gocd
 import (
 	"context"
 	"fmt"
-	"net/url"
 )
 
 // AgentsService describes the HAL _link resource for the api response object for an agent objects.
@@ -11,21 +10,14 @@ type AgentsService service
 
 // AgentsLinks describes the HAL _link resource for the api response object for a collection of agent objects.
 //go:generate gocd-response-links-generator -type=AgentsLinks,AgentLinks
-type AgentsLinks struct {
-	Self *url.URL `json:"self"`
-	Doc  *url.URL `json:"doc"`
-}
+//type AgentsLinks []*HALLink
 
 // AgentLinks describes the HAL _link resource for the api response object for a single agent object.
-type AgentLinks struct {
-	Self *url.URL `json:"self"`
-	Doc  *url.URL `json:"doc"`
-	Find *url.URL `json:"find"`
-}
+//type AgentLinks []*HALLink
 
 // AgentsResponse describes the structure of the API response when listing collections of agent object.
 type AgentsResponse struct {
-	Links    *AgentsLinks `json:"_links,omitempty"`
+	Links    *HALLinks `json:"_links,omitempty"`
 	Embedded *struct {
 		Agents []*Agent `json:"agents"`
 	} `json:"_embedded,omitempty"`
@@ -47,7 +39,7 @@ type Agent struct {
 	Environments     []string      `json:"environments,omitempty"`
 	BuildState       string        `json:"build_state,omitempty"`
 	BuildDetails     *BuildDetails `json:"build_details,omitempty"`
-	Links            *AgentLinks   `json:"_links,omitempty,omitempty"`
+	Links            *HALLinks     `json:"_links,omitempty,omitempty"`
 	client           *Client
 }
 
@@ -73,18 +65,10 @@ type AgentBulkOperationUpdate struct {
 
 // BuildDetails describes the builds being performed on this agent.
 type BuildDetails struct {
-	Links    *BuildDetailsLinks `json:"_links"`
-	Pipeline string             `json:"pipeline"`
-	Stage    string             `json:"stage"`
-	Job      string             `json:"job"`
-}
-
-// BuildDetailsLinks describes the HAL structure for _link objects for the build details.
-//go:generate gocd-response-links-generator -type=BuildDetailsLinks
-type BuildDetailsLinks struct {
-	Job      *url.URL `json:"job"`
-	Stage    *url.URL `json:"stage"`
-	Pipeline *url.URL `json:"pipeline"`
+	Links    *HALLinks `json:"_links"`
+	Pipeline string    `json:"pipeline"`
+	Stage    string    `json:"stage"`
+	Job      string    `json:"job"`
 }
 
 // RemoveLinks sets the `Link` attribute as `nil`. Used when rendering an `Agent` struct to JSON.
