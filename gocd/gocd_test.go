@@ -83,6 +83,9 @@ func testClientNewHTTPS(t *testing.T) {
 
 	transport := c.client.Transport.(*http.Transport)
 	assert.True(t, transport.TLSClientConfig.InsecureSkipVerify)
+
+	client.Lock()
+	client.Unlock()
 }
 
 func TestCheckResponse(t *testing.T) {
