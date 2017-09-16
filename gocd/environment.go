@@ -2,26 +2,10 @@ package gocd
 
 import (
 	"context"
-	"net/url"
 )
 
 // EnvironmentsService exposes calls for interacting with Environment objects in the GoCD API.
 type EnvironmentsService service
-
-// EnvironmentsResponseLinks describes the HAL _link resource for the api response object for a collection of environment
-// objects
-//go:generate gocd-response-links-generator -type=EnvironmentsResponseLinks,EnvironmentLinks
-type EnvironmentsResponseLinks struct {
-	Self *url.URL `json:"self"`
-	Doc  *url.URL `json:"doc"`
-}
-
-// EnvironmentLinks describes the HAL _link resource for the api response object for a collection of environment objects.
-type EnvironmentLinks struct {
-	Self *url.URL `json:"self"`
-	Doc  *url.URL `json:"doc"`
-	Find *url.URL `json:"find"`
-}
 
 // EnvironmentsResponse describes the response obejct for a plugin API call.
 type EnvironmentsResponse struct {
