@@ -8,13 +8,6 @@ import (
 // AgentsService describes the HAL _link resource for the api response object for an agent objects.
 type AgentsService service
 
-// AgentsLinks describes the HAL _link resource for the api response object for a collection of agent objects.
-//go:generate gocd-response-links-generator -type=AgentsLinks,AgentLinks
-//type AgentsLinks []*HALLink
-
-// AgentLinks describes the HAL _link resource for the api response object for a single agent object.
-//type AgentLinks []*HALLink
-
 // AgentsResponse describes the structure of the API response when listing collections of agent object.
 type AgentsResponse struct {
 	Links    *HALLinks `json:"_links,omitempty"`
