@@ -238,33 +238,33 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 
 // Do takes an HTTP request and resposne the response from the GoCD API endpoint.
 func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}, responseType string) (*APIResponse, error) {
+	var err error
+	var resp *http.Response
+	var bdy string
 
 	req.HTTP = req.HTTP.WithContext(ctx)
 
-	response := &APIResponse{
-		Request: req,
-	}
-
-	resp, err := c.client.Do(req.HTTP)
-	if err != nil {
+	if resp, err = c.client.Do(req.HTTP); err != nil {
 		return nil, err
 	}
 
-	response.HTTP = resp
-	err = CheckResponse(response.HTTP)
-	if err != nil {
-		return response, err
+	r := &APIResponse{
+		Request: req,
+		HTTP:    resp,
+	}
+
+	if err = CheckResponse(r.HTTP); err != nil {
+		return r, err
 	}
 
 	if v != nil {
-		var bdy string
-		if bdy, err = readDoResponseBody(v, &response.HTTP.Body, responseType); err != nil {
+		if bdy, err = readDoResponseBody(v, &r.HTTP.Body, responseType); err != nil {
 			return nil, err
 		}
-		response.Body = bdy
+		r.Body = bdy
 	}
 
-	return response, err
+	return r, err
 }
 
 func readDoResponseBody(v interface{}, body *io.ReadCloser, responseType string) (string, error) {
