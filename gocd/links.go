@@ -52,11 +52,7 @@ func (al HALLinks) MarshallJSON() ([]byte, error) {
 	for _, link := range al.links {
 		ls[link.Name] = &linkHref{H: link.URL.String()}
 	}
-	j, e := json.Marshal(ls)
-	if e != nil {
-		return nil, e
-	}
-	return j, nil
+	return json.Marshal(ls)
 }
 
 // UnmarshalJSON allows the decoding of links from JSON

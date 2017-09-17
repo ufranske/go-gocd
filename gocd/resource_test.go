@@ -11,13 +11,52 @@ func TestResource(t *testing.T) {
 	t.Run("PipelineGroups", testResourcePipelineGroups)
 	t.Run("StageContainer", testResourceStageContainers)
 	t.Run("HALContainer", testResourceHALContainers)
+	t.Run("Versioned", testResourceVersioned)
+}
+
+func testResourceVersioned(t *testing.T) {
+	vers := map[string]Versioned{
+		"Environment": &Environment{},
+	}
+	for key, ver := range vers {
+		t.Run(key, func(t *testing.T) {
+			testResourceVersion(t, ver)
+		})
+	}
+}
+
+func testResourceVersion(t *testing.T, ver Versioned) {
+	v := ver.GetVersion()
+	assert.Empty(t, v)
+
+	ver.SetVersion("mock-version")
+	v = ver.GetVersion()
+	assert.Equal(t, "mock-version", v)
 }
 
 func testResourceHALContainers(t *testing.T) {
+	l := &HALLinks{links: []*HALLink{}}
+
 	hals := map[string]HALContainer{
-		"Agent": &Agent{Links: &HALLinks{
-			links: []*HALLink{},
-		}},
+		"Agent":    &Agent{Links: l},
+		"Pipeline": &Pipeline{Links: l},
+		"EnvironmentResponse": &EnvironmentsResponse{
+			Links: l,
+			Embedded: &EmbeddedEnvironments{
+				Environments: []*Environment{
+					{Links: l},
+				},
+			},
+		},
+		"Environment": &Environment{
+			Links: l,
+			Pipelines: []*Pipeline{{
+				Links: l,
+			}},
+			Agents: []*Agent{{
+				Links: l,
+			}},
+		},
 	}
 	for key, hal := range hals {
 		t.Run(key, func(t *testing.T) {
@@ -28,6 +67,8 @@ func testResourceHALContainers(t *testing.T) {
 
 func testResourceHALContainer(t *testing.T, hal HALContainer) {
 	assert.NotNil(t, hal.GetLinks())
+	hal.RemoveLinks()
+	assert.Nil(t, hal.GetLinks())
 }
 
 func testResourceStageContainers(t *testing.T) {

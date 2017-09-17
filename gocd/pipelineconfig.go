@@ -28,7 +28,6 @@ func (pcs *PipelineConfigsService) Get(ctx context.Context, name string) (*Pipel
 
 // Update a pipeline configuration
 func (pcs *PipelineConfigsService) Update(ctx context.Context, name string, p *Pipeline) (*Pipeline, *APIResponse, error) {
-
 	pr := Pipeline{}
 
 	_, resp, err := pcs.client.putAction(ctx, &APIClientRequest{
@@ -44,7 +43,6 @@ func (pcs *PipelineConfigsService) Update(ctx context.Context, name string, p *P
 	})
 
 	return &pr, resp, err
-
 }
 
 // Create a pipeline configuration
