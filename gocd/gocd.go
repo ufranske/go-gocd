@@ -240,7 +240,6 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}, responseType string) (*APIResponse, error) {
 	var err error
 	var resp *http.Response
-	var bdy string
 
 	req.HTTP = req.HTTP.WithContext(ctx)
 
@@ -258,10 +257,9 @@ func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}, respons
 	}
 
 	if v != nil {
-		if bdy, err = readDoResponseBody(v, &r.HTTP.Body, responseType); err != nil {
+		if r.Body, err = readDoResponseBody(v, &r.HTTP.Body, responseType); err != nil {
 			return nil, err
 		}
-		r.Body = bdy
 	}
 
 	return r, err
