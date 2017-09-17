@@ -13,7 +13,7 @@ format:
 
 lint:
 	diff -u <(echo -n) <(gofmt -d -s main.go $(GO_TARGETS))
-	golint -set_exit_status . ./cli ./gocd ./gocd-*-generator
+	golint -set_exit_status . $(go list ./... | grep -v vendor/)
 
 test: lint
 	go tool vet $(GO_TARGETS)
