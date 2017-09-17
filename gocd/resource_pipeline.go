@@ -20,6 +20,11 @@ func (p *Pipeline) RemoveLinks() {
 	p.Links = nil
 }
 
+// GetLinks from pipeline
+func (p *Pipeline) GetLinks() *HALLinks {
+	return p.Links
+}
+
 // GetName of the pipeline
 func (p *Pipeline) GetName() string {
 	return p.Name

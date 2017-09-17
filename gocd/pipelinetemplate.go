@@ -86,9 +86,6 @@ func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st
 		RequestBody:  pt,
 		ResponseBody: &ptr,
 	})
-	if err != nil {
-		return nil, nil, err
-	}
 
 	return &ptr, resp, err
 

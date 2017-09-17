@@ -9,10 +9,13 @@ type EnvironmentsService service
 
 // EnvironmentsResponse describes the response obejct for a plugin API call.
 type EnvironmentsResponse struct {
-	Links    *HALLinks `json:"_links"`
-	Embedded struct {
-		Environments []*Environment `json:"environments"`
-	} `json:"_embedded"`
+	Links    *HALLinks             `json:"_links"`
+	Embedded *EmbeddedEnvironments `json:"_embedded"`
+}
+
+// EmbeddedEnvironments encapsulates the environment struct
+type EmbeddedEnvironments struct {
+	Environments []*Environment `json:"environments"`
 }
 
 // Environment describes a group of pipelines and agents
