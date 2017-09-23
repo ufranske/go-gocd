@@ -16,8 +16,9 @@ func TestResource(t *testing.T) {
 
 func testResourceVersioned(t *testing.T) {
 	vers := map[string]Versioned{
-		"Environment":      &Environment{},
-		"PipelineTemplate": &PipelineTemplate{},
+		"Environment":           &Environment{Version: "mock-version1"},
+		"PipelineTemplate":      &PipelineTemplate{Version: "mock-version1"},
+		"PipelineConfigRequest": &PipelineConfigRequest{Pipeline: &Pipeline{Version: "mock-version1"}},
 	}
 	for key, ver := range vers {
 		t.Run(key, func(t *testing.T) {
@@ -28,7 +29,7 @@ func testResourceVersioned(t *testing.T) {
 
 func testResourceVersion(t *testing.T, ver Versioned) {
 	v := ver.GetVersion()
-	assert.Empty(t, v)
+	assert.Equal(t, "mock-version1", v)
 
 	ver.SetVersion("mock-version")
 	v = ver.GetVersion()
