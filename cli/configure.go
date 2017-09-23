@@ -1,12 +1,12 @@
 package cli
 
 import (
+	"fmt"
 	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
-	"io/ioutil"
 	"gopkg.in/yaml.v2"
-	"fmt"
+	"io/ioutil"
 )
 
 // List of command name and descriptions
