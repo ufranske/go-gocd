@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"fmt"
 	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
@@ -24,7 +23,6 @@ func configureAction(c *cli.Context) (err error) {
 	}
 
 	cfgs, err := gocd.LoadConfigFromFile()
-	fmt.Println(cfgs)
 
 	if cfg, err = generateConfig(); err != nil {
 		return handleErrOutput("Configure:generate", err)
