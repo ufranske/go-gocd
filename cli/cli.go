@@ -71,7 +71,6 @@ func cliAgent(c *cli.Context) *gocd.Client {
 		cfg.Password = password
 	}
 
-
 	cfg.SkipSslCheck = cfg.SkipSslCheck || c.Bool("skip_ssl_check")
 
 	return cfg.Client()

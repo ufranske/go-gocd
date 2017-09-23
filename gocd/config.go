@@ -31,7 +31,7 @@ type Configuration struct {
 // LoadConfigByName loads configurations from yaml at default file location
 func LoadConfigByName(name string) (cfg *Configuration, err error) {
 	cfgs, err := LoadConfigFromFile()
-	if  err == nil {
+	if err == nil {
 		cfg = cfgs[name]
 	} else {
 		return nil, err
