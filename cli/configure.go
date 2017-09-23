@@ -4,8 +4,9 @@ import (
 	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"gopkg.in/yaml.v2"
+	"fmt"
 )
 
 // List of command name and descriptions
@@ -14,28 +15,41 @@ const (
 	ConfigureCommandUsage = "Generate configuration file ~/.gocd.conf"
 )
 
-func configureAction(c *cli.Context) error {
-	var s string
-	var err error
-	if s, err = generateConfigFile(); err != nil {
-		return err
+func configureAction(c *cli.Context) (err error) {
+	var cfg *gocd.Configuration
+	var profile string
+
+	if profile = c.String("profile"); profile == "" {
+		profile = "default"
 	}
 
-	if err = ioutil.WriteFile(gocd.ConfigFilePath(),
-		[]byte(s), 0644); err != nil {
-		return err
+	cfgs, err := gocd.LoadConfigFromFile()
+	fmt.Println(cfgs)
+
+	if cfg, err = generateConfig(); err != nil {
+		return handleErrOutput("Configure:generate", err)
+	} else {
+		cfgs[profile] = cfg
+	}
+
+	b, err := yaml.Marshal(cfgs)
+	if err != nil {
+		return handleErrOutput("Configure:yaml", err)
+	}
+
+	if err = ioutil.WriteFile(gocd.ConfigFilePath(), b, 0644); err != nil {
+		return handleErrOutput("Configure:write", err)
 	}
 
 	return nil
 }
 
 // Build a default template
-func generateConfigFile() (string, error) {
-	cfg := gocd.Configuration{}
-
+func generateConfig() (cfg *gocd.Configuration, err error) {
+	cfg = &gocd.Configuration{}
 	qs := []*survey.Question{
 		{
-			Name:     "gocd_server",
+			Name:     "server",
 			Prompt:   &survey.Input{Message: "GoCD Server (should contain '/go/' suffix)"},
 			Validate: survey.Required,
 		},
@@ -53,26 +67,8 @@ func generateConfigFile() (string, error) {
 		},
 	}
 
-	a := struct {
-		GoCDServer   string `survey:"gocd_server"`
-		Username     string
-		Password     string
-		SkipSslCheck bool `survey:"skip_ssl_check"`
-	}{}
-
-	survey.Ask(qs, &a)
-
-	cfg.Server = a.GoCDServer
-	cfg.Username = a.Username
-	cfg.Password = a.Password
-	cfg.SslCheck = !a.SkipSslCheck
-
-	s, err := yaml.Marshal(cfg)
-	if err != nil {
-		return "", err
-	}
-
-	return string(s), nil
+	err = survey.Ask(qs, cfg)
+	return cfg, err
 }
 
 // ConfigureCommand handles the interaction between the cli flags and the action handler for configure
@@ -81,5 +77,8 @@ func configureCommand() *cli.Command {
 		Name:   ConfigureCommandName,
 		Usage:  ConfigureCommandUsage,
 		Action: configureAction,
+		Flags: []cli.Flag{
+			cli.StringFlag{Name: "profile"},
+		},
 	}
 }
