@@ -16,9 +16,10 @@ func TestResource(t *testing.T) {
 
 func testResourceVersioned(t *testing.T) {
 	vers := map[string]Versioned{
-		"Environment":           &Environment{Version: "mock-version1"},
-		"PipelineTemplate":      &PipelineTemplate{Version: "mock-version1"},
-		"PipelineConfigRequest": &PipelineConfigRequest{Pipeline: &Pipeline{Version: "mock-version1"}},
+		"Environment":             &Environment{Version: "mock-version1"},
+		"PipelineTemplate":        &PipelineTemplate{Version: "mock-version1"},
+		"PipelineConfigRequest":   &PipelineConfigRequest{Pipeline: &Pipeline{Version: "mock-version1"}},
+		"PipelineTemplateRequest": &PipelineTemplateRequest{Version: "mock-version1"},
 	}
 	for key, ver := range vers {
 		t.Run(key, func(t *testing.T) {
