@@ -18,7 +18,7 @@ func configureAction(c *cli.Context) (err error) {
 	var cfg *gocd.Configuration
 	var profile string
 
-	if profile = c.String("profile"); profile == "" {
+	if profile = c.Parent().String("profile"); profile == "" {
 		profile = "default"
 	}
 
