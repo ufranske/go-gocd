@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"fmt"
 	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/urfave/cli"
 	"gopkg.in/AlecAivazis/survey.v1"
@@ -19,12 +18,11 @@ func configureAction(c *cli.Context) (err error) {
 	var cfg *gocd.Configuration
 	var profile string
 
-	if profile = c.String("profile"); profile == "" {
+	if profile = c.Parent().String("profile"); profile == "" {
 		profile = "default"
 	}
 
 	cfgs, err := gocd.LoadConfigFromFile()
-	fmt.Println(cfgs)
 
 	if cfg, err = generateConfig(); err != nil {
 		return handleErrOutput("Configure:generate", err)
