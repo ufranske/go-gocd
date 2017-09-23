@@ -16,7 +16,8 @@ func TestResource(t *testing.T) {
 
 func testResourceVersioned(t *testing.T) {
 	vers := map[string]Versioned{
-		"Environment": &Environment{},
+		"Environment":      &Environment{},
+		"PipelineTemplate": &PipelineTemplate{},
 	}
 	for key, ver := range vers {
 		t.Run(key, func(t *testing.T) {
