@@ -2,8 +2,8 @@ language: go
 go:
   - 1.8.x
   - 1.9.x
-  - release
-  - tip
+#  - release
+#  - tip
 
 env:
  - CODECLIMATE_API_HOST=https://codebeat.co/webhooks/code_coverage
@@ -15,9 +15,9 @@ addons:
     - rpm
 
 matrix:
-  allow_failures:
-    - go: release
-    - go: tip
+#  allow_failures:
+#    - go: release
+#    - go: tip
   fast_finish: true
 
 before_install:
