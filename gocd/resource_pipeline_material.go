@@ -15,7 +15,6 @@ func (m Material) Equal(a *Material) bool {
 	default:
 		panic(fmt.Errorf("Material comparison not implemented for '%s'", m.Type))
 	}
-	return false
 }
 
 func (a1 MaterialAttributes) equalGit(a2 *MaterialAttributes) bool {
