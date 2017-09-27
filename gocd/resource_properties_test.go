@@ -3,6 +3,7 @@ package gocd
 import (
 	"testing"
 	"github.com/stretchr/testify/assert"
+	"io"
 )
 
 func TestResourceProperties(t *testing.T) {
@@ -11,6 +12,21 @@ func TestResourceProperties(t *testing.T) {
 	t.Run("MarshallCSV", testResourcePropertiesMarshallCSV)
 	t.Run("UnmarshallCSVWithHeader", testResourcePropertiesUnmarshallCSVWithHeader)
 	t.Run("UnmarshallCSVWithoutHeader", testResourcePropertiesUnmarshallCSVWithoutHeader)
+	t.Run("IOWriterInterface", testResourcePropertiesIOWriter)
+}
+
+func testResourcePropertiesIOWriter(t *testing.T) {
+	var w1 io.Writer
+	var p1 Properties
+	p1 = Properties{}
+	w1 = &p1
+	w1.Write([]byte("one"))
+	assert.Equal(t, "one", p1.DataFrame[0][0])
+
+	var p2 interface{}
+	p2 = Properties{}
+	_, ok := p2.(io.Writer)
+	assert.True(t, ok)
 }
 
 func testResourcePropertiesBasic(t *testing.T) {

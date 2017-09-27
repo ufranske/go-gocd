@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"strings"
 	"io"
+	"io/ioutil"
 )
 
 type Properties struct {
@@ -64,6 +65,7 @@ func (p Properties) MarshallCSV() (string, error) {
 
 func (p *Properties) UnmarshallCSV(raw string) error {
 	r := csv.NewReader(strings.NewReader(raw))
+	r.TrimLeadingSpace = true
 	for {
 		record, err := r.Read()
 		if err == io.EOF {
@@ -79,4 +81,15 @@ func (p *Properties) UnmarshallCSV(raw string) error {
 		}
 	}
 	return nil
+}
+
+func (pr *Properties) Write(p []byte) (n int, err error) {
+	numBytes := len(p)
+	raw, err := ioutil.ReadAll(bytes.NewReader(p))
+	if err != nil {
+		return 0, nil
+	}
+	pr.UnmarshallCSV(string(raw))
+
+	return numBytes, nil
 }
