@@ -79,6 +79,7 @@ type Client struct {
 	Encryption        *EncryptionService
 	Plugins           *PluginsService
 	Environments      *EnvironmentsService
+	Properties        *PropertiesService
 
 	common service
 	cookie string
@@ -152,6 +153,7 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 	c.Encryption = (*EncryptionService)(&c.common)
 	c.Plugins = (*PluginsService)(&c.common)
 	c.Environments = (*EnvironmentsService)(&c.common)
+	c.Properties = (*PropertiesService)(&c.common)
 
 	return c
 }
@@ -176,7 +178,13 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 		return request, errors.New("Mock Testing Error")
 	}
 
-	rel, err := url.Parse("api/" + urlStr)
+	// Some calls
+	if strings.HasPrefix(urlStr, "/") {
+		urlStr = urlStr[1:]
+	} else {
+		urlStr = "api/" + urlStr
+	}
+	rel, err := url.Parse(urlStr)
 	if err != nil {
 		return request, err
 	}
@@ -258,6 +266,12 @@ func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}, respons
 }
 
 func readDoResponseBody(v interface{}, body *io.ReadCloser, responseType string) (string, error) {
+
+	if w, ok := v.(io.Writer); ok {
+		io.Copy(w, *body)
+		return "", nil
+	}
+
 	bdy, err := ioutil.ReadAll(*body)
 	if responseType == responseTypeXML {
 		err = xml.Unmarshal(bdy, v)
