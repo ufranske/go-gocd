@@ -22,11 +22,6 @@ func testResourcePropertiesIOWriter(t *testing.T) {
 	w1 = &p1
 	w1.Write([]byte("one"))
 	assert.Equal(t, "one", p1.DataFrame[0][0])
-
-	var p2 interface{}
-	p2 = Properties{}
-	_, ok := p2.(io.Writer)
-	assert.True(t, ok)
 }
 
 func testResourcePropertiesBasic(t *testing.T) {

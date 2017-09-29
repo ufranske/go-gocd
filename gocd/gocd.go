@@ -36,6 +36,7 @@ const (
 const (
 	responseTypeXML  = "xml"
 	responseTypeJSON = "json"
+	responseTypeText = "text"
 )
 
 // StringResponse handles the unmarshaling of the single string response from DELETE requests.
@@ -190,6 +191,9 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 	}
 
 	u := c.BaseURL.ResolveReference(rel)
+	if c.BaseURL.RawQuery != "" {
+		u.RawQuery = c.BaseURL.RawQuery
+	}
 
 	var buf io.ReadWriter
 	if body != nil {
@@ -273,7 +277,10 @@ func readDoResponseBody(v interface{}, body *io.ReadCloser, responseType string)
 	}
 
 	bdy, err := ioutil.ReadAll(*body)
-	if responseType == responseTypeXML {
+	if responseType == responseTypeText {
+		strBody := string(bdy)
+		v = &strBody
+	} else if responseType == responseTypeXML {
 		err = xml.Unmarshal(bdy, v)
 	} else {
 		err = json.Unmarshal(bdy, v)
