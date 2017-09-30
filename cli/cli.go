@@ -44,6 +44,8 @@ func GetCliCommands() []cli.Command {
 		*getEnvironmentCommand(),
 		*addPipelinesToEnvironmentCommand(),
 		*removePipelinesFromEnvironmentCommand(),
+		*listPropertiesCommand(),
+		*createPropertyCommand(),
 	}
 }
 
