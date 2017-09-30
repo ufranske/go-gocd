@@ -23,6 +23,9 @@ func configureAction(c *cli.Context) (err error) {
 	}
 
 	cfgs, err := gocd.LoadConfigFromFile()
+	if err != nil {
+		return handleErrOutput("Configure:generate", err)
+	}
 
 	if cfg, err = generateConfig(); err != nil {
 		return handleErrOutput("Configure:generate", err)
