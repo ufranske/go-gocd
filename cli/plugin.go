@@ -3,6 +3,7 @@ package cli
 import (
 	"context"
 	"github.com/urfave/cli"
+	"errors"
 )
 
 // List of command name and descriptions
@@ -15,6 +16,10 @@ const (
 
 // GetPluginAction retrieves a single plugin by name
 func getPluginAction(c *cli.Context) error {
+	name := c.String("name")
+	if name == "" {
+		return handleErrOutput("GetPlugin",errors.New("'--name' is missing."))
+	}
 	pgs, r, err := cliAgent(c).Plugins.Get(context.Background(), c.String("name"))
 	if err != nil {
 		return handleOutput(nil, r, "GetPlugin", err)
