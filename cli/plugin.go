@@ -3,6 +3,7 @@ package cli
 import (
 	"context"
 	"errors"
+	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/urfave/cli"
 )
 
@@ -15,26 +16,18 @@ const (
 )
 
 // GetPluginAction retrieves a single plugin by name
-func getPluginAction(c *cli.Context) cli.ExitCoder {
+func getPluginAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	name := c.String("name")
 	if name == "" {
-		return NewCliError("GetPlugin", nil, errors.New("'--name' is missing."))
+		return nil, nil, errors.New("'--name' is missing.")
 	}
 
-	pgs, r, err := cliAgent(c).Plugins.Get(context.Background(), c.String("name"))
-	if err != nil {
-		return NewCliError("GetPlugin", r, err)
-	}
-	return handleOutput(pgs, "GetPlugin")
+	return client.Plugins.Get(context.Background(), c.String("name"))
 }
 
 // ListPluginsAction retrieves all plugin configurations
-func listPluginsAction(c *cli.Context) cli.ExitCoder {
-	pgs, r, err := cliAgent(c).Plugins.List(context.Background())
-	if err != nil {
-		return NewCliError("ListPlugins", r, err)
-	}
-	return handleOutput(pgs, "ListPlugins")
+func listPluginsAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
+	return client.Plugins.List(context.Background())
 }
 
 // GetPluginCommand Describes the cli interface for the GetPluginAction

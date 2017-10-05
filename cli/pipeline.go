@@ -3,6 +3,7 @@ package cli
 import (
 	"context"
 	"errors"
+	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/urfave/cli"
 )
 
@@ -23,86 +24,62 @@ const (
 )
 
 // GetPipelineStatusAction handles the business logic between the command objects and the go-gocd library.
-func getPipelineStatusAction(c *cli.Context) cli.ExitCoder {
-	if c.String("name") == "" {
-		return NewCliError("GetPipelineStatus", nil, errors.New("'--name' is missing"))
+func getPipelineStatusAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
+	var name string
+	if name = c.String("name"); name == "" {
+		return nil, nil, errors.New("'--name' is missing")
 	}
-	pgs, r, err := cliAgent(c).Pipelines.GetStatus(context.Background(), c.String("name"), -1)
-	if err != nil {
-		return NewCliError("GetPipelineStatus", r, err)
-	}
-
-	return handleOutput(pgs, "GetPipelineStatus")
+	return client.Pipelines.GetStatus(context.Background(), name, -1)
 }
 
 // GetPipelineAction handles the business logic between the command objects and the go-gocd library.
-func getPipelineAction(c *cli.Context) cli.ExitCoder {
-	if c.String("name") == "" {
-		return NewCliError("GetPipeline", nil, errors.New("'--name' is missing"))
+func getPipelineAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
+	var name string
+	if name = c.String("name"); name == "" {
+		return nil, nil, errors.New("'--name' is missing")
 	}
-	pgs, r, err := cliAgent(c).PipelineConfigs.Get(context.Background(), c.String("name"))
-	if err != nil {
-		return NewCliError("GetPipeline", r, err)
-	}
-
-	return handleOutput(pgs, "GetPipeline")
+	return client.PipelineConfigs.Get(context.Background(), c.String("name"))
 }
 
 // GetPipelineHistoryAction handles the interaction between the cli flags and the action handler for
 // get-pipeline-history-action
-func getPipelineHistoryAction(c *cli.Context) cli.ExitCoder {
-	if c.String("name") == "" {
-		return NewCliError("GetPipelineHistory", nil, errors.New("'--name' is missing"))
+func getPipelineHistoryAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
+	var name string
+	if name = c.String("name"); name == "" {
+		return nil, nil, errors.New("'--name' is missing")
 	}
 
-	pgs, r, err := cliAgent(c).Pipelines.GetHistory(context.Background(), c.String("name"), -1)
-	if err != nil {
-		return NewCliError("GetPipelineHistory", r, err)
-	}
-
-	return handleOutput(pgs, "GetPipelineHistory")
+	return client.Pipelines.GetHistory(context.Background(), c.String("name"), -1)
 }
 
 // PausePipelineAction handles the business logic between the command objects and the go-gocd library.
-func pausePipelineAction(c *cli.Context) cli.ExitCoder {
-	if c.String("name") == "" {
-		return NewCliError("PausePipeline", nil, errors.New("'--name' is missing"))
+func pausePipelineAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
+	var name string
+	if name = c.String("name"); name == "" {
+		return nil, nil, errors.New("'--name' is missing")
 	}
 
-	pgs, r, err := cliAgent(c).Pipelines.Pause(context.Background(), c.String("name"))
-	if err != nil {
-		return NewCliError("PausePipeline", r, err)
-	}
-
-	return handleOutput(pgs, "PausePipeline")
+	return client.Pipelines.Pause(context.Background(), c.String("name"))
 }
 
 // UnpausePipelineAction handles the business logic between the command objects and the go-gocd library.
-func unpausePipelineAction(c *cli.Context) cli.ExitCoder {
-	if c.String("name") == "" {
-		return NewCliError("UnpausePipeline", nil, errors.New("'--name' is missing"))
+func unpausePipelineAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
+	var name string
+	if name = c.String("name"); name == "" {
+		return nil, nil, errors.New("'--name' is missing")
 	}
 
-	pgs, r, err := cliAgent(c).Pipelines.Unpause(context.Background(), c.String("name"))
-	if err != nil {
-		return NewCliError("UnpausePipeline", r, err)
-	}
-
-	return handleOutput(pgs, "UnpausePipeline")
+	return client.Pipelines.Unpause(context.Background(), c.String("name"))
 }
 
 // ReleasePipelineLockAction handles the business logic between the command objects and the go-gocd library.
-func releasePipelineLockAction(c *cli.Context) cli.ExitCoder {
-	if c.String("name") == "" {
-		return NewCliError("ReleasePipelinelock", nil, errors.New("'--name' is missing"))
+func releasePipelineLockAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
+	var name string
+	if name = c.String("name"); name == "" {
+		return nil, nil, errors.New("'--name' is missing")
 	}
 
-	pgs, r, err := cliAgent(c).Pipelines.ReleaseLock(context.Background(), c.String("name"))
-	if err != nil {
-		return NewCliError("ReleasePipelinelock", r, err)
-	}
-
-	return handleOutput(pgs, "ReleasePipelinelock")
+	return client.Pipelines.ReleaseLock(context.Background(), c.String("name"))
 }
 
 // GetPipelineStatusCommand handles the interaction between the cli flags and the action handler for

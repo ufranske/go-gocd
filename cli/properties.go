@@ -15,65 +15,57 @@ const (
 	propertiesGroup            = "Properties"
 )
 
-func createPropertyAction(c *cli.Context) cli.ExitCoder {
+func createPropertyAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	name := c.String("name")
 	if name == "" {
-		return NewCliError(propertiesGroup, nil, errors.New("'--name' is missing"))
+		return nil, nil, errors.New("'--name' is missing")
 	}
 
 	value := c.String("value")
 	if value == "" {
-		return NewCliError(propertiesGroup, nil, errors.New("'--value' is missing"))
+		return nil, nil, errors.New("'--value' is missing")
 	}
 
 	pipeline := c.String("pipeline")
 	if pipeline == "" {
-		return NewCliError(propertiesGroup, nil, errors.New("'--pipeline' is missing"))
+		return nil, nil, errors.New("'--pipeline' is missing")
 	}
 	pipelineCounter := c.Int("pipeline-counter")
 
 	stage := c.String("stage")
 	if stage == "" {
-		return NewCliError("Properties", nil, errors.New("'--stage' is missing"))
+		return nil, nil, errors.New("'--stage' is missing")
 	}
 	stageCounter := c.Int("stage-counter")
 
-	created, r, err := cliAgent(c).Properties.Create(context.Background(), name, value, &gocd.PropertyRequest{
+	return client.Properties.Create(context.Background(), name, value, &gocd.PropertyRequest{
 		Pipeline:        pipeline,
 		PipelineCounter: pipelineCounter,
 		Stage:           stage,
 		StageCounter:    stageCounter,
 	})
-	if err != nil {
-		return NewCliError(propertiesGroup, r, err)
-	}
-	return handleOutput(created, "ListProperties")
 }
 
-func listPropertiesAction(c *cli.Context) cli.ExitCoder {
+func listPropertiesAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 
 	pipeline := c.String("pipeline")
 	if pipeline == "" {
-		return NewCliError(propertiesGroup, nil, errors.New("'--pipeline' is missing"))
+		return nil, nil, errors.New("'--pipeline' is missing")
 	}
 	pipelineCounter := c.Int("pipeline-counter")
 
 	stage := c.String("stage")
 	if stage == "" {
-		return NewCliError(propertiesGroup, nil, errors.New("'--stage' is missing"))
+		return nil, nil, errors.New("'--stage' is missing")
 	}
 	stageCounter := c.Int("stage-counter")
 
-	properties, r, err := cliAgent(c).Properties.List(context.Background(), &gocd.PropertyRequest{
+	return client.Properties.List(context.Background(), &gocd.PropertyRequest{
 		Pipeline:        pipeline,
 		PipelineCounter: pipelineCounter,
 		Stage:           stage,
 		StageCounter:    stageCounter,
 	})
-	if err != nil {
-		return NewCliError("ListProperties", r, err)
-	}
-	return handleOutput(properties, "ListProperties")
 }
 
 func listPropertiesCommand() *cli.Command {

@@ -2,6 +2,7 @@ package cli
 
 import (
 	"context"
+	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/urfave/cli"
 )
 
@@ -13,13 +14,8 @@ const (
 
 // ListPipelineGroupsAction handles the interaction between the cli flags and the action handler for
 // list-pipeline-groups
-func listPipelineGroupsAction(c *cli.Context) cli.ExitCoder {
-	pgs, r, err := cliAgent(c).PipelineGroups.List(context.Background(), c.String("group-name"))
-	if err != nil {
-		return NewCliError("ListPipelineTemplates", r, err)
-	}
-
-	return handleOutput(pgs, "ListPipelineTemplates")
+func listPipelineGroupsAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
+	return client.PipelineGroups.List(context.Background(), c.String("group-name"))
 }
 
 // ListPipelineGroupsCommand handles the interaction between the cli flags and the action handler for

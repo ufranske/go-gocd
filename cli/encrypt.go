@@ -3,6 +3,7 @@ package cli
 import (
 	"context"
 	"errors"
+	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/urfave/cli"
 )
 
@@ -13,17 +14,13 @@ const (
 )
 
 // EncryptAction gets a list of agents and return them.
-func encryptAction(c *cli.Context) cli.ExitCoder {
+func encryptAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	var value string
 	if value = c.String("value"); value == "" {
-		return NewCliError("Encrypt", nil, errors.New("'--value' is missing"))
+		return nil, nil, errors.New("'--value' is missing")
 	}
 
-	encryptedValue, r, err := cliAgent(c).Encryption.Encrypt(context.Background(), value)
-	if err != nil {
-		return NewCliError("Encrypt", r, err)
-	}
-	return handleOutput(encryptedValue, "Encrypt")
+	return client.Encryption.Encrypt(context.Background(), value)
 }
 
 // EncryptCommand checks a template-name is provided and that the response is a 2xx response.
