@@ -36,6 +36,9 @@ func (car configActionRunner) run() (err error) {
 	}
 
 	cfgs, err := car.loadConfigs()
+	if err != nil {
+		return NewCliError("Configure:generate", nil, err)
+	}
 
 	if cfg, err = car.generateConfig(); err != nil {
 		return NewCliError("Configure:generate", nil, err)
