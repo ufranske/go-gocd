@@ -1,9 +1,9 @@
 package gocd
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
 	"io"
+	"testing"
 )
 
 func TestResourceProperties(t *testing.T) {

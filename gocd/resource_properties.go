@@ -1,11 +1,11 @@
 package gocd
 
 import (
-	"encoding/csv"
 	"bytes"
-	"strings"
+	"encoding/csv"
 	"io"
 	"io/ioutil"
+	"strings"
 )
 
 type Properties struct {

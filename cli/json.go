@@ -25,7 +25,7 @@ var Schemas = map[string]interface{}{
 }
 
 // GenerateJSONSchemaAction will generate the list of files for the JSON Schema for the defined structs.
-func generateJSONSchemaAction(c *cli.Context) error {
+func generateJSONSchemaAction(c *cli.Context) cli.ExitCoder {
 	directory := "schema"
 	os.Mkdir(directory, os.FileMode(int(0777)))
 	for k, s := range Schemas {
@@ -35,7 +35,7 @@ func generateJSONSchemaAction(c *cli.Context) error {
 		fmt.Printf("Writing '%s' to disk '%s'...\n", k, schemaPath)
 		err := ioutil.WriteFile(schemaPath, []byte(schema), 0644)
 		if err != nil {
-			return err
+			return NewCliError("GenerateJSON", nil, err)
 		}
 	}
 

@@ -1,12 +1,12 @@
 package gocd
 
 import (
-	"testing"
+	"context"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
-	"fmt"
 	"net/http"
-	"context"
+	"testing"
 )
 
 func TestProperties(t *testing.T) {

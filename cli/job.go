@@ -12,12 +12,12 @@ const (
 )
 
 // ListScheduledJobsAction gets a list of agents and return them.
-func listScheduledJobsAction(c *cli.Context) error {
+func listScheduledJobsAction(c *cli.Context) cli.ExitCoder {
 	encryptedValue, r, err := cliAgent(c).Jobs.ListScheduled(context.Background())
 	if err != nil {
-		return handleOutput(nil, r, "ListScheduledJobs", err)
+		return NewCliError("ListScheduledJobs", r, err)
 	}
-	return handleOutput(encryptedValue, r, "ListScheduledJobs", err)
+	return handleOutput(encryptedValue, "ListScheduledJobs")
 }
 
 // ListScheduledJobsCommand provides interface between handler and action

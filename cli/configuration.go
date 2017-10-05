@@ -2,6 +2,7 @@ package cli
 
 import (
 	"context"
+	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/urfave/cli"
 )
 
@@ -15,18 +16,22 @@ const (
 
 // GetConfigurationAction gets a list of agents and return them.
 func getConfigurationAction(c *cli.Context) (err error) {
-	if pgs, r, err := cliAgent(c).Configuration.Get(context.Background()); err == nil {
-		return handleOutput(pgs, r, "GetConfiguration", err)
+	var r *gocd.APIResponse
+	var pgs *gocd.ConfigXML
+	if pgs, r, err = cliAgent(c).Configuration.Get(context.Background()); err == nil {
+		return handleOutput(pgs, "GetConfiguration")
 	}
-	return handleErrOutput("GetConfiguration", err)
+	return NewCliError("GetConfiguration", r, err)
 }
 
 // GetVersionAction returns version information about GoCD
 func getVersionAction(c *cli.Context) (err error) {
-	if v, r, err := cliAgent(c).Configuration.GetVersion(context.Background()); err == nil {
-		return handleOutput(v, r, "GetVersion", err)
+	var r *gocd.APIResponse
+	var v *gocd.Version
+	if v, r, err = cliAgent(c).Configuration.GetVersion(context.Background()); err == nil {
+		return handleOutput(v, "GetVersion")
 	}
-	return handleErrOutput("GetVersion", err)
+	return NewCliError("GetVersion", r, err)
 }
 
 // GetConfigurationCommand handles the interaction between the cli flags and the action handler for delete-agents

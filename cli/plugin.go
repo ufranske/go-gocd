@@ -14,23 +14,21 @@ const (
 )
 
 // GetPluginAction retrieves a single plugin by name
-func getPluginAction(c *cli.Context) error {
+func getPluginAction(c *cli.Context) cli.ExitCoder {
 	pgs, r, err := cliAgent(c).Plugins.Get(context.Background(), c.String("name"))
 	if err != nil {
-		return handleOutput(nil, r, "GetPlugin", err)
+		return NewCliError("GetPlugin", r, err)
 	}
-
-	return handleOutput(pgs, r, "ListPipelineTemplates", err)
+	return handleOutput(pgs, "GetPlugin")
 }
 
 // ListPluginsAction retrieves all plugin configurations
-func listPluginsAction(c *cli.Context) error {
+func listPluginsAction(c *cli.Context) cli.ExitCoder {
 	pgs, r, err := cliAgent(c).Plugins.List(context.Background())
 	if err != nil {
-		return handleOutput(nil, r, "ListPlugins", err)
+		return NewCliError("ListPlugins", r, err)
 	}
-
-	return handleOutput(pgs, r, "ListPlugins", err)
+	return handleOutput(pgs, "ListPlugins")
 }
 
 // GetPluginCommand Describes the cli interface for the GetPluginAction
