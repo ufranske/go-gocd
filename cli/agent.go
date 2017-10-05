@@ -22,6 +22,7 @@ const (
 	UpdateAgentsCommandUsage = "Bulk Update Agents"
 	DeleteAgentsCommandName  = "delete-agents"
 	DeleteAgentsCommandUsage = "Bulk Delete Agents"
+	agentCategory            = "Agents"
 )
 
 // ListAgentsAction gets a list of agents and return them.
@@ -118,7 +119,7 @@ func listAgentsCommand() *cli.Command {
 		Name:     ListAgentsCommandName,
 		Usage:    ListAgentsCommandUsage,
 		Action:   listAgentsAction,
-		Category: "Agents",
+		Category: agentCategory,
 	}
 }
 
@@ -128,7 +129,7 @@ func getAgentCommand() *cli.Command {
 		Name:     GetAgentCommandName,
 		Usage:    GetAgentCommandUsage,
 		Action:   getAgentAction,
-		Category: "Agents",
+		Category: agentCategory,
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
 		},
@@ -141,7 +142,7 @@ func updateAgentCommand() *cli.Command {
 		Name:     UpdateAgentCommandName,
 		Usage:    UpdateAgentCommandUsage,
 		Action:   updateAgentAction,
-		Category: "Agents",
+		Category: agentCategory,
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
 			cli.StringFlag{Name: "config, c", Usage: "JSON encoded config for agent update."},
@@ -155,7 +156,7 @@ func deleteAgentCommand() *cli.Command {
 		Name:     DeleteAgentCommandName,
 		Usage:    DeleteAgentCommandUsage,
 		Action:   deleteAgentAction,
-		Category: "Agents",
+		Category: agentCategory,
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
 		},
@@ -168,7 +169,7 @@ func updateAgentsCommand() *cli.Command {
 		Name:     UpdateAgentsCommandName,
 		Usage:    UpdateAgentsCommandUsage,
 		Action:   actionWrapper(updateAgentsAction),
-		Category: "Agents",
+		Category: agentCategory,
 		Flags: []cli.Flag{
 			cli.StringSliceFlag{Name: "uuid", Usage: "GoCD Agent UUIDs"},
 			cli.StringFlag{Name: "state", Usage: "Whether agents are enabled or disabled. Allowed values 'Enabled','Disabled'."},
@@ -183,7 +184,7 @@ func deleteAgentsCommand() *cli.Command {
 		Name:     DeleteAgentsCommandName,
 		Usage:    DeleteAgentsCommandUsage,
 		Action:   actionWrapper(deleteAgentsAction),
-		Category: "Agents",
+		Category: agentCategory,
 		Flags: []cli.Flag{
 			cli.StringSliceFlag{Name: "uuid", Usage: "GoCD Agent UUIDs"},
 		},

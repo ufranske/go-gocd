@@ -17,5 +17,4 @@ func TestEnvironment(t *testing.T) {
 		assert.NotEmpty(t, envCmd.Name)
 		assert.NotEmpty(t, envCmd.Usage)
 	}
-
 }
