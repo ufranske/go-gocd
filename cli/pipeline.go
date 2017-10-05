@@ -92,7 +92,7 @@ func getPipelineStatusCommand() *cli.Command {
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
-		Action: getPipelineStatusAction,
+		Action: actionWrapper(getPipelineStatusAction),
 	}
 }
 
@@ -106,7 +106,7 @@ func pausePipelineCommand() *cli.Command {
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
-		Action: pausePipelineAction,
+		Action: actionWrapper(pausePipelineAction),
 	}
 }
 
@@ -120,7 +120,7 @@ func unpausePipelineCommand() *cli.Command {
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
-		Action: unpausePipelineAction,
+		Action: actionWrapper(unpausePipelineAction),
 	}
 }
 
@@ -134,7 +134,7 @@ func releasePipelineLockCommand() *cli.Command {
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
-		Action: releasePipelineLockAction,
+		Action: actionWrapper(releasePipelineLockAction),
 	}
 }
 
@@ -148,7 +148,7 @@ func getPipelineCommand() *cli.Command {
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
-		Action: getPipelineAction,
+		Action: actionWrapper(getPipelineAction),
 	}
 }
 
@@ -162,6 +162,6 @@ func getPipelineHistoryCommand() *cli.Command {
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
-		Action: getPipelineHistoryAction,
+		Action: actionWrapper(getPipelineHistoryAction),
 	}
 }

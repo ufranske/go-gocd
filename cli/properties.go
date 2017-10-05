@@ -72,7 +72,7 @@ func listPropertiesCommand() *cli.Command {
 	return &cli.Command{
 		Name:     listPropertiesCommandName,
 		Usage:    listPropertiesCommandUsage,
-		Action:   listPropertiesAction,
+		Action:   actionWrapper(listPropertiesAction),
 		Category: propertiesGroup,
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "pipeline", EnvVar: "GO_PIPELINE_NAME"},
@@ -88,7 +88,7 @@ func createPropertyCommand() *cli.Command {
 	return &cli.Command{
 		Name:     createPropertyCommandName,
 		Usage:    createPropertyCommandUsage,
-		Action:   createPropertyAction,
+		Action:   actionWrapper(createPropertyAction),
 		Category: propertiesGroup,
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},

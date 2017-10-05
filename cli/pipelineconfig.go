@@ -134,7 +134,7 @@ func createPipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:     CreatePipelineConfigCommandName,
 		Usage:    CreatePipelineConfigCommandUsage,
-		Action:   createPipelineConfigAction,
+		Action:   actionWrapper(createPipelineConfigAction),
 		Category: "Pipeline Configs",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "group"},
@@ -149,7 +149,7 @@ func updatePipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:     UpdatePipelineConfigCommandName,
 		Usage:    UpdatePipelineConfigCommandUsage,
-		Action:   updatePipelineConfigAction,
+		Action:   actionWrapper(updatePipelineConfigAction),
 		Category: "Pipeline Configs",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
@@ -166,7 +166,7 @@ func deletePipelineConfigCommand() *cli.Command {
 		Name:     DeletePipelineConfigCommandName,
 		Usage:    DeletePipelineConfigCommandUsage,
 		Category: "Pipeline Configs",
-		Action:   deletePipelineConfigAction,
+		Action:   actionWrapper(deletePipelineConfigAction),
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
 		},
@@ -178,7 +178,7 @@ func getPipelineConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetPipelineConfigCommandName,
 		Usage:    GetPipelineConfigCommandUsage,
-		Action:   getPipelineConfigAction,
+		Action:   actionWrapper(getPipelineConfigAction),
 		Category: "Pipeline Configs",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
