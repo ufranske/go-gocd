@@ -50,7 +50,7 @@ func GetCliCommands() []cli.Command {
 }
 
 // NewCliClient
-func cliAgent(c *cli.Context) *gocd.Client {
+func NewCliClient(c *cli.Context) *gocd.Client {
 	var profile string
 	if profile = c.Parent().String("profile"); profile == "" {
 		profile = "default"
@@ -89,4 +89,17 @@ func handleOutput(r interface{}, reqType string) cli.ExitCoder {
 
 	fmt.Println(string(b))
 	return nil
+}
+
+type actionWrapperFunc func(client *gocd.Client, c *cli.Context) (interface{}, *gocd.APIResponse, error)
+
+func actionWrapper(callback actionWrapperFunc) interface{} {
+	return func(c *cli.Context) cli.ExitCoder {
+		client := c.App.Metadata["c"].(gocd.Client)
+		v, resp, err := callback(&client, c)
+		if err != nil {
+			return NewCliError(c.Command.Name, resp, err)
+		}
+		return handleOutput(v, c.Command.Name)
+	}
 }
