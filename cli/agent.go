@@ -25,79 +25,87 @@ const (
 )
 
 // ListAgentsAction gets a list of agents and return them.
-func listAgentsAction(c *cli.Context) error {
+func listAgentsAction(c *cli.Context) cli.ExitCoder {
 	agents, r, err := cliAgent(c).Agents.List(context.Background())
 	if err != nil {
-		return handleOutput(nil, r, "ListAgents", err)
+		return NewCliError("ListAgents", r, err)
 	}
 	for _, agent := range agents {
 		agent.RemoveLinks()
 	}
-	return handleOutput(agents, r, "ListAgents", err)
+	return handleOutput(agents, "ListAgents")
 }
 
 // GetAgentAction retrieves a single agent object.
-func getAgentAction(c *cli.Context) error {
+func getAgentAction(c *cli.Context) cli.ExitCoder {
 	agent, r, err := cliAgent(c).Agents.Get(context.Background(), c.String("uuid"))
 	if r.HTTP.StatusCode != 404 {
 		agent.RemoveLinks()
 	}
-	return handleOutput(agent, r, "GetAgent", err)
+	if err != nil {
+		return NewCliError("GetAgent", r, err)
+	}
+	return handleOutput(agent, "GetAgent")
 }
 
 // UpdateAgentAction updates a single agent.
-func updateAgentAction(c *cli.Context) error {
+func updateAgentAction(c *cli.Context) cli.ExitCoder {
 
 	if c.String("uuid") == "" {
-		return handleOutput(nil, nil, "UpdateAgent", errors.New("'--uuid' is missing"))
+		return NewCliError("UpdateAgent", nil, errors.New("'--uuid' is missing"))
 	}
 
 	if c.String("config") == "" {
-		return handleOutput(nil, nil, "UpdateAgent", errors.New("'--config' is missing"))
+		return NewCliError("UpdateAgent", nil, errors.New("'--config' is missing"))
 	}
 
 	a := &gocd.Agent{}
 	b := []byte(c.String("config"))
 	if err := json.Unmarshal(b, &a); err != nil {
-		return handleOutput(nil, nil, "UpdateAgent", err)
+		return NewCliError("UpdateAgent", nil, err)
 	}
 
 	agent, r, err := cliAgent(c).Agents.Update(context.Background(), c.String("uuid"), a)
 	if r.HTTP.StatusCode != 404 {
 		agent.RemoveLinks()
+	} else if err != nil {
+		return NewCliError("UpdateAgent", r, err)
 	}
-	return handleOutput(agent, r, "UpdateAgent", err)
+	return handleOutput(agent, "UpdateAgent")
 }
 
 // DeleteAgentAction delets an agent. Note: The agent must be disabled.
-func deleteAgentAction(c *cli.Context) error {
+func deleteAgentAction(c *cli.Context) cli.ExitCoder {
 	if c.String("uuid") == "" {
-		return handleOutput(nil, nil, "DeleteAgent", errors.New("'--uuid' is missing"))
+		return handleOutput(nil, "DeleteAgent")
 	}
 
 	deleteResponse, r, err := cliAgent(c).Agents.Delete(context.Background(), c.String("uuid"))
 	if r.HTTP.StatusCode == 406 {
 		err = errors.New(deleteResponse)
 	}
-	return handleOutput(deleteResponse, r, "DeleteAgent", err)
+	if err != nil {
+		return NewCliError("DeleteAgent", r, err)
+	}
+	return handleOutput(deleteResponse, "DeleteAgent")
 }
 
 // UpdateAgentsAction updates a single agent.
-func updateAgentsAction(c *cli.Context) error {
+func updateAgentsAction(c *cli.Context) cli.ExitCoder {
 
 	u := gocd.AgentBulkUpdate{}
 	if o := c.String("operations"); o != "" {
 		b := []byte(o)
 		op := gocd.AgentBulkOperationsUpdate{}
 		if err := json.Unmarshal(b, &op); err == nil {
-			return handleOutput(nil, nil, "BulkAgentUpdate", err)
+			return handleOutput(nil, "BulkAgentUpdate")
 		}
 		u.Operations = &op
 	}
 
 	var uuids []string
 	if uuids = c.StringSlice("uuid"); len(uuids) == 0 {
-		return handleOutput(nil, nil, "BulkAgentUpdate", errors.New("'--uuid' is missing"))
+		return handleOutput(nil, "BulkAgentUpdate")
 	}
 	u.Uuids = uuids
 
@@ -109,11 +117,14 @@ func updateAgentsAction(c *cli.Context) error {
 	if r.HTTP.StatusCode == 406 {
 		err = errors.New(updateResponse)
 	}
-	return handleOutput(updateResponse, r, "BulkAgentUpdate", err)
+	if err != nil {
+		return NewCliError("BulkAgentUpdate", r, err)
+	}
+	return handleOutput(updateResponse, "BulkAgentUpdate")
 }
 
 // DeleteAgentsAction must be implemented.
-func deleteAgentsAction(c *cli.Context) error {
+func deleteAgentsAction(c *cli.Context) cli.ExitCoder {
 	return nil
 }
 

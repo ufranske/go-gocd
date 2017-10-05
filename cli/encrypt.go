@@ -13,17 +13,17 @@ const (
 )
 
 // EncryptAction gets a list of agents and return them.
-func encryptAction(c *cli.Context) error {
-	value := c.String("value")
-	if value == "" {
-		return handleOutput(nil, nil, "Encrypt", errors.New("'--value' is missing"))
+func encryptAction(c *cli.Context) cli.ExitCoder {
+	var value string
+	if value = c.String("value"); value == "" {
+		return NewCliError("Encrypt", nil, errors.New("'--value' is missing"))
 	}
 
 	encryptedValue, r, err := cliAgent(c).Encryption.Encrypt(context.Background(), value)
 	if err != nil {
-		return handleOutput(nil, r, "Encrypt", err)
+		return NewCliError("Encrypt", r, err)
 	}
-	return handleOutput(encryptedValue, r, "Encrypt", err)
+	return handleOutput(encryptedValue, "Encrypt")
 }
 
 // EncryptCommand checks a template-name is provided and that the response is a 2xx response.

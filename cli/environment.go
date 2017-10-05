@@ -21,70 +21,78 @@ const (
 )
 
 // ListEnvironmentsAction handles the listing of environments
-func listEnvironmentsAction(c *cli.Context) error {
+func listEnvironmentsAction(c *cli.Context) cli.ExitCoder {
 	es, r, err := cliAgent(c).Environments.List(context.Background())
-	if err != nil {
-		return handleErrOutput("ListEnvironments", err)
+	if err == nil {
+		es.RemoveLinks()
+	} else {
+		return NewCliError("ListEnvironments", r, err)
 	}
 
-	es.RemoveLinks()
-
-	return handleOutput(es, r, "ListEnvironments", err)
+	return handleOutput(es, "ListEnvironments")
 }
 
 // GetEnvironmentAction handles the retrieval of environments
-func getEnvironmentAction(c *cli.Context) error {
-	if c.String("name") == "" {
-		return handleOutput(nil, nil, "GetEnvironment", errors.New("'--name' is missing"))
+func getEnvironmentAction(c *cli.Context) cli.ExitCoder {
+	var name string
+	if name = c.String("name"); name == "" {
+		return NewCliError("GetEnvironment", nil, errors.New("'--name' is missing"))
 	}
-	e, r, err := cliAgent(c).Environments.Get(context.Background(), c.String("name"))
-	if err != nil {
-		return handleErrOutput("GetEnvironment", err)
+	e, r, err := cliAgent(c).Environments.Get(context.Background(), name)
+	if err == nil {
+		e.RemoveLinks()
+	} else {
+		return NewCliError("GetEnvironment", r, err)
 	}
-	e.RemoveLinks()
-	return handleOutput(e, r, "GetEnvironment", err)
+	return handleOutput(e, "GetEnvironment")
 }
 
 // AddPipelinesToEnvironmentAction handles the adding of a pipeline to an environment
-func addPipelinesToEnvironmentAction(c *cli.Context) error {
-	if c.String("environment-name") == "" {
-		return handleOutput(nil, nil, "AddPipelinesToEnvironment", errors.New("'--environment-name' is missing"))
+func addPipelinesToEnvironmentAction(c *cli.Context) cli.ExitCoder {
+	var environment, pipelines string
+
+	if environment = c.String("environment-name"); environment == "" {
+		return NewCliError("AddPipelinesToEnvironment", nil, errors.New("'--environment-name' is missing"))
 	}
-	if c.String("pipeline-names") == "" {
-		return handleOutput(nil, nil, "AddPipelinesToEnvironment", errors.New("'--pipeline-names' is missing"))
+	if pipelines = c.String("pipeline-names"); pipelines == "" {
+		return NewCliError("AddPipelinesToEnvironment", nil, errors.New("'--pipeline-names' is missing"))
 	}
 
-	e, r, err := cliAgent(c).Environments.Patch(context.Background(), c.String("environment-name"), &gocd.EnvironmentPatchRequest{
+	e, r, err := cliAgent(c).Environments.Patch(context.Background(), environment, &gocd.EnvironmentPatchRequest{
 		Pipelines: &gocd.PatchStringAction{
-			Add: strings.Split(c.String("pipeline-names"), ","),
+			Add: strings.Split(pipelines, ","),
 		},
 	})
-	if err != nil {
-		return handleErrOutput("AddPipelinesToEnvironment", err)
+	if err == nil {
+		e.RemoveLinks()
+	} else {
+		return NewCliError("AddPipelinesToEnvironment", r, err)
 	}
-	e.RemoveLinks()
-	return handleOutput(e, r, "AddPipelinesToEnvironment", err)
+	return handleOutput(e, "AddPipelinesToEnvironment")
 }
 
 // RemovePipelinesFromEnvironmentAction handles the removing of a pipeline from an environment
-func removePipelinesFromEnvironmentAction(c *cli.Context) error {
-	if c.String("environment-name") == "" {
-		return handleOutput(nil, nil, "RemovePipelinesFromEnvironment", errors.New("'--environment-name' is missing"))
+func removePipelinesFromEnvironmentAction(c *cli.Context) cli.ExitCoder {
+	var environment, pipelines string
+
+	if environment = c.String("environment-name"); environment == "" {
+		return NewCliError("RemovePipelinesFromEnvironment", nil, errors.New("'--environment-name' is missing"))
 	}
-	if c.String("pipeline-names") == "" {
-		return handleOutput(nil, nil, "RemovePipelinesFromEnvironment", errors.New("'--pipeline-names' is missing"))
+	if pipelines = c.String("pipeline-names"); pipelines == "" {
+		return NewCliError("RemovePipelinesFromEnvironment", nil, errors.New("'--pipeline-names' is missing"))
 	}
 
-	e, r, err := cliAgent(c).Environments.Patch(context.Background(), c.String("environment-name"), &gocd.EnvironmentPatchRequest{
+	e, r, err := cliAgent(c).Environments.Patch(context.Background(), environment, &gocd.EnvironmentPatchRequest{
 		Pipelines: &gocd.PatchStringAction{
-			Remove: strings.Split(c.String("pipeline-names"), ","),
+			Remove: strings.Split(pipelines, ","),
 		},
 	})
-	if err != nil {
-		return handleErrOutput("RemovePipelinesFromEnvironment", err)
+	if err == nil {
+		e.RemoveLinks()
+	} else {
+		return NewCliError("RemovePipelinesFromEnvironment", r, err)
 	}
-	e.RemoveLinks()
-	return handleOutput(e, r, "RemovePipelinesFromEnvironment", err)
+	return handleOutput(e, "RemovePipelinesFromEnvironment")
 }
 
 // ListEnvironmentsCommand handles definition of cli command
@@ -135,7 +143,9 @@ func removePipelinesFromEnvironmentCommand() *cli.Command {
 		Action:   removePipelinesFromEnvironmentAction,
 		Category: "Environments",
 		Flags: []cli.Flag{
-			cli.StringFlag{Name: "environment-name"},
+			cli.StringFlag{
+				Name: "environment-name",
+			},
 			cli.StringFlag{
 				Name:  "pipeline-names",
 				Usage: "Comma seperated list of pipeline names to remove.",

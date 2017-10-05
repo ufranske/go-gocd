@@ -23,24 +23,24 @@ const (
 
 // CreatePipelineConfigAction handles the interaction between the cli flags and the action handler for
 // create-pipeline-config-action
-func createPipelineConfigAction(c *cli.Context) error {
+func createPipelineConfigAction(c *cli.Context) cli.ExitCoder {
 	group := c.String("group")
 	if group == "" {
-		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--group' is missing"))
+		return NewCliError("CreatePipelineConfig", nil, errors.New("'--group' is missing"))
 	}
 
 	pipeline := c.String("pipeline")
 	pipelineFile := c.String("pipeline-file")
 	if pipeline == "" && pipelineFile == "" {
-		return handleErrOutput(
-			"CreatePipelineConfig",
+		return NewCliError(
+			"CreatePipelineConfig", nil,
 			errors.New("One of '--pipeline-file' or '--pipeline' must be specified"),
 		)
 	}
 
 	if pipeline != "" && pipelineFile != "" {
-		return handleErrOutput(
-			"CreatePipelineConfig",
+		return NewCliError(
+			"CreatePipelineConfig", nil,
 			errors.New("Only one of '--pipeline-file' or '--pipeline' can be specified"),
 		)
 	}
@@ -50,7 +50,7 @@ func createPipelineConfigAction(c *cli.Context) error {
 	if pipelineFile != "" {
 		pf, err = ioutil.ReadFile(pipelineFile)
 		if err != nil {
-			return handleErrOutput("CreatePipelineConfig", err)
+			return NewCliError("CreatePipelineConfig", nil, err)
 		}
 	} else {
 		pf = []byte(pipeline)
@@ -58,41 +58,41 @@ func createPipelineConfigAction(c *cli.Context) error {
 	p := &gocd.Pipeline{}
 	err = json.Unmarshal(pf, &p)
 	if err != nil {
-		return handleErrOutput("CreatePipelineConfig", err)
+		return NewCliError("CreatePipelineConfig", nil, err)
 	}
 
 	pc, r, err := cliAgent(c).PipelineConfigs.Create(context.Background(), group, p)
 	if err != nil {
-		return handleErrOutput("CreatePipelineConfig", err)
+		return NewCliError("CreatePipelineConfig", r, err)
 	}
-	return handleOutput(pc, r, "CreatePipelineConfig", err)
+	return handleOutput(pc, "CreatePipelineConfig")
 }
 
 // UpdatePipelineConfigAction handles the interaction between the cli flags and the action handler for
 // update-pipeline-config-action
-func updatePipelineConfigAction(c *cli.Context) error {
+func updatePipelineConfigAction(c *cli.Context) cli.ExitCoder {
 	name := c.String("name")
 	if name == "" {
-		return handleOutput(nil, nil, "UpdatePipelineConfig", errors.New("'--name' is missing"))
+		return NewCliError("UpdatePipelineConfig", nil, errors.New("'--name' is missing"))
 	}
 
 	version := c.String("pipeline-version")
 	if version == "" {
-		return handleOutput(nil, nil, "UpdatePipelineConfig", errors.New("'--pipeline-version' is missing"))
+		return NewCliError("UpdatePipelineConfig", nil, errors.New("'--pipeline-version' is missing"))
 	}
 
 	pipeline := c.String("pipeline")
 	pipelineFile := c.String("pipeline-file")
 	if pipeline == "" && pipelineFile == "" {
-		return handleErrOutput(
-			"UpdatePipelineConfig",
+		return NewCliError(
+			"UpdatePipelineConfig", nil,
 			errors.New("One of '--pipeline-file' or '--pipeline' must be specified"),
 		)
 	}
 
 	if pipeline != "" && pipelineFile != "" {
-		return handleErrOutput(
-			"UpdatePipelineConfig",
+		return NewCliError(
+			"UpdatePipelineConfig", nil,
 			errors.New("Only one of '--pipeline-file' or '--pipeline' can be specified"),
 		)
 	}
@@ -102,7 +102,7 @@ func updatePipelineConfigAction(c *cli.Context) error {
 	if pipelineFile != "" {
 		pf, err = ioutil.ReadFile(pipelineFile)
 		if err != nil {
-			return handleErrOutput("UpdatePipelineConfig", err)
+			return NewCliError("UpdatePipelineConfig", nil, err)
 		}
 	} else {
 		pf = []byte(pipeline)
@@ -112,45 +112,51 @@ func updatePipelineConfigAction(c *cli.Context) error {
 	}
 	err = json.Unmarshal(pf, &p)
 	if err != nil {
-		return handleErrOutput("UpdatePipelineConfig", err)
+		return NewCliError("UpdatePipelineConfig", nil, err)
 	}
 
 	pc, r, err := cliAgent(c).PipelineConfigs.Update(context.Background(), name, p)
 	if err != nil {
-		return handleErrOutput("CreatePipelineConfig", err)
+		return NewCliError("CreatePipelineConfig", r, err)
 	}
-	return handleOutput(pc, r, "CreatePipelineConfig", err)
+	return handleOutput(pc, "CreatePipelineConfig")
 
 }
 
 // DeletePipelineConfigAction handles the interaction between the cli flags and the action handler for
 // delete-pipeline-config-action
-func deletePipelineConfigAction(c *cli.Context) error {
+func deletePipelineConfigAction(c *cli.Context) cli.ExitCoder {
 	name := c.String("name")
 	if name == "" {
-		return handleOutput(nil, nil, "CreatePipelineConfig", errors.New("'--name' is missing"))
+		return NewCliError("CreatePipelineConfig", nil, errors.New("'--name' is missing"))
 	}
 
 	deleteResponse, r, err := cliAgent(c).PipelineConfigs.Delete(context.Background(), name)
 	if r.HTTP.StatusCode == 406 {
 		err = errors.New(deleteResponse)
 	}
-	return handleOutput(deleteResponse, r, "DeletePipelineTemplate", err)
+	if err != nil {
+		return NewCliError("CreatePipelineConfig", r, err)
+	}
+	return handleOutput(deleteResponse, "DeletePipelineTemplate")
 }
 
 // GetPipelineConfigAction handles the interaction between the cli flags and the action handler for get-pipeline-config
-func getPipelineConfigAction(c *cli.Context) error {
+func getPipelineConfigAction(c *cli.Context) cli.ExitCoder {
 	name := c.String("name")
 	if name == "" {
-		return handleOutput(nil, nil, "GetPipelineConfig", errors.New("'--name' is missing"))
+		return NewCliError("GetPipelineConfig", nil, errors.New("'--name' is missing"))
 	}
 
 	getResponse, r, err := cliAgent(c).PipelineConfigs.Get(context.Background(), name)
 	if r.HTTP.StatusCode != 404 {
 		getResponse.RemoveLinks()
 	}
+	if err != nil {
+		return NewCliError("GetPipelineConfig", r, err)
+	}
 
-	return handleOutput(getResponse, r, "GetPipelineConfig", err)
+	return handleOutput(getResponse, "GetPipelineConfig")
 }
 
 // CreatePipelineConfigCommand handles the interaction between the cli flags and the action handler for create-pipeline-config

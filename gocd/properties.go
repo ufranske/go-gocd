@@ -1,9 +1,9 @@
 package gocd
 
 import (
+	"bytes"
 	"context"
 	"fmt"
-	"bytes"
 )
 
 // AgentsService describes Actions which can be performed on agents
@@ -50,7 +50,6 @@ func (ps *PropertiesService) Create(ctx context.Context, name string, value stri
 		pr.Stage, pr.StageCounter,
 		pr.Job, name,
 	)
-
 
 	responseBuffer := bytes.NewBuffer([]byte(""))
 	_, resp, err := ps.client.postAction(ctx, &APIClientRequest{

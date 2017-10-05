@@ -1,10 +1,10 @@
 package cli
 
 import (
-	"github.com/urfave/cli"
 	"context"
 	"errors"
 	"github.com/drewsonne/go-gocd/gocd"
+	"github.com/urfave/cli"
 )
 
 const (
@@ -15,26 +15,26 @@ const (
 	propertiesGroup            = "Properties"
 )
 
-func createPropertyAction(c *cli.Context) error {
+func createPropertyAction(c *cli.Context) cli.ExitCoder {
 	name := c.String("name")
 	if name == "" {
-		return handleErrOutput(propertiesGroup, errors.New("'--name' is missing"))
+		return NewCliError(propertiesGroup, nil, errors.New("'--name' is missing"))
 	}
 
 	value := c.String("value")
 	if value == "" {
-		return handleErrOutput(propertiesGroup, errors.New("'--value' is missing"))
+		return NewCliError(propertiesGroup, nil, errors.New("'--value' is missing"))
 	}
 
 	pipeline := c.String("pipeline")
 	if pipeline == "" {
-		return handleErrOutput(propertiesGroup, errors.New("'--pipeline' is missing"))
+		return NewCliError(propertiesGroup, nil, errors.New("'--pipeline' is missing"))
 	}
 	pipelineCounter := c.Int("pipeline-counter")
 
 	stage := c.String("stage")
 	if stage == "" {
-		return handleErrOutput("Properties", errors.New("'--stage' is missing"))
+		return NewCliError("Properties", nil, errors.New("'--stage' is missing"))
 	}
 	stageCounter := c.Int("stage-counter")
 
@@ -44,20 +44,23 @@ func createPropertyAction(c *cli.Context) error {
 		Stage:           stage,
 		StageCounter:    stageCounter,
 	})
-	return handleOutput(created, r, "ListProperties", err)
+	if err != nil {
+		return NewCliError(propertiesGroup, r, err)
+	}
+	return handleOutput(created, "ListProperties")
 }
 
-func listPropertiesAction(c *cli.Context) error {
+func listPropertiesAction(c *cli.Context) cli.ExitCoder {
 
 	pipeline := c.String("pipeline")
 	if pipeline == "" {
-		return handleErrOutput(propertiesGroup, errors.New("'--pipeline' is missing"))
+		return NewCliError(propertiesGroup, nil, errors.New("'--pipeline' is missing"))
 	}
 	pipelineCounter := c.Int("pipeline-counter")
 
 	stage := c.String("stage")
 	if stage == "" {
-		return handleErrOutput(propertiesGroup, errors.New("'--stage' is missing"))
+		return NewCliError(propertiesGroup, nil, errors.New("'--stage' is missing"))
 	}
 	stageCounter := c.Int("stage-counter")
 
@@ -67,7 +70,10 @@ func listPropertiesAction(c *cli.Context) error {
 		Stage:           stage,
 		StageCounter:    stageCounter,
 	})
-	return handleOutput(properties, r, "ListProperties", err)
+	if err != nil {
+		return NewCliError("ListProperties", r, err)
+	}
+	return handleOutput(properties, "ListProperties")
 }
 
 func listPropertiesCommand() *cli.Command {
