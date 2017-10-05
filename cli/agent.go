@@ -118,7 +118,7 @@ func listAgentsCommand() *cli.Command {
 	return &cli.Command{
 		Name:     ListAgentsCommandName,
 		Usage:    ListAgentsCommandUsage,
-		Action:   listAgentsAction,
+		Action:   actionWrapper(listAgentsAction),
 		Category: agentCategory,
 	}
 }
@@ -128,7 +128,7 @@ func getAgentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     GetAgentCommandName,
 		Usage:    GetAgentCommandUsage,
-		Action:   getAgentAction,
+		Action:   actionWrapper(getAgentAction),
 		Category: agentCategory,
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
@@ -141,7 +141,7 @@ func updateAgentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     UpdateAgentCommandName,
 		Usage:    UpdateAgentCommandUsage,
-		Action:   updateAgentAction,
+		Action:   actionWrapper(updateAgentAction),
 		Category: agentCategory,
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
@@ -155,7 +155,7 @@ func deleteAgentCommand() *cli.Command {
 	return &cli.Command{
 		Name:     DeleteAgentCommandName,
 		Usage:    DeleteAgentCommandUsage,
-		Action:   deleteAgentAction,
+		Action:   actionWrapper(deleteAgentAction),
 		Category: agentCategory,
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "uuid, u", Usage: "GoCD Agent UUID"},
