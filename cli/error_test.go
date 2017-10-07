@@ -26,8 +26,8 @@ func testErrorType(t *testing.T) {
 func testErrorBasic(t *testing.T) {
 	err := NewCliError("TestReqType", nil, errors.New("test-error"))
 	assert.Equal(t, `{
-  "Error": "test-error",
-  "Request": "TestReqType"
+  "error": "test-error",
+  "request": "TestReqType"
 }`, err.Error())
 
 	assert.Equal(t, 1, err.ExitCode())
@@ -49,13 +49,13 @@ func testErrorUnexpectedError(t *testing.T) {
 		},
 	}, errors.New("test-error"))
 	assert.Equal(t, `{
-  "Error": "An error occurred while retrieving the resource.",
-  "RequestBody": "",
-  "RequestEndpoint": "http://example.com/",
-  "RequestHeader": "null",
-  "ResponseBody": "",
-  "ResponseHeader": "null",
-  "Status": 201
+  "error": "An error occurred while retrieving the resource.",
+  "request-body": "",
+  "request-endpoint": "http://example.com/",
+  "request-header": "null",
+  "response-body": "",
+  "response-header": "null",
+  "status": 201
 }`, err.Error())
 
 }
