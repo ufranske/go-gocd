@@ -8,12 +8,14 @@ import (
 	"strings"
 )
 
+// Properties describes a properties resource in the GoCD API.
 type Properties struct {
 	UnmarshallWithHeader bool
 	Header               []string
 	DataFrame            [][]string
 }
 
+// NewPropertiesFrame generate a new data frame for properties on a gocd job.
 func NewPropertiesFrame(frame [][]string) *Properties {
 	p := Properties{}
 	for i, line := range frame {
@@ -26,34 +28,38 @@ func NewPropertiesFrame(frame [][]string) *Properties {
 	return &p
 }
 
-func (p Properties) Get(row int, column string) string {
+// Get a single parameter value for a given run of the job.
+func (pr Properties) Get(row int, column string) string {
 	var columnIdx int
-	for i, key := range p.Header {
+	for i, key := range pr.Header {
 		if key == column {
 			columnIdx = i
 		}
 	}
-	return p.DataFrame[row][columnIdx]
+	return pr.DataFrame[row][columnIdx]
 }
 
-func (p *Properties) AddRow(r []string) {
-	p.SetRow(len(p.DataFrame), r)
+// AddRow to an existing properties data frame
+func (pr *Properties) AddRow(r []string) {
+	pr.SetRow(len(pr.DataFrame), r)
 }
 
-func (p *Properties) SetRow(row int, r []string) {
-	for row >= len(p.DataFrame) {
-		p.DataFrame = append(p.DataFrame, []string{})
+// SetRow in an existing data frame
+func (pr *Properties) SetRow(row int, r []string) {
+	for row >= len(pr.DataFrame) {
+		pr.DataFrame = append(pr.DataFrame, []string{})
 	}
-	p.DataFrame[row] = r
+	pr.DataFrame[row] = r
 }
 
-func (p Properties) MarshallCSV() (string, error) {
+// MarshallCSV returns the data frame as a string
+func (pr Properties) MarshallCSV() (string, error) {
 	buf := new(bytes.Buffer)
 	w := csv.NewWriter(buf)
-	if err := w.Write(p.Header); err != nil {
+	if err := w.Write(pr.Header); err != nil {
 		return buf.String(), err
 	}
-	for _, line := range p.DataFrame {
+	for _, line := range pr.DataFrame {
 		if err := w.Write(line); err != nil {
 			return buf.String(), err
 		}
@@ -63,7 +69,8 @@ func (p Properties) MarshallCSV() (string, error) {
 	return buf.String(), nil
 }
 
-func (p *Properties) UnmarshallCSV(raw string) error {
+// UnmarshallCSV returns the data frame from a string
+func (pr *Properties) UnmarshallCSV(raw string) error {
 	r := csv.NewReader(strings.NewReader(raw))
 	r.TrimLeadingSpace = true
 	for {
@@ -74,15 +81,16 @@ func (p *Properties) UnmarshallCSV(raw string) error {
 		if err != nil {
 			return err
 		}
-		if p.UnmarshallWithHeader && len(p.Header) == 0 && len(p.DataFrame) == 0 {
-			p.Header = record
+		if pr.UnmarshallWithHeader && len(pr.Header) == 0 && len(pr.DataFrame) == 0 {
+			pr.Header = record
 		} else {
-			p.AddRow(record)
+			pr.AddRow(record)
 		}
 	}
 	return nil
 }
 
+// Write the data frame to a byte stream as a csv.
 func (pr *Properties) Write(p []byte) (n int, err error) {
 	numBytes := len(p)
 	raw, err := ioutil.ReadAll(bytes.NewReader(p))

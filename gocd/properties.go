@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-// AgentsService describes Actions which can be performed on agents
+// PropertiesService describes Actions which can be performed on agents
 type PropertiesService service
 
 // PropertyRequest describes the parameters to be submitted when calling/creating properties.
@@ -26,6 +26,7 @@ type PropertyCreateResponse struct {
 	Value string
 }
 
+// List the properties for the given job/pipeline/stage run.
 func (ps *PropertiesService) List(ctx context.Context, pr *PropertyRequest) (*Properties, *APIResponse, error) {
 	path := fmt.Sprintf("/properties/%s/%d/%s/%d/%s",
 		pr.Pipeline, pr.PipelineCounter,
@@ -35,6 +36,7 @@ func (ps *PropertiesService) List(ctx context.Context, pr *PropertyRequest) (*Pr
 	return ps.commonPropertiesAction(ctx, path)
 }
 
+// Get a specific property for the given job/pipeline/stage run.
 func (ps *PropertiesService) Get(ctx context.Context, name string, pr *PropertyRequest) (*Properties, *APIResponse, error) {
 	path := fmt.Sprintf("/properties/%s/%d/%s/%d/%s/%s",
 		pr.Pipeline, pr.PipelineCounter,
@@ -44,6 +46,7 @@ func (ps *PropertiesService) Get(ctx context.Context, name string, pr *PropertyR
 	return ps.commonPropertiesAction(ctx, path)
 }
 
+// Create a specific property for the given job/pipeline/stage run.
 func (ps *PropertiesService) Create(ctx context.Context, name string, value string, pr *PropertyRequest) (bool, *APIResponse, error) {
 	path := fmt.Sprintf("/properties/%s/%d/%s/%d/%s/%s",
 		pr.Pipeline, pr.PipelineCounter,
@@ -64,6 +67,7 @@ func (ps *PropertiesService) Create(ctx context.Context, name string, value stri
 	return responseString == r, resp, err
 }
 
+// ListHistorical properties for a given pipeline, stage, job.
 func (ps *PropertiesService) ListHistorical(ctx context.Context, pr *PropertyRequest) (*Properties, *APIResponse, error) {
 	u := ps.client.BaseURL
 	q := u.Query()
