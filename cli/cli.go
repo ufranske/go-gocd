@@ -50,15 +50,15 @@ func GetCliCommands() []cli.Command {
 }
 
 // NewCliClient
-func NewCliClient(c *cli.Context) *gocd.Client {
+func NewCliClient(c *cli.Context) (*gocd.Client, error) {
 	var profile string
 	if profile = c.Parent().String("profile"); profile == "" {
 		profile = "default"
 	}
 
-	cfg, err := gocd.LoadConfigByName(profile)
-	if err != nil {
-		panic(err)
+	cfg := &gocd.Configuration{}
+	if err := gocd.LoadConfigByName(profile, cfg); err != nil {
+		return nil, err
 	}
 
 	if server := c.String("server"); server != "" {
@@ -75,12 +75,12 @@ func NewCliClient(c *cli.Context) *gocd.Client {
 
 	cfg.SkipSslCheck = cfg.SkipSslCheck || c.Bool("skip_ssl_check")
 
-	return cfg.Client()
+	return cfg.Client(), nil
 }
 
 func handleOutput(r interface{}, reqType string) cli.ExitCoder {
 	o := map[string]interface{}{
-		fmt.Sprintf("%sResponse", reqType): r,
+		fmt.Sprintf("%s-response", reqType): r,
 	}
 	b, err := json.MarshalIndent(o, "", "    ")
 	if err != nil {
@@ -94,9 +94,13 @@ func handleOutput(r interface{}, reqType string) cli.ExitCoder {
 type actionWrapperFunc func(client *gocd.Client, c *cli.Context) (interface{}, *gocd.APIResponse, error)
 
 func actionWrapper(callback actionWrapperFunc) interface{} {
-	return func(c *cli.Context) cli.ExitCoder {
-		client := c.App.Metadata["c"].(gocd.Client)
-		v, resp, err := callback(&client, c)
+	return func(c *cli.Context) error {
+		cl := c.App.Metadata["c"].(func(c *cli.Context) (*gocd.Client, error))
+		client, err := cl(c)
+		if err != nil {
+			return NewCliError(c.Command.Name, nil, err)
+		}
+		v, resp, err := callback(client, c)
 		if err != nil {
 			return NewCliError(c.Command.Name, resp, err)
 		}

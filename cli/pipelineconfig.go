@@ -29,14 +29,14 @@ func createPipelineConfigAction(client *gocd.Client, c *cli.Context) (r interfac
 		return nil, nil, NewFlagError("group")
 	}
 
-	pipeline := c.String("pipeline")
+	pipeline := c.String("pipeline-json")
 	pipelineFile := c.String("pipeline-file")
 	if pipeline == "" && pipelineFile == "" {
-		return nil, nil, errors.New("One of '--pipeline-file' or '--pipeline' must be specified")
+		return nil, nil, errors.New("One of '--pipeline-file' or '--pipeline-json' must be specified")
 	}
 
 	if pipeline != "" && pipelineFile != "" {
-		return nil, nil, errors.New("Only one of '--pipeline-file' or '--pipeline' can be specified")
+		return nil, nil, errors.New("Only one of '--pipeline-file' or '--pipeline-json' can be specified")
 	}
 
 	var pf []byte
@@ -138,8 +138,8 @@ func createPipelineConfigCommand() *cli.Command {
 		Category: "Pipeline Configs",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "group"},
-			cli.StringFlag{Name: "pipeline"},
-			cli.StringFlag{Name: "pipeline-file"},
+			cli.StringFlag{Name: "pipeline-json", Usage: "A JSON string describing the pipeline configuration"},
+			cli.StringFlag{Name: "pipeline-file", Usage: "Path to a JSON file describing the pipeline configuration"},
 		},
 	}
 }

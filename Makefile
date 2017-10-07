@@ -23,7 +23,7 @@ test: lint
 
 before_install:
 	@go get -t -v $$(go list ./... | grep -v vendor/)
-	@go get github.com/golang/lint/golint
+	@go in github.com/golang/lint/golint
 
 build: deploy_on_develop
 

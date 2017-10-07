@@ -2,7 +2,6 @@ package cli
 
 import (
 	"context"
-	"errors"
 	"github.com/drewsonne/go-gocd/gocd"
 	"github.com/urfave/cli"
 )

@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/user"
 	"strings"
+	"fmt"
 )
 
 // ConfigDirectoryPath is the location where the authentication information is stored
@@ -29,12 +30,18 @@ type Configuration struct {
 }
 
 // LoadConfigByName loads configurations from yaml at default file location
-func LoadConfigByName(name string) (cfg *Configuration, err error) {
+func LoadConfigByName(name string, cfg *Configuration) (err error) {
+
 	cfgs, err := LoadConfigFromFile()
 	if err == nil {
-		cfg = cfgs[name]
+		newCfg, hasCfg := cfgs[name];
+		if !hasCfg {
+			return fmt.Errorf("Could not find configuration profile '%s'", name)
+		}
+
+		*cfg = *newCfg
 	} else {
-		return nil, err
+		return err
 	}
 
 	if server := os.Getenv(EnvVarServer); server != "" {
@@ -49,7 +56,7 @@ func LoadConfigByName(name string) (cfg *Configuration, err error) {
 		cfg.Password = password
 	}
 
-	return cfg, nil
+	return nil
 }
 
 func LoadConfigFromFile() (cfgs map[string]*Configuration, err error) {

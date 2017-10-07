@@ -256,14 +256,14 @@ func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}, respons
 		HTTP:    resp,
 	}
 
-	if err = CheckResponse(r.HTTP); err != nil {
-		return r, err
-	}
-
 	if v != nil {
 		if r.Body, err = readDoResponseBody(v, &r.HTTP.Body, responseType); err != nil {
 			return nil, err
 		}
+	}
+
+	if err = CheckResponse(r.HTTP); err != nil {
+		return r, err
 	}
 
 	return r, err
