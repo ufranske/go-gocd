@@ -42,9 +42,9 @@ func (car configActionRunner) run() (err error) {
 
 	if cfg, err = car.generateConfig(); err != nil {
 		return NewCliError("Configure:generate", nil, err)
-	} else {
-		cfgs[profile] = cfg
 	}
+
+	cfgs[profile] = cfg
 
 	if b, err = yaml.Marshal(cfgs); err != nil {
 		return NewCliError("Configure:yaml", nil, err)

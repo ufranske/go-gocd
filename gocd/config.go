@@ -59,6 +59,7 @@ func LoadConfigByName(name string, cfg *Configuration) (err error) {
 	return nil
 }
 
+// LoadConfigFromFile on disk and return it as a Config item
 func LoadConfigFromFile() (cfgs map[string]*Configuration, err error) {
 	var b []byte
 	cfgs = make(map[string]*Configuration, 1)

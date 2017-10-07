@@ -49,7 +49,7 @@ func GetCliCommands() []cli.Command {
 	}
 }
 
-// NewCliClient
+// NewCliClient creates a new gocd client for use by cli actions.
 func NewCliClient(c *cli.Context) (*gocd.Client, error) {
 	var profile string
 	if profile = c.Parent().String("profile"); profile == "" {
