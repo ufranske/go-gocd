@@ -19,7 +19,7 @@ const (
 func getPluginAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	name := c.String("name")
 	if name == "" {
-		return nil, nil, errors.New("'--name' is missing.")
+		return nil, nil, NewFlagError("name")
 	}
 
 	return client.Plugins.Get(context.Background(), c.String("name"))

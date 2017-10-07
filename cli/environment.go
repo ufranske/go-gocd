@@ -33,7 +33,7 @@ func listEnvironmentsAction(client *gocd.Client, c *cli.Context) (r interface{},
 func getEnvironmentAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	var name string
 	if name = c.String("name"); name == "" {
-		return nil, nil, errors.New("'--name' is missing")
+		return nil, nil, NewFlagError("name")
 	}
 	e, resp, err := client.Environments.Get(context.Background(), name)
 	if err == nil {
@@ -47,10 +47,10 @@ func addPipelinesToEnvironmentAction(client *gocd.Client, c *cli.Context) (r int
 	var environment, pipelines string
 
 	if environment = c.String("environment-name"); environment == "" {
-		return nil, nil, errors.New("'--environment-name' is missing")
+		return nil, nil, NewFlagError("environment-name")
 	}
 	if pipelines = c.String("pipeline-names"); pipelines == "" {
-		return nil, nil, errors.New("'--pipeline-names' is missing")
+		return nil, nil, NewFlagError("pipeline-names")
 	}
 
 	e, resp, err := client.Environments.Patch(context.Background(), environment, &gocd.EnvironmentPatchRequest{
@@ -70,10 +70,10 @@ func removePipelinesFromEnvironmentAction(client *gocd.Client, c *cli.Context) (
 	var environment, pipelines string
 
 	if environment = c.String("environment-name"); environment == "" {
-		return nil, nil, errors.New("'--environment-name' is missing")
+		return nil, nil, NewFlagError("environment-name")
 	}
 	if pipelines = c.String("pipeline-names"); pipelines == "" {
-		return nil, nil, errors.New("'--pipeline-names' is missing")
+		return nil, nil, NewFlagError("pipeline-names")
 	}
 
 	e, resp, err := client.Environments.Patch(context.Background(), environment, &gocd.EnvironmentPatchRequest{

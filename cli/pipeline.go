@@ -27,7 +27,7 @@ const (
 func getPipelineStatusAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	var name string
 	if name = c.String("name"); name == "" {
-		return nil, nil, errors.New("'--name' is missing")
+		return nil, nil, NewFlagError("name")
 	}
 	return client.Pipelines.GetStatus(context.Background(), name, -1)
 }
@@ -36,7 +36,7 @@ func getPipelineStatusAction(client *gocd.Client, c *cli.Context) (r interface{}
 func getPipelineAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	var name string
 	if name = c.String("name"); name == "" {
-		return nil, nil, errors.New("'--name' is missing")
+		return nil, nil, NewFlagError("name")
 	}
 	return client.PipelineConfigs.Get(context.Background(), c.String("name"))
 }
@@ -46,7 +46,7 @@ func getPipelineAction(client *gocd.Client, c *cli.Context) (r interface{}, resp
 func getPipelineHistoryAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	var name string
 	if name = c.String("name"); name == "" {
-		return nil, nil, errors.New("'--name' is missing")
+		return nil, nil, NewFlagError("name")
 	}
 
 	return client.Pipelines.GetHistory(context.Background(), c.String("name"), -1)
@@ -56,7 +56,7 @@ func getPipelineHistoryAction(client *gocd.Client, c *cli.Context) (r interface{
 func pausePipelineAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	var name string
 	if name = c.String("name"); name == "" {
-		return nil, nil, errors.New("'--name' is missing")
+		return nil, nil, NewFlagError("name")
 	}
 
 	return client.Pipelines.Pause(context.Background(), c.String("name"))
@@ -66,7 +66,7 @@ func pausePipelineAction(client *gocd.Client, c *cli.Context) (r interface{}, re
 func unpausePipelineAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	var name string
 	if name = c.String("name"); name == "" {
-		return nil, nil, errors.New("'--name' is missing")
+		return nil, nil, NewFlagError("name")
 	}
 
 	return client.Pipelines.Unpause(context.Background(), c.String("name"))
@@ -76,7 +76,7 @@ func unpausePipelineAction(client *gocd.Client, c *cli.Context) (r interface{}, 
 func releasePipelineLockAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	var name string
 	if name = c.String("name"); name == "" {
-		return nil, nil, errors.New("'--name' is missing")
+		return nil, nil, NewFlagError("name")
 	}
 
 	return client.Pipelines.ReleaseLock(context.Background(), c.String("name"))

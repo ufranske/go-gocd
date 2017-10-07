@@ -3,12 +3,19 @@ package cli
 import (
 	"encoding/json"
 	"github.com/drewsonne/go-gocd/gocd"
+	"fmt"
 )
 
 type JSONCliError struct {
-	data dataJSONCliError
+	ReqType string
+	data    dataJSONCliError
+	resp    *gocd.APIResponse
 }
 type dataJSONCliError map[string]interface{}
+
+func NewFlagError(flag string) (err error) {
+	return fmt.Errorf("'--%s' is missing", flag)
+}
 
 func NewCliError(reqType string, hr *gocd.APIResponse, err error) (jerr JSONCliError) {
 	data := dataJSONCliError{
@@ -30,6 +37,7 @@ func NewCliError(reqType string, hr *gocd.APIResponse, err error) (jerr JSONCliE
 	}
 	return JSONCliError{
 		data: data,
+		resp: hr,
 	}
 }
 
@@ -43,5 +51,8 @@ func (e JSONCliError) Error() string {
 }
 
 func (e JSONCliError) ExitCode() int {
-	return 1
+	if e.resp == nil {
+		return 1
+	}
+	return e.resp.HTTP.StatusCode
 }

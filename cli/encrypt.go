@@ -17,7 +17,7 @@ const (
 func encryptAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	var value string
 	if value = c.String("value"); value == "" {
-		return nil, nil, errors.New("'--value' is missing")
+		return nil, nil, NewFlagError("value")
 	}
 
 	return client.Encryption.Encrypt(context.Background(), value)
