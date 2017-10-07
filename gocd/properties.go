@@ -60,7 +60,7 @@ func (ps *PropertiesService) Create(ctx context.Context, name string, value stri
 		Path:         path,
 		ResponseType: responseTypeText,
 		ResponseBody: responseBuffer,
-		RequestBody:  fmt.Sprint("%s=%s", name, value),
+		RequestBody:  fmt.Sprintf("%s=%s", name, value),
 		Headers: map[string]string{
 			"Confirm": "true",
 		},
