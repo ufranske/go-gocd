@@ -27,6 +27,7 @@ func NewCliError(reqType string, hr *gocd.APIResponse, err error) (jerr JSONCliE
 	if hr != nil {
 		data["status"] = hr.HTTP.StatusCode
 		data["response-body"] = hr.Body
+		data["url"] = hr.Request.HTTP.URL.String()
 
 		if hr.HTTP.StatusCode == 404 {
 			data["error"] = "Resource not found"
