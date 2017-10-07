@@ -272,8 +272,8 @@ func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}, respons
 func readDoResponseBody(v interface{}, body *io.ReadCloser, responseType string) (string, error) {
 
 	if w, ok := v.(io.Writer); ok {
-		io.Copy(w, *body)
-		return "", nil
+		_, err := io.Copy(w, *body)
+		return "", err
 	}
 
 	bdy, err := ioutil.ReadAll(*body)

@@ -6,11 +6,13 @@ import (
 	"io"
 	"io/ioutil"
 	"strings"
+	"encoding/json"
 )
 
 // Properties describes a properties resource in the GoCD API.
 type Properties struct {
 	UnmarshallWithHeader bool
+	IsDatum              bool
 	Header               []string
 	DataFrame            [][]string
 }
@@ -100,4 +102,26 @@ func (pr *Properties) Write(p []byte) (n int, err error) {
 	pr.UnmarshallCSV(string(raw))
 
 	return numBytes, nil
+}
+
+// MarshallJSON converts the properties structure to a list of maps
+func (pr *Properties) MarshalJSON() ([]byte, error) {
+	structures := make([]map[string]string, len(pr.DataFrame))
+
+	for i, row := range pr.DataFrame {
+		rowStructure := map[string]string{}
+		for j, key := range pr.Header {
+			value := row[j]
+			rowStructure[key] = value
+		}
+
+		if pr.IsDatum {
+			return json.Marshal(rowStructure)
+		}
+
+		structures[i] = rowStructure
+	}
+
+	return json.Marshal(structures)
+
 }
