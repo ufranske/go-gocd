@@ -3,10 +3,10 @@ package gocd
 import (
 	"bytes"
 	"encoding/csv"
+	"encoding/json"
 	"io"
 	"io/ioutil"
 	"strings"
-	"encoding/json"
 )
 
 // Properties describes a properties resource in the GoCD API.
