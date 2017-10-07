@@ -1,6 +1,7 @@
 package gocd
 
 import (
+	"fmt"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
@@ -29,12 +30,18 @@ type Configuration struct {
 }
 
 // LoadConfigByName loads configurations from yaml at default file location
-func LoadConfigByName(name string) (cfg *Configuration, err error) {
+func LoadConfigByName(name string, cfg *Configuration) (err error) {
+
 	cfgs, err := LoadConfigFromFile()
 	if err == nil {
-		cfg = cfgs[name]
+		newCfg, hasCfg := cfgs[name]
+		if !hasCfg {
+			return fmt.Errorf("Could not find configuration profile '%s'", name)
+		}
+
+		*cfg = *newCfg
 	} else {
-		return nil, err
+		return err
 	}
 
 	if server := os.Getenv(EnvVarServer); server != "" {
@@ -49,9 +56,10 @@ func LoadConfigByName(name string) (cfg *Configuration, err error) {
 		cfg.Password = password
 	}
 
-	return cfg, nil
+	return nil
 }
 
+// LoadConfigFromFile on disk and return it as a Config item
 func LoadConfigFromFile() (cfgs map[string]*Configuration, err error) {
 	var b []byte
 	cfgs = make(map[string]*Configuration, 1)
