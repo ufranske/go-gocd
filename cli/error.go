@@ -2,8 +2,8 @@ package cli
 
 import (
 	"encoding/json"
-	"github.com/drewsonne/go-gocd/gocd"
 	"fmt"
+	"github.com/drewsonne/go-gocd/gocd"
 )
 
 type JSONCliError struct {

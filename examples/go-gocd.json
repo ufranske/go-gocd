@@ -5,7 +5,8 @@
       "type": "git",
       "attributes": {
         "url": "https://github.com/drewsonne/go-gocd",
-        "destination": "src/github.com/drewsonne/go-gocd"
+        "destination": "src/github.com/drewsonne/go-gocd",
+        "branch": "feature/properties"
       }
     }
   ],
