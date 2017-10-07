@@ -26,7 +26,7 @@ const (
 func listPipelineTemplatesAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	ts, resp, err := client.PipelineTemplates.List(context.Background())
 	if err != nil {
-		return nil, resp, err
+		return ts, resp, err
 	}
 
 	type p struct {
@@ -57,7 +57,7 @@ func listPipelineTemplatesAction(client *gocd.Client, c *cli.Context) (r interfa
 func getPipelineTemplateAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	var name string
 	if name = c.String("template-name"); name == "" {
-		return nil, nil, errors.New("'--template-name' is missing")
+		return nil, nil, NewFlagError("template-name")
 	}
 
 	pt, resp, err := client.PipelineTemplates.Get(context.Background(), name)
@@ -70,7 +70,7 @@ func getPipelineTemplateAction(client *gocd.Client, c *cli.Context) (r interface
 // CreatePipelineTemplateAction checks stages and template-name is provided, and that the response is 2xx.
 func createPipelineTemplateAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	if c.String("template-name") == "" {
-		return nil, nil, errors.New("'--template-name' is missing")
+		return nil, nil, NewFlagError("template-name")
 	}
 	if len(c.StringSlice("stage")) < 1 {
 		return nil, nil, errors.New("At least 1 '--stage' must be set")
@@ -94,10 +94,10 @@ func createPipelineTemplateAction(client *gocd.Client, c *cli.Context) (r interf
 // 2xx.
 func updatePipelineTemplateAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	if c.String("template-name") == "" {
-		return nil, nil, errors.New("'--template-name' is missing")
+		return nil, nil, NewFlagError("template-name")
 	}
 	if c.String("template-version") == "" {
-		return nil, nil, errors.New("'--version' is missing")
+		return nil, nil, NewFlagError("version")
 	}
 	if len(c.StringSlice("stage")) < 1 {
 		return nil, nil, errors.New("At least 1 '--stage' must be set")
@@ -133,7 +133,7 @@ func deletePipelineTemplateCommand() *cli.Command {
 			cli.StringFlag{Name: "template-name", Usage: "Pipeline Template name."}},
 		Action: func(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 			if c.String("template-name") == "" {
-				return nil, nil, errors.New("'--template-name' is missing")
+				return nil, nil, NewFlagError("template-name")
 			}
 
 			deleteResponse, resp, err := client.PipelineTemplates.Delete(context.Background(), c.String("template-name"))

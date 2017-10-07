@@ -26,7 +26,7 @@ const (
 func createPipelineConfigAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	group := c.String("group")
 	if group == "" {
-		return nil, nil, errors.New("'--group' is missing")
+		return nil, nil, NewFlagError("group")
 	}
 
 	pipeline := c.String("pipeline")
@@ -63,11 +63,11 @@ func updatePipelineConfigAction(client *gocd.Client, c *cli.Context) (r interfac
 	var name, version string
 
 	if name = c.String("name"); name == "" {
-		return nil, nil, errors.New("'--name' is missing")
+		return nil, nil, NewFlagError("name")
 	}
 
 	if version = c.String("pipeline-version"); version == "" {
-		return nil, nil, errors.New("'--pipeline-version' is missing")
+		return nil, nil, NewFlagError("pipeline-version")
 	}
 
 	pipeline := c.String("pipeline")
@@ -105,7 +105,7 @@ func updatePipelineConfigAction(client *gocd.Client, c *cli.Context) (r interfac
 func deletePipelineConfigAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	name := c.String("name")
 	if name == "" {
-		return nil, nil, errors.New("'--name' is missing")
+		return nil, nil, NewFlagError("name")
 	}
 
 	deleteResponse, resp, err := client.PipelineConfigs.Delete(context.Background(), name)
@@ -119,7 +119,7 @@ func deletePipelineConfigAction(client *gocd.Client, c *cli.Context) (r interfac
 func getPipelineConfigAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
 	name := c.String("name")
 	if name == "" {
-		return nil, nil, errors.New("'--name' is missing")
+		return nil, nil, NewFlagError("name")
 	}
 
 	getResponse, resp, err := client.PipelineConfigs.Get(context.Background(), name)

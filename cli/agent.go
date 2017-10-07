@@ -49,11 +49,11 @@ func getAgentAction(client *gocd.Client, c *cli.Context) (v interface{}, resp *g
 func updateAgentAction(client *gocd.Client, c *cli.Context) (v interface{}, resp *gocd.APIResponse, err error) {
 
 	if c.String("uuid") == "" {
-		return nil, nil, errors.New("'--uuid' is missing")
+		return nil, nil, NewFlagError("uuid")
 	}
 
 	if c.String("config") == "" {
-		return nil, nil, errors.New("'--config' is missing")
+		return nil, nil, NewFlagError("config")
 	}
 
 	a := &gocd.Agent{}
@@ -68,7 +68,7 @@ func updateAgentAction(client *gocd.Client, c *cli.Context) (v interface{}, resp
 // DeleteAgentAction delets an agent. Note: The agent must be disabled.
 func deleteAgentAction(client *gocd.Client, c *cli.Context) (v interface{}, resp *gocd.APIResponse, err error) {
 	if c.String("uuid") == "" {
-		return nil, nil, errors.New("'--uuid' is missing")
+		return nil, nil, NewFlagError("uuid")
 	}
 
 	deleteResponse, r, err := client.Agents.Delete(context.Background(), c.String("uuid"))
@@ -93,7 +93,7 @@ func updateAgentsAction(client *gocd.Client, c *cli.Context) (v interface{}, res
 
 	var uuids []string
 	if uuids = c.StringSlice("uuid"); len(uuids) == 0 {
-		return nil, nil, errors.New("'--uuid' is missing")
+		return nil, nil, NewFlagError("uuid")
 	}
 	u.Uuids = uuids
 

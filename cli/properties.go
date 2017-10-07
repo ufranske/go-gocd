@@ -16,26 +16,25 @@ const (
 )
 
 func createPropertyAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
-	name := c.String("name")
-	if name == "" {
-		return nil, nil, errors.New("'--name' is missing")
+	var name, value, pipeline, stage string
+
+	if name = c.String("name"); name == "" {
+		return nil, nil, NewFlagError("name")
 	}
 
-	value := c.String("value")
-	if value == "" {
-		return nil, nil, errors.New("'--value' is missing")
+	if value = c.String("value"); value == "" {
+		return nil, nil, NewFlagError("value")
 	}
 
-	pipeline := c.String("pipeline")
-	if pipeline == "" {
-		return nil, nil, errors.New("'--pipeline' is missing")
+	if pipeline = c.String("pipeline"); pipeline == "" {
+		return nil, nil, NewFlagError("pipeline")
 	}
+
+	if stage = c.String("stage"); stage == "" {
+		return nil, nil, NewFlagError("stage")
+	}
+
 	pipelineCounter := c.Int("pipeline-counter")
-
-	stage := c.String("stage")
-	if stage == "" {
-		return nil, nil, errors.New("'--stage' is missing")
-	}
 	stageCounter := c.Int("stage-counter")
 
 	return client.Properties.Create(context.Background(), name, value, &gocd.PropertyRequest{
@@ -47,18 +46,18 @@ func createPropertyAction(client *gocd.Client, c *cli.Context) (r interface{}, r
 }
 
 func listPropertiesAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
+	var pipeline, stage string
 
-	pipeline := c.String("pipeline")
-	if pipeline == "" {
-		return nil, nil, errors.New("'--pipeline' is missing")
+	if pipeline = c.String("pipeline"); pipeline == "" {
+		return nil, nil, NewFlagError("pipeline")
 	}
-	pipelineCounter := c.Int("pipeline-counter")
 
-	stage := c.String("stage")
-	if stage == "" {
-		return nil, nil, errors.New("'--stage' is missing")
+	if stage = c.String("stage"); stage == "" {
+		return nil, nil, NewFlagError("stage")
 	}
+
 	stageCounter := c.Int("stage-counter")
+	pipelineCounter := c.Int("pipeline-counter")
 
 	return client.Properties.List(context.Background(), &gocd.PropertyRequest{
 		Pipeline:        pipeline,
