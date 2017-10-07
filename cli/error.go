@@ -22,21 +22,25 @@ func NewFlagError(flag string) (err error) {
 // NewCliError creates an error which can be returned from a cli action
 func NewCliError(reqType string, hr *gocd.APIResponse, err error) (jerr JSONCliError) {
 	data := dataJSONCliError{
-		"Error": err.Error(),
+		"error": err.Error(),
 	}
 	if hr != nil {
-		b1, _ := json.Marshal(hr.HTTP.Header)
-		b2, _ := json.Marshal(hr.Request.HTTP.Header)
-		data["Error"] = "An error occurred while retrieving the resource."
-		data["Status"] = hr.HTTP.StatusCode
-		data["ResponseHeader"] = string(b1)
-		data["ResponseBody"] = hr.Body
-		data["RequestBody"] = hr.Request.Body
-		data["RequestEndpoint"] = hr.Request.HTTP.URL.String()
-		data["RequestHeader"] = string(b2)
+		data["status"] = hr.HTTP.StatusCode
+		data["response-body"] = hr.Body
 
+		if hr.HTTP.StatusCode == 404 {
+			data["error"] = "Resource not found"
+		} else {
+			b1, _ := json.Marshal(hr.HTTP.Header)
+			b2, _ := json.Marshal(hr.Request.HTTP.Header)
+			data["error"] = "An error occurred while retrieving the resource."
+			data["response-header"] = string(b1)
+			data["request-body"] = hr.Request.Body
+			data["request-endpoint"] = hr.Request.HTTP.URL.String()
+			data["request-header"] = string(b2)
+		}
 	} else {
-		data["Request"] = reqType
+		data["request"] = reqType
 	}
 	return JSONCliError{
 		data: data,
@@ -59,5 +63,17 @@ func (e JSONCliError) ExitCode() int {
 	if e.resp == nil {
 		return 1
 	}
-	return e.resp.HTTP.StatusCode
+	code := e.resp.HTTP.StatusCode
+	if code >= 100 && code < 200 {
+		return 10
+	} else if code >= 200 && code < 300 {
+		return 20
+	} else if code >= 300 && code < 400 {
+		return 30
+	} else if code >= 400 && code < 500 {
+		return 40
+	} else if code >= 500 && code < 600 {
+		return 50
+	}
+	return 2
 }

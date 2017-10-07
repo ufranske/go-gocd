@@ -18,6 +18,7 @@ type PropertyRequest struct {
 	Job             string
 	LimitPipeline   string
 	Limit           int
+	Single          bool
 }
 
 // PropertyCreateResponse handles the parsing of the response when creating a property
@@ -33,7 +34,7 @@ func (ps *PropertiesService) List(ctx context.Context, pr *PropertyRequest) (*Pr
 		pr.Stage, pr.StageCounter,
 		pr.Job,
 	)
-	return ps.commonPropertiesAction(ctx, path)
+	return ps.commonPropertiesAction(ctx, path, pr.Single)
 }
 
 // Get a specific property for the given job/pipeline/stage run.
@@ -43,7 +44,7 @@ func (ps *PropertiesService) Get(ctx context.Context, name string, pr *PropertyR
 		pr.Stage, pr.StageCounter,
 		pr.Job, name,
 	)
-	return ps.commonPropertiesAction(ctx, path)
+	return ps.commonPropertiesAction(ctx, path, true)
 }
 
 // Create a specific property for the given job/pipeline/stage run.
@@ -59,8 +60,13 @@ func (ps *PropertiesService) Create(ctx context.Context, name string, value stri
 		Path:         path,
 		ResponseType: responseTypeText,
 		ResponseBody: responseBuffer,
+		RequestBody:  fmt.Sprint("%s=%s", name, value),
+		Headers: map[string]string{
+			"Confirm": "true",
+		},
 	})
 	responseString := responseBuffer.String()
+	resp.Body = responseString
 
 	r := fmt.Sprintf("Property '%s' created with value '%s'", name, value)
 
@@ -79,12 +85,13 @@ func (ps *PropertiesService) ListHistorical(ctx context.Context, pr *PropertyReq
 		q.Set("limitPipeline", pr.LimitPipeline)
 	}
 	u.RawQuery = q.Encode()
-	return ps.commonPropertiesAction(ctx, "/properties/search")
+	return ps.commonPropertiesAction(ctx, "/properties/search", false)
 }
 
-func (ps *PropertiesService) commonPropertiesAction(ctx context.Context, path string) (*Properties, *APIResponse, error) {
+func (ps *PropertiesService) commonPropertiesAction(ctx context.Context, path string, isDatum bool) (*Properties, *APIResponse, error) {
 	p := Properties{
 		UnmarshallWithHeader: true,
+		IsDatum:              isDatum,
 	}
 	_, resp, err := ps.client.getAction(ctx, &APIClientRequest{
 		Path:         path,

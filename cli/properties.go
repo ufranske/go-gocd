@@ -15,7 +15,8 @@ const (
 )
 
 func createPropertyAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
-	var name, value, pipeline, stage string
+	var name, value, pipeline, stage, job string
+	var pipelineCounter, stageCounter int
 
 	if name = c.String("name"); name == "" {
 		return nil, nil, NewFlagError("name")
@@ -33,19 +34,30 @@ func createPropertyAction(client *gocd.Client, c *cli.Context) (r interface{}, r
 		return nil, nil, NewFlagError("stage")
 	}
 
-	pipelineCounter := c.Int("pipeline-counter")
-	stageCounter := c.Int("stage-counter")
+	if job = c.String("job"); job == "" {
+		return nil, nil, NewFlagError("job")
+	}
+
+	if pipelineCounter = c.Int("pipeline-counter"); pipelineCounter < 1 {
+		return nil, nil, NewFlagError("pipeline-counter")
+	}
+
+	if stageCounter = c.Int("stage-counter"); stageCounter < 1 {
+		return nil, nil, NewFlagError("stage-counter")
+	}
 
 	return client.Properties.Create(context.Background(), name, value, &gocd.PropertyRequest{
 		Pipeline:        pipeline,
 		PipelineCounter: pipelineCounter,
 		Stage:           stage,
 		StageCounter:    stageCounter,
+		Job:             job,
 	})
 }
 
 func listPropertiesAction(client *gocd.Client, c *cli.Context) (r interface{}, resp *gocd.APIResponse, err error) {
-	var pipeline, stage string
+	var pipeline, stage, job string
+	var pipelineCounter, stageCounter int
 
 	if pipeline = c.String("pipeline"); pipeline == "" {
 		return nil, nil, NewFlagError("pipeline")
@@ -55,14 +67,25 @@ func listPropertiesAction(client *gocd.Client, c *cli.Context) (r interface{}, r
 		return nil, nil, NewFlagError("stage")
 	}
 
-	stageCounter := c.Int("stage-counter")
-	pipelineCounter := c.Int("pipeline-counter")
+	if job = c.String("job"); job == "" {
+		return nil, nil, NewFlagError("job")
+	}
+
+	if pipelineCounter = c.Int("pipeline-counter"); pipelineCounter < 1 {
+		return nil, nil, NewFlagError("pipeline-counter")
+	}
+
+	if stageCounter = c.Int("stage-counter"); stageCounter < 1 {
+		return nil, nil, NewFlagError("stage-counter")
+	}
 
 	return client.Properties.List(context.Background(), &gocd.PropertyRequest{
 		Pipeline:        pipeline,
 		PipelineCounter: pipelineCounter,
 		Stage:           stage,
 		StageCounter:    stageCounter,
+		Job:             job,
+		Single:          true,
 	})
 }
 
