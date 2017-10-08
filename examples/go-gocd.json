@@ -5,8 +5,7 @@
       "type": "git",
       "attributes": {
         "url": "https://github.com/drewsonne/go-gocd",
-        "destination": "src/github.com/drewsonne/go-gocd",
-        "branch": "feature/properties"
+        "destination": "src/github.com/drewsonne/go-gocd"
       }
     }
   ],
@@ -27,13 +26,27 @@
             {
               "type": "exec",
               "attributes": {
+                "command": "gocd",
+                "arguments": [
+                  "create-property",
+                  "--name",
+                  "test-key",
+                  "--value",
+                  "test-value"
+                ]
+              }
+            },
+            {
+              "type": "exec",
+              "attributes": {
                 "command": "make",
                 "arguments": [
                   "test"
                 ],
                 "working_directory": "src/github.com/drewsonne/go-gocd"
               }
-            },{
+            },
+            {
               "type": "exec",
               "attributes": {
                 "command": "ls",
