@@ -20,6 +20,6 @@ services:
     depends_on:
      - gocd-server
     environment:
-     AGENT_AUTO_REGISTER_KEY: b7985410-b631-4615-905d-0472313aaad9
+     AGENT_AUTO_REGISTER_KEY: c66f081b-4014-4dfc-b766-1e10392e5004
 #     AGENT_AUTO_REGISTER_HOSTNAME: https://server:8154/go
      GO_SERVER_URL: https://server:8154/go

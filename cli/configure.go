@@ -56,7 +56,11 @@ func (car configActionRunner) run() (err error) {
 }
 
 func writeConfigsToFile(b []byte) (err error) {
-	if err = ioutil.WriteFile(gocd.ConfigFilePath(), b, 0644); err != nil {
+	path, err := gocd.ConfigFilePath()
+	if err != nil {
+		return err
+	}
+	if err = ioutil.WriteFile(path, b, 0644); err != nil {
 		return NewCliError("Configure:write", nil, err)
 	}
 	return nil

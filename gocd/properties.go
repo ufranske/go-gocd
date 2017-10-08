@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	log "github.com/Sirupsen/logrus"
 )
 
 // PropertiesService describes Actions which can be performed on agents
@@ -34,6 +35,7 @@ func (ps *PropertiesService) List(ctx context.Context, pr *PropertyRequest) (*Pr
 		pr.Stage, pr.StageCounter,
 		pr.Job,
 	)
+	log.Info("Calling `PropertiesServices.List`")
 	return ps.commonPropertiesAction(ctx, path, pr.Single)
 }
 
@@ -55,6 +57,7 @@ func (ps *PropertiesService) Create(ctx context.Context, name string, value stri
 		pr.Job, name,
 	)
 
+	log.Info("Calling `PropertiesServices.Create`")
 	responseBuffer := bytes.NewBuffer([]byte(""))
 	_, resp, err := ps.client.postAction(ctx, &APIClientRequest{
 		Path:         path,

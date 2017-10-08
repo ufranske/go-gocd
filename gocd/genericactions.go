@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	log "github.com/Sirupsen/logrus"
+	"encoding/json"
 )
 
 // APIClientRequest helper struct to reduce amount of code.
@@ -69,6 +71,9 @@ func (c *Client) deleteAction(ctx context.Context, path string, apiversion strin
 
 func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface{}, *APIResponse, error) {
 
+	log.Debugf("HTTP Request")
+	log.Debugf("%s %s", r.Method, r.Path)
+
 	if r.ResponseType == "" {
 		r.ResponseType = responseTypeJSON
 	}
@@ -101,13 +106,40 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface
 		}
 	}
 
+	for header, values := range req.HTTP.Header {
+		for _, value := range values {
+			log.Debugf("%s: %s", header, value)
+		}
+	}
+	if r.RequestBody != nil {
+		log.Debug()
+		log.Debug(r.RequestBody)
+		log.Debug()
+		log.Debug()
+	}
+
 	resp, err := c.Do(ctx, req, r.ResponseBody, r.ResponseType)
 	if err != nil {
+		log.Error(err)
 		return r.ResponseBody, resp, err
 	}
 
 	if ver, isVersioned = (r.ResponseBody).(Versioned); isVersioned {
 		parseVersions(resp.HTTP, ver)
+	}
+
+	if r.ResponseType == responseTypeJSON {
+		log.Debug()
+		log.Debug("Response")
+		log.Debugf("%s %s", resp.HTTP.Proto, resp.HTTP.Status)
+		for header, values := range resp.HTTP.Header {
+			for _, value := range values {
+				log.Debugf("%s: %s", header, value)
+			}
+		}
+		log.Debug()
+		b, _ := json.Marshal(r.ResponseBody)
+		log.Debugf("%s", b)
 	}
 
 	return r.ResponseBody, resp, err

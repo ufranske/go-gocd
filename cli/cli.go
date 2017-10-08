@@ -52,28 +52,31 @@ func GetCliCommands() []cli.Command {
 // NewCliClient creates a new gocd client for use by cli actions.
 func NewCliClient(c *cli.Context) (*gocd.Client, error) {
 	var profile string
+
 	if profile = c.Parent().String("profile"); profile == "" {
 		profile = "default"
 	}
 
 	cfg := &gocd.Configuration{}
-	if err := gocd.LoadConfigByName(profile, cfg); err != nil {
-		return nil, err
-	}
+	cfgErr := gocd.LoadConfigByName(profile, cfg)
 
-	if server := c.String("server"); server != "" {
+	if server := c.Parent().String("server"); server != "" {
 		cfg.Server = server
 	}
 
-	if username := c.String("username"); username != "" {
+	if cfg.Server == "" && cfgErr != nil {
+		return nil, cfgErr
+	}
+
+	if username := c.Parent().String("username"); username != "" {
 		cfg.Username = username
 	}
 
-	if password := c.String("password"); password != "" {
+	if password := c.Parent().String("password"); password != "" {
 		cfg.Password = password
 	}
 
-	cfg.SkipSslCheck = cfg.SkipSslCheck || c.Bool("skip_ssl_check")
+	cfg.SkipSslCheck = cfg.SkipSslCheck || c.Parent().Bool("skip_ssl_check")
 
 	return cfg.Client(), nil
 }
