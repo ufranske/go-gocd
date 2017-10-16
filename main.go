@@ -43,7 +43,6 @@ func buildCli() *cli.App {
 		cli.StringFlag{
 			Name:   "server",
 			EnvVar: gocd.EnvVarServer,
-			Value:  "https://127.0.0.1:8154/go/",
 		},
 		cli.StringFlag{
 			Name:   "username",

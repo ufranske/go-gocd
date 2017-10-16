@@ -64,8 +64,13 @@ func NewCliClient(c *cli.Context) (*gocd.Client, error) {
 		cfg.Server = server
 	}
 
-	if cfg.Server == "" && cfgErr != nil {
-		return nil, cfgErr
+	if cfg.Server == "" {
+		if cfgErr != nil {
+			return nil, cfgErr
+		} else {
+			// If we didn't have any errors, and our server is empty, use the local.
+			cfg.Server = "https://127.0.0.1:8154/go/"
+		}
 	}
 
 	if username := c.Parent().String("username"); username != "" {
