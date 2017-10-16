@@ -69,10 +69,9 @@ func (c *Client) deleteAction(ctx context.Context, path string, apiversion strin
 	return a.Message, resp, err
 }
 
-func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface{}, *APIResponse, error) {
+func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responeBody interface{}, resp *APIResponse, err error) {
 
-	log.Debugf("HTTP Request")
-	log.Debugf("%s %s", r.Method, r.Path)
+	log.Debugf("HTTP Request\n%s %s", r.Method, r.Path)
 
 	if r.ResponseType == "" {
 		r.ResponseType = responseTypeJSON
@@ -86,9 +85,12 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface
 	}
 
 	// Build the request
-	req, err := c.NewRequest(r.Method, r.Path, r.RequestBody, r.APIVersion)
-	if err != nil {
+	var req *APIRequest
+	if req, err = c.NewRequest(r.Method, r.Path, r.RequestBody, r.APIVersion); err != nil {
 		return false, nil, err
+	}
+	if r.RequestBody != nil {
+		log.Debugf("\n%s\n\n", r.RequestBody)
 	}
 
 	if len(r.Headers) > 0 {
@@ -97,17 +99,9 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface
 		}
 	}
 
-	for header, values := range req.HTTP.Header {
-		for _, value := range values {
-			log.Debugf("%s: %s", header, value)
-		}
-	}
-	if r.RequestBody != nil {
-		log.Debugf("\n%s\n\n", r.RequestBody)
-	}
+	printHeaderDebug(req.HTTP.Header)
 
-	resp, err := c.Do(ctx, req, r.ResponseBody, r.ResponseType)
-	if err != nil {
+	if resp, err = c.Do(ctx, req, r.ResponseBody, r.ResponseType); err != nil {
 		log.Error(err)
 		return r.ResponseBody, resp, err
 	}
@@ -118,16 +112,20 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface
 
 	if r.ResponseType == responseTypeJSON {
 		log.Debugf("\nResponse\n%s %s\n", resp.HTTP.Proto, resp.HTTP.Status)
-		for header, values := range resp.HTTP.Header {
-			for _, value := range values {
-				log.Debugf("%s: %s", header, value)
-			}
-		}
+		printHeaderDebug(resp.HTTP.Header)
 		b, _ := json.Marshal(r.ResponseBody)
 		log.Debugf("\n%s", b)
 	}
 
 	return r.ResponseBody, resp, err
+}
+
+func printHeaderDebug(headers http.Header) {
+	for header, values := range headers {
+		for _, value := range values {
+			log.Debugf("%s: %s", header, value)
+		}
+	}
 }
 
 func parseVersions(response *http.Response, versioned Versioned) {
