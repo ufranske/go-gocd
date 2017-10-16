@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	log "github.com/Sirupsen/logrus"
+	"strings"
 )
 
 // PropertiesService describes Actions which can be performed on agents
@@ -34,6 +36,7 @@ func (ps *PropertiesService) List(ctx context.Context, pr *PropertyRequest) (*Pr
 		pr.Stage, pr.StageCounter,
 		pr.Job,
 	)
+	log.Info("Calling `PropertiesServices.List`")
 	return ps.commonPropertiesAction(ctx, path, pr.Single)
 }
 
@@ -49,28 +52,29 @@ func (ps *PropertiesService) Get(ctx context.Context, name string, pr *PropertyR
 
 // Create a specific property for the given job/pipeline/stage run.
 func (ps *PropertiesService) Create(ctx context.Context, name string, value string, pr *PropertyRequest) (bool, *APIResponse, error) {
-	path := fmt.Sprintf("/properties/%s/%d/%s/%d/%s/%s",
-		pr.Pipeline, pr.PipelineCounter,
-		pr.Stage, pr.StageCounter,
-		pr.Job, name,
-	)
 
+	log.Info("Calling `PropertiesServices.Create`")
 	responseBuffer := bytes.NewBuffer([]byte(""))
 	_, resp, err := ps.client.postAction(ctx, &APIClientRequest{
-		Path:         path,
+		Path: fmt.Sprintf("/properties/%s/%d/%s/%d/%s/%s",
+			pr.Pipeline, pr.PipelineCounter,
+			pr.Stage, pr.StageCounter,
+			pr.Job, name,
+		),
 		ResponseType: responseTypeText,
 		ResponseBody: responseBuffer,
-		RequestBody:  fmt.Sprintf("%s=%s", name, value),
+		RequestBody: strings.Join(
+			[]string{name, value},
+			"=",
+		),
 		Headers: map[string]string{
 			"Confirm": "true",
 		},
 	})
-	responseString := responseBuffer.String()
-	resp.Body = responseString
+	resp.Body = responseBuffer.String()
+	responseIsValid := resp.Body == fmt.Sprintf("Property '%s' created with value '%s'", name, value)
 
-	r := fmt.Sprintf("Property '%s' created with value '%s'", name, value)
-
-	return responseString == r, resp, err
+	return responseIsValid, resp, err
 }
 
 // ListHistorical properties for a given pipeline, stage, job.
