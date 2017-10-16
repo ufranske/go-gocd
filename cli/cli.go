@@ -99,9 +99,9 @@ func handleOutput(r interface{}, reqType string) cli.ExitCoder {
 	return nil
 }
 
-type actionWrapperFunc func(client *gocd.Client, c *cli.Context) (interface{}, *gocd.APIResponse, error)
+type ActionWrapperFunc func(client *gocd.Client, c *cli.Context) (interface{}, *gocd.APIResponse, error)
 
-func actionWrapper(callback actionWrapperFunc) interface{} {
+func ActionWrapper(callback ActionWrapperFunc) interface{} {
 	return func(c *cli.Context) error {
 		cl := c.App.Metadata["c"].(func(c *cli.Context) (*gocd.Client, error))
 		client, err := cl(c)
