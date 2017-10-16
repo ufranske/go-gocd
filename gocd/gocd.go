@@ -39,6 +39,11 @@ const (
 	responseTypeText = "text"
 )
 
+//Logging Environment variables
+const (
+	gocdLogLevel = "GOCD_LOG"
+)
+
 // StringResponse handles the unmarshaling of the single string response from DELETE requests.
 type StringResponse struct {
 	Message string `json:"message"`
@@ -155,6 +160,8 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 	c.Plugins = (*PluginsService)(&c.common)
 	c.Environments = (*EnvironmentsService)(&c.common)
 	c.Properties = (*PropertiesService)(&c.common)
+
+	SetupLogging()
 
 	return c
 }
