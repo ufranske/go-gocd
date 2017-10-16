@@ -2,11 +2,11 @@ package gocd
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	log "github.com/Sirupsen/logrus"
 	"net/http"
 	"strings"
-	log "github.com/Sirupsen/logrus"
-	"encoding/json"
 )
 
 // APIClientRequest helper struct to reduce amount of code.
