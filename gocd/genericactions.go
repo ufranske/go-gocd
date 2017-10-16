@@ -78,9 +78,7 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface
 		r.ResponseType = responseTypeJSON
 	}
 
-	var isVersioned bool
-	var ver Versioned
-	if ver, isVersioned = (r.RequestBody).(Versioned); isVersioned {
+	if ver, isVersioned := (r.RequestBody).(Versioned); isVersioned {
 		if r.Headers == nil {
 			r.Headers = map[string]string{}
 		}
@@ -88,14 +86,7 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface
 	}
 
 	// Build the request
-	var reqBody interface{}
-	if r.RequestBody != nil {
-		reqBody = r.RequestBody
-	} else {
-		reqBody = nil
-	}
-
-	req, err := c.NewRequest(r.Method, r.Path, reqBody, r.APIVersion)
+	req, err := c.NewRequest(r.Method, r.Path, r.RequestBody, r.APIVersion)
 	if err != nil {
 		return false, nil, err
 	}
@@ -112,10 +103,7 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface
 		}
 	}
 	if r.RequestBody != nil {
-		log.Debug()
-		log.Debug(r.RequestBody)
-		log.Debug()
-		log.Debug()
+		log.Debugf("\n%s\n\n", r.RequestBody)
 	}
 
 	resp, err := c.Do(ctx, req, r.ResponseBody, r.ResponseType)
@@ -124,22 +112,19 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (interface
 		return r.ResponseBody, resp, err
 	}
 
-	if ver, isVersioned = (r.ResponseBody).(Versioned); isVersioned {
+	if ver, isVersioned := (r.ResponseBody).(Versioned); isVersioned {
 		parseVersions(resp.HTTP, ver)
 	}
 
 	if r.ResponseType == responseTypeJSON {
-		log.Debug()
-		log.Debug("Response")
-		log.Debugf("%s %s", resp.HTTP.Proto, resp.HTTP.Status)
+		log.Debugf("\nResponse\n%s %s\n", resp.HTTP.Proto, resp.HTTP.Status)
 		for header, values := range resp.HTTP.Header {
 			for _, value := range values {
 				log.Debugf("%s: %s", header, value)
 			}
 		}
-		log.Debug()
 		b, _ := json.Marshal(r.ResponseBody)
-		log.Debugf("%s", b)
+		log.Debugf("\n%s", b)
 	}
 
 	return r.ResponseBody, resp, err
