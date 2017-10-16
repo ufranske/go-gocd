@@ -77,12 +77,12 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responeBo
 		r.ResponseType = responseTypeJSON
 	}
 
-	if ver, isVersioned := (r.RequestBody).(Versioned); isVersioned {
+	versionAction(r.RequestBody, func(ver Versioned) {
 		if r.Headers == nil {
 			r.Headers = map[string]string{}
 		}
 		r.Headers["If-Match"] = fmt.Sprintf("\"%s\"", ver.GetVersion())
-	}
+	})
 
 	// Build the request
 	var req *APIRequest
@@ -106,9 +106,9 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responeBo
 		return r.ResponseBody, resp, err
 	}
 
-	if ver, isVersioned := (r.ResponseBody).(Versioned); isVersioned {
+	versionAction(r.ResponseBody, func(ver Versioned) {
 		parseVersions(resp.HTTP, ver)
-	}
+	})
 
 	if r.ResponseType == responseTypeJSON {
 		log.Debugf("\nResponse\n%s %s\n", resp.HTTP.Proto, resp.HTTP.Status)
@@ -118,6 +118,12 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responeBo
 	}
 
 	return r.ResponseBody, resp, err
+}
+
+func versionAction(versioned interface{}, verFunc func(versionsed Versioned)) {
+	if ver, isVersioned := (versioned).(Versioned); isVersioned {
+		verFunc(ver)
+	}
 }
 
 func printHeaderDebug(headers http.Header) {
