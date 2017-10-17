@@ -60,7 +60,7 @@ func NewCliClient(c *cli.Context) (*gocd.Client, error) {
 	cfg := &gocd.Configuration{}
 	cfgErr := gocd.LoadConfigByName(profile, cfg)
 
-	setStringFromContext(&cfg.Server, "server",c)
+	setStringFromContext(&cfg.Server, "server", c)
 
 	if cfg.Server == "" {
 		if cfgErr != nil {
@@ -71,8 +71,8 @@ func NewCliClient(c *cli.Context) (*gocd.Client, error) {
 		}
 	}
 
-	setStringFromContext(&cfg.Username, "username",c)
-	setStringFromContext(&cfg.Password, "password",c)
+	setStringFromContext(&cfg.Username, "username", c)
+	setStringFromContext(&cfg.Password, "password", c)
 
 	cfg.SkipSslCheck = cfg.SkipSslCheck || c.Bool("skip_ssl_check")
 
