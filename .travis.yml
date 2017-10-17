@@ -24,14 +24,14 @@ before_install:
   - make before_install
 
 script:
-  - go generate -x $(go list ./... | grep -v vendor/) && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
+  - go generate -x $(glide novendor) && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
   - make test
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - go get github.com/goreleaser/goreleaser
   - npm install -g codeclimate-test-reporter
-  - codeclimate-test-reporter < coverage.txt
+  - codeclimate-test-reporter < coverage.out
 
 deploy:
   - provider: script
