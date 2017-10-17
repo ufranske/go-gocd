@@ -18,6 +18,7 @@ test: lint
 	go tool vet $(GO_TARGETS)
 	go tool vet main.go
 	bash ./go.test.sh
+	cat coverage.out
 #	$(MAKE) -C ./gocd test
 #	$(MAKE) -C ./cli test
 
