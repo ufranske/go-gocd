@@ -31,7 +31,7 @@ after_success:
   - bash <(curl -s https://codecov.io/bash)
   - go get github.com/goreleaser/goreleaser
   - npm install -g codeclimate-test-reporter
-  - codeclimate-test-reporter < coverage.out
+  - codeclimate-test-reporter < coverage.txt
 
 deploy:
   - provider: script
