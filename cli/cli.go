@@ -60,9 +60,7 @@ func NewCliClient(c *cli.Context) (*gocd.Client, error) {
 	cfg := &gocd.Configuration{}
 	cfgErr := gocd.LoadConfigByName(profile, cfg)
 
-	if server := c.String("server"); server != "" {
-		cfg.Server = server
-	}
+	setStringFromContext(&cfg.Server, "server",c)
 
 	if cfg.Server == "" {
 		if cfgErr != nil {
@@ -73,17 +71,19 @@ func NewCliClient(c *cli.Context) (*gocd.Client, error) {
 		}
 	}
 
-	if username := c.String("username"); username != "" {
-		cfg.Username = username
-	}
-
-	if password := c.String("password"); password != "" {
-		cfg.Password = password
-	}
+	setStringFromContext(&cfg.Username, "username",c)
+	setStringFromContext(&cfg.Password, "password",c)
 
 	cfg.SkipSslCheck = cfg.SkipSslCheck || c.Bool("skip_ssl_check")
 
 	return cfg.Client(), nil
+}
+
+func setStringFromContext(dest *string, key string, c *cli.Context) {
+	var value string
+	if value = c.String(key); value != "" {
+		*dest = value
+	}
 }
 
 func handleOutput(r interface{}, reqType string) cli.ExitCoder {
