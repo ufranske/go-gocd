@@ -24,7 +24,7 @@ before_install:
   - make before_install
 
 script:
-  - go generate -x $(go list ./... | grep -v vendor/) && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
+  - go generate -x $(glide novendor) && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
   - make test
 
 after_success:

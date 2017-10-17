@@ -18,13 +18,14 @@ test: lint
 	go tool vet $(GO_TARGETS)
 	go tool vet main.go
 	bash ./go.test.sh
-	$(MAKE) -C ./gocd test
-	$(MAKE) -C ./cli test
+#	$(MAKE) -C ./gocd test
+#	$(MAKE) -C ./cli test
 
 before_install:
 	@go get -t -v $$(go list ./... | grep -v vendor/)
 	@go get github.com/golang/lint/golint
 	@go install github.com/golang/lint/golint
+	@curl https://glide.sh/get | sh
 
 build: deploy_on_develop
 
