@@ -8,7 +8,6 @@ type PipelineGroupsService service
 // PipelineGroups represents a collection of pipeline groups
 type PipelineGroups []*PipelineGroup
 
-
 // PipelineGroup describes a pipeline group API response.
 type PipelineGroup struct {
 	Name      string      `json:"name"`
