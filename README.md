@@ -147,4 +147,4 @@ before v1.0.0 of this library.
  
 ## License ##
 
-This library is distributed under the LGPL-style license found in [LICENSE](./LICENSE) file.
+This library is distributed under the Apache 2.0 license found in [LICENSE](./LICENSE) file.
