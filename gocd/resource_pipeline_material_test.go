@@ -13,33 +13,40 @@ func testResourceMaterial(t *testing.T) {
 func testMaterialEquality(t *testing.T) {
 	s1 := Material{
 		Type: "git",
-		Attributes: MaterialAttributes{
+		Attributes: &MaterialAttributesGit{
 			URL: "https://github.com/gocd/gocd",
 		},
 	}
 
 	s2 := Material{
 		Type: "git",
-		Attributes: MaterialAttributes{
+		Attributes: &MaterialAttributesGit{
 			Name: "gocd-src",
 			URL:  "https://github.com/gocd/gocd",
 		},
 	}
-
-	assert.True(t, s1.Equal(&s2))
+	ok, err := s1.Equal(&s2)
+	assert.Nil(t, err)
+	assert.True(t, ok)
 }
 
 func testMaterialAttributeEquality(t *testing.T) {
-	a1 := MaterialAttributes{}
-	a2 := MaterialAttributes{}
-	assert.True(t, a1.equalGit(&a2))
+	a1 := MaterialAttributesGit{}
+	a2 := MaterialAttributesGit{}
+	ok, err := a1.equal(&a2)
+	assert.Nil(t, err)
+	assert.True(t, ok)
 
 	a2.URL = "https://github.com/drewsonne/go-gocd"
-	assert.False(t, a1.equalGit(&a2))
+	ok, err = a1.equal(&a2)
+	assert.Nil(t, err)
+	assert.False(t, ok)
 
 	a1.URL = "https://github.com/drewsonne/go-gocd"
 	a2.Branch = "feature/branch"
-	assert.False(t, a1.equalGit(&a2))
+	ok, err = a1.equal(&a2)
+	assert.Nil(t, err)
+	assert.False(t, ok)
 
 	for _, branchCombo := range [][]string{
 		{"", "master"},
@@ -49,6 +56,8 @@ func testMaterialAttributeEquality(t *testing.T) {
 	} {
 		a1.Branch = branchCombo[0]
 		a2.Branch = branchCombo[1]
-		assert.True(t, a1.equalGit(&a2))
+		ok, err = a1.equal(&a2)
+		assert.Nil(t, err)
+		assert.True(t, ok)
 	}
 }
