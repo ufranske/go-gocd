@@ -32,6 +32,16 @@ func (m *Material) UnmarshalJSON(b []byte) error {
 		m.Attributes = &MaterialAttributesGit{}
 	case "svn":
 		m.Attributes = &MaterialAttributesSvn{}
+	case "hg":
+		m.Attributes = &MaterialAttributesHg{}
+	case "p4":
+		m.Attributes = &MaterialAttributesP4{}
+	case "tfs":
+		m.Attributes = &MaterialAttributesTfs{}
+	case "dependency":
+		m.Attributes = &MaterialAttributesDependency{}
+	case "package":
+		m.Attributes = &MaterialAttributesPackage{}
 	default:
 		return fmt.Errorf("Unexpected Material type: '%s'", m.Type)
 	}
