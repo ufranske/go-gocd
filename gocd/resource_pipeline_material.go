@@ -30,6 +30,8 @@ func (m *Material) UnmarshalJSON(b []byte) error {
 	switch m.Type = temp["type"].(string); strings.ToLower(m.Type) {
 	case "git":
 		m.Attributes = &MaterialAttributesGit{}
+	case "svn":
+		m.Attributes = &MaterialAttributesSvn{}
 	default:
 		return fmt.Errorf("Unexpected Material type: '%s'", m.Type)
 	}
