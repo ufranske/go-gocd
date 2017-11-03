@@ -42,6 +42,8 @@ func (m *Material) UnmarshalJSON(b []byte) error {
 		m.Attributes = &MaterialAttributesDependency{}
 	case "package":
 		m.Attributes = &MaterialAttributesPackage{}
+	case "plugin":
+		m.Attributes = &MaterialAttributesPlugin{}
 	default:
 		return fmt.Errorf("Unexpected Material type: '%s'", m.Type)
 	}
@@ -112,6 +114,18 @@ func (mag *MaterialAttributesGit) UnmarshallInterface(i map[string]interface{}) 
 		default:
 			fmt.Println(value)
 			fmt.Println(key)
+		}
+	}
+}
+
+func (mas *MaterialAttributesSvn) UnmarshallInterface(i map[string]interface{}) {
+	for key, value := range i {
+		if value == nil {
+			continue
+		}
+		switch key {
+		case "name":
+			mas.Name = value.(string)
 		}
 	}
 }
