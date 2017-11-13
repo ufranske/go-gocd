@@ -7,17 +7,17 @@ type MaterialAttributes interface {
 
 // MaterialAttributesGit describes a git material
 type MaterialAttributesGit struct {
-	Name        string `json:"name,omitempty"`
-	URL         string `json:"url,omitempty"`
-	Branch      string `json:"branch,omitempty"`
-	Destination string `json:"destination,omitempty"`
-	AutoUpdate  bool   `json:"auto_update,omitempty"`
-
-	Filter       *MaterialFilter `json:"filter,omitempty"`
-	InvertFilter bool            `json:"invert_filter"`
+	Name   string `json:"name,omitempty"`
+	URL    string `json:"url,omitempty"`
+	Branch string `json:"branch,omitempty"`
 
 	SubmoduleFolder string `json:"submodule_folder,omitempty"`
 	ShallowClone    bool   `json:"shallow_clone,omitempty"`
+
+	Destination  string          `json:"destination,omitempty"`
+	Filter       *MaterialFilter `json:"filter,omitempty"`
+	InvertFilter bool            `json:"invert_filter"`
+	AutoUpdate   bool            `json:"auto_update,omitempty"`
 }
 
 // MaterialAttributesSvn describes a material type
@@ -27,20 +27,21 @@ type MaterialAttributesSvn struct {
 	Username          string `json:"username"`
 	Password          string `json:"password"`
 	EncryptedPassword string `json:"encrypted_password"`
-	Destination       string `json:"destination,omitempty"`
 
-	Filter         *MaterialFilter `json:"filter,omitempty"`
-	InvertFilter   bool            `json:"invert_filter"`
-	AutoUpdate     bool            `json:"auto_update,omitempty"`
-	CheckExternals bool            `json:"check_externals"`
+	CheckExternals bool `json:"check_externals"`
+
+	Destination  string          `json:"destination,omitempty"`
+	Filter       *MaterialFilter `json:"filter,omitempty"`
+	InvertFilter bool            `json:"invert_filter"`
+	AutoUpdate   bool            `json:"auto_update,omitempty"`
 }
 
 // MaterialAttributesHg describes a Mercurial material type
 type MaterialAttributesHg struct {
-	Name        string `json:"name"`
-	Url         string `json:"url"`
-	Destination string `json:"destination"`
+	Name string `json:"name"`
+	URL  string `json:"url"`
 
+	Destination  string          `json:"destination"`
 	Filter       *MaterialFilter `json:"filter,omitempty"`
 	InvertFilter bool            `json:"invert_filter"`
 	AutoUpdate   bool            `json:"auto_update,omitempty"`
@@ -57,8 +58,7 @@ type MaterialAttributesP4 struct {
 	Password          string `json:"password"`
 	EncryptedPassword string `json:"encrypted_password"`
 
-	Destination string `json:"destination"`
-
+	Destination  string          `json:"destination"`
 	Filter       *MaterialFilter `json:"filter,omitempty"`
 	InvertFilter bool            `json:"invert_filter"`
 	AutoUpdate   bool            `json:"auto_update,omitempty"`
@@ -68,7 +68,7 @@ type MaterialAttributesP4 struct {
 type MaterialAttributesTfs struct {
 	Name string `json:"name"`
 
-	Url         string `json:"url"`
+	URL         string `json:"url"`
 	ProjectPath string `json:"project_path"`
 	Domain      string `json:"domain"`
 
@@ -76,8 +76,7 @@ type MaterialAttributesTfs struct {
 	Password          string `json:"password"`
 	EncryptedPassword string `json:"encrypted_password"`
 
-	Destination string `json:"destination"`
-
+	Destination  string          `json:"destination"`
 	Filter       *MaterialFilter `json:"filter,omitempty"`
 	InvertFilter bool            `json:"invert_filter"`
 	AutoUpdate   bool            `json:"auto_update,omitempty"`
@@ -98,9 +97,9 @@ type MaterialAttributesPackage struct {
 
 // MaterialAttributesPlugin describes a plugin material
 type MaterialAttributesPlugin struct {
-	Ref         string `json:"ref"`
-	Destination string `json:"destination"`
+	Ref string `json:"ref"`
 
+	Destination  string          `json:"destination"`
 	Filter       *MaterialFilter `json:"filter,omitempty"`
 	InvertFilter bool            `json:"invert_filter"`
 }

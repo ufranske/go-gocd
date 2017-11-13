@@ -82,6 +82,12 @@ func LoadConfigFromFile() (cfgs map[string]*Configuration, err error) {
 
 // ConfigFilePath specifies the default path to a config file
 func ConfigFilePath() (string, error) {
+
+	config_path := os.Getenv("GOCD_CONFIG_PATH")
+	if config_path != "" {
+		return config_path, nil
+	}
+
 	// @TODO Make it work for windows. Maybe...
 	usr, err := user.Current()
 	if err != nil {
