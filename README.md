@@ -4,6 +4,7 @@
 [![Build Status](https://travis-ci.org/drewsonne/go-gocd.svg?branch=master)](https://travis-ci.org/drewsonne/go-gocd)
 [![codecov](https://codecov.io/gh/drewsonne/go-gocd/branch/master/graph/badge.svg)](https://codecov.io/gh/drewsonne/go-gocd)
 [![codebeat badge](https://codebeat.co/badges/1ea74899-2337-4ea6-aaeb-2cc8037fe362)](https://codebeat.co/projects/github-com-drewsonne-go-gocd-master)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdrewsonne%2Fgo-gocd.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdrewsonne%2Fgo-gocd?ref=badge_shield)
 
 ## CLI
 
