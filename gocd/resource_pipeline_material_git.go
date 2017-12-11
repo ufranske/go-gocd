@@ -1,8 +1,8 @@
 package gocd
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 )
 
 func (mag *MaterialAttributesGit) equal(a2i interface{}) (bool, error) {
@@ -44,8 +44,8 @@ func (mag *MaterialAttributesGit) UnmarshallInterface(i map[string]interface{}) 
 			mag.ShallowClone = value.(bool)
 		case "invert_filter":
 			mag.InvertFilter = value.(bool)
-			//case "filter":
-			//	mag.Filter = value.(string)
+		case "filter":
+			mag.Filter = unmarshallMaterialFilter(value)
 		default:
 			fmt.Println(value)
 			fmt.Println(key)

@@ -8,6 +8,7 @@ import (
 func testResourceMaterial(t *testing.T) {
 	t.Run("Equality", testMaterialEquality)
 	t.Run("AttributeEquality", testMaterialAttributeEquality)
+	t.Run("FilterUnmarshall", testMaterialFilterUnmarshall)
 }
 
 func testMaterialEquality(t *testing.T) {
@@ -60,4 +61,9 @@ func testMaterialAttributeEquality(t *testing.T) {
 		assert.Nil(t, err)
 		assert.True(t, ok)
 	}
+}
+
+
+func testMaterialFilterUnmarshall(t *testing.T) {
+
 }

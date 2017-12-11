@@ -2,7 +2,6 @@ package gocd
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"strings"
 )
@@ -69,12 +68,6 @@ func (m *Material) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (matp *MaterialAttributesPackage) equal(a2i interface{}) (bool, error) {
-	var ok bool
-	a2, ok := a2i.(*MaterialAttributesPackage)
-	if !ok {
-		return false, errors.New("Can only compare with same material type.")
-	}
-	return matp.Ref == a2.Ref, nil
+func unmarshallMaterialFilter(i interface{}) *MaterialFilter {
+	return nil
 }
-
