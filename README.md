@@ -8,7 +8,7 @@
 
 ## CLI
 
-CLI tool to interace with GoCD Server.
+CLI tool to interface with GoCD Server.
 
 ### Usage
 
