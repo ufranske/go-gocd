@@ -260,7 +260,7 @@ func parseType(str, ty string) (interface{}, error) {
 }
 
 var formatMapping = map[string][]string{
-	"time.Time": {"string", "date-time"},
+	"time.Time": []string{"string", "date-time"},
 }
 
 var kindMapping = map[reflect.Kind]string{
