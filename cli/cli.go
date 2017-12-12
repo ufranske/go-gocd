@@ -28,7 +28,6 @@ func GetCliCommands() []cli.Command {
 		*getPipelineHistoryCommand(),
 		*getPipelineCommand(),
 		*createPipelineConfigCommand(),
-		*generateJSONSchemaCommand(),
 		*getPipelineStatusCommand(),
 		*pausePipelineCommand(),
 		*unpausePipelineCommand(),
