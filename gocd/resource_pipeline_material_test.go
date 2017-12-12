@@ -63,7 +63,6 @@ func testMaterialAttributeEquality(t *testing.T) {
 	}
 }
 
-
 func testMaterialFilterUnmarshall(t *testing.T) {
 
 }

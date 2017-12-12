@@ -9,7 +9,7 @@ func (mag *MaterialAttributesGit) equal(a2i interface{}) (bool, error) {
 	var ok bool
 	a2, ok := a2i.(*MaterialAttributesGit)
 	if !ok {
-		return false, errors.New("Can only compare with same material type.")
+		return false, errors.New("can only compare with same material type")
 	}
 	urlsEqual := mag.URL == a2.URL
 	branchesEqual := mag.Branch == a2.Branch ||
@@ -22,6 +22,7 @@ func (mag *MaterialAttributesGit) equal(a2i interface{}) (bool, error) {
 	return branchesEqual, nil
 }
 
+// UnmarshallInterface from a JSON string to a MaterialAttributesGit struct
 func (mag *MaterialAttributesGit) UnmarshallInterface(i map[string]interface{}) {
 	for key, value := range i {
 		if value == nil {

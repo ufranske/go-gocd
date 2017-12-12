@@ -1,6 +1,7 @@
 package gocd
 
-type MaterialAttributes interface {
+// MaterialAttribute describes the behaviour of the GoCD material structures for a pipeline
+type MaterialAttribute interface {
 	equal(attributes interface{}) (bool, error)
 	UnmarshallInterface(map[string]interface{})
 }

@@ -9,7 +9,7 @@ func (mtfs *MaterialAttributesTfs) equal(mtfs2i interface{}) (bool, error) {
 	var ok bool
 	mtfs2, ok := mtfs2i.(*MaterialAttributesTfs)
 	if !ok {
-		return false, errors.New("Can only compare with same material type.")
+		return false, errors.New("can only compare with same material type")
 	}
 	namesEqual := mtfs.Name == mtfs2.Name
 	urlsEqual := mtfs.URL == mtfs2.URL
@@ -25,6 +25,7 @@ func (mtfs *MaterialAttributesTfs) equal(mtfs2i interface{}) (bool, error) {
 		nil
 }
 
+// UnmarshallInterface from a JSON string to a MaterialAttributesTfs struct
 func (mtfs *MaterialAttributesTfs) UnmarshallInterface(i map[string]interface{}) {
 	for key, value := range i {
 		if value == nil {

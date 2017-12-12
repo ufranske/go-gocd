@@ -47,10 +47,10 @@ type PipelineConfigOrigin struct {
 
 // Material describes an artifact dependency for a pipeline object.
 type Material struct {
-	Type        string             `json:"type"`
-	Fingerprint string             `json:"fingerprint,omitempty"`
-	Description string             `json:"description,omitempty"`
-	Attributes  MaterialAttributes `json:"attributes"`
+	Type        string            `json:"type"`
+	Fingerprint string            `json:"fingerprint,omitempty"`
+	Description string            `json:"description,omitempty"`
+	Attributes  MaterialAttribute `json:"attributes"`
 }
 
 // MaterialFilter describes which globs to ignore

@@ -22,6 +22,7 @@ func (m Material) Equal(a *Material) (isEqual bool, err error) {
 	return isEqual, nil
 }
 
+// UnmarshalJSON string into a Material struct
 func (m *Material) UnmarshalJSON(b []byte) error {
 	temp := map[string]interface{}{}
 	json.Unmarshal(b, &temp)

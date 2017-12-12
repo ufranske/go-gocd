@@ -9,13 +9,14 @@ func (mad *MaterialAttributesDependency) equal(mad2i interface{}) (bool, error) 
 	var ok bool
 	mad2, ok := mad2i.(*MaterialAttributesDependency)
 	if !ok {
-		return false, errors.New("Can only compare with same material type.")
+		return false, errors.New("can only compare with same material type")
 	}
 	return mad.Pipeline == mad2.Pipeline &&
 			mad.Stage == mad2.Stage,
 		nil
 }
 
+// UnmarshallInterface for a MaterialAttribute struct to be turned into a json string
 func (mad *MaterialAttributesDependency) UnmarshallInterface(i map[string]interface{}) {
 	for key, value := range i {
 		if value == nil {

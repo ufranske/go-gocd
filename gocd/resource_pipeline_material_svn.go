@@ -6,7 +6,7 @@ func (mas *MaterialAttributesSvn) equal(mas2i interface{}) (isEqual bool, err er
 	var ok bool
 	mas2, ok := mas2i.(*MaterialAttributesGit)
 	if !ok {
-		return false, errors.New("Can only compare with same material type.")
+		return false, errors.New("can only compare with same material type")
 	}
 	urlsEqual := mas.URL == mas2.URL
 	destinationEqual := mas.Destination == mas2.Destination
@@ -14,6 +14,7 @@ func (mas *MaterialAttributesSvn) equal(mas2i interface{}) (isEqual bool, err er
 	return urlsEqual && destinationEqual, nil
 }
 
+// UnmarshallInterface from a JSON string to a MaterialAttributesSvn struct
 func (mas *MaterialAttributesSvn) UnmarshallInterface(i map[string]interface{}) {
 	for key, value := range i {
 		if value == nil {

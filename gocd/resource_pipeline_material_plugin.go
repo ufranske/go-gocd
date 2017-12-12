@@ -6,7 +6,7 @@ func (mapp *MaterialAttributesPlugin) equal(mapp2i interface{}) (bool, error) {
 	var ok bool
 	mapp2, ok := mapp2i.(*MaterialAttributesPlugin)
 	if !ok {
-		return false, errors.New("Can only compare with same material type.")
+		return false, errors.New("can only compare with same material type")
 	}
 
 	return mapp.Ref == mapp2.Ref &&
@@ -14,6 +14,7 @@ func (mapp *MaterialAttributesPlugin) equal(mapp2i interface{}) (bool, error) {
 		nil
 }
 
+// UnmarshallInterface from a JSON string to a MaterialAttributesPlugin struct
 func (mapp *MaterialAttributesPlugin) UnmarshallInterface(i map[string]interface{}) {
 	for key, value := range i {
 		if value == nil {

@@ -6,7 +6,7 @@ func (mp4 *MaterialAttributesP4) equal(mp42i interface{}) (bool, error) {
 	var ok bool
 	mp42, ok := mp42i.(*MaterialAttributesP4)
 	if !ok {
-		return false, errors.New("Can only compare with same material type.")
+		return false, errors.New("can only compare with same material type")
 	}
 
 	namesEqual := mp4.Name == mp42.Name
@@ -16,6 +16,7 @@ func (mp4 *MaterialAttributesP4) equal(mp42i interface{}) (bool, error) {
 	return namesEqual && portEqual && destEqual, nil
 }
 
+// UnmarshallInterface from a JSON string to a MaterialAttributesP4 struct
 func (mp4 *MaterialAttributesP4) UnmarshallInterface(i map[string]interface{}) {
 	for key, value := range i {
 		if value == nil {
