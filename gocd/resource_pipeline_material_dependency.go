@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func (mad *MaterialAttributesDependency) equal(mad2i interface{}) (bool, error) {
+func (mad MaterialAttributesDependency) equal(mad2i interface{}) (bool, error) {
 	var ok bool
 	mad2, ok := mad2i.(*MaterialAttributesDependency)
 	if !ok {
@@ -17,7 +17,7 @@ func (mad *MaterialAttributesDependency) equal(mad2i interface{}) (bool, error) 
 }
 
 // UnmarshallInterface for a MaterialAttribute struct to be turned into a json string
-func (mad *MaterialAttributesDependency) UnmarshallInterface(i map[string]interface{}) {
+func unmarshallMaterialAttributesDependency(mad *MaterialAttributesDependency, i map[string]interface{}) {
 	for key, value := range i {
 		if value == nil {
 			continue

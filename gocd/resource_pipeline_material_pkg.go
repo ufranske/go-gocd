@@ -2,7 +2,7 @@ package gocd
 
 import "errors"
 
-func (mapk *MaterialAttributesPackage) equal(mapk2i interface{}) (bool, error) {
+func (mapk MaterialAttributesPackage) equal(mapk2i interface{}) (bool, error) {
 	var ok bool
 	mapk2, ok := mapk2i.(*MaterialAttributesPackage)
 	if !ok {
@@ -13,7 +13,7 @@ func (mapk *MaterialAttributesPackage) equal(mapk2i interface{}) (bool, error) {
 }
 
 // UnmarshallInterface from a JSON string to a MaterialAttributesPackage struct
-func (mapk *MaterialAttributesPackage) UnmarshallInterface(i map[string]interface{}) {
+func unmarshallMaterialAttributesPackage(mapk *MaterialAttributesPackage, i map[string]interface{}) {
 	for key, value := range i {
 		if value == nil {
 			continue

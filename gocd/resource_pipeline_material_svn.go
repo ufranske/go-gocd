@@ -2,7 +2,7 @@ package gocd
 
 import "errors"
 
-func (mas *MaterialAttributesSvn) equal(mas2i interface{}) (isEqual bool, err error) {
+func (mas MaterialAttributesSvn) equal(mas2i interface{}) (isEqual bool, err error) {
 	var ok bool
 	mas2, ok := mas2i.(*MaterialAttributesGit)
 	if !ok {
@@ -15,7 +15,7 @@ func (mas *MaterialAttributesSvn) equal(mas2i interface{}) (isEqual bool, err er
 }
 
 // UnmarshallInterface from a JSON string to a MaterialAttributesSvn struct
-func (mas *MaterialAttributesSvn) UnmarshallInterface(i map[string]interface{}) {
+func unmarshallMaterialAttributesSvn(mas *MaterialAttributesSvn, i map[string]interface{}) {
 	for key, value := range i {
 		if value == nil {
 			continue

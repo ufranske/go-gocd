@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func (mag *MaterialAttributesGit) equal(a2i interface{}) (bool, error) {
+func (mag MaterialAttributesGit) equal(a2i interface{}) (bool, error) {
 	var ok bool
 	a2, ok := a2i.(*MaterialAttributesGit)
 	if !ok {
@@ -23,7 +23,7 @@ func (mag *MaterialAttributesGit) equal(a2i interface{}) (bool, error) {
 }
 
 // UnmarshallInterface from a JSON string to a MaterialAttributesGit struct
-func (mag *MaterialAttributesGit) UnmarshallInterface(i map[string]interface{}) {
+func unmarshallMaterialAttributesGit(mag *MaterialAttributesGit, i map[string]interface{}) {
 	for key, value := range i {
 		if value == nil {
 			continue

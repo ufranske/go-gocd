@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func (mtfs *MaterialAttributesTfs) equal(mtfs2i interface{}) (bool, error) {
+func (mtfs MaterialAttributesTfs) equal(mtfs2i interface{}) (bool, error) {
 	var ok bool
 	mtfs2, ok := mtfs2i.(*MaterialAttributesTfs)
 	if !ok {
@@ -26,7 +26,7 @@ func (mtfs *MaterialAttributesTfs) equal(mtfs2i interface{}) (bool, error) {
 }
 
 // UnmarshallInterface from a JSON string to a MaterialAttributesTfs struct
-func (mtfs *MaterialAttributesTfs) UnmarshallInterface(i map[string]interface{}) {
+func unmarshallMaterialAttributesTfs(mtfs *MaterialAttributesTfs, i map[string]interface{}) {
 	for key, value := range i {
 		if value == nil {
 			continue

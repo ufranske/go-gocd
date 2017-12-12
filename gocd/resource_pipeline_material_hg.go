@@ -2,7 +2,7 @@ package gocd
 
 import "errors"
 
-func (mhg *MaterialAttributesHg) equal(mhg2i interface{}) (bool, error) {
+func (mhg MaterialAttributesHg) equal(mhg2i interface{}) (bool, error) {
 	var ok bool
 	mhg2, ok := mhg2i.(*MaterialAttributesHg)
 	if !ok {
@@ -15,7 +15,7 @@ func (mhg *MaterialAttributesHg) equal(mhg2i interface{}) (bool, error) {
 }
 
 // UnmarshallInterface from a JSON string to a MaterialAttributesHg struct
-func (mhg *MaterialAttributesHg) UnmarshallInterface(i map[string]interface{}) {
+func unmarshallMaterialAttributesHg(mhg *MaterialAttributesHg, i map[string]interface{}) {
 	for key, value := range i {
 		if value == nil {
 			continue

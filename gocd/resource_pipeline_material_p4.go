@@ -2,7 +2,7 @@ package gocd
 
 import "errors"
 
-func (mp4 *MaterialAttributesP4) equal(mp42i interface{}) (bool, error) {
+func (mp4 MaterialAttributesP4) equal(mp42i interface{}) (bool, error) {
 	var ok bool
 	mp42, ok := mp42i.(*MaterialAttributesP4)
 	if !ok {
@@ -17,7 +17,7 @@ func (mp4 *MaterialAttributesP4) equal(mp42i interface{}) (bool, error) {
 }
 
 // UnmarshallInterface from a JSON string to a MaterialAttributesP4 struct
-func (mp4 *MaterialAttributesP4) UnmarshallInterface(i map[string]interface{}) {
+func unmarshallMaterialAttributesP4(mp4 *MaterialAttributesP4, i map[string]interface{}) {
 	for key, value := range i {
 		if value == nil {
 			continue

@@ -2,7 +2,7 @@ package gocd
 
 import "errors"
 
-func (mapp *MaterialAttributesPlugin) equal(mapp2i interface{}) (bool, error) {
+func (mapp MaterialAttributesPlugin) equal(mapp2i interface{}) (bool, error) {
 	var ok bool
 	mapp2, ok := mapp2i.(*MaterialAttributesPlugin)
 	if !ok {
@@ -15,7 +15,7 @@ func (mapp *MaterialAttributesPlugin) equal(mapp2i interface{}) (bool, error) {
 }
 
 // UnmarshallInterface from a JSON string to a MaterialAttributesPlugin struct
-func (mapp *MaterialAttributesPlugin) UnmarshallInterface(i map[string]interface{}) {
+func unmarshallMaterialAttributesPlugin(mapp *MaterialAttributesPlugin, i map[string]interface{}) {
 	for key, value := range i {
 		if value == nil {
 			continue

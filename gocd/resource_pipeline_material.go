@@ -27,34 +27,14 @@ func (m *Material) UnmarshalJSON(b []byte) error {
 	temp := map[string]interface{}{}
 	json.Unmarshal(b, &temp)
 
-	switch m.Type = temp["type"].(string); strings.ToLower(m.Type) {
-	case "git":
-		m.Attributes = &MaterialAttributesGit{}
-	case "svn":
-		m.Attributes = &MaterialAttributesSvn{}
-	case "hg":
-		m.Attributes = &MaterialAttributesHg{}
-	case "p4":
-		m.Attributes = &MaterialAttributesP4{}
-	case "tfs":
-		m.Attributes = &MaterialAttributesTfs{}
-	case "dependency":
-		m.Attributes = &MaterialAttributesDependency{}
-	case "package":
-		m.Attributes = &MaterialAttributesPackage{}
-	case "plugin":
-		m.Attributes = &MaterialAttributesPlugin{}
-	default:
-		return fmt.Errorf("Unexpected Material type: '%s'", m.Type)
-	}
-
+	var rawAttributes map[string]interface{}
 	for key, value := range temp {
 		if value == nil {
 			continue
 		}
 		switch key {
 		case "attributes":
-			m.Attributes.UnmarshallInterface(temp["attributes"].(map[string]interface{}))
+			rawAttributes = value.(map[string]interface{})
 		case "fingerprint":
 			m.Fingerprint = value.(string)
 		case "description":
@@ -64,6 +44,43 @@ func (m *Material) UnmarshalJSON(b []byte) error {
 		default:
 			return fmt.Errorf("Unexpected key: '%s'", key)
 		}
+	}
+
+	switch m.Type = temp["type"].(string); strings.ToLower(m.Type) {
+	case "git":
+		mag := &MaterialAttributesGit{}
+		unmarshallMaterialAttributesGit(mag, rawAttributes)
+		m.Attributes = mag
+	case "svn":
+		mas := &MaterialAttributesSvn{}
+		unmarshallMaterialAttributesSvn(mas, rawAttributes)
+		m.Attributes = mas
+	case "hg":
+		mah := &MaterialAttributesHg{}
+		unmarshallMaterialAttributesHg(mah, rawAttributes)
+		m.Attributes = mah
+	case "p4":
+		map4 := &MaterialAttributesP4{}
+		unmarshallMaterialAttributesP4(map4, rawAttributes)
+		m.Attributes = map4
+	case "tfs":
+		mat := &MaterialAttributesTfs{}
+		unmarshallMaterialAttributesTfs(mat, rawAttributes)
+		m.Attributes = mat
+	case "dependency":
+		mad := &MaterialAttributesDependency{}
+		unmarshallMaterialAttributesDependency(mad, rawAttributes)
+		m.Attributes = mad
+	case "package":
+		mapp := &MaterialAttributesPackage{}
+		unmarshallMaterialAttributesPackage(mapp, rawAttributes)
+		m.Attributes = mapp
+	case "plugin":
+		mapl := &MaterialAttributesPlugin{}
+		unmarshallMaterialAttributesPlugin(mapl, rawAttributes)
+		m.Attributes = mapl
+	default:
+		return fmt.Errorf("Unexpected Material type: '%s'", m.Type)
 	}
 
 	return nil

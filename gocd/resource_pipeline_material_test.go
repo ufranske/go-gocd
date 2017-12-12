@@ -8,7 +8,7 @@ import (
 func testResourceMaterial(t *testing.T) {
 	t.Run("Equality", testMaterialEquality)
 	t.Run("AttributeEquality", testMaterialAttributeEquality)
-	t.Run("FilterUnmarshall", testMaterialFilterUnmarshall)
+	//t.Run("FilterUnmarshall", testMaterialAttributeUnmarshall)
 }
 
 func testMaterialEquality(t *testing.T) {
@@ -63,6 +63,20 @@ func testMaterialAttributeEquality(t *testing.T) {
 	}
 }
 
-func testMaterialFilterUnmarshall(t *testing.T) {
-
+func testMaterialAttributeUnmarshall(t *testing.T) {
+	for _, test := range []struct {
+		source            string
+		destination       Material
+		expectedAttribute MaterialAttribute
+	}{
+		{
+			source: `{
+  "type": "git"
+}`,
+			destination:       Material{},
+			expectedAttribute: MaterialAttributesGit{},
+		},
+	} {
+		test.destination.UnmarshalJSON([]byte(test.source))
+	}
 }
