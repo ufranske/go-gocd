@@ -6,6 +6,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -14,7 +15,8 @@ import (
 	"os"
 	"strings"
 	"sync"
-	"errors"
+
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -74,6 +76,8 @@ type Client struct {
 
 	UserAgent string
 
+	Log *logrus.Logger
+
 	Agents            *AgentsService
 	PipelineGroups    *PipelineGroupsService
 	Stages            *StagesService
@@ -101,6 +105,7 @@ type PaginationResponse struct {
 // service is a generic service encapsulating the client for talking to the GoCD server.
 type service struct {
 	client *Client
+	log    *logrus.Logger
 }
 
 // Auth structure wrapping the Username and Password variables, which are used to get an Auth cookie header used for
@@ -141,9 +146,11 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 		client:    httpClient,
 		BaseURL:   baseURL,
 		UserAgent: userAgent,
+		Log:       logrus.New(),
 	}
 
 	c.common.client = c
+	c.common.log = c.Log
 
 	c.Username = cfg.Username
 	c.Password = cfg.Password
@@ -161,7 +168,7 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 	c.Environments = (*EnvironmentsService)(&c.common)
 	c.Properties = (*PropertiesService)(&c.common)
 
-	SetupLogging()
+	SetupLogging(c.Log)
 
 	return c
 }
