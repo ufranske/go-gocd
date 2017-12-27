@@ -1,7 +1,5 @@
 package: github.com/drewsonne/go-gocd
 import:
-- package: github.com/pkg/errors
-  version: ^0.8.0
 - package: github.com/urakozz/go-json-schema-generator
 - package: github.com/urfave/cli
   version: 1.20.0
