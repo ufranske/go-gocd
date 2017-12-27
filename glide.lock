@@ -1,5 +1,5 @@
-hash: 0812a5384a37553a559fd0b2ab053e65c8a770b4f2d390463dd90b2077021c3f
-updated: 2017-12-11T22:15:51.333486612Z
+hash: a1a2f54face52bb88474c1033c638b1fd31805af663e9388d9f3283c9b0e6b2c
+updated: 2017-12-27T10:43:23.542889417Z
 imports:
 - name: github.com/mattn/go-colorable
   version: 6fcc0c1fd9b620311d821b106a400b35dc95c497
@@ -41,7 +41,7 @@ testImports:
   subpackages:
   - spew
 - name: github.com/goreleaser/goreleaser
-  version: e82994f878667a2da7828bc0f7c7db07584c1089
+  version: cd03056dca53fb4fe362fe9ab1f85a8917d577aa
   subpackages:
   - assert
 - name: github.com/pmezard/go-difflib
