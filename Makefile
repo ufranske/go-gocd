@@ -4,6 +4,9 @@ TEST?=$$(go list ./... |grep -v 'vendor')
 
 GO_TARGETS= ./cli ./gocd ./gocd-*generator
 
+doc:
+	godoc2md github.com/drewsonne/go-gocd/gocd > gocd/README.md
+
 format:
 	gofmt -w -s .
 	$(MAKE) -C ./cli/ format

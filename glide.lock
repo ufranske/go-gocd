@@ -1,5 +1,5 @@
 hash: a1a2f54face52bb88474c1033c638b1fd31805af663e9388d9f3283c9b0e6b2c
-updated: 2017-12-27T10:43:23.542889417Z
+updated: 2017-12-28T09:50:18.785168Z
 imports:
 - name: github.com/mattn/go-colorable
   version: 6fcc0c1fd9b620311d821b106a400b35dc95c497
@@ -7,8 +7,6 @@ imports:
   version: 6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c
 - name: github.com/mgutz/ansi
   version: 9520e82c474b0a04dd04f8a40959027271bab992
-- name: github.com/pkg/errors
-  version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: github.com/sirupsen/logrus
   version: d682213848ed68c0a260ca37d6dd5ace8423f5ba
 - name: github.com/Sirupsen/logrus
@@ -41,7 +39,7 @@ testImports:
   subpackages:
   - spew
 - name: github.com/goreleaser/goreleaser
-  version: cd03056dca53fb4fe362fe9ab1f85a8917d577aa
+  version: 9068d941d0f7315328973393bd21d659f8edb1b4
   subpackages:
   - assert
 - name: github.com/pmezard/go-difflib
