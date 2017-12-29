@@ -27,8 +27,8 @@ func (pcs *PipelineConfigsService) Get(ctx context.Context, name string) (p *Pip
 }
 
 // Update a pipeline configuration
-func (pcs *PipelineConfigsService) Update(ctx context.Context, name string, p *Pipeline) (p *Pipeline, resp *APIResponse, err error) {
-	p = &Pipeline{}
+func (pcs *PipelineConfigsService) Update(ctx context.Context, name string, p *Pipeline) (pr *Pipeline, resp *APIResponse, err error) {
+	pr = &Pipeline{}
 
 	_, resp, err = pcs.client.putAction(ctx, &APIClientRequest{
 		Path:       "admin/pipelines/" + name,
@@ -36,16 +36,16 @@ func (pcs *PipelineConfigsService) Update(ctx context.Context, name string, p *P
 		RequestBody: &PipelineConfigRequest{
 			Pipeline: p,
 		},
-		ResponseBody: p,
+		ResponseBody: pr,
 	})
 
 	return
 }
 
 // Create a pipeline configuration
-func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *Pipeline) (p *Pipeline, resp *APIResponse, err error) {
+func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *Pipeline) (pr *Pipeline, resp *APIResponse, err error) {
 
-	p = &Pipeline{}
+	pr = &Pipeline{}
 	_, resp, err = pcs.client.postAction(ctx, &APIClientRequest{
 		Path:       "admin/pipelines",
 		APIVersion: apiV4,
@@ -53,7 +53,7 @@ func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *
 			Group:    group,
 			Pipeline: p,
 		},
-		ResponseBody: p,
+		ResponseBody: pr,
 	})
 
 	return
