@@ -10,7 +10,7 @@ type PluginsService service
 
 // PluginsResponse describes the response obejct for a plugin API call.
 type PluginsResponse struct {
-	Links    *HALLinks `json:"_links"`
+	Links *HALLinks `json:"_links"`
 	Embedded struct {
 		PluginInfo []*Plugin `json:"plugin_info"`
 	} `json:"_embedded"`
@@ -51,13 +51,13 @@ func (ps *PluginsService) List(ctx context.Context) (*PluginsResponse, *APIRespo
 }
 
 // Get retrieves information about a specific plugin.
-func (ps *PluginsService) Get(ctx context.Context, name string) (*Plugin, *APIResponse, error) {
-	p := &Plugin{}
-	_, resp, err := ps.client.getAction(ctx, &APIClientRequest{
+func (ps *PluginsService) Get(ctx context.Context, name string) (p *Plugin, resp *APIResponse, err error) {
+	p = &Plugin{}
+	_, resp, err = ps.client.getAction(ctx, &APIClientRequest{
 		Path:         fmt.Sprintf("admin/plugin_info/%s", name),
-		ResponseBody: &p,
+		ResponseBody: p,
 		APIVersion:   apiV2,
 	})
 
-	return p, resp, err
+	return
 }

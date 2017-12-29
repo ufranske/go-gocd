@@ -17,7 +17,7 @@ type PipelineTemplateRequest struct {
 
 // PipelineTemplateResponse describes an api response for a single pipeline templates
 type PipelineTemplateResponse struct {
-	Name     string `json:"name"`
+	Name string `json:"name"`
 	Embedded *struct {
 		Pipelines []*struct {
 			Name string `json:"name"`
@@ -27,7 +27,7 @@ type PipelineTemplateResponse struct {
 
 // PipelineTemplatesResponse describes an api response for multiple pipeline templates
 type PipelineTemplatesResponse struct {
-	Links    *HALLinks `json:"_links,omitempty"`
+	Links *HALLinks `json:"_links,omitempty"`
 	Embedded *struct {
 		Templates []*PipelineTemplate `json:"templates"`
 	} `json:"_embedded,omitempty"`
@@ -47,68 +47,65 @@ type PipelineTemplate struct {
 }
 
 // Get a single PipelineTemplate object in the GoCD API.
-func (pts *PipelineTemplatesService) Get(ctx context.Context, name string) (*PipelineTemplate, *APIResponse, error) {
-	pt := PipelineTemplate{}
-	_, resp, err := pts.client.getAction(ctx, &APIClientRequest{
+func (pts *PipelineTemplatesService) Get(ctx context.Context, name string) (pt *PipelineTemplate, resp *APIResponse, err error) {
+	pt = &PipelineTemplate{}
+	_, resp, err = pts.client.getAction(ctx, &APIClientRequest{
 		Path:         "admin/templates/" + name,
 		APIVersion:   apiV3,
-		ResponseBody: &pt,
+		ResponseBody: pt,
 	})
-	//pt.Version = resp.HTTP.Header.Get("Etag")
-	//pt.Version = strings.Replace(pt.Version, "\"", "", -1)
-	return &pt, resp, err
+
+	return
 }
 
 // List all PipelineTemplate objects in the GoCD API.
-func (pts *PipelineTemplatesService) List(ctx context.Context) ([]*PipelineTemplate, *APIResponse, error) {
+func (pts *PipelineTemplatesService) List(ctx context.Context) (pt []*PipelineTemplate, resp *APIResponse, err error) {
 	ptr := PipelineTemplatesResponse{}
-
-	_, resp, err := pts.client.getAction(ctx, &APIClientRequest{
+	_, resp, err = pts.client.getAction(ctx, &APIClientRequest{
 		Path:         "admin/templates",
 		APIVersion:   apiV3,
 		ResponseBody: &ptr,
 	})
+	pt = ptr.Embedded.Templates
 
-	return ptr.Embedded.Templates, resp, err
+	return
 }
 
 // Create a new PipelineTemplate object in the GoCD API.
-func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st []*Stage) (*PipelineTemplate, *APIResponse, error) {
+func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st []*Stage) (ptr *PipelineTemplate, resp *APIResponse, err error) {
 
 	pt := PipelineTemplateRequest{
 		Name:   name,
 		Stages: st,
 	}
-	ptr := PipelineTemplate{}
+	ptr = &PipelineTemplate{}
 
-	_, resp, err := pts.client.postAction(ctx, &APIClientRequest{
+	_, resp, err = pts.client.postAction(ctx, &APIClientRequest{
 		Path:         "admin/templates",
 		APIVersion:   apiV3,
 		RequestBody:  pt,
-		ResponseBody: &ptr,
+		ResponseBody: ptr,
 	})
 
-	return &ptr, resp, err
+	return
 
 }
 
 // Update an PipelineTemplate object in the GoCD API.
-func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, template *PipelineTemplate) (*PipelineTemplate, *APIResponse, error) {
-	pt := &PipelineTemplateRequest{
-		Name:    name,
-		Stages:  template.Stages,
-		Version: template.Version,
-	}
-	ptr := PipelineTemplate{}
-
-	_, resp, err := pts.client.putAction(ctx, &APIClientRequest{
-		Path:         "admin/templates/" + name,
-		APIVersion:   apiV3,
-		RequestBody:  pt,
-		ResponseBody: &ptr,
+func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, template *PipelineTemplate) (ptr *PipelineTemplate, resp *APIResponse, err error) {
+	ptr = &PipelineTemplate{}
+	_, resp, err = pts.client.putAction(ctx, &APIClientRequest{
+		Path:       "admin/templates/" + name,
+		APIVersion: apiV3,
+		RequestBody: &PipelineTemplateRequest{
+			Name:    name,
+			Stages:  template.Stages,
+			Version: template.Version,
+		},
+		ResponseBody: ptr,
 	})
 
-	return &ptr, resp, err
+	return
 
 }
 

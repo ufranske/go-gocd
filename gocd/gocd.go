@@ -281,28 +281,31 @@ func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}, respons
 	return r, err
 }
 
-func readDoResponseBody(v interface{}, body *io.ReadCloser, responseType string) (string, error) {
+func readDoResponseBody(v interface{}, bodyReader *io.ReadCloser, responseType string) (body string, err error) {
+	var bodyBytes []byte
 
 	if w, ok := v.(io.Writer); ok {
-		_, err := io.Copy(w, *body)
+		_, err := io.Copy(w, *bodyReader)
 		return "", err
 	}
 
-	bdy, err := ioutil.ReadAll(*body)
+	bodyBytes, err = ioutil.ReadAll(*bodyReader)
 	if responseType == responseTypeText {
-		strBody := string(bdy)
-		v = &strBody
+		body = string(bodyBytes)
+		v = &body
 	} else if responseType == responseTypeXML {
-		err = xml.Unmarshal(bdy, v)
+		err = xml.Unmarshal(bodyBytes, v)
 	} else {
-		err = json.Unmarshal(bdy, v)
+		err = json.Unmarshal(bodyBytes, v)
 	}
+
+	body = string(bodyBytes)
+
 	if err == io.EOF {
 		err = nil // ignore EOF errors caused by empty response body
-	} else if err != nil {
-		return "", nil
 	}
-	return string(bdy), nil
+	return
+
 }
 
 // CheckResponse asserts that the http response status code was 2xx.
@@ -310,7 +313,7 @@ func CheckResponse(response *APIResponse) (err error) {
 	if response.HTTP.StatusCode < 200 || response.HTTP.StatusCode >= 400 {
 
 		errorParts := []string{
-			fmt.Sprintf("Received HTTP Status '%s'", response.HTTP.Status),
+			fmt.Sprintf("HTTP Response '%s'", response.HTTP.Status),
 		}
 		if message := createErrorResponseMessage(response.Body); message != "" {
 			errorParts = append(errorParts, message)
@@ -331,8 +334,8 @@ func createErrorResponseMessage(body string) (resp string) {
 		resBody["message"] = message
 	}
 
-	if _, hasData := reqBody["data"]; hasData {
-		if data, isData := reqBody["data"].(map[string]interface{}); isData {
+	if data, hasData := reqBody["data"]; hasData {
+		if data, isData := data.(map[string]interface{}); isData {
 			if err, hasErrors := data["errors"]; hasErrors {
 				resBody["errors"] = err
 			}
@@ -344,6 +347,6 @@ func createErrorResponseMessage(body string) (resp string) {
 		resp = string(b)
 	}
 
-	return resp
+	return
 
 }

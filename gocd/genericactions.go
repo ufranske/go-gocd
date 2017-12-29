@@ -70,7 +70,7 @@ func (c *Client) deleteAction(ctx context.Context, path string, apiversion strin
 	return a.Message, resp, err
 }
 
-func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responeBody interface{}, resp *APIResponse, err error) {
+func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responseBody interface{}, resp *APIResponse, err error) {
 
 	c.Log.WithFields(logrus.Fields{
 		"Method": r.Method,
@@ -127,7 +127,7 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responeBo
 }
 
 func versionAction(versioned interface{}, verFunc func(versionsed Versioned)) {
-	if ver, isVersioned := (versioned).(Versioned); isVersioned {
+	if ver, isVersioned := versioned.(Versioned); isVersioned {
 		verFunc(ver)
 	}
 }

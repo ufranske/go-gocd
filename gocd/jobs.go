@@ -11,10 +11,10 @@ const (
 	JobStateTransitionScheduled = "Scheduled"
 )
 
-// JobsService describes the HAL _link resource for the api response object for a job
+// JobsService describes actions which can be performed on jobs
 type JobsService service
 
-// Job describes a job object.
+// Job describes a job which can be performed in GoCD
 type Job struct {
 	AgentUUID            string                 `json:"agent_uuid,omitempty"`
 	Name                 string                 `json:"name"`
@@ -159,13 +159,14 @@ type JobScheduleLink struct {
 }
 
 // ListScheduled lists Pipeline groups
-func (js *JobsService) ListScheduled(ctx context.Context) ([]*JobSchedule, *APIResponse, error) {
-	jobs := JobScheduleResponse{}
-	_, resp, err := js.client.getAction(ctx, &APIClientRequest{
+func (js *JobsService) ListScheduled(ctx context.Context) (jobs []*JobSchedule, resp *APIResponse, err error) {
+	j := &JobScheduleResponse{}
+	_, resp, err = js.client.getAction(ctx, &APIClientRequest{
 		Path:         "jobs/scheduled.xml",
-		ResponseBody: &jobs,
+		ResponseBody: j,
 		ResponseType: responseTypeXML,
 	})
+	jobs = j.Jobs
 
-	return jobs.Jobs, resp, err
+	return
 }

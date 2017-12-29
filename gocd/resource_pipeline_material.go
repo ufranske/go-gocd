@@ -12,17 +12,17 @@ func (m Material) Equal(a *Material) (isEqual bool, err error) {
 		return
 	}
 
-	isEqual, err = m.Attributes.equal(a.Attributes)
-
-	return
+	return m.Attributes.equal(a.Attributes)
 }
 
 // UnmarshalJSON string into a Material struct
-func (m *Material) UnmarshalJSON(b []byte) error {
-	temp := map[string]interface{}{}
-	json.Unmarshal(b, &temp)
+func (m *Material) UnmarshalJSON(b []byte) (err error) {
+	raw := map[string]interface{}{}
+	if err = json.Unmarshal(b, &raw); err == nil {
+		err = m.Ingest(raw)
+	}
 
-	return m.Ingest(temp)
+	return
 }
 
 // Ingest an abstract structure
@@ -51,14 +51,15 @@ func (m *Material) Ingest(payload map[string]interface{}) (err error) {
 		case "type":
 			continue
 		default:
-			return fmt.Errorf("Unexpected key: '%s'", key)
+			err = fmt.Errorf("Unexpected key: '%s'", key)
+			break
 		}
 	}
 	return
 }
 
 // IngestAttributes to Material from an abstract structure
-func (m *Material) IngestAttributes(rawAttributes map[string]interface{}) error {
+func (m *Material) IngestAttributes(rawAttributes map[string]interface{}) (err error) {
 	switch strings.ToLower(m.Type) {
 	case "git":
 		mag := &MaterialAttributesGit{}
@@ -93,10 +94,10 @@ func (m *Material) IngestAttributes(rawAttributes map[string]interface{}) error 
 		unmarshallMaterialAttributesPlugin(mapl, rawAttributes)
 		m.Attributes = mapl
 	default:
-		return fmt.Errorf("Unexpected Material type: '%s'", m.Type)
+		err = fmt.Errorf("Unexpected Material type: '%s'", m.Type)
 	}
 
-	return nil
+	return
 }
 
 // GenerateGeneric form (map[string]interface) of the material filter
@@ -113,8 +114,8 @@ func (mf *MaterialFilter) GenerateGeneric() (g map[string]interface{}) {
 	return
 }
 
-func unmarshallMaterialFilter(i map[string]interface{}) *MaterialFilter {
-	m := &MaterialFilter{}
+func unmarshallMaterialFilter(i map[string]interface{}) (m *MaterialFilter) {
+	m = &MaterialFilter{}
 	if ignoreI, ok1 := i["ignore"]; ok1 {
 		if ignoreIs, ok2 := ignoreI.([]interface{}); ok2 {
 			m.Ignore = decodeConfigStringList(ignoreIs)
@@ -126,12 +127,12 @@ func unmarshallMaterialFilter(i map[string]interface{}) *MaterialFilter {
 }
 
 // Give an abstract list of strings cast as []interface{}, convert them back to []string{}.
-func decodeConfigStringList(lI []interface{}) []string {
+func decodeConfigStringList(lI []interface{}) (ret []string) {
 
 	if len(lI) == 1 {
 		return []string{lI[0].(string)}
 	}
-	ret := make([]string, len(lI))
+	ret = make([]string, len(lI))
 	for i, vI := range lI {
 		ret[i] = vI.(string)
 	}
