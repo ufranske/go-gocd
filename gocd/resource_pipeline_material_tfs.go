@@ -2,7 +2,6 @@ package gocd
 
 import (
 	"errors"
-	"fmt"
 )
 
 func (mtfs MaterialAttributesTfs) equal(mtfs2i MaterialAttribute) (bool, error) {
@@ -58,10 +57,6 @@ func unmarshallMaterialAttributesTfs(mtfs *MaterialAttributesTfs, i map[string]i
 			mtfs.InvertFilter = value.(bool)
 		case "auto_update":
 			mtfs.AutoUpdate = value.(bool)
-
-		default:
-			fmt.Println(value)
-			fmt.Println(key)
 		}
 	}
 }

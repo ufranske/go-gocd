@@ -2,7 +2,6 @@ package gocd
 
 import (
 	"errors"
-	"fmt"
 )
 
 func (mag MaterialAttributesGit) equal(a2i MaterialAttribute) (bool, error) {
@@ -47,9 +46,6 @@ func unmarshallMaterialAttributesGit(mag *MaterialAttributesGit, i map[string]in
 			mag.InvertFilter = value.(bool)
 		case "filter":
 			mag.Filter = unmarshallMaterialFilter(value.(map[string]interface{}))
-		default:
-			fmt.Println(value)
-			fmt.Println(key)
 		}
 	}
 }
