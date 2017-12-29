@@ -28,10 +28,7 @@ func (m *Material) UnmarshalJSON(b []byte) (err error) {
 // Ingest an abstract structure
 func (m *Material) Ingest(payload map[string]interface{}) (err error) {
 
-	if mType, hasMType := payload["type"]; hasMType {
-		m.Type = mType.(string)
-		m.IngestAttributes(map[string]interface{}{})
-	}
+	m.IngestMaterial(payload)
 
 	for key, value := range payload {
 		if value == nil {
@@ -56,6 +53,14 @@ func (m *Material) Ingest(payload map[string]interface{}) (err error) {
 		}
 	}
 	return
+}
+
+// IngestType of Material
+func (m *Material) IngestMaterial(payload map[string]interface{}) {
+	if mType, hasMType := payload["type"]; hasMType {
+		m.Type = mType.(string)
+		m.IngestAttributes(map[string]interface{}{})
+	}
 }
 
 // IngestAttributes to Material from an abstract structure
