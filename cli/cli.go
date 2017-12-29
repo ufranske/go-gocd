@@ -29,7 +29,6 @@ func GetCliCommands() []cli.Command {
 		*getPipelineHistoryCommand(),
 		*getPipelineCommand(),
 		*createPipelineConfigCommand(),
-		*generateJSONSchemaCommand(),
 		*getPipelineStatusCommand(),
 		*pausePipelineCommand(),
 		*unpausePipelineCommand(),
@@ -70,6 +69,7 @@ func NewCliClient(c *cli.Context) (cl *gocd.Client, err error) {
 		} else {
 			return
 		}
+		return
 	}
 
 	setStringFromContext(&cfg.Username, "username", c)

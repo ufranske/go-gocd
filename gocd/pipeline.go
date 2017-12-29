@@ -47,26 +47,10 @@ type PipelineConfigOrigin struct {
 
 // Material describes an artifact dependency for a pipeline object.
 type Material struct {
-	Type        string             `json:"type"`
-	Fingerprint string             `json:"fingerprint,omitempty"`
-	Description string             `json:"description,omitempty"`
-	Attributes  MaterialAttributes `json:"attributes"`
-}
-
-// MaterialAttributes describes a material type
-type MaterialAttributes struct {
-	URL             string          `json:"url,omitempty"`
-	Destination     string          `json:"destination,omitempty"`
-	Filter          *MaterialFilter `json:"filter,omitempty"`
-	InvertFilter    bool            `json:"invert_filter"`
-	Name            string          `json:"name,omitempty"`
-	AutoUpdate      bool            `json:"auto_update,omitempty"`
-	Branch          string          `json:"branch,omitempty"`
-	SubmoduleFolder string          `json:"submodule_folder,omitempty"`
-	ShallowClone    bool            `json:"shallow_clone,omitempty"`
-	Pipeline        string          `json:"pipeline,omitempty"`
-	Stage           string          `json:"stage,omitempty"`
-	Ref             string          `json:"ref"`
+	Type        string            `json:"type"`
+	Fingerprint string            `json:"fingerprint,omitempty"`
+	Description string            `json:"description,omitempty"`
+	Attributes  MaterialAttribute `json:"attributes"`
 }
 
 // MaterialFilter describes which globs to ignore
