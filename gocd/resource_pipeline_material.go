@@ -40,13 +40,14 @@ func (m *Material) Ingest(payload map[string]interface{}) error {
 		case "description":
 			m.Description = value.(string)
 		case "type":
+			m.Type = value.(string)
 			continue
 		default:
 			return fmt.Errorf("Unexpected key: '%s'", key)
 		}
 	}
 
-	switch m.Type = temp["type"].(string); strings.ToLower(m.Type) {
+	switch strings.ToLower(m.Type) {
 	case "git":
 		mag := &MaterialAttributesGit{}
 		unmarshallMaterialAttributesGit(mag, rawAttributes)
