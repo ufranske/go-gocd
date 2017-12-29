@@ -30,6 +30,7 @@ before_install:
 	@go get github.com/golang/lint/golint
 	@go install github.com/golang/lint/golint
 	curl https://glide.sh/get | sh
+	glide install
 
 build: deploy_on_develop
 
