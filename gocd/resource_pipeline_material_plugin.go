@@ -22,7 +22,7 @@ func (mapp MaterialAttributesPlugin) GenerateGeneric() (ma map[string]interface{
 
 // HasFilter in this material attribute
 func (mapp MaterialAttributesPlugin) HasFilter() bool {
-	return false
+	return true
 }
 
 // GetFilter from material attribute
