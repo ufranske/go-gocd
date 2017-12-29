@@ -22,8 +22,13 @@ func (m *Material) UnmarshalJSON(b []byte) error {
 	temp := map[string]interface{}{}
 	json.Unmarshal(b, &temp)
 
+	return m.Ingest(temp)
+}
+
+// Ingest an abstract structure
+func (m *Material) Ingest(payload map[string]interface{}) error {
 	var rawAttributes map[string]interface{}
-	for key, value := range temp {
+	for key, value := range payload {
 		if value == nil {
 			continue
 		}
