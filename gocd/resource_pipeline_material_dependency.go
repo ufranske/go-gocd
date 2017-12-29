@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func (mad MaterialAttributesDependency) equal(mad2i interface{}) (bool, error) {
+func (mad MaterialAttributesDependency) equal(mad2i MaterialAttribute) (bool, error) {
 	var ok bool
 	mad2, ok := mad2i.(MaterialAttributesDependency)
 	if !ok {

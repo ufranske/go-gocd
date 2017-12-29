@@ -2,7 +2,7 @@ package gocd
 
 import "errors"
 
-func (mhg MaterialAttributesHg) equal(mhg2i interface{}) (bool, error) {
+func (mhg MaterialAttributesHg) equal(mhg2i MaterialAttribute) (bool, error) {
 	var ok bool
 	mhg2, ok := mhg2i.(MaterialAttributesHg)
 	if !ok {
@@ -32,7 +32,7 @@ func unmarshallMaterialAttributesHg(mhg *MaterialAttributesHg, i map[string]inte
 		case "auto_update":
 			mhg.AutoUpdate = value.(bool)
 		case "filter":
-			mhg.Filter = unmarshallMaterialFilter(value)
+			mhg.Filter = unmarshallMaterialFilter(value.(map[string]interface{}))
 		}
 	}
 }

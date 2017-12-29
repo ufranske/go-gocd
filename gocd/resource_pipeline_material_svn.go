@@ -2,7 +2,7 @@ package gocd
 
 import "errors"
 
-func (mas MaterialAttributesSvn) equal(mas2i interface{}) (isEqual bool, err error) {
+func (mas MaterialAttributesSvn) equal(mas2i MaterialAttribute) (isEqual bool, err error) {
 	var ok bool
 	mas2, ok := mas2i.(MaterialAttributesSvn)
 	if !ok {
@@ -39,6 +39,8 @@ func unmarshallMaterialAttributesSvn(mas *MaterialAttributesSvn, i map[string]in
 			mas.InvertFilter = value.(bool)
 		case "auto_update":
 			mas.AutoUpdate = value.(bool)
+		case "filter":
+			mas.Filter = unmarshallMaterialFilter(value.(map[string]interface{}))
 		}
 	}
 }

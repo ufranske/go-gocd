@@ -2,7 +2,7 @@ package gocd
 
 import "errors"
 
-func (mapp MaterialAttributesPlugin) equal(mapp2i interface{}) (bool, error) {
+func (mapp MaterialAttributesPlugin) equal(mapp2i MaterialAttribute) (bool, error) {
 	var ok bool
 	mapp2, ok := mapp2i.(MaterialAttributesPlugin)
 	if !ok {
@@ -26,7 +26,7 @@ func unmarshallMaterialAttributesPlugin(mapp *MaterialAttributesPlugin, i map[st
 		case "destination":
 			mapp.Destination = value.(string)
 		case "filter":
-			mapp.Filter = unmarshallMaterialFilter(value)
+			mapp.Filter = unmarshallMaterialFilter(value.(map[string]interface{}))
 		case "invert_filter":
 			mapp.InvertFilter = value.(bool)
 		}
