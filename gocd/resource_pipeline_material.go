@@ -22,8 +22,13 @@ func (m *Material) UnmarshalJSON(b []byte) error {
 	temp := map[string]interface{}{}
 	json.Unmarshal(b, &temp)
 
+	return m.Ingest(temp)
+}
+
+// Ingest an abstract structure
+func (m *Material) Ingest(payload map[string]interface{}) error {
 	var rawAttributes map[string]interface{}
-	for key, value := range temp {
+	for key, value := range payload {
 		if value == nil {
 			continue
 		}
@@ -35,13 +40,14 @@ func (m *Material) UnmarshalJSON(b []byte) error {
 		case "description":
 			m.Description = value.(string)
 		case "type":
+			m.Type = value.(string)
 			continue
 		default:
 			return fmt.Errorf("Unexpected key: '%s'", key)
 		}
 	}
 
-	switch m.Type = temp["type"].(string); strings.ToLower(m.Type) {
+	switch strings.ToLower(m.Type) {
 	case "git":
 		mag := &MaterialAttributesGit{}
 		unmarshallMaterialAttributesGit(mag, rawAttributes)
