@@ -10,8 +10,34 @@ func testResourceMaterial(t *testing.T) {
 	t.Run("Equality", testMaterialEquality)
 	t.Run("AttributeEquality", testMaterialAttributeEquality)
 	t.Run("AttributeInequality", testMaterialAttributeInequality)
+	t.Run("HasFilter", testMaterialAttributeFilterable)
 	t.Run("Unmarshall", testMaterialUnmarshall)
 	t.Run("UnmarshallAttributes", testMaterialUnmarshallAttributes)
+}
+
+func testMaterialAttributeFilterable(t *testing.T) {
+	for i, test := range []struct {
+		a      MaterialAttribute
+		result bool
+	}{
+		{a: MaterialAttributesGit{}, result: true},
+		{a: MaterialAttributesSvn{}, result: true},
+		{a: MaterialAttributesHg{}, result: true},
+		{a: MaterialAttributesP4{}, result: true},
+		{a: MaterialAttributesTfs{}, result: true},
+		{a: MaterialAttributesDependency{}, result: false},
+		{a: MaterialAttributesPackage{}, result: false},
+		{a: MaterialAttributesPlugin{}, result: true},
+	} {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			assert.Equal(t, test.result, test.a.HasFilter())
+			if test.result {
+				assert.IsType(t, &MaterialFilter{}, test.a.GetFilter())
+			} else {
+				assert.Nil(t, test.a.GetFilter())
+			}
+		})
+	}
 }
 
 func testMaterialEquality(t *testing.T) {
