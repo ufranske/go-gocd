@@ -2,11 +2,12 @@ package gocd
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"os/user"
 	"strings"
+
+	"gopkg.in/yaml.v2"
 )
 
 // ConfigDirectoryPath is the location where the authentication information is stored
@@ -36,7 +37,7 @@ func LoadConfigByName(name string, cfg *Configuration) (err error) {
 	if err == nil {
 		newCfg, hasCfg := cfgs[name]
 		if !hasCfg {
-			return fmt.Errorf("Could not find configuration profile '%s'", name)
+			return fmt.Errorf("could not find configuration profile '%s'", name)
 		}
 
 		*cfg = *newCfg
@@ -68,7 +69,7 @@ func LoadConfigFromFile() (cfgs map[string]*Configuration, err error) {
 	if err != nil {
 		return cfgs, err
 	}
-	if _, err := os.Stat(p); !os.IsNotExist(err) {
+	if _, err := os.Stat(p); os.IsExist(err) {
 		if b, err = ioutil.ReadFile(p); err != nil {
 			return nil, err
 		}

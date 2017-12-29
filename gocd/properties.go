@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"strings"
 )
 
@@ -36,7 +36,7 @@ func (ps *PropertiesService) List(ctx context.Context, pr *PropertyRequest) (*Pr
 		pr.Stage, pr.StageCounter,
 		pr.Job,
 	)
-	log.Info("Calling `PropertiesServices.List`")
+	ps.log.WithField("endpoint", "PropertiesServices.List").Info("Calling endpoint")
 	return ps.commonPropertiesAction(ctx, path, pr.Single)
 }
 
@@ -47,6 +47,7 @@ func (ps *PropertiesService) Get(ctx context.Context, name string, pr *PropertyR
 		pr.Stage, pr.StageCounter,
 		pr.Job, name,
 	)
+	ps.log.WithField("endpoint", "PropertiesServices.Get").Info("Calling endpoint")
 	return ps.commonPropertiesAction(ctx, path, true)
 }
 
@@ -55,6 +56,8 @@ func (ps *PropertiesService) Create(ctx context.Context, name string, value stri
 
 	log.Info("Calling `PropertiesServices.Create`")
 	responseBuffer := bytes.NewBuffer([]byte(""))
+
+	ps.log.WithField("endpoint", "PropertiesServices.Create").Info("Calling endpoint")
 	_, resp, err := ps.client.postAction(ctx, &APIClientRequest{
 		Path: fmt.Sprintf("/properties/%s/%d/%s/%d/%s/%s",
 			pr.Pipeline, pr.PipelineCounter,

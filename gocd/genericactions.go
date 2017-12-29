@@ -4,9 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"net/http"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 // APIClientRequest helper struct to reduce amount of code.
@@ -71,7 +72,10 @@ func (c *Client) deleteAction(ctx context.Context, path string, apiversion strin
 
 func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responeBody interface{}, resp *APIResponse, err error) {
 
-	log.Debugf("HTTP Request\n%s %s", r.Method, r.Path)
+	c.Log.WithFields(logrus.Fields{
+		"Method": r.Method,
+		"Path":   r.Path,
+	}).Debug("Requesting Endpoint")
 
 	if r.ResponseType == "" {
 		r.ResponseType = responseTypeJSON
@@ -90,7 +94,7 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responeBo
 		return false, nil, err
 	}
 	if r.RequestBody != nil {
-		log.Debugf("\n%s\n\n", r.RequestBody)
+		c.Log.WithField("RequestBody", r.RequestBody).Debug("Sending Request Body")
 	}
 
 	if len(r.Headers) > 0 {
@@ -99,10 +103,10 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responeBo
 		}
 	}
 
-	printHeaderDebug(req.HTTP.Header)
+	c.Log.WithFields(headerLogFields(req.HTTP.Header)).Debug("Request Header")
 
 	if resp, err = c.Do(ctx, req, r.ResponseBody, r.ResponseType); err != nil {
-		log.Error(err)
+		c.Log.Error(err)
 		return r.ResponseBody, resp, err
 	}
 
@@ -111,10 +115,13 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responeBo
 	})
 
 	if r.ResponseType == responseTypeJSON {
-		log.Debugf("\nResponse\n%s %s\n", resp.HTTP.Proto, resp.HTTP.Status)
-		printHeaderDebug(resp.HTTP.Header)
 		b, _ := json.Marshal(r.ResponseBody)
-		log.Debugf("\n%s", b)
+		c.Log.WithFields(headerLogFields(resp.HTTP.Header)).Debug("Response Headers")
+		c.Log.WithFields(logrus.Fields{
+			"Protocol": resp.HTTP.Proto,
+			"Status":   resp.HTTP.Status,
+			"Body":     b,
+		}).Debug("Response")
 	}
 
 	return r.ResponseBody, resp, err
@@ -126,12 +133,14 @@ func versionAction(versioned interface{}, verFunc func(versionsed Versioned)) {
 	}
 }
 
-func printHeaderDebug(headers http.Header) {
+func headerLogFields(headers http.Header) logrus.Fields {
+	fields := logrus.Fields{}
 	for header, values := range headers {
 		for _, value := range values {
-			log.Debugf("%s: %s", header, value)
+			fields[header] = value
 		}
 	}
+	return fields
 }
 
 func parseVersions(response *http.Response, versioned Versioned) {
