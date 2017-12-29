@@ -16,6 +16,22 @@ func (mp4 MaterialAttributesP4) equal(ma MaterialAttribute) (bool, error) {
 	return namesEqual && portEqual && destEqual, nil
 }
 
+// GenerateGeneric form (map[string]interface) of the material filter
+func (mp4 MaterialAttributesP4) GenerateGeneric() (ma map[string]interface{}) {
+	ma = make(map[string]interface{})
+	return
+}
+
+// HasFilter in this material attribute
+func (mp4 MaterialAttributesP4) HasFilter() bool {
+	return true
+}
+
+// GetFilter from material attribute
+func (mp4 MaterialAttributesP4) GetFilter() *MaterialFilter {
+	return mp4.Filter
+}
+
 // UnmarshallInterface from a JSON string to a MaterialAttributesP4 struct
 func unmarshallMaterialAttributesP4(mp4 *MaterialAttributesP4, i map[string]interface{}) {
 	for key, value := range i {

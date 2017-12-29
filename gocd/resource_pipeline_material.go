@@ -26,27 +26,39 @@ func (m *Material) UnmarshalJSON(b []byte) error {
 }
 
 // Ingest an abstract structure
-func (m *Material) Ingest(payload map[string]interface{}) error {
-	var rawAttributes map[string]interface{}
+func (m *Material) Ingest(payload map[string]interface{}) (err error) {
+
+	if mType, hasMType := payload["type"]; hasMType {
+		m.Type = mType.(string)
+		m.IngestAttributes(map[string]interface{}{})
+	}
+
 	for key, value := range payload {
 		if value == nil {
 			continue
 		}
 		switch key {
 		case "attributes":
-			rawAttributes = value.(map[string]interface{})
+			if v1, ok1 := value.(map[string]interface{}); ok1 {
+				if err = m.IngestAttributes(v1); err != nil {
+					return
+				}
+			}
 		case "fingerprint":
 			m.Fingerprint = value.(string)
 		case "description":
 			m.Description = value.(string)
 		case "type":
-			m.Type = value.(string)
 			continue
 		default:
 			return fmt.Errorf("Unexpected key: '%s'", key)
 		}
 	}
+	return
+}
 
+// IngestAttributes to Material from an abstract structure
+func (m *Material) IngestAttributes(rawAttributes map[string]interface{}) error {
 	switch strings.ToLower(m.Type) {
 	case "git":
 		mag := &MaterialAttributesGit{}
@@ -87,12 +99,41 @@ func (m *Material) Ingest(payload map[string]interface{}) error {
 	return nil
 }
 
+// GenerateGeneric form (map[string]interface) of the material filter
+func (mf *MaterialFilter) GenerateGeneric() (g map[string]interface{}) {
+	if mf != nil {
+		ignores := []interface{}{}
+		for _, ig := range mf.Ignore {
+			ignores = append(ignores, ig)
+		}
+		g = map[string]interface{}{
+			"ignore": ignores,
+		}
+	}
+	return
+}
+
 func unmarshallMaterialFilter(i map[string]interface{}) *MaterialFilter {
 	m := &MaterialFilter{}
-	if ignoreI, ok := i["ignore"]; ok {
-		if ignores, ok := ignoreI.([]string); ok {
+	if ignoreI, ok1 := i["ignore"]; ok1 {
+		if ignoreIs, ok2 := ignoreI.([]interface{}); ok2 {
+			m.Ignore = decodeConfigStringList(ignoreIs)
+		} else if ignores, ok3 := ignoreI.([]string); ok3 {
 			m.Ignore = ignores
 		}
 	}
 	return m
+}
+
+// Give an abstract list of strings cast as []interface{}, convert them back to []string{}.
+func decodeConfigStringList(lI []interface{}) []string {
+
+	if len(lI) == 1 {
+		return []string{lI[0].(string)}
+	}
+	ret := make([]string, len(lI))
+	for i, vI := range lI {
+		ret[i] = vI.(string)
+	}
+	return ret
 }

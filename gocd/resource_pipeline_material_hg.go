@@ -14,6 +14,22 @@ func (mhg MaterialAttributesHg) equal(mhg2i MaterialAttribute) (bool, error) {
 	return urlsEqual && destEqual, nil
 }
 
+// GenerateGeneric form (map[string]interface) of the material filter
+func (mhg MaterialAttributesHg) GenerateGeneric() (ma map[string]interface{}) {
+	ma = make(map[string]interface{})
+	return
+}
+
+// HasFilter in this material attribute
+func (mhg MaterialAttributesHg) HasFilter() bool {
+	return true
+}
+
+// GetFilter from material attribute
+func (mhg MaterialAttributesHg) GetFilter() *MaterialFilter {
+	return mhg.Filter
+}
+
 // UnmarshallInterface from a JSON string to a MaterialAttributesHg struct
 func unmarshallMaterialAttributesHg(mhg *MaterialAttributesHg, i map[string]interface{}) {
 	for key, value := range i {

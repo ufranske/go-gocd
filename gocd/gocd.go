@@ -274,7 +274,7 @@ func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}, respons
 		}
 	}
 
-	if err = CheckResponse(r.HTTP); err != nil {
+	if err = CheckResponse(r); err != nil {
 		return r, err
 	}
 
@@ -306,17 +306,44 @@ func readDoResponseBody(v interface{}, body *io.ReadCloser, responseType string)
 }
 
 // CheckResponse asserts that the http response status code was 2xx.
-func CheckResponse(response *http.Response) error {
-	if response.StatusCode < 200 || response.StatusCode >= 400 {
-		bdy, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			return err
+func CheckResponse(response *APIResponse) (err error) {
+	if response.HTTP.StatusCode < 200 || response.HTTP.StatusCode >= 400 {
+
+		errorParts := []string{
+			fmt.Sprintf("Received HTTP Status '%s'", response.HTTP.Status),
 		}
-		return fmt.Errorf(
-			"Received HTTP Status '%s': '%s'",
-			response.Status,
-			bdy,
-		)
+		if message := createErrorResponseMessage(response.Body); message != "" {
+			errorParts = append(errorParts, message)
+		}
+
+		err = errors.New(strings.Join(errorParts, ": "))
 	}
-	return nil
+	return
+}
+
+func createErrorResponseMessage(body string) (resp string) {
+	reqBody := make(map[string]interface{})
+	resBody := make(map[string]interface{})
+
+	json.Unmarshal([]byte(body), &reqBody)
+
+	if message, hasMessage := reqBody["message"]; hasMessage {
+		resBody["message"] = message
+	}
+
+	if _, hasData := reqBody["data"]; hasData {
+		if data, isData := reqBody["data"].(map[string]interface{}); isData {
+			if err, hasErrors := data["errors"]; hasErrors {
+				resBody["errors"] = err
+			}
+		}
+	}
+
+	if len(resBody) > 0 {
+		b, _ := json.MarshalIndent(resBody, "", "  ")
+		resp = string(b)
+	}
+
+	return resp
+
 }

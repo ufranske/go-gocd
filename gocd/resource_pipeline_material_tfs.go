@@ -24,6 +24,22 @@ func (mtfs MaterialAttributesTfs) equal(mtfs2i MaterialAttribute) (bool, error) 
 		nil
 }
 
+// GenerateGeneric form (map[string]interface) of the material filter
+func (mtfs MaterialAttributesTfs) GenerateGeneric() (ma map[string]interface{}) {
+	ma = make(map[string]interface{})
+	return
+}
+
+// HasFilter in this material attribute
+func (mtfs MaterialAttributesTfs) HasFilter() bool {
+	return true
+}
+
+// GetFilter from material attribute
+func (mtfs MaterialAttributesTfs) GetFilter() *MaterialFilter {
+	return mtfs.Filter
+}
+
 // UnmarshallInterface from a JSON string to a MaterialAttributesTfs struct
 func unmarshallMaterialAttributesTfs(mtfs *MaterialAttributesTfs, i map[string]interface{}) {
 	for key, value := range i {
