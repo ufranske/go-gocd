@@ -4,7 +4,7 @@ import "errors"
 
 func (mas MaterialAttributesSvn) equal(mas2i interface{}) (isEqual bool, err error) {
 	var ok bool
-	mas2, ok := mas2i.(*MaterialAttributesGit)
+	mas2, ok := mas2i.(MaterialAttributesSvn)
 	if !ok {
 		return false, errors.New("can only compare with same material type")
 	}

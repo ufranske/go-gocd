@@ -4,7 +4,7 @@ import "errors"
 
 func (mp4 MaterialAttributesP4) equal(mp42i interface{}) (bool, error) {
 	var ok bool
-	mp42, ok := mp42i.(*MaterialAttributesP4)
+	mp42, ok := mp42i.(MaterialAttributesP4)
 	if !ok {
 		return false, errors.New("can only compare with same material type")
 	}

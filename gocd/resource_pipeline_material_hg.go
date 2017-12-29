@@ -4,7 +4,7 @@ import "errors"
 
 func (mhg MaterialAttributesHg) equal(mhg2i interface{}) (bool, error) {
 	var ok bool
-	mhg2, ok := mhg2i.(*MaterialAttributesHg)
+	mhg2, ok := mhg2i.(MaterialAttributesHg)
 	if !ok {
 		return false, errors.New("can only compare with same material type")
 	}

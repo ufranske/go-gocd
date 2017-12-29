@@ -4,7 +4,7 @@ import "errors"
 
 func (mapk MaterialAttributesPackage) equal(mapk2i interface{}) (bool, error) {
 	var ok bool
-	mapk2, ok := mapk2i.(*MaterialAttributesPackage)
+	mapk2, ok := mapk2i.(MaterialAttributesPackage)
 	if !ok {
 		return false, errors.New("can only compare with same material type")
 	}

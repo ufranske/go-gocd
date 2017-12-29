@@ -4,7 +4,7 @@ import "errors"
 
 func (mapp MaterialAttributesPlugin) equal(mapp2i interface{}) (bool, error) {
 	var ok bool
-	mapp2, ok := mapp2i.(*MaterialAttributesPlugin)
+	mapp2, ok := mapp2i.(MaterialAttributesPlugin)
 	if !ok {
 		return false, errors.New("can only compare with same material type")
 	}

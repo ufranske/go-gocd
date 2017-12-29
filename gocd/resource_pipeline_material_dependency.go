@@ -7,7 +7,7 @@ import (
 
 func (mad MaterialAttributesDependency) equal(mad2i interface{}) (bool, error) {
 	var ok bool
-	mad2, ok := mad2i.(*MaterialAttributesDependency)
+	mad2, ok := mad2i.(MaterialAttributesDependency)
 	if !ok {
 		return false, errors.New("can only compare with same material type")
 	}

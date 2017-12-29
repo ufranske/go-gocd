@@ -7,7 +7,7 @@ import (
 
 func (mag MaterialAttributesGit) equal(a2i interface{}) (bool, error) {
 	var ok bool
-	a2, ok := a2i.(*MaterialAttributesGit)
+	a2, ok := a2i.(MaterialAttributesGit)
 	if !ok {
 		return false, errors.New("can only compare with same material type")
 	}

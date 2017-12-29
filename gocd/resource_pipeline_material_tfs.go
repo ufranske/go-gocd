@@ -7,7 +7,7 @@ import (
 
 func (mtfs MaterialAttributesTfs) equal(mtfs2i interface{}) (bool, error) {
 	var ok bool
-	mtfs2, ok := mtfs2i.(*MaterialAttributesTfs)
+	mtfs2, ok := mtfs2i.(MaterialAttributesTfs)
 	if !ok {
 		return false, errors.New("can only compare with same material type")
 	}
