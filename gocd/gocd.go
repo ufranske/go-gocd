@@ -132,11 +132,9 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 		httpClient = http.DefaultClient
 	}
 
-	if strings.HasPrefix(cfg.Server, "https") {
-		if cfg.SkipSslCheck {
-			httpClient.Transport = &http.Transport{
-				TLSClientConfig: &tls.Config{InsecureSkipVerify: cfg.SkipSslCheck},
-			}
+	if strings.HasPrefix(cfg.Server, "https") && cfg.SkipSslCheck {
+		httpClient.Transport = &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: cfg.SkipSslCheck},
 		}
 	}
 
