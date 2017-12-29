@@ -9,6 +9,7 @@ import (
 func testResourceMaterial(t *testing.T) {
 	t.Run("Equality", testMaterialEquality)
 	t.Run("AttributeEquality", testMaterialAttributeEquality)
+	t.Run("AttributeInequality", testMaterialAttributeInequality)
 	t.Run("FilterUnmarshall", testMaterialAttributeUnmarshall)
 }
 
@@ -34,38 +35,47 @@ func testMaterialEquality(t *testing.T) {
 
 func testMaterialAttributeEquality(t *testing.T) {
 	for i, test := range []struct {
-		a      MaterialAttribute
-		b      MaterialAttribute
-		result bool
+		a MaterialAttribute
+		b MaterialAttribute
 	}{
-		{a: MaterialAttributesGit{}, b: MaterialAttributesGit{}, result: true},
-		{a: MaterialAttributesSvn{}, b: MaterialAttributesSvn{}, result: true},
-		{a: MaterialAttributesHg{}, b: MaterialAttributesHg{}, result: true},
-		{a: MaterialAttributesP4{}, b: MaterialAttributesP4{}, result: true},
-		{a: MaterialAttributesTfs{}, b: MaterialAttributesTfs{}, result: true},
-		{a: MaterialAttributesDependency{}, b: MaterialAttributesDependency{}, result: true},
-		{a: MaterialAttributesPackage{}, b: MaterialAttributesPackage{}, result: true},
-		{a: MaterialAttributesPlugin{}, b: MaterialAttributesPlugin{}, result: true},
-		{
-			a:      MaterialAttributesGit{},
-			b:      MaterialAttributesGit{URL: "https://github.com/drewsonne/go-gocd"},
-			result: false,
-		},
-		{
-			a:      MaterialAttributesGit{URL: "https://github.com/drewsonne/go-gocd"},
-			b:      MaterialAttributesGit{URL: "https://github.com/drewsonne/go-gocd", Branch: "feature/branch"},
-			result: false,
-		},
-		{a: MaterialAttributesGit{Branch: ""}, b: MaterialAttributesGit{Branch: "master"}, result: true},
-		{a: MaterialAttributesGit{Branch: "master"}, b: MaterialAttributesGit{Branch: ""}, result: true},
-		{a: MaterialAttributesGit{Branch: ""}, b: MaterialAttributesGit{Branch: ""}, result: true},
-		{a: MaterialAttributesGit{Branch: "master"}, b: MaterialAttributesGit{Branch: "master"}, result: true},
+		{a: MaterialAttributesGit{}, b: MaterialAttributesGit{}},
+		{a: MaterialAttributesGit{Branch: ""}, b: MaterialAttributesGit{Branch: "master"}},
+		{a: MaterialAttributesGit{Branch: "master"}, b: MaterialAttributesGit{Branch: ""}},
+		{a: MaterialAttributesGit{Branch: ""}, b: MaterialAttributesGit{Branch: ""}},
+		{a: MaterialAttributesGit{Branch: "master"}, b: MaterialAttributesGit{Branch: "master"}},
+		{a: MaterialAttributesSvn{}, b: MaterialAttributesSvn{}},
+		{a: MaterialAttributesHg{}, b: MaterialAttributesHg{}},
+		{a: MaterialAttributesP4{}, b: MaterialAttributesP4{}},
+		{a: MaterialAttributesTfs{}, b: MaterialAttributesTfs{}},
+		{a: MaterialAttributesDependency{}, b: MaterialAttributesDependency{}},
+		{a: MaterialAttributesPackage{}, b: MaterialAttributesPackage{}},
+		{a: MaterialAttributesPlugin{}, b: MaterialAttributesPlugin{}},
 	} {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			ok, err := test.a.equal(test.b)
-			assert.Equal(t, ok, test.result)
+			assert.True(t, ok)
 			assert.Nil(t, err)
 		})
+	}
+}
+
+func testMaterialAttributeInequality(t *testing.T) {
+	for i, test := range []struct {
+		a MaterialAttribute
+		b MaterialAttribute
+	}{
+		{a: MaterialAttributesGit{}, b: MaterialAttributesGit{URL: "https://github.com/gocd/gocd"}},
+		{
+			a: MaterialAttributesGit{URL: "https://github.com/gocd/gocd"},
+			b: MaterialAttributesGit{URL: "https://github.com/gocd/gocd", Branch: "feature/branch"},
+		},
+	} {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			ok, err := test.a.equal(test.b)
+			assert.False(t, ok)
+			assert.Nil(t, err)
+		})
+
 	}
 }
 
