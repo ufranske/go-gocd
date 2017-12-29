@@ -48,8 +48,8 @@ func (m *Material) UnmarshalJSON(b []byte) error {
 
 	switch m.Type = temp["type"].(string); strings.ToLower(m.Type) {
 	case "git":
-		mag := MaterialAttributesGit{}
-		unmarshallMaterialAttributesGit(&mag, rawAttributes)
+		mag := &MaterialAttributesGit{}
+		unmarshallMaterialAttributesGit(mag, rawAttributes)
 		m.Attributes = mag
 	case "svn":
 		mas := &MaterialAttributesSvn{}
