@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func (mag MaterialAttributesGit) equal(a2i interface{}) (bool, error) {
+func (mag MaterialAttributesGit) equal(a2i MaterialAttribute) (bool, error) {
 	var ok bool
 	a2, ok := a2i.(MaterialAttributesGit)
 	if !ok {
@@ -46,7 +46,7 @@ func unmarshallMaterialAttributesGit(mag *MaterialAttributesGit, i map[string]in
 		case "invert_filter":
 			mag.InvertFilter = value.(bool)
 		case "filter":
-			mag.Filter = unmarshallMaterialFilter(value)
+			mag.Filter = unmarshallMaterialFilter(value.(map[string]interface{}))
 		default:
 			fmt.Println(value)
 			fmt.Println(key)

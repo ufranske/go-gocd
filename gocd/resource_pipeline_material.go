@@ -81,6 +81,12 @@ func (m *Material) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func unmarshallMaterialFilter(i interface{}) *MaterialFilter {
-	return nil
+func unmarshallMaterialFilter(i map[string]interface{}) *MaterialFilter {
+	m := &MaterialFilter{}
+	if ignoreI, ok := i["ignore"]; ok {
+		if ignores, ok := ignoreI.([]string); ok {
+			m.Ignore = ignores
+		}
+	}
+	return m
 }

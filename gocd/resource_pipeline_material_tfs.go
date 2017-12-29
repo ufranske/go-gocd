@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func (mtfs MaterialAttributesTfs) equal(mtfs2i interface{}) (bool, error) {
+func (mtfs MaterialAttributesTfs) equal(mtfs2i MaterialAttribute) (bool, error) {
 	var ok bool
 	mtfs2, ok := mtfs2i.(MaterialAttributesTfs)
 	if !ok {
@@ -53,7 +53,7 @@ func unmarshallMaterialAttributesTfs(mtfs *MaterialAttributesTfs, i map[string]i
 		case "destination":
 			mtfs.Destination = value.(string)
 		case "filter":
-			mtfs.Filter = unmarshallMaterialFilter(value)
+			mtfs.Filter = unmarshallMaterialFilter(value.(map[string]interface{}))
 		case "invert_filter":
 			mtfs.InvertFilter = value.(bool)
 		case "auto_update":

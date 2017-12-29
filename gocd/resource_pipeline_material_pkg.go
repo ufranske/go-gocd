@@ -2,7 +2,7 @@ package gocd
 
 import "errors"
 
-func (mapk MaterialAttributesPackage) equal(mapk2i interface{}) (bool, error) {
+func (mapk MaterialAttributesPackage) equal(mapk2i MaterialAttribute) (bool, error) {
 	var ok bool
 	mapk2, ok := mapk2i.(MaterialAttributesPackage)
 	if !ok {

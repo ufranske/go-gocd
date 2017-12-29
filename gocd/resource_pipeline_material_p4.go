@@ -2,9 +2,9 @@ package gocd
 
 import "errors"
 
-func (mp4 MaterialAttributesP4) equal(mp42i interface{}) (bool, error) {
+func (mp4 MaterialAttributesP4) equal(ma MaterialAttribute) (bool, error) {
 	var ok bool
-	mp42, ok := mp42i.(MaterialAttributesP4)
+	mp42, ok := ma.(MaterialAttributesP4)
 	if !ok {
 		return false, errors.New("can only compare with same material type")
 	}
@@ -40,7 +40,7 @@ func unmarshallMaterialAttributesP4(mp4 *MaterialAttributesP4, i map[string]inte
 		case "destination":
 			mp4.Destination = value.(string)
 		case "filter":
-			mp4.Filter = unmarshallMaterialFilter(value)
+			mp4.Filter = unmarshallMaterialFilter(value.(map[string]interface{}))
 		case "invert_filter":
 			mp4.InvertFilter = value.(bool)
 		case "auto_update":

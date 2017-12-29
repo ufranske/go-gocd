@@ -10,7 +10,8 @@ func testResourceMaterial(t *testing.T) {
 	t.Run("Equality", testMaterialEquality)
 	t.Run("AttributeEquality", testMaterialAttributeEquality)
 	t.Run("AttributeInequality", testMaterialAttributeInequality)
-	t.Run("FilterUnmarshall", testMaterialAttributeUnmarshall)
+	t.Run("Unmarshall", testMaterialUnmarshall)
+	t.Run("UnmarshallAttributes", testMaterialUnmarshallAttributes)
 }
 
 func testMaterialEquality(t *testing.T) {
@@ -64,6 +65,14 @@ func testMaterialAttributeInequality(t *testing.T) {
 		a MaterialAttribute
 		b MaterialAttribute
 	}{
+		{a: MaterialAttributesGit{}, b: MaterialAttributesP4{}},
+		{a: MaterialAttributesSvn{}, b: MaterialAttributesGit{}},
+		{a: MaterialAttributesHg{}, b: MaterialAttributesGit{}},
+		{a: MaterialAttributesP4{}, b: MaterialAttributesGit{}},
+		{a: MaterialAttributesTfs{}, b: MaterialAttributesGit{}},
+		{a: MaterialAttributesDependency{}, b: MaterialAttributesGit{}},
+		{a: MaterialAttributesPackage{}, b: MaterialAttributesGit{}},
+		{a: MaterialAttributesPlugin{}, b: MaterialAttributesGit{}},
 		{a: MaterialAttributesGit{}, b: MaterialAttributesGit{URL: "https://github.com/gocd/gocd"}},
 		{
 			a: MaterialAttributesGit{URL: "https://github.com/gocd/gocd"},
@@ -79,7 +88,7 @@ func testMaterialAttributeInequality(t *testing.T) {
 	}
 }
 
-func testMaterialAttributeUnmarshall(t *testing.T) {
+func testMaterialUnmarshall(t *testing.T) {
 	m := Material{}
 	for i, test := range []struct {
 		source   string
@@ -99,4 +108,15 @@ func testMaterialAttributeUnmarshall(t *testing.T) {
 			assert.IsType(t, test.expected, m.Attributes)
 		})
 	}
+}
+
+func testMaterialUnmarshallAttributes(t *testing.T) {
+	t.Run("Dependency", testUnmarshallMaterialAttributesDependency)
+	t.Run("Git", testUnmarshallMaterialAttributesGit)
+	t.Run("Hg", testUnmarshallMaterialAttributesHg)
+	t.Run("P4", testUnmarshallMaterialAttributesP4)
+	t.Run("Package", testUnmarshallMaterialAttributesPkg)
+	t.Run("Plugin", testUnmarshallMaterialAttributesPlugin)
+	t.Run("SVN", testUnmarshallMaterialAttributesSvn)
+	t.Run("TFS", testUnmarshallMaterialAttributesTfs)
 }
