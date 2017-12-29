@@ -8,7 +8,7 @@ import (
 func testResourceMaterial(t *testing.T) {
 	t.Run("Equality", testMaterialEquality)
 	t.Run("AttributeEquality", testMaterialAttributeEquality)
-	//t.Run("FilterUnmarshall", testMaterialAttributeUnmarshall)
+	t.Run("FilterUnmarshall", testMaterialAttributeUnmarshall)
 }
 
 func testMaterialEquality(t *testing.T) {

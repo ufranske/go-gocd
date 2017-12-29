@@ -9,17 +9,12 @@ import (
 // Equal is true if the two materials are logically equivalent. Not neccesarily literally equal.
 func (m Material) Equal(a *Material) (isEqual bool, err error) {
 	if m.Type != a.Type {
-		return false, nil
+		return
 	}
-	switch m.Type {
-	case "git":
-		if isEqual, err = m.Attributes.equal(a.Attributes); err != nil {
-			return false, err
-		}
-	default:
-		panic(fmt.Errorf("Material comparison not implemented for '%s'", m.Type))
-	}
-	return isEqual, nil
+
+	isEqual, err = m.Attributes.equal(a.Attributes)
+
+	return
 }
 
 // UnmarshalJSON string into a Material struct
