@@ -45,6 +45,7 @@ var logFormat = map[string]logrus.Formatter{
 //    - TEXT
 func SetupLogging(log *logrus.Logger) {
 	log.SetLevel(logLevels[getLogLevel()])
+
 	log.Formatter = logFormat[getLogType()]
 }
 

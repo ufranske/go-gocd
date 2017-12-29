@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
-	"reflect"
 	"testing"
 )
 
@@ -227,7 +226,5 @@ func testClientDo(t *testing.T) {
 	client.Do(context.Background(), req, body, responseTypeJSON)
 
 	want := &foo{"a"}
-	if !reflect.DeepEqual(body, want) {
-		t.Errorf("Response body = %v, want %v", body, want)
-	}
+	assert.Equal(t, want, body)
 }

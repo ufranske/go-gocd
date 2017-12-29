@@ -53,9 +53,9 @@ func (ps *PropertiesService) Get(ctx context.Context, name string, pr *PropertyR
 // Create a specific property for the given job/pipeline/stage run.
 func (ps *PropertiesService) Create(ctx context.Context, name string, value string, pr *PropertyRequest) (bool, *APIResponse, error) {
 
+	ps.log.WithField("endpoint", "PropertiesServices.Create").Info("Calling endpoint")
 	responseBuffer := bytes.NewBuffer([]byte(""))
 
-	ps.log.WithField("endpoint", "PropertiesServices.Create").Info("Calling endpoint")
 	_, resp, err := ps.client.postAction(ctx, &APIClientRequest{
 		Path: fmt.Sprintf("/properties/%s/%d/%s/%d/%s/%s",
 			pr.Pipeline, pr.PipelineCounter,

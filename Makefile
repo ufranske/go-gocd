@@ -29,9 +29,7 @@ before_install:
 	@go get -t -v $$(go list ./... | grep -v vendor/)
 	@go get github.com/golang/lint/golint
 	@go install github.com/golang/lint/golint
-#	curl -i https://api.github.com/user
-#	curl -i https://api.github.com/rate_limit
-	curl https://raw.githubusercontent.com/drewsonne/glide.sh/feature/github_auth_get/get | bash -x
+	curl https://glide.sh/get | sh
 
 build: deploy_on_develop
 

@@ -106,7 +106,6 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responeBo
 	c.Log.WithFields(headerLogFields(req.HTTP.Header)).Debug("Request Header")
 
 	if resp, err = c.Do(ctx, req, r.ResponseBody, r.ResponseType); err != nil {
-		c.Log.Error(err)
 		return r.ResponseBody, resp, err
 	}
 
