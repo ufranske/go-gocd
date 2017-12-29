@@ -24,6 +24,7 @@ func (mtfs MaterialAttributesTfs) equal(mtfs2i MaterialAttribute) (bool, error) 
 		nil
 }
 
+// GenerateGeneric form (map[string]interface) of the material filter
 func (mtfs MaterialAttributesTfs) GenerateGeneric() (ma map[string]interface{}) {
 	ma = make(map[string]interface{})
 	return

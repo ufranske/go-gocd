@@ -14,6 +14,7 @@ func (mas MaterialAttributesSvn) equal(mas2i MaterialAttribute) (isEqual bool, e
 	return urlsEqual && destinationEqual, nil
 }
 
+// GenerateGeneric form (map[string]interface) of the material filter
 func (mas MaterialAttributesSvn) GenerateGeneric() (ma map[string]interface{}) {
 	ma = make(map[string]interface{})
 	return

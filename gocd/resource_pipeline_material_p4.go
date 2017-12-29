@@ -16,6 +16,7 @@ func (mp4 MaterialAttributesP4) equal(ma MaterialAttribute) (bool, error) {
 	return namesEqual && portEqual && destEqual, nil
 }
 
+// GenerateGeneric form (map[string]interface) of the material filter
 func (mp4 MaterialAttributesP4) GenerateGeneric() (ma map[string]interface{}) {
 	ma = make(map[string]interface{})
 	return

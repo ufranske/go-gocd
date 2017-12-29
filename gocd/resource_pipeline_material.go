@@ -57,7 +57,7 @@ func (m *Material) Ingest(payload map[string]interface{}) (err error) {
 	return
 }
 
-// Ingest Material attributes from an abstract structure
+// IngestAttributes to Material from an abstract structure
 func (m *Material) IngestAttributes(rawAttributes map[string]interface{}) error {
 	switch strings.ToLower(m.Type) {
 	case "git":
@@ -99,6 +99,7 @@ func (m *Material) IngestAttributes(rawAttributes map[string]interface{}) error 
 	return nil
 }
 
+// GenerateGeneric form (map[string]interface) of the material filter
 func (mf *MaterialFilter) GenerateGeneric() (g map[string]interface{}) {
 	if mf != nil {
 		ignores := []interface{}{}

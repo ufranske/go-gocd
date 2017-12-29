@@ -21,6 +21,7 @@ func (mag MaterialAttributesGit) equal(a2i MaterialAttribute) (bool, error) {
 	return branchesEqual, nil
 }
 
+// GenerateGeneric form (map[string]interface) of the material filter
 func (mag MaterialAttributesGit) GenerateGeneric() (ma map[string]interface{}) {
 	ma = map[string]interface{}{
 		"name":             mag.Name,

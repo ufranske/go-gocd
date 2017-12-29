@@ -14,6 +14,7 @@ func (mapp MaterialAttributesPlugin) equal(mapp2i MaterialAttribute) (bool, erro
 		nil
 }
 
+// GenerateGeneric form (map[string]interface) of the material filter
 func (mapp MaterialAttributesPlugin) GenerateGeneric() (ma map[string]interface{}) {
 	ma = make(map[string]interface{})
 	return

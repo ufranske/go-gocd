@@ -14,6 +14,7 @@ func (mhg MaterialAttributesHg) equal(mhg2i MaterialAttribute) (bool, error) {
 	return urlsEqual && destEqual, nil
 }
 
+// GenerateGeneric form (map[string]interface) of the material filter
 func (mhg MaterialAttributesHg) GenerateGeneric() (ma map[string]interface{}) {
 	ma = make(map[string]interface{})
 	return

@@ -15,6 +15,7 @@ func (mad MaterialAttributesDependency) equal(mad2i MaterialAttribute) (bool, er
 		nil
 }
 
+// GenerateGeneric form (map[string]interface) of the material filter
 func (mad MaterialAttributesDependency) GenerateGeneric() (ma map[string]interface{}) {
 	ma = make(map[string]interface{})
 	return
