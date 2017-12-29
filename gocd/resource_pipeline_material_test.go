@@ -62,17 +62,18 @@ func testMaterialAttributeEquality(t *testing.T) {
 
 func testMaterialAttributeInequality(t *testing.T) {
 	for i, test := range []struct {
-		a MaterialAttribute
-		b MaterialAttribute
+		a         MaterialAttribute
+		b         MaterialAttribute
+		errString string
 	}{
-		{a: MaterialAttributesGit{}, b: MaterialAttributesP4{}},
-		{a: MaterialAttributesSvn{}, b: MaterialAttributesGit{}},
-		{a: MaterialAttributesHg{}, b: MaterialAttributesGit{}},
-		{a: MaterialAttributesP4{}, b: MaterialAttributesGit{}},
-		{a: MaterialAttributesTfs{}, b: MaterialAttributesGit{}},
-		{a: MaterialAttributesDependency{}, b: MaterialAttributesGit{}},
-		{a: MaterialAttributesPackage{}, b: MaterialAttributesGit{}},
-		{a: MaterialAttributesPlugin{}, b: MaterialAttributesGit{}},
+		{a: MaterialAttributesGit{}, b: MaterialAttributesP4{}, errString: "can only compare with same material type"},
+		{a: MaterialAttributesSvn{}, b: MaterialAttributesGit{}, errString: "can only compare with same material type"},
+		{a: MaterialAttributesHg{}, b: MaterialAttributesGit{}, errString: "can only compare with same material type"},
+		{a: MaterialAttributesP4{}, b: MaterialAttributesGit{}, errString: "can only compare with same material type"},
+		{a: MaterialAttributesTfs{}, b: MaterialAttributesGit{}, errString: "can only compare with same material type"},
+		{a: MaterialAttributesDependency{}, b: MaterialAttributesGit{}, errString: "can only compare with same material type"},
+		{a: MaterialAttributesPackage{}, b: MaterialAttributesGit{}, errString: "can only compare with same material type"},
+		{a: MaterialAttributesPlugin{}, b: MaterialAttributesGit{}, errString: "can only compare with same material type"},
 		{a: MaterialAttributesGit{}, b: MaterialAttributesGit{URL: "https://github.com/gocd/gocd"}},
 		{
 			a: MaterialAttributesGit{URL: "https://github.com/gocd/gocd"},
@@ -82,7 +83,11 @@ func testMaterialAttributeInequality(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			ok, err := test.a.equal(test.b)
 			assert.False(t, ok)
-			assert.Nil(t, err)
+			if test.errString == "" {
+				assert.Nil(t, err)
+			} else {
+				assert.EqualError(t, err, test.errString)
+			}
 		})
 
 	}
