@@ -80,7 +80,7 @@ the structure of the GoCD API documentation at
 ## <a name="pkg-index">Index</a>
 * [Constants](#pkg-constants)
 * [func CheckResponse(response *http.Response) error](#CheckResponse)
-* [func ConfigFilePath() (string, error)](#ConfigFilePath)
+* [func ConfigFilePath() (configPath string, err error)](#ConfigFilePath)
 * [func LoadConfigByName(name string, cfg *Configuration) (err error)](#LoadConfigByName)
 * [func LoadConfigFromFile() (cfgs map[string]*Configuration, err error)](#LoadConfigFromFile)
 * [func SetupLogging(log *logrus.Logger)](#SetupLogging)
@@ -192,8 +192,17 @@ the structure of the GoCD API documentation at
   * [func (js *JobsService) ListScheduled(ctx context.Context) ([]*JobSchedule, *APIResponse, error)](#JobsService.ListScheduled)
 * [type MailHost](#MailHost)
 * [type Material](#Material)
-  * [func (m Material) Equal(a *Material) bool](#Material.Equal)
-* [type MaterialAttributes](#MaterialAttributes)
+  * [func (m Material) Equal(a *Material) (isEqual bool, err error)](#Material.Equal)
+  * [func (m *Material) UnmarshalJSON(b []byte) error](#Material.UnmarshalJSON)
+* [type MaterialAttribute](#MaterialAttribute)
+* [type MaterialAttributesDependency](#MaterialAttributesDependency)
+* [type MaterialAttributesGit](#MaterialAttributesGit)
+* [type MaterialAttributesHg](#MaterialAttributesHg)
+* [type MaterialAttributesP4](#MaterialAttributesP4)
+* [type MaterialAttributesPackage](#MaterialAttributesPackage)
+* [type MaterialAttributesPlugin](#MaterialAttributesPlugin)
+* [type MaterialAttributesSvn](#MaterialAttributesSvn)
+* [type MaterialAttributesTfs](#MaterialAttributesTfs)
 * [type MaterialFilter](#MaterialFilter)
 * [type MaterialRevision](#MaterialRevision)
 * [type Modification](#Modification)
@@ -306,7 +315,7 @@ the structure of the GoCD API documentation at
 
 
 #### <a name="pkg-files">Package files</a>
-[agent.go](/src/github.com/drewsonne/go-gocd/gocd/agent.go) [approval.go](/src/github.com/drewsonne/go-gocd/gocd/approval.go) [authentication.go](/src/github.com/drewsonne/go-gocd/gocd/authentication.go) [client.go](/src/github.com/drewsonne/go-gocd/gocd/client.go) [config.go](/src/github.com/drewsonne/go-gocd/gocd/config.go) [configuration.go](/src/github.com/drewsonne/go-gocd/gocd/configuration.go) [configuration_task.go](/src/github.com/drewsonne/go-gocd/gocd/configuration_task.go) [doc.go](/src/github.com/drewsonne/go-gocd/gocd/doc.go) [encryption.go](/src/github.com/drewsonne/go-gocd/gocd/encryption.go) [environment.go](/src/github.com/drewsonne/go-gocd/gocd/environment.go) [genericactions.go](/src/github.com/drewsonne/go-gocd/gocd/genericactions.go) [gocd.go](/src/github.com/drewsonne/go-gocd/gocd/gocd.go) [jobs.go](/src/github.com/drewsonne/go-gocd/gocd/jobs.go) [jobs_validation.go](/src/github.com/drewsonne/go-gocd/gocd/jobs_validation.go) [links.go](/src/github.com/drewsonne/go-gocd/gocd/links.go) [logging.go](/src/github.com/drewsonne/go-gocd/gocd/logging.go) [pipeline.go](/src/github.com/drewsonne/go-gocd/gocd/pipeline.go) [pipelineconfig.go](/src/github.com/drewsonne/go-gocd/gocd/pipelineconfig.go) [pipelinegroups.go](/src/github.com/drewsonne/go-gocd/gocd/pipelinegroups.go) [pipelinetemplate.go](/src/github.com/drewsonne/go-gocd/gocd/pipelinetemplate.go) [plugin.go](/src/github.com/drewsonne/go-gocd/gocd/plugin.go) [properties.go](/src/github.com/drewsonne/go-gocd/gocd/properties.go) [resource.go](/src/github.com/drewsonne/go-gocd/gocd/resource.go) [resource_agent.go](/src/github.com/drewsonne/go-gocd/gocd/resource_agent.go) [resource_approval.go](/src/github.com/drewsonne/go-gocd/gocd/resource_approval.go) [resource_environment.go](/src/github.com/drewsonne/go-gocd/gocd/resource_environment.go) [resource_jobs.go](/src/github.com/drewsonne/go-gocd/gocd/resource_jobs.go) [resource_pipeline.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline.go) [resource_pipeline_material.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material.go) [resource_pipelinegroups.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipelinegroups.go) [resource_pipelinetemplate.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipelinetemplate.go) [resource_properties.go](/src/github.com/drewsonne/go-gocd/gocd/resource_properties.go) [resource_stages.go](/src/github.com/drewsonne/go-gocd/gocd/resource_stages.go) [resource_task.go](/src/github.com/drewsonne/go-gocd/gocd/resource_task.go) [stages.go](/src/github.com/drewsonne/go-gocd/gocd/stages.go) 
+[agent.go](/src/github.com/drewsonne/go-gocd/gocd/agent.go) [approval.go](/src/github.com/drewsonne/go-gocd/gocd/approval.go) [authentication.go](/src/github.com/drewsonne/go-gocd/gocd/authentication.go) [client.go](/src/github.com/drewsonne/go-gocd/gocd/client.go) [config.go](/src/github.com/drewsonne/go-gocd/gocd/config.go) [configuration.go](/src/github.com/drewsonne/go-gocd/gocd/configuration.go) [configuration_task.go](/src/github.com/drewsonne/go-gocd/gocd/configuration_task.go) [doc.go](/src/github.com/drewsonne/go-gocd/gocd/doc.go) [encryption.go](/src/github.com/drewsonne/go-gocd/gocd/encryption.go) [environment.go](/src/github.com/drewsonne/go-gocd/gocd/environment.go) [genericactions.go](/src/github.com/drewsonne/go-gocd/gocd/genericactions.go) [gocd.go](/src/github.com/drewsonne/go-gocd/gocd/gocd.go) [jobs.go](/src/github.com/drewsonne/go-gocd/gocd/jobs.go) [jobs_validation.go](/src/github.com/drewsonne/go-gocd/gocd/jobs_validation.go) [links.go](/src/github.com/drewsonne/go-gocd/gocd/links.go) [logging.go](/src/github.com/drewsonne/go-gocd/gocd/logging.go) [pipeline.go](/src/github.com/drewsonne/go-gocd/gocd/pipeline.go) [pipeline_material.go](/src/github.com/drewsonne/go-gocd/gocd/pipeline_material.go) [pipelineconfig.go](/src/github.com/drewsonne/go-gocd/gocd/pipelineconfig.go) [pipelinegroups.go](/src/github.com/drewsonne/go-gocd/gocd/pipelinegroups.go) [pipelinetemplate.go](/src/github.com/drewsonne/go-gocd/gocd/pipelinetemplate.go) [plugin.go](/src/github.com/drewsonne/go-gocd/gocd/plugin.go) [properties.go](/src/github.com/drewsonne/go-gocd/gocd/properties.go) [resource.go](/src/github.com/drewsonne/go-gocd/gocd/resource.go) [resource_agent.go](/src/github.com/drewsonne/go-gocd/gocd/resource_agent.go) [resource_approval.go](/src/github.com/drewsonne/go-gocd/gocd/resource_approval.go) [resource_environment.go](/src/github.com/drewsonne/go-gocd/gocd/resource_environment.go) [resource_jobs.go](/src/github.com/drewsonne/go-gocd/gocd/resource_jobs.go) [resource_pipeline.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline.go) [resource_pipeline_material.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material.go) [resource_pipeline_material_dependency.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_dependency.go) [resource_pipeline_material_git.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_git.go) [resource_pipeline_material_hg.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_hg.go) [resource_pipeline_material_p4.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_p4.go) [resource_pipeline_material_pkg.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_pkg.go) [resource_pipeline_material_plugin.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_plugin.go) [resource_pipeline_material_svn.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_svn.go) [resource_pipeline_material_tfs.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_tfs.go) [resource_pipelinegroups.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipelinegroups.go) [resource_pipelinetemplate.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipelinetemplate.go) [resource_properties.go](/src/github.com/drewsonne/go-gocd/gocd/resource_properties.go) [resource_stages.go](/src/github.com/drewsonne/go-gocd/gocd/resource_stages.go) [resource_task.go](/src/github.com/drewsonne/go-gocd/gocd/resource_task.go) [stages.go](/src/github.com/drewsonne/go-gocd/gocd/stages.go) 
 
 
 ## <a name="pkg-constants">Constants</a>
@@ -355,9 +364,9 @@ CheckResponse asserts that the http response status code was 2xx.
 
 
 
-## <a name="ConfigFilePath">func</a> [ConfigFilePath](/src/target/config.go?s=1981:2018#L86)
+## <a name="ConfigFilePath">func</a> [ConfigFilePath](/src/target/config.go?s=1981:2033#L86)
 ``` go
-func ConfigFilePath() (string, error)
+func ConfigFilePath() (configPath string, err error)
 ```
 ConfigFilePath specifies the default path to a config file
 
@@ -744,7 +753,7 @@ the job to move to the next stage of the pipeline.
 
 
 
-## <a name="BuildCause">type</a> [BuildCause](/src/target/pipeline.go?s=3594:3877#L93)
+## <a name="BuildCause">type</a> [BuildCause](/src/target/pipeline.go?s=2791:3074#L77)
 ``` go
 type BuildCause struct {
     Approver          string             `json:"approver,omitempty"`
@@ -2081,13 +2090,13 @@ MailHost part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="Material">type</a> [Material](/src/target/pipeline.go?s=1869:2117#L49)
+## <a name="Material">type</a> [Material](/src/target/pipeline.go?s=1869:2113#L49)
 ``` go
 type Material struct {
-    Type        string             `json:"type"`
-    Fingerprint string             `json:"fingerprint,omitempty"`
-    Description string             `json:"description,omitempty"`
-    Attributes  MaterialAttributes `json:"attributes"`
+    Type        string            `json:"type"`
+    Fingerprint string            `json:"fingerprint,omitempty"`
+    Description string            `json:"description,omitempty"`
+    Attributes  MaterialAttribute `json:"attributes"`
 }
 ```
 Material describes an artifact dependency for a pipeline object.
@@ -2101,33 +2110,31 @@ Material describes an artifact dependency for a pipeline object.
 
 
 
-### <a name="Material.Equal">func</a> (Material) [Equal](/src/target/resource_pipeline_material.go?s=130:171#L8)
+### <a name="Material.Equal">func</a> (Material) [Equal](/src/target/resource_pipeline_material.go?s=158:220#L10)
 ``` go
-func (m Material) Equal(a *Material) bool
+func (m Material) Equal(a *Material) (isEqual bool, err error)
 ```
 Equal is true if the two materials are logically equivalent. Not neccesarily literally equal.
 
 
 
 
-## <a name="MaterialAttributes">type</a> [MaterialAttributes](/src/target/pipeline.go?s=2167:2916#L57)
+### <a name="Material.UnmarshalJSON">func</a> (\*Material) [UnmarshalJSON](/src/target/resource_pipeline_material.go?s=367:415#L21)
 ``` go
-type MaterialAttributes struct {
-    URL             string          `json:"url,omitempty"`
-    Destination     string          `json:"destination,omitempty"`
-    Filter          *MaterialFilter `json:"filter,omitempty"`
-    InvertFilter    bool            `json:"invert_filter"`
-    Name            string          `json:"name,omitempty"`
-    AutoUpdate      bool            `json:"auto_update,omitempty"`
-    Branch          string          `json:"branch,omitempty"`
-    SubmoduleFolder string          `json:"submodule_folder,omitempty"`
-    ShallowClone    bool            `json:"shallow_clone,omitempty"`
-    Pipeline        string          `json:"pipeline,omitempty"`
-    Stage           string          `json:"stage,omitempty"`
-    Ref             string          `json:"ref"`
+func (m *Material) UnmarshalJSON(b []byte) error
+```
+UnmarshalJSON string into a Material struct
+
+
+
+
+## <a name="MaterialAttribute">type</a> [MaterialAttribute](/src/target/pipeline_material.go?s=106:193#L4)
+``` go
+type MaterialAttribute interface {
+    // contains filtered or unexported methods
 }
 ```
-MaterialAttributes describes a material type
+MaterialAttribute describes the behaviour of the GoCD material structures for a pipeline
 
 
 
@@ -2138,7 +2145,202 @@ MaterialAttributes describes a material type
 
 
 
-## <a name="MaterialFilter">type</a> [MaterialFilter](/src/target/pipeline.go?s=2968:3031#L73)
+## <a name="MaterialAttributesDependency">type</a> [MaterialAttributesDependency](/src/target/pipeline_material.go?s=3021:3219#L86)
+``` go
+type MaterialAttributesDependency struct {
+    Name       string `json:"name"`
+    Pipeline   string `json:"pipeline"`
+    Stage      string `json:"stage"`
+    AutoUpdate bool   `json:"auto_update,omitempty"`
+}
+```
+MaterialAttributesDependency describes a Pipeline dependency material
+
+
+
+
+
+
+
+
+
+
+## <a name="MaterialAttributesGit">type</a> [MaterialAttributesGit](/src/target/pipeline_material.go?s=245:750#L9)
+``` go
+type MaterialAttributesGit struct {
+    Name   string `json:"name,omitempty"`
+    URL    string `json:"url,omitempty"`
+    Branch string `json:"branch,omitempty"`
+
+    SubmoduleFolder string `json:"submodule_folder,omitempty"`
+    ShallowClone    bool   `json:"shallow_clone,omitempty"`
+
+    Destination  string          `json:"destination,omitempty"`
+    Filter       *MaterialFilter `json:"filter,omitempty"`
+    InvertFilter bool            `json:"invert_filter"`
+    AutoUpdate   bool            `json:"auto_update,omitempty"`
+}
+```
+MaterialAttributesGit describes a git material
+
+
+
+
+
+
+
+
+
+
+## <a name="MaterialAttributesHg">type</a> [MaterialAttributesHg](/src/target/pipeline_material.go?s=1422:1733#L40)
+``` go
+type MaterialAttributesHg struct {
+    Name string `json:"name"`
+    URL  string `json:"url"`
+
+    Destination  string          `json:"destination"`
+    Filter       *MaterialFilter `json:"filter,omitempty"`
+    InvertFilter bool            `json:"invert_filter"`
+    AutoUpdate   bool            `json:"auto_update,omitempty"`
+}
+```
+MaterialAttributesHg describes a Mercurial material type
+
+
+
+
+
+
+
+
+
+
+## <a name="MaterialAttributesP4">type</a> [MaterialAttributesP4](/src/target/pipeline_material.go?s=1794:2334#L51)
+``` go
+type MaterialAttributesP4 struct {
+    Name       string `json:"name"`
+    Port       string `json:"port"`
+    UseTickets bool   `json:"use_tickets"`
+    View       string `json:"view"`
+
+    Username          string `json:"username"`
+    Password          string `json:"password"`
+    EncryptedPassword string `json:"encrypted_password"`
+
+    Destination  string          `json:"destination"`
+    Filter       *MaterialFilter `json:"filter,omitempty"`
+    InvertFilter bool            `json:"invert_filter"`
+    AutoUpdate   bool            `json:"auto_update,omitempty"`
+}
+```
+MaterialAttributesP4 describes a Perforce material type
+
+
+
+
+
+
+
+
+
+
+## <a name="MaterialAttributesPackage">type</a> [MaterialAttributesPackage](/src/target/pipeline_material.go?s=3280:3346#L94)
+``` go
+type MaterialAttributesPackage struct {
+    Ref string `json:"ref"`
+}
+```
+MaterialAttributesPackage describes a package reference
+
+
+
+
+
+
+
+
+
+
+## <a name="MaterialAttributesPlugin">type</a> [MaterialAttributesPlugin](/src/target/pipeline_material.go?s=3404:3630#L99)
+``` go
+type MaterialAttributesPlugin struct {
+    Ref string `json:"ref"`
+
+    Destination  string          `json:"destination"`
+    Filter       *MaterialFilter `json:"filter,omitempty"`
+    InvertFilter bool            `json:"invert_filter"`
+}
+```
+MaterialAttributesPlugin describes a plugin material
+
+
+
+
+
+
+
+
+
+
+## <a name="MaterialAttributesSvn">type</a> [MaterialAttributesSvn](/src/target/pipeline_material.go?s=803:1360#L24)
+``` go
+type MaterialAttributesSvn struct {
+    Name              string `json:"name,omitempty"`
+    URL               string `json:"url,omitempty"`
+    Username          string `json:"username"`
+    Password          string `json:"password"`
+    EncryptedPassword string `json:"encrypted_password"`
+
+    CheckExternals bool `json:"check_externals"`
+
+    Destination  string          `json:"destination,omitempty"`
+    Filter       *MaterialFilter `json:"filter,omitempty"`
+    InvertFilter bool            `json:"invert_filter"`
+    AutoUpdate   bool            `json:"auto_update,omitempty"`
+}
+```
+MaterialAttributesSvn describes a material type
+
+
+
+
+
+
+
+
+
+
+## <a name="MaterialAttributesTfs">type</a> [MaterialAttributesTfs](/src/target/pipeline_material.go?s=2405:2946#L68)
+``` go
+type MaterialAttributesTfs struct {
+    Name string `json:"name"`
+
+    URL         string `json:"url"`
+    ProjectPath string `json:"project_path"`
+    Domain      string `json:"domain"`
+
+    Username          string `json:"username"`
+    Password          string `json:"password"`
+    EncryptedPassword string `json:"encrypted_password"`
+
+    Destination  string          `json:"destination"`
+    Filter       *MaterialFilter `json:"filter,omitempty"`
+    InvertFilter bool            `json:"invert_filter"`
+    AutoUpdate   bool            `json:"auto_update,omitempty"`
+}
+```
+MaterialAttributesTfs describes a Team Foundation Server material
+
+
+
+
+
+
+
+
+
+
+## <a name="MaterialFilter">type</a> [MaterialFilter](/src/target/pipeline.go?s=2165:2228#L57)
 ``` go
 type MaterialFilter struct {
     Ignore []string `json:"ignore"`
@@ -2155,7 +2357,7 @@ MaterialFilter describes which globs to ignore
 
 
 
-## <a name="MaterialRevision">type</a> [MaterialRevision](/src/target/pipeline.go?s=3992:4305#L101)
+## <a name="MaterialRevision">type</a> [MaterialRevision](/src/target/pipeline.go?s=3189:3502#L85)
 ``` go
 type MaterialRevision struct {
     Modifications []Modification `json:"modifications"`
@@ -2179,7 +2381,7 @@ MaterialRevision describes the uniquely identifiable version for the material wh
 
 
 
-## <a name="Modification">type</a> [Modification](/src/target/pipeline.go?s=4398:4664#L113)
+## <a name="Modification">type</a> [Modification](/src/target/pipeline.go?s=3595:3861#L97)
 ``` go
 type Modification struct {
     EmailAddress string `json:"email_address"`
@@ -2572,7 +2774,7 @@ List Pipeline groups
 
 
 
-## <a name="PipelineHistory">type</a> [PipelineHistory](/src/target/pipeline.go?s=3097:3178#L78)
+## <a name="PipelineHistory">type</a> [PipelineHistory](/src/target/pipeline.go?s=2294:2375#L62)
 ``` go
 type PipelineHistory struct {
     Pipelines []*PipelineInstance `json:"pipelines"`
@@ -2589,7 +2791,7 @@ PipelineHistory describes the history of runs for a pipeline
 
 
 
-## <a name="PipelineInstance">type</a> [PipelineInstance](/src/target/pipeline.go?s=3232:3522#L83)
+## <a name="PipelineInstance">type</a> [PipelineInstance](/src/target/pipeline.go?s=2429:2719#L67)
 ``` go
 type PipelineInstance struct {
     BuildCause   BuildCause `json:"build_cause"`
@@ -2648,7 +2850,7 @@ PipelineRequest describes a pipeline request object
 
 
 
-## <a name="PipelineStatus">type</a> [PipelineStatus](/src/target/pipeline.go?s=4738:4875#L123)
+## <a name="PipelineStatus">type</a> [PipelineStatus](/src/target/pipeline.go?s=3935:4072#L107)
 ``` go
 type PipelineStatus struct {
     Locked      bool `json:"locked"`
@@ -2932,7 +3134,7 @@ PipelinesService describes the HAL _link resource for the api response object fo
 
 
 
-### <a name="PipelinesService.GetHistory">func</a> (\*PipelinesService) [GetHistory](/src/target/pipeline.go?s=6402:6527#L169)
+### <a name="PipelinesService.GetHistory">func</a> (\*PipelinesService) [GetHistory](/src/target/pipeline.go?s=5599:5724#L153)
 ``` go
 func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset int) (*PipelineHistory, *APIResponse, error)
 ```
@@ -2941,7 +3143,7 @@ GetHistory returns a list of pipeline instances describing the pipeline history.
 
 
 
-### <a name="PipelinesService.GetInstance">func</a> (\*PipelinesService) [GetInstance](/src/target/pipeline.go?s=5948:6075#L156)
+### <a name="PipelinesService.GetInstance">func</a> (\*PipelinesService) [GetInstance](/src/target/pipeline.go?s=5145:5272#L140)
 ``` go
 func (pgs *PipelinesService) GetInstance(ctx context.Context, name string, offset int) (*PipelineInstance, *APIResponse, error)
 ```
@@ -2950,7 +3152,7 @@ GetInstance of a pipeline run.
 
 
 
-### <a name="PipelinesService.GetStatus">func</a> (\*PipelinesService) [GetStatus](/src/target/pipeline.go?s=4960:5083#L130)
+### <a name="PipelinesService.GetStatus">func</a> (\*PipelinesService) [GetStatus](/src/target/pipeline.go?s=4157:4280#L114)
 ``` go
 func (pgs *PipelinesService) GetStatus(ctx context.Context, name string, offset int) (*PipelineStatus, *APIResponse, error)
 ```
@@ -2959,7 +3161,7 @@ GetStatus returns a list of pipeline instanves describing the pipeline history.
 
 
 
-### <a name="PipelinesService.Pause">func</a> (\*PipelinesService) [Pause](/src/target/pipeline.go?s=5336:5432#L141)
+### <a name="PipelinesService.Pause">func</a> (\*PipelinesService) [Pause](/src/target/pipeline.go?s=4533:4629#L125)
 ``` go
 func (pgs *PipelinesService) Pause(ctx context.Context, name string) (bool, *APIResponse, error)
 ```
@@ -2968,7 +3170,7 @@ Pause allows a pipeline to handle new build events
 
 
 
-### <a name="PipelinesService.ReleaseLock">func</a> (\*PipelinesService) [ReleaseLock](/src/target/pipeline.go?s=5753:5855#L151)
+### <a name="PipelinesService.ReleaseLock">func</a> (\*PipelinesService) [ReleaseLock](/src/target/pipeline.go?s=4950:5052#L135)
 ``` go
 func (pgs *PipelinesService) ReleaseLock(ctx context.Context, name string) (bool, *APIResponse, error)
 ```
@@ -2977,7 +3179,7 @@ ReleaseLock frees a pipeline to handle new build events
 
 
 
-### <a name="PipelinesService.Unpause">func</a> (\*PipelinesService) [Unpause](/src/target/pipeline.go?s=5541:5639#L146)
+### <a name="PipelinesService.Unpause">func</a> (\*PipelinesService) [Unpause](/src/target/pipeline.go?s=4738:4836#L130)
 ``` go
 func (pgs *PipelinesService) Unpause(ctx context.Context, name string) (bool, *APIResponse, error)
 ```
