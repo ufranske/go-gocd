@@ -21,6 +21,33 @@ func (mag MaterialAttributesGit) equal(a2i MaterialAttribute) (bool, error) {
 	return branchesEqual, nil
 }
 
+func (mag MaterialAttributesGit) GenerateGeneric() (ma map[string]interface{}) {
+	ma = map[string]interface{}{
+		"name":             mag.Name,
+		"url":              mag.URL,
+		"auto_update":      mag.AutoUpdate,
+		"branch":           mag.Branch,
+		"submodule_folder": mag.SubmoduleFolder,
+		"destination":      mag.Destination,
+		"shallow_clone":    mag.ShallowClone,
+		"invert_filter":    mag.InvertFilter,
+	}
+	if f := mag.Filter.GenerateGeneric(); f != nil {
+		ma["filter"] = f
+	}
+	return
+}
+
+// HasFilter in this material attribute
+func (mag MaterialAttributesGit) HasFilter() bool {
+	return true
+}
+
+// GetFilter from material attribute
+func (mag MaterialAttributesGit) GetFilter() *MaterialFilter {
+	return mag.Filter
+}
+
 // UnmarshallInterface from a JSON string to a MaterialAttributesGit struct
 func unmarshallMaterialAttributesGit(mag *MaterialAttributesGit, i map[string]interface{}) {
 	for key, value := range i {
@@ -45,7 +72,9 @@ func unmarshallMaterialAttributesGit(mag *MaterialAttributesGit, i map[string]in
 		case "invert_filter":
 			mag.InvertFilter = value.(bool)
 		case "filter":
-			mag.Filter = unmarshallMaterialFilter(value.(map[string]interface{}))
+			if v1, ok1 := value.(map[string]interface{}); ok1 {
+				mag.Filter = unmarshallMaterialFilter(v1)
+			}
 		}
 	}
 }

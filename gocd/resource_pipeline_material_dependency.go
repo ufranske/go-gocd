@@ -15,6 +15,21 @@ func (mad MaterialAttributesDependency) equal(mad2i MaterialAttribute) (bool, er
 		nil
 }
 
+func (mad MaterialAttributesDependency) GenerateGeneric() (ma map[string]interface{}) {
+	ma = make(map[string]interface{})
+	return
+}
+
+// HasFilter in this material attribute
+func (mad MaterialAttributesDependency) HasFilter() bool {
+	return false
+}
+
+// GetFilter from material attribute
+func (mad MaterialAttributesDependency) GetFilter() *MaterialFilter {
+	return nil
+}
+
 // UnmarshallInterface for a MaterialAttribute struct to be turned into a json string
 func unmarshallMaterialAttributesDependency(mad *MaterialAttributesDependency, i map[string]interface{}) {
 	for key, value := range i {

@@ -3,6 +3,9 @@ package gocd
 // MaterialAttribute describes the behaviour of the GoCD material structures for a pipeline
 type MaterialAttribute interface {
 	equal(attributes MaterialAttribute) (bool, error)
+	GenerateGeneric() map[string]interface{}
+	HasFilter() bool
+	GetFilter() *MaterialFilter
 }
 
 // MaterialAttributesGit describes a git material

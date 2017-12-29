@@ -14,6 +14,21 @@ func (mas MaterialAttributesSvn) equal(mas2i MaterialAttribute) (isEqual bool, e
 	return urlsEqual && destinationEqual, nil
 }
 
+func (mas MaterialAttributesSvn) GenerateGeneric() (ma map[string]interface{}) {
+	ma = make(map[string]interface{})
+	return
+}
+
+// HasFilter in this material attribute
+func (mas MaterialAttributesSvn) HasFilter() bool {
+	return true
+}
+
+// GetFilter from material attribute
+func (mas MaterialAttributesSvn) GetFilter() *MaterialFilter {
+	return mas.Filter
+}
+
 // UnmarshallInterface from a JSON string to a MaterialAttributesSvn struct
 func unmarshallMaterialAttributesSvn(mas *MaterialAttributesSvn, i map[string]interface{}) {
 	for key, value := range i {

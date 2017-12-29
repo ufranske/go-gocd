@@ -137,14 +137,15 @@ func testNewRequestFailDecode(t *testing.T) {
 
 func testCheckResponseFailBodyRead(t *testing.T) {
 	rc := mockReadCloserFail{}
-	//ioutil.ReadAll(rc)
 
-	err := CheckResponse(&http.Response{
-		StatusCode: 199,
-		Status:     "Failed",
-		Body:       rc,
+	err := CheckResponse(&APIResponse{
+		HTTP: &http.Response{
+			StatusCode: 199,
+			Status:     "Failed",
+			Body:       rc,
+		},
 	})
-	assert.EqualError(t, err, "MockReadFail")
+	assert.EqualError(t, err, "Received HTTP Status 'Failed'")
 }
 
 func testCheckResponseInvalid(t *testing.T) {
@@ -155,25 +156,31 @@ func testCheckResponseInvalid(t *testing.T) {
 	rc1 = cb1
 	rc2 = cb2
 
-	err := CheckResponse(&http.Response{
-		StatusCode: 199,
-		Status:     "Failed",
-		Body:       rc1,
+	err := CheckResponse(&APIResponse{
+		HTTP: &http.Response{
+			StatusCode: 199,
+			Status:     "Failed",
+			Body:       rc1,
+		},
 	})
 	assert.NotNil(t, err)
 
-	err = CheckResponse(&http.Response{
-		StatusCode: 400,
-		Status:     "Failed",
-		Body:       rc2,
+	err = CheckResponse(&APIResponse{
+		HTTP: &http.Response{
+			StatusCode: 400,
+			Status:     "Failed",
+			Body:       rc2,
+		},
 	})
 	assert.NotNil(t, err)
 
 }
 
 func testCheckResponseValid(t *testing.T) {
-	err := CheckResponse(&http.Response{
-		StatusCode: 200,
+	err := CheckResponse(&APIResponse{
+		HTTP: &http.Response{
+			StatusCode: 200,
+		},
 	})
 	assert.Nil(t, err)
 }

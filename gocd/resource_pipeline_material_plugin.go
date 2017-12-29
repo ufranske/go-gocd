@@ -14,6 +14,21 @@ func (mapp MaterialAttributesPlugin) equal(mapp2i MaterialAttribute) (bool, erro
 		nil
 }
 
+func (mapp MaterialAttributesPlugin) GenerateGeneric() (ma map[string]interface{}) {
+	ma = make(map[string]interface{})
+	return
+}
+
+// HasFilter in this material attribute
+func (mapp MaterialAttributesPlugin) HasFilter() bool {
+	return false
+}
+
+// GetFilter from material attribute
+func (mapp MaterialAttributesPlugin) GetFilter() *MaterialFilter {
+	return mapp.Filter
+}
+
 // UnmarshallInterface from a JSON string to a MaterialAttributesPlugin struct
 func unmarshallMaterialAttributesPlugin(mapp *MaterialAttributesPlugin, i map[string]interface{}) {
 	for key, value := range i {
