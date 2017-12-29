@@ -2,7 +2,6 @@ package gocd
 
 import (
 	"errors"
-	"fmt"
 )
 
 func (mad MaterialAttributesDependency) equal(mad2i MaterialAttribute) (bool, error) {
@@ -31,9 +30,6 @@ func unmarshallMaterialAttributesDependency(mad *MaterialAttributesDependency, i
 			mad.Stage = value.(string)
 		case "auto_update":
 			mad.AutoUpdate = value.(bool)
-		default:
-			fmt.Println(value)
-			fmt.Println(key)
 		}
 	}
 }

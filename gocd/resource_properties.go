@@ -97,7 +97,7 @@ func (pr *Properties) Write(p []byte) (n int, err error) {
 	numBytes := len(p)
 	raw, err := ioutil.ReadAll(bytes.NewReader(p))
 	if err != nil {
-		return 0, nil
+		return 0, err
 	}
 	pr.UnmarshallCSV(string(raw))
 
