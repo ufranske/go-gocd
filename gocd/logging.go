@@ -50,21 +50,21 @@ func SetupLogging(log *logrus.Logger) {
 }
 
 // Get the log type from env variables
-func getLogType() string {
-	logType := os.Getenv(LogTypeEnvVarName)
+func getLogType() (logType string) {
+	logType = os.Getenv(LogTypeEnvVarName)
 	if len(logType) == 0 {
 		// If no env is set, return the default
-		return LogTypeDefault
+		logType = LogTypeDefault
 	}
-	return logType
+	return
 }
 
 // Get the log level from env variables
-func getLogLevel() string {
-	loglevel := os.Getenv(LogLevelEnvVarName)
+func getLogLevel() (loglevel string) {
+	loglevel = os.Getenv(LogLevelEnvVarName)
 	if len(loglevel) == 0 {
 		// If no env is set, return the default
-		return LogLevelDefault
+		loglevel = LogLevelDefault
 	}
-	return loglevel
+	return
 }

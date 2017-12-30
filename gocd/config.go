@@ -10,7 +10,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// ConfigDirectoryPath is the location where the authentication information is stored
+// ConfigDirectoryPath is the default location of the `.gocdconf` configuration file
 const ConfigDirectoryPath = "~/.gocd.conf"
 
 // Environment variables for configuration.
@@ -22,7 +22,7 @@ const (
 	EnvVarSkipSsl        = "GOCD_SKIP_SSL_CHECK"
 )
 
-// Configuration object used to initialise a gocd lib client to interact with the GoCD server.
+// Configuration describes a single connection to a GoCD server
 type Configuration struct {
 	Server       string
 	Username     string `yaml:"username,omitempty"`
@@ -30,7 +30,7 @@ type Configuration struct {
 	SkipSslCheck bool   `yaml:"skip_ssl_check,omitempty" survey:"skip_ssl_check"`
 }
 
-// LoadConfigByName loads configurations from yaml at default file location
+// LoadConfigByName loads configurations from yaml at the default file location
 func LoadConfigByName(name string, cfg *Configuration) (err error) {
 
 	cfgs, err := LoadConfigFromFile()
@@ -60,40 +60,41 @@ func LoadConfigByName(name string, cfg *Configuration) (err error) {
 	return nil
 }
 
-// LoadConfigFromFile on disk and return it as a Config item
+// LoadConfigFromFile on disk and return it as a Configuration item
 func LoadConfigFromFile() (cfgs map[string]*Configuration, err error) {
 	var b []byte
-	cfgs = map[string]*Configuration{}
 
 	p, err := ConfigFilePath()
 	if err != nil {
-		return cfgs, err
+		return
 	}
-	if _, err := os.Stat(p); os.IsExist(err) {
+	if _, err = os.Stat(p); os.IsExist(err) {
 		if b, err = ioutil.ReadFile(p); err != nil {
-			return nil, err
+			return
 		}
 
+		cfgs = make(map[string]*Configuration)
 		if err = yaml.Unmarshal(b, &cfgs); err != nil {
-			return nil, err
+			return
 		}
 	}
 
-	return cfgs, nil
+	return
 }
 
 // ConfigFilePath specifies the default path to a config file
 func ConfigFilePath() (configPath string, err error) {
+	var usr *user.User
 
 	if configPath = os.Getenv("GOCD_CONFIG_PATH"); configPath != "" {
 		return
 	}
 
 	// @TODO Make it work for windows. Maybe...
-	usr, err := user.Current()
-	if err != nil {
-		return "", err
+	if usr, err = user.Current(); err != nil {
+		return
 	}
-	homeDir := usr.HomeDir
-	return strings.Replace(ConfigDirectoryPath, "~", homeDir, 1), nil
+
+	configPath = strings.Replace(ConfigDirectoryPath, "~", usr.HomeDir, 1)
+	return
 }
