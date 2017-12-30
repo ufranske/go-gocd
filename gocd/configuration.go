@@ -215,6 +215,7 @@ type Version struct {
 
 // Get the config.xml document from the server and... render it as JSON... 'cause... eyugh.
 func (cs *ConfigurationService) Get(ctx context.Context) (cx *ConfigXML, resp *APIResponse, err error) {
+	cx = &ConfigXML{}
 	_, resp, err = cs.client.getAction(ctx, &APIClientRequest{
 		Path:         "admin/config.xml",
 		ResponseBody: cx,
@@ -225,6 +226,7 @@ func (cs *ConfigurationService) Get(ctx context.Context) (cx *ConfigXML, resp *A
 
 // GetVersion of the GoCD server and other metadata about the software version.
 func (cs *ConfigurationService) GetVersion(ctx context.Context) (v *Version, resp *APIResponse, err error) {
+	v = &Version{}
 	_, resp, err = cs.client.getAction(ctx, &APIClientRequest{
 		Path:         "version",
 		ResponseBody: v,

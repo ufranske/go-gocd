@@ -64,10 +64,9 @@ func (m *Material) IngestType(payload map[string]interface{}) {
 // IngestAttributeGenerics to Material and perform some error checking
 func (m *Material) IngestAttributeGenerics(i interface{}) (err error) {
 	if v1, ok1 := i.(map[string]interface{}); ok1 {
-		if err = m.IngestAttributes(v1); err != nil {
-			return
-		}
+		err = m.IngestAttributes(v1)
 	}
+	return
 }
 
 // IngestAttributes to Material from an abstract structure

@@ -311,7 +311,7 @@ func CheckResponse(response *APIResponse) (err error) {
 	if response.HTTP.StatusCode < 200 || response.HTTP.StatusCode >= 400 {
 
 		errorParts := []string{
-			fmt.Sprintf("HTTP Response '%s'", response.HTTP.Status),
+			fmt.Sprintf("Received HTTP Status '%s'", response.HTTP.Status),
 		}
 		if message := createErrorResponseMessage(response.Body); message != "" {
 			errorParts = append(errorParts, message)
