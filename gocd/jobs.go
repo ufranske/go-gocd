@@ -30,7 +30,7 @@ type Job struct {
 	StageCounter         string                 `json:"stage_counter,omitempty"`
 	StageName            string                 `json:"stage_name,omitempty"`
 	RunInstanceCount     int                    `json:"run_instance_count,omitempty"`
-	Timeout              int                    `json:"timeout,omitempty"`
+	Timeout              TimeoutField           `json:"timeout,omitempty"`
 	EnvironmentVariables []*EnvironmentVariable `json:"environment_variables,omitempty"`
 	Properties           []*JobProperty         `json:"properties,omitempty"`
 	Resources            []string               `json:"resources,omitempty"`
@@ -157,6 +157,9 @@ type JobScheduleLink struct {
 	Rel  string `xml:"rel,attr"`
 	HRef string `xml:"href,attr"`
 }
+
+// TimeoutField helps manage the marshalling of the timoeut field which can be both "never" and an integer
+type TimeoutField int
 
 // ListScheduled lists Pipeline groups
 func (js *JobsService) ListScheduled(ctx context.Context) (jobs []*JobSchedule, resp *APIResponse, err error) {

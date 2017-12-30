@@ -9,6 +9,14 @@ import (
 	"strings"
 )
 
+type csvUnmarshal interface {
+	UnmarshallCSV(raw string) error
+}
+
+type csvMarshal interface {
+	MarshallCSV() (string, error)
+}
+
 // Properties describes a properties resource in the GoCD API.
 type Properties struct {
 	UnmarshallWithHeader bool

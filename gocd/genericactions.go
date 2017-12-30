@@ -85,7 +85,7 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responseB
 		if r.Headers == nil {
 			r.Headers = map[string]string{}
 		}
-		r.Headers["If-Match"] = fmt.Sprintf("\"%s\"", ver.GetVersion())
+		r.Headers["If-Match"] = fmt.Sprintf(`"%s"`, ver.GetVersion())
 	})
 
 	// Build the request

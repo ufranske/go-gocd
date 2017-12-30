@@ -32,9 +32,10 @@ func (al HALLinks) GetOk(name string) (link *HALLink, ok bool) {
 	for _, link = range al.links {
 		if strings.ToLower(link.Name) == strings.ToLower(name) {
 			ok = true
-			break
+			return
 		}
 	}
+	link = nil
 	return
 }
 

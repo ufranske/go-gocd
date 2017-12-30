@@ -29,6 +29,7 @@ type PropertyCreateResponse struct {
 
 // List the properties for the given job/pipeline/stage run.
 func (ps *PropertiesService) List(ctx context.Context, pr *PropertyRequest) (*Properties, *APIResponse, error) {
+
 	ps.log.WithField("endpoint", "PropertiesServices.List").Info("Calling endpoint")
 	return ps.commonPropertiesAction(ctx, fmt.Sprintf("/properties/%s/%d/%s/%d/%s",
 		pr.Pipeline, pr.PipelineCounter,
@@ -93,7 +94,7 @@ func (ps *PropertiesService) commonPropertiesAction(ctx context.Context, path st
 	}
 	_, resp, err = ps.client.getAction(ctx, &APIClientRequest{
 		Path:         path,
-		ResponseBody: &p,
+		ResponseBody: p,
 	})
 
 	return

@@ -7,8 +7,9 @@ func (p *Pipeline) GetStages() []*Stage {
 
 // GetStage from the pipeline template
 func (p *Pipeline) GetStage(stageName string) (stage *Stage) {
-	for _, stage = range p.Stages {
-		if stage.Name == stageName {
+	for _, s := range p.Stages {
+		if s.Name == stageName {
+			stage = s
 			break
 		}
 	}
