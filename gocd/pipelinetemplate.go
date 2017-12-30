@@ -17,7 +17,7 @@ type PipelineTemplateRequest struct {
 
 // PipelineTemplateResponse describes an api response for a single pipeline templates
 type PipelineTemplateResponse struct {
-	Name string `json:"name"`
+	Name     string `json:"name"`
 	Embedded *struct {
 		Pipelines []*struct {
 			Name string `json:"name"`
@@ -27,7 +27,7 @@ type PipelineTemplateResponse struct {
 
 // PipelineTemplatesResponse describes an api response for multiple pipeline templates
 type PipelineTemplatesResponse struct {
-	Links *HALLinks `json:"_links,omitempty"`
+	Links    *HALLinks `json:"_links,omitempty"`
 	Embedded *struct {
 		Templates []*PipelineTemplate `json:"templates"`
 	} `json:"_embedded,omitempty"`

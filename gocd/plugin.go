@@ -10,7 +10,7 @@ type PluginsService service
 
 // PluginsResponse describes the response obejct for a plugin API call.
 type PluginsResponse struct {
-	Links *HALLinks `json:"_links"`
+	Links    *HALLinks `json:"_links"`
 	Embedded struct {
 		PluginInfo []*Plugin `json:"plugin_info"`
 	} `json:"_embedded"`
