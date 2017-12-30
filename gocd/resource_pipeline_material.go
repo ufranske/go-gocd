@@ -36,11 +36,7 @@ func (m *Material) Ingest(payload map[string]interface{}) (err error) {
 		}
 		switch key {
 		case "attributes":
-			if v1, ok1 := value.(map[string]interface{}); ok1 {
-				if err = m.IngestAttributes(v1); err != nil {
-					return
-				}
-			}
+			err = m.IngestAttributeGenerics(value)
 		case "fingerprint":
 			m.Fingerprint = value.(string)
 		case "description":
@@ -48,7 +44,9 @@ func (m *Material) Ingest(payload map[string]interface{}) (err error) {
 		case "type":
 			continue
 		default:
-			err = fmt.Errorf("Unexpected key: '%s'", key)
+			err = fmt.Errorf("unexpected key: '%s'", key)
+		}
+		if err != nil {
 			break
 		}
 	}
@@ -60,6 +58,15 @@ func (m *Material) IngestMaterial(payload map[string]interface{}) {
 	if mType, hasMType := payload["type"]; hasMType {
 		m.Type = mType.(string)
 		m.IngestAttributes(map[string]interface{}{})
+	}
+}
+
+// IngestAttributeGenerics to Material and perform some error checking
+func (m *Material) IngestAttributeGenerics(i interface{}) (err error) {
+	if v1, ok1 := i.(map[string]interface{}); ok1 {
+		if err = m.IngestAttributes(v1); err != nil {
+			return
+		}
 	}
 }
 
