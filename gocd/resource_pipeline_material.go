@@ -28,7 +28,7 @@ func (m *Material) UnmarshalJSON(b []byte) (err error) {
 // Ingest an abstract structure
 func (m *Material) Ingest(payload map[string]interface{}) (err error) {
 
-	m.IngestMaterial(payload)
+	m.IngestType(payload)
 
 	for key, value := range payload {
 		if value == nil {
@@ -53,8 +53,8 @@ func (m *Material) Ingest(payload map[string]interface{}) (err error) {
 	return
 }
 
-// IngestType of Material
-func (m *Material) IngestMaterial(payload map[string]interface{}) {
+// IngestType of Material if it is provided
+func (m *Material) IngestType(payload map[string]interface{}) {
 	if mType, hasMType := payload["type"]; hasMType {
 		m.Type = mType.(string)
 		m.IngestAttributes(map[string]interface{}{})
@@ -135,7 +135,7 @@ func unmarshallMaterialFilter(i map[string]interface{}) (m *MaterialFilter) {
 			m.Ignore = ignores
 		}
 	}
-	return m
+	return
 }
 
 // Give an abstract list of strings cast as []interface{}, convert them back to []string{}.
@@ -148,5 +148,5 @@ func decodeConfigStringList(lI []interface{}) (ret []string) {
 	for i, vI := range lI {
 		ret[i] = vI.(string)
 	}
-	return ret
+	return
 }
