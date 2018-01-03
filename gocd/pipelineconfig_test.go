@@ -93,7 +93,7 @@ func testPipelineConfigGet(t *testing.T) {
 	j := s.Jobs[0]
 	assert.Equal(t, "defaultJob", j.Name)
 	assert.Empty(t, j.RunInstanceCount)
-	assert.Equal(t, 0, j.Timeout)
+	assert.Equal(t, TimeoutField(0), j.Timeout)
 	assert.Len(t, j.EnvironmentVariables, 0)
 	assert.Len(t, j.Resources, 0)
 
@@ -162,24 +162,15 @@ func testPipelineConfigCreate(t *testing.T) {
 func testPipelineConfigUpdate(t *testing.T) {
 	mux.HandleFunc("/api/admin/pipelines/test-name", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "PUT", r.Method, "Unexpected HTTP method")
-		//b, err := ioutil.ReadAll(r.Body)
-		//if err != nil {
-		//	t.Error(err)
-		//}
-		//assert.Equal(
-		//	t,
-		//	"{\n  \"pipeline\": {\n    \"name\": \"\",\n    \"stages\": null,\n    \"version\": \"test-version\"\n  }\n}\n",
-		//	string(b))
+
 		j, _ := ioutil.ReadFile("test/resources/pipelineconfig.0.json")
 
-		assert.Equal(t, "\"test-version\"", r.Header.Get("If-Match"))
-		w.Header().Set("ETag", "\"mock-version\"")
+		assert.Equal(t, `"test-version"`, r.Header.Get("If-Match"))
+		w.Header().Set("ETag", `"mock-version"`)
 		fmt.Fprint(w, string(j))
 	})
 
-	p := Pipeline{
-		Version: "test-version",
-	}
+	p := Pipeline{Version: "test-version"}
 	pcs, _, err := client.PipelineConfigs.Update(context.Background(), "test-name", &p)
 	if err != nil {
 		t.Error(t, err)

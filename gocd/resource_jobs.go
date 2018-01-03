@@ -7,14 +7,16 @@ import (
 )
 
 // JSONString returns a string of this stage as a JSON object.
-func (j *Job) JSONString() (string, error) {
-	err := j.Validate()
+func (j *Job) JSONString() (body string, err error) {
+	err = j.Validate()
 	if err != nil {
-		return "", err
+		return
 	}
 
 	bdy, err := json.MarshalIndent(j, "", "  ")
-	return string(bdy), err
+	body = string(bdy)
+
+	return
 }
 
 // Validate a job structure has non-nil values on correct attributes
@@ -36,5 +38,13 @@ func (tf *TimeoutField) UnmarshalJSON(b []byte) (err error) {
 		valInt, err = strconv.Atoi(value)
 
 	}
-	return nil
+	valTf := TimeoutField(valInt)
+	tf = &valTf
+
+	return
+}
+
+// MarshalJSON of the TimeoutField into integer
+func (tf TimeoutField) MarshalJSON() (b []byte, err error) {
+	return []byte(strconv.Itoa(int(tf))), nil
 }
