@@ -24,7 +24,6 @@ test: lint
 	cat coverage.out
 
 before_install:
-	@go get -t -v $$(go list ./... | grep -v vendor/)
 	@go get github.com/golang/lint/golint
 	@go install github.com/golang/lint/golint
 	curl https://glide.sh/get | sh
