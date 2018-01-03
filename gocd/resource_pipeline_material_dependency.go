@@ -18,6 +18,21 @@ func (mad MaterialAttributesDependency) equal(mad2i MaterialAttribute) (bool, er
 // GenerateGeneric form (map[string]interface) of the material filter
 func (mad MaterialAttributesDependency) GenerateGeneric() (ma map[string]interface{}) {
 	ma = make(map[string]interface{})
+	if mad.Name != "" {
+		ma["name"] = mad.Name
+	}
+
+	if mad.Pipeline != "" {
+		ma["pipeline"] = mad.Pipeline
+	}
+
+	if mad.Stage != "" {
+		ma["stage"] = mad.Stage
+	}
+
+	if mad.AutoUpdate {
+		ma["auto_update"] = mad.AutoUpdate
+	}
 	return
 }
 
