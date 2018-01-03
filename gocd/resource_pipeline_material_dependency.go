@@ -11,7 +11,7 @@ func (mad MaterialAttributesDependency) equal(mad2i MaterialAttribute) (bool, er
 		return false, errors.New("can only compare with same material type")
 	}
 	return mad.Pipeline == mad2.Pipeline &&
-		mad.Stage == mad2.Stage,
+			mad.Stage == mad2.Stage,
 		nil
 }
 
