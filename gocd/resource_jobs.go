@@ -27,14 +27,16 @@ func (j *Job) Validate() (err error) {
 	return
 }
 
+// UnmarshalJSON and handle integers, null, and never
 func (tf *TimeoutField) UnmarshalJSON(b []byte) (err error) {
 	value := string(b)
 	var valInt int
 
-	if value == `"never"` || value == "null" {
+	if value == `"never"` || value == `"null"` {
 		valInt = 0
 	} else {
 		valInt, err = strconv.Atoi(value)
+
 	}
 	valTf := TimeoutField(valInt)
 	tf = &valTf
@@ -42,6 +44,7 @@ func (tf *TimeoutField) UnmarshalJSON(b []byte) (err error) {
 	return
 }
 
+// MarshalJSON of the TimeoutField into integer
 func (tf TimeoutField) MarshalJSON() (b []byte, err error) {
 	return []byte(strconv.Itoa(int(tf))), nil
 }

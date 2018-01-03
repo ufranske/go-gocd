@@ -41,7 +41,7 @@ type MaterialAttributesSvn struct {
 
 // MaterialAttributesHg describes a Mercurial material type
 type MaterialAttributesHg struct {
-	Name string `json:"name"`
+	Name string `json:"name,omitempty"`
 	URL  string `json:"url"`
 
 	Destination  string          `json:"destination"`
@@ -52,7 +52,7 @@ type MaterialAttributesHg struct {
 
 // MaterialAttributesP4 describes a Perforce material type
 type MaterialAttributesP4 struct {
-	Name       string `json:"name"`
+	Name       string `json:"name,omitempty"`
 	Port       string `json:"port"`
 	UseTickets bool   `json:"use_tickets"`
 	View       string `json:"view"`
@@ -69,7 +69,7 @@ type MaterialAttributesP4 struct {
 
 // MaterialAttributesTfs describes a Team Foundation Server material
 type MaterialAttributesTfs struct {
-	Name string `json:"name"`
+	Name string `json:"name,omitempty"`
 
 	URL         string `json:"url"`
 	ProjectPath string `json:"project_path"`
@@ -87,7 +87,7 @@ type MaterialAttributesTfs struct {
 
 // MaterialAttributesDependency describes a Pipeline dependency material
 type MaterialAttributesDependency struct {
-	Name       string `json:"name"`
+	Name       string `json:"name,omitempty"`
 	Pipeline   string `json:"pipeline"`
 	Stage      string `json:"stage"`
 	AutoUpdate bool   `json:"auto_update,omitempty"`
