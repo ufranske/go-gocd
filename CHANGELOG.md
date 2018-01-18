@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.6.14] - 18-01-2017
+### Changed
+ - Fixed a bug where `http.Client` structs were having their transports overriden if a user provided
+   http.Client was provided.
+
 ## [0.6.5] - 11-12-2017
 ### Changed
  - Fixed bugs around loading config profiles
