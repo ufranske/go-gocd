@@ -91,6 +91,7 @@ type Client struct {
 	Plugins           *PluginsService
 	Environments      *EnvironmentsService
 	Properties        *PropertiesService
+	Roles             *RoleService
 
 	common service
 	cookie string
@@ -166,6 +167,7 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 	c.Plugins = (*PluginsService)(&c.common)
 	c.Environments = (*EnvironmentsService)(&c.common)
 	c.Properties = (*PropertiesService)(&c.common)
+	c.Roles = (*RoleService)(&c.common)
 
 	SetupLogging(c.Log)
 
