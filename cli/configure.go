@@ -6,6 +6,7 @@ import (
 	"gopkg.in/AlecAivazis/survey.v1"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"os"
 )
 
 // List of command name and descriptions
@@ -36,8 +37,10 @@ func (car configActionRunner) run() (err error) {
 	}
 
 	cfgs, err := car.loadConfigs()
-	if err != nil {
-		return NewCliError("Configure:generate", nil, err)
+	if !os.IsNotExist(err) {
+		if err != nil {
+			return NewCliError("Configure:generate:load", nil, err)
+		}
 	}
 
 	if cfg, err = car.generateConfig(); err != nil {
