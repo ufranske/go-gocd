@@ -63,6 +63,7 @@ func LoadConfigByName(name string, cfg *Configuration) (err error) {
 // LoadConfigFromFile on disk and return it as a Configuration item
 func LoadConfigFromFile() (cfgs map[string]*Configuration, err error) {
 	var b []byte
+	cfgs = make(map[string]*Configuration)
 
 	p, err := ConfigFilePath()
 	if err != nil {
@@ -73,10 +74,11 @@ func LoadConfigFromFile() (cfgs map[string]*Configuration, err error) {
 			return
 		}
 
-		cfgs = make(map[string]*Configuration)
 		if err = yaml.Unmarshal(b, &cfgs); err != nil {
 			return
 		}
+	} else {
+		return
 	}
 
 	return
