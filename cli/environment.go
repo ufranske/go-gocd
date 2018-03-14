@@ -17,7 +17,7 @@ const (
 	GetEnvironmentCommandName                  = "get-environment"
 	GetEnvironmentCommandUsage                 = "Get an environment by name"
 	PatchEnvironmentCommandName                = "patch-environment"
-	PatchEnvironmentCommandUsage               = "patch an environment by name"
+	PatchEnvironmentCommandUsage               = "Patch an environment by name"
 	AddPipelinesToEnvironmentCommandName       = "add-pipelines-to-environment"
 	AddPipelinesToEnvironmentCommandUsage      = "Add one or more pipelines to an environment"
 	RemovePipelinesFromEnvironmentCommandName  = "remove-pipelines-from-environment"
