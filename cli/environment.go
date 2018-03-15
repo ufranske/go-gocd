@@ -54,24 +54,24 @@ func patchEnvironmentAction(client *gocd.Client, c *cli.Context) (r interface{},
 		return nil, nil, NewFlagError("name")
 	}
 
-	patch := c.String("patch")
-	patchFile := c.String("patch-file")
-	if patch == "" && patchFile == "" {
-		return nil, nil, errors.New("One of '--patch-file' or '--patch' must be specified")
+	jsonString := c.String("json")
+	jsonFile := c.String("json-file")
+	if jsonString == "" && jsonFile == "" {
+		return nil, nil, errors.New("One of '--json-file' or '--json' must be specified")
 	}
 
-	if patch != "" && patchFile != "" {
-		return nil, nil, errors.New("Only one of '--patch-file' or '--patch' can be specified")
+	if jsonString != "" && jsonFile != "" {
+		return nil, nil, errors.New("Only one of '--json-file' or '--json' can be specified")
 	}
 
 	var pf []byte
-	if patchFile != "" {
-		pf, err = ioutil.ReadFile(patchFile)
+	if jsonFile != "" {
+		pf, err = ioutil.ReadFile(jsonFile)
 		if err != nil {
 			return nil, nil, err
 		}
 	} else {
-		pf = []byte(patch)
+		pf = []byte(jsonString)
 	}
 	p := &gocd.EnvironmentPatchRequest{}
 
@@ -160,8 +160,8 @@ func patchEnvironmentCommand() *cli.Command {
 		Category: "Environments",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "name"},
-			cli.StringFlag{Name: "patch"},
-			cli.StringFlag{Name: "patch-file"},
+			cli.StringFlag{Name: "json"},
+			cli.StringFlag{Name: "json-file"},
 		},
 	}
 }
