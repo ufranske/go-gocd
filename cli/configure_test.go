@@ -2,9 +2,9 @@ package cli
 
 import (
 	"testing"
-	//ct "github.com/drewsonne/go-gocd/testcli"
+	//ct "github.com/beamly/go-gocd/testcli"
 	//"flag"
-	"github.com/drewsonne/go-gocd/gocd"
+	"github.com/beamly/go-gocd/gocd"
 	"github.com/stretchr/testify/assert"
 	//"github.com/urfave/cli"
 	"flag"

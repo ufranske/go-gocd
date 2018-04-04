@@ -1,7 +1,7 @@
 
 
 # gocd
-`import "github.com/drewsonne/go-gocd/gocd"`
+`import "github.com/beamly/go-gocd/gocd"`
 
 * [Overview](#pkg-overview)
 * [Index](#pkg-index)
@@ -13,7 +13,7 @@ Package gocd provides a client for using the GoCD Server API.
 Usage:
 
 
-	import "github.com/drewsonne/go-gocd/gocd"
+	import "github.com/beamly/go-gocd/gocd"
 
 Construct a new GoCD client and supply the URL to your GoCD server and if required, username and password. Then use the
 various services on the client to access different parts of the GoCD API.
@@ -22,7 +22,7 @@ For example:
 
 	package main
 	import (
-		"github.com/drewsonne/go-gocd/gocd"
+		"github.com/beamly/go-gocd/gocd"
 		"context"
 		"fmt"
 	)
@@ -57,7 +57,7 @@ If you wish to use your own http client, you can use the following idiom
 	package main
 	
 	import (
-		"github.com/drewsonne/go-gocd/gocd"
+		"github.com/beamly/go-gocd/gocd"
 		"net/http"
 		"context"
 	)
@@ -79,7 +79,7 @@ the structure of the GoCD API documentation at
 
 ## <a name="pkg-index">Index</a>
 * [Constants](#pkg-constants)
-* [func CheckResponse(response *http.Response) error](#CheckResponse)
+* [func CheckResponse(response *APIResponse) (err error)](#CheckResponse)
 * [func ConfigFilePath() (configPath string, err error)](#ConfigFilePath)
 * [func LoadConfigByName(name string, cfg *Configuration) (err error)](#LoadConfigByName)
 * [func LoadConfigFromFile() (cfgs map[string]*Configuration, err error)](#LoadConfigFromFile)
@@ -95,11 +95,11 @@ the structure of the GoCD API documentation at
 * [type AgentBulkUpdate](#AgentBulkUpdate)
 * [type AgentsResponse](#AgentsResponse)
 * [type AgentsService](#AgentsService)
-  * [func (s *AgentsService) BulkUpdate(ctx context.Context, agents AgentBulkUpdate) (string, *APIResponse, error)](#AgentsService.BulkUpdate)
+  * [func (s *AgentsService) BulkUpdate(ctx context.Context, agents AgentBulkUpdate) (message string, resp *APIResponse, err error)](#AgentsService.BulkUpdate)
   * [func (s *AgentsService) Delete(ctx context.Context, uuid string) (string, *APIResponse, error)](#AgentsService.Delete)
   * [func (s *AgentsService) Get(ctx context.Context, uuid string) (*Agent, *APIResponse, error)](#AgentsService.Get)
-  * [func (s *AgentsService) JobRunHistory(ctx context.Context, uuid string) ([]*Job, *APIResponse, error)](#AgentsService.JobRunHistory)
-  * [func (s *AgentsService) List(ctx context.Context) ([]*Agent, *APIResponse, error)](#AgentsService.List)
+  * [func (s *AgentsService) JobRunHistory(ctx context.Context, uuid string) (jobs []*Job, resp *APIResponse, err error)](#AgentsService.JobRunHistory)
+  * [func (s *AgentsService) List(ctx context.Context) (agents []*Agent, resp *APIResponse, err error)](#AgentsService.List)
   * [func (s *AgentsService) Update(ctx context.Context, uuid string, agent *Agent) (*Agent, *APIResponse, error)](#AgentsService.Update)
 * [type Approval](#Approval)
   * [func (a *Approval) Clean()](#Approval.Clean)
@@ -113,7 +113,7 @@ the structure of the GoCD API documentation at
   * [func NewClient(cfg *Configuration, httpClient *http.Client) *Client](#NewClient)
   * [func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}, responseType string) (*APIResponse, error)](#Client.Do)
   * [func (c *Client) Lock()](#Client.Lock)
-  * [func (c *Client) Login(ctx context.Context) error](#Client.Login)
+  * [func (c *Client) Login(ctx context.Context) (err error)](#Client.Login)
   * [func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion string) (req *APIRequest, err error)](#Client.NewRequest)
   * [func (c *Client) Unlock()](#Client.Unlock)
 * [type ConfigApproval](#ConfigApproval)
@@ -146,11 +146,11 @@ the structure of the GoCD API documentation at
   * [func (c *Configuration) Client() *Client](#Configuration.Client)
   * [func (c *Configuration) HasAuth() bool](#Configuration.HasAuth)
 * [type ConfigurationService](#ConfigurationService)
-  * [func (cs *ConfigurationService) Get(ctx context.Context) (*ConfigXML, *APIResponse, error)](#ConfigurationService.Get)
-  * [func (cs *ConfigurationService) GetVersion(ctx context.Context) (*Version, *APIResponse, error)](#ConfigurationService.GetVersion)
+  * [func (cs *ConfigurationService) Get(ctx context.Context) (cx *ConfigXML, resp *APIResponse, err error)](#ConfigurationService.Get)
+  * [func (cs *ConfigurationService) GetVersion(ctx context.Context) (v *Version, resp *APIResponse, err error)](#ConfigurationService.GetVersion)
 * [type EmbeddedEnvironments](#EmbeddedEnvironments)
 * [type EncryptionService](#EncryptionService)
-  * [func (es *EncryptionService) Encrypt(ctx context.Context, plaintext string) (*CipherText, *APIResponse, error)](#EncryptionService.Encrypt)
+  * [func (es *EncryptionService) Encrypt(ctx context.Context, plaintext string) (c *CipherText, resp *APIResponse, err error)](#EncryptionService.Encrypt)
 * [type Environment](#Environment)
   * [func (env *Environment) GetLinks() *HALLinks](#Environment.GetLinks)
   * [func (env *Environment) GetVersion() (version string)](#Environment.GetVersion)
@@ -163,24 +163,24 @@ the structure of the GoCD API documentation at
   * [func (er *EnvironmentsResponse) GetLinks() *HALLinks](#EnvironmentsResponse.GetLinks)
   * [func (er *EnvironmentsResponse) RemoveLinks()](#EnvironmentsResponse.RemoveLinks)
 * [type EnvironmentsService](#EnvironmentsService)
-  * [func (es *EnvironmentsService) Create(ctx context.Context, name string) (*Environment, *APIResponse, error)](#EnvironmentsService.Create)
+  * [func (es *EnvironmentsService) Create(ctx context.Context, name string) (e *Environment, resp *APIResponse, err error)](#EnvironmentsService.Create)
   * [func (es *EnvironmentsService) Delete(ctx context.Context, name string) (string, *APIResponse, error)](#EnvironmentsService.Delete)
-  * [func (es *EnvironmentsService) Get(ctx context.Context, name string) (*Environment, *APIResponse, error)](#EnvironmentsService.Get)
-  * [func (es *EnvironmentsService) List(ctx context.Context) (*EnvironmentsResponse, *APIResponse, error)](#EnvironmentsService.List)
-  * [func (es *EnvironmentsService) Patch(ctx context.Context, name string, patch *EnvironmentPatchRequest) (*Environment, *APIResponse, error)](#EnvironmentsService.Patch)
+  * [func (es *EnvironmentsService) Get(ctx context.Context, name string) (e *Environment, resp *APIResponse, err error)](#EnvironmentsService.Get)
+  * [func (es *EnvironmentsService) List(ctx context.Context) (e *EnvironmentsResponse, resp *APIResponse, err error)](#EnvironmentsService.List)
+  * [func (es *EnvironmentsService) Patch(ctx context.Context, name string, patch *EnvironmentPatchRequest) (e *Environment, resp *APIResponse, err error)](#EnvironmentsService.Patch)
 * [type GitRepositoryMaterial](#GitRepositoryMaterial)
 * [type HALContainer](#HALContainer)
 * [type HALLink](#HALLink)
 * [type HALLinks](#HALLinks)
   * [func (al *HALLinks) Add(link *HALLink)](#HALLinks.Add)
-  * [func (al HALLinks) Get(name string) *HALLink](#HALLinks.Get)
-  * [func (al HALLinks) GetOk(name string) (*HALLink, bool)](#HALLinks.GetOk)
-  * [func (al HALLinks) Keys() []string](#HALLinks.Keys)
+  * [func (al HALLinks) Get(name string) (link *HALLink)](#HALLinks.Get)
+  * [func (al HALLinks) GetOk(name string) (link *HALLink, ok bool)](#HALLinks.GetOk)
+  * [func (al HALLinks) Keys() (keys []string)](#HALLinks.Keys)
   * [func (al HALLinks) MarshallJSON() ([]byte, error)](#HALLinks.MarshallJSON)
-  * [func (al *HALLinks) UnmarshalJSON(j []byte) (e error)](#HALLinks.UnmarshalJSON)
+  * [func (al *HALLinks) UnmarshalJSON(j []byte) (err error)](#HALLinks.UnmarshalJSON)
 * [type Job](#Job)
-  * [func (j *Job) JSONString() (string, error)](#Job.JSONString)
-  * [func (j *Job) Validate() error](#Job.Validate)
+  * [func (j *Job) JSONString() (body string, err error)](#Job.JSONString)
+  * [func (j *Job) Validate() (err error)](#Job.Validate)
 * [type JobProperty](#JobProperty)
 * [type JobRunHistoryResponse](#JobRunHistoryResponse)
 * [type JobSchedule](#JobSchedule)
@@ -189,21 +189,50 @@ the structure of the GoCD API documentation at
 * [type JobScheduleResponse](#JobScheduleResponse)
 * [type JobStateTransition](#JobStateTransition)
 * [type JobsService](#JobsService)
-  * [func (js *JobsService) ListScheduled(ctx context.Context) ([]*JobSchedule, *APIResponse, error)](#JobsService.ListScheduled)
+  * [func (js *JobsService) ListScheduled(ctx context.Context) (jobs []*JobSchedule, resp *APIResponse, err error)](#JobsService.ListScheduled)
 * [type MailHost](#MailHost)
 * [type Material](#Material)
   * [func (m Material) Equal(a *Material) (isEqual bool, err error)](#Material.Equal)
-  * [func (m *Material) UnmarshalJSON(b []byte) error](#Material.UnmarshalJSON)
+  * [func (m *Material) Ingest(payload map[string]interface{}) (err error)](#Material.Ingest)
+  * [func (m *Material) IngestAttributeGenerics(i interface{}) (err error)](#Material.IngestAttributeGenerics)
+  * [func (m *Material) IngestAttributes(rawAttributes map[string]interface{}) (err error)](#Material.IngestAttributes)
+  * [func (m *Material) IngestType(payload map[string]interface{})](#Material.IngestType)
+  * [func (m *Material) UnmarshalJSON(b []byte) (err error)](#Material.UnmarshalJSON)
 * [type MaterialAttribute](#MaterialAttribute)
 * [type MaterialAttributesDependency](#MaterialAttributesDependency)
+  * [func (mad MaterialAttributesDependency) GenerateGeneric() (ma map[string]interface{})](#MaterialAttributesDependency.GenerateGeneric)
+  * [func (mad MaterialAttributesDependency) GetFilter() *MaterialFilter](#MaterialAttributesDependency.GetFilter)
+  * [func (mad MaterialAttributesDependency) HasFilter() bool](#MaterialAttributesDependency.HasFilter)
 * [type MaterialAttributesGit](#MaterialAttributesGit)
+  * [func (mag MaterialAttributesGit) GenerateGeneric() (ma map[string]interface{})](#MaterialAttributesGit.GenerateGeneric)
+  * [func (mag MaterialAttributesGit) GetFilter() *MaterialFilter](#MaterialAttributesGit.GetFilter)
+  * [func (mag MaterialAttributesGit) HasFilter() bool](#MaterialAttributesGit.HasFilter)
 * [type MaterialAttributesHg](#MaterialAttributesHg)
+  * [func (mhg MaterialAttributesHg) GenerateGeneric() (ma map[string]interface{})](#MaterialAttributesHg.GenerateGeneric)
+  * [func (mhg MaterialAttributesHg) GetFilter() *MaterialFilter](#MaterialAttributesHg.GetFilter)
+  * [func (mhg MaterialAttributesHg) HasFilter() bool](#MaterialAttributesHg.HasFilter)
 * [type MaterialAttributesP4](#MaterialAttributesP4)
+  * [func (mp4 MaterialAttributesP4) GenerateGeneric() (ma map[string]interface{})](#MaterialAttributesP4.GenerateGeneric)
+  * [func (mp4 MaterialAttributesP4) GetFilter() *MaterialFilter](#MaterialAttributesP4.GetFilter)
+  * [func (mp4 MaterialAttributesP4) HasFilter() bool](#MaterialAttributesP4.HasFilter)
 * [type MaterialAttributesPackage](#MaterialAttributesPackage)
+  * [func (mapk MaterialAttributesPackage) GenerateGeneric() (ma map[string]interface{})](#MaterialAttributesPackage.GenerateGeneric)
+  * [func (mapk MaterialAttributesPackage) GetFilter() *MaterialFilter](#MaterialAttributesPackage.GetFilter)
+  * [func (mapk MaterialAttributesPackage) HasFilter() bool](#MaterialAttributesPackage.HasFilter)
 * [type MaterialAttributesPlugin](#MaterialAttributesPlugin)
+  * [func (mapp MaterialAttributesPlugin) GenerateGeneric() (ma map[string]interface{})](#MaterialAttributesPlugin.GenerateGeneric)
+  * [func (mapp MaterialAttributesPlugin) GetFilter() *MaterialFilter](#MaterialAttributesPlugin.GetFilter)
+  * [func (mapp MaterialAttributesPlugin) HasFilter() bool](#MaterialAttributesPlugin.HasFilter)
 * [type MaterialAttributesSvn](#MaterialAttributesSvn)
+  * [func (mas MaterialAttributesSvn) GenerateGeneric() (ma map[string]interface{})](#MaterialAttributesSvn.GenerateGeneric)
+  * [func (mas MaterialAttributesSvn) GetFilter() *MaterialFilter](#MaterialAttributesSvn.GetFilter)
+  * [func (mas MaterialAttributesSvn) HasFilter() bool](#MaterialAttributesSvn.HasFilter)
 * [type MaterialAttributesTfs](#MaterialAttributesTfs)
+  * [func (mtfs MaterialAttributesTfs) GenerateGeneric() (ma map[string]interface{})](#MaterialAttributesTfs.GenerateGeneric)
+  * [func (mtfs MaterialAttributesTfs) GetFilter() *MaterialFilter](#MaterialAttributesTfs.GetFilter)
+  * [func (mtfs MaterialAttributesTfs) HasFilter() bool](#MaterialAttributesTfs.HasFilter)
 * [type MaterialFilter](#MaterialFilter)
+  * [func (mf *MaterialFilter) GenerateGeneric() (g map[string]interface{})](#MaterialFilter.GenerateGeneric)
 * [type MaterialRevision](#MaterialRevision)
 * [type Modification](#Modification)
 * [type PaginationResponse](#PaginationResponse)
@@ -214,7 +243,7 @@ the structure of the GoCD API documentation at
   * [func (p *Pipeline) AddStage(stage *Stage)](#Pipeline.AddStage)
   * [func (p *Pipeline) GetLinks() *HALLinks](#Pipeline.GetLinks)
   * [func (p *Pipeline) GetName() string](#Pipeline.GetName)
-  * [func (p *Pipeline) GetStage(stageName string) *Stage](#Pipeline.GetStage)
+  * [func (p *Pipeline) GetStage(stageName string) (stage *Stage)](#Pipeline.GetStage)
   * [func (p *Pipeline) GetStages() []*Stage](#Pipeline.GetStages)
   * [func (p *Pipeline) GetVersion() (version string)](#Pipeline.GetVersion)
   * [func (p *Pipeline) RemoveLinks()](#Pipeline.RemoveLinks)
@@ -226,10 +255,10 @@ the structure of the GoCD API documentation at
   * [func (pr *PipelineConfigRequest) GetVersion() (version string)](#PipelineConfigRequest.GetVersion)
   * [func (pr *PipelineConfigRequest) SetVersion(version string)](#PipelineConfigRequest.SetVersion)
 * [type PipelineConfigsService](#PipelineConfigsService)
-  * [func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *Pipeline) (*Pipeline, *APIResponse, error)](#PipelineConfigsService.Create)
+  * [func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *Pipeline) (pr *Pipeline, resp *APIResponse, err error)](#PipelineConfigsService.Create)
   * [func (pcs *PipelineConfigsService) Delete(ctx context.Context, name string) (string, *APIResponse, error)](#PipelineConfigsService.Delete)
-  * [func (pcs *PipelineConfigsService) Get(ctx context.Context, name string) (*Pipeline, *APIResponse, error)](#PipelineConfigsService.Get)
-  * [func (pcs *PipelineConfigsService) Update(ctx context.Context, name string, p *Pipeline) (*Pipeline, *APIResponse, error)](#PipelineConfigsService.Update)
+  * [func (pcs *PipelineConfigsService) Get(ctx context.Context, name string) (p *Pipeline, resp *APIResponse, err error)](#PipelineConfigsService.Get)
+  * [func (pcs *PipelineConfigsService) Update(ctx context.Context, name string, p *Pipeline) (pr *Pipeline, resp *APIResponse, err error)](#PipelineConfigsService.Update)
 * [type PipelineGroup](#PipelineGroup)
 * [type PipelineGroups](#PipelineGroups)
   * [func (pg *PipelineGroups) GetGroupByPipeline(pipeline *Pipeline) *PipelineGroup](#PipelineGroups.GetGroupByPipeline)
@@ -258,15 +287,15 @@ the structure of the GoCD API documentation at
 * [type PipelineTemplateResponse](#PipelineTemplateResponse)
 * [type PipelineTemplatesResponse](#PipelineTemplatesResponse)
 * [type PipelineTemplatesService](#PipelineTemplatesService)
-  * [func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st []*Stage) (*PipelineTemplate, *APIResponse, error)](#PipelineTemplatesService.Create)
+  * [func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st []*Stage) (ptr *PipelineTemplate, resp *APIResponse, err error)](#PipelineTemplatesService.Create)
   * [func (pts *PipelineTemplatesService) Delete(ctx context.Context, name string) (string, *APIResponse, error)](#PipelineTemplatesService.Delete)
-  * [func (pts *PipelineTemplatesService) Get(ctx context.Context, name string) (*PipelineTemplate, *APIResponse, error)](#PipelineTemplatesService.Get)
-  * [func (pts *PipelineTemplatesService) List(ctx context.Context) ([]*PipelineTemplate, *APIResponse, error)](#PipelineTemplatesService.List)
-  * [func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, template *PipelineTemplate) (*PipelineTemplate, *APIResponse, error)](#PipelineTemplatesService.Update)
+  * [func (pts *PipelineTemplatesService) Get(ctx context.Context, name string) (pt *PipelineTemplate, resp *APIResponse, err error)](#PipelineTemplatesService.Get)
+  * [func (pts *PipelineTemplatesService) List(ctx context.Context) (pt []*PipelineTemplate, resp *APIResponse, err error)](#PipelineTemplatesService.List)
+  * [func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, template *PipelineTemplate) (ptr *PipelineTemplate, resp *APIResponse, err error)](#PipelineTemplatesService.Update)
 * [type PipelinesService](#PipelinesService)
-  * [func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset int) (*PipelineHistory, *APIResponse, error)](#PipelinesService.GetHistory)
-  * [func (pgs *PipelinesService) GetInstance(ctx context.Context, name string, offset int) (*PipelineInstance, *APIResponse, error)](#PipelinesService.GetInstance)
-  * [func (pgs *PipelinesService) GetStatus(ctx context.Context, name string, offset int) (*PipelineStatus, *APIResponse, error)](#PipelinesService.GetStatus)
+  * [func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset int) (pt *PipelineHistory, resp *APIResponse, err error)](#PipelinesService.GetHistory)
+  * [func (pgs *PipelinesService) GetInstance(ctx context.Context, name string, offset int) (pt *PipelineInstance, resp *APIResponse, err error)](#PipelinesService.GetInstance)
+  * [func (pgs *PipelinesService) GetStatus(ctx context.Context, name string, offset int) (ps *PipelineStatus, resp *APIResponse, err error)](#PipelinesService.GetStatus)
   * [func (pgs *PipelinesService) Pause(ctx context.Context, name string) (bool, *APIResponse, error)](#PipelinesService.Pause)
   * [func (pgs *PipelinesService) ReleaseLock(ctx context.Context, name string) (bool, *APIResponse, error)](#PipelinesService.ReleaseLock)
   * [func (pgs *PipelinesService) Unpause(ctx context.Context, name string) (bool, *APIResponse, error)](#PipelinesService.Unpause)
@@ -278,7 +307,7 @@ the structure of the GoCD API documentation at
 * [type PluginView](#PluginView)
 * [type PluginsResponse](#PluginsResponse)
 * [type PluginsService](#PluginsService)
-  * [func (ps *PluginsService) Get(ctx context.Context, name string) (*Plugin, *APIResponse, error)](#PluginsService.Get)
+  * [func (ps *PluginsService) Get(ctx context.Context, name string) (p *Plugin, resp *APIResponse, err error)](#PluginsService.Get)
   * [func (ps *PluginsService) List(ctx context.Context) (*PluginsResponse, *APIResponse, error)](#PluginsService.List)
 * [type Properties](#Properties)
   * [func NewPropertiesFrame(frame [][]string) *Properties](#NewPropertiesFrame)
@@ -290,7 +319,7 @@ the structure of the GoCD API documentation at
   * [func (pr *Properties) UnmarshallCSV(raw string) error](#Properties.UnmarshallCSV)
   * [func (pr *Properties) Write(p []byte) (n int, err error)](#Properties.Write)
 * [type PropertiesService](#PropertiesService)
-  * [func (ps *PropertiesService) Create(ctx context.Context, name string, value string, pr *PropertyRequest) (bool, *APIResponse, error)](#PropertiesService.Create)
+  * [func (ps *PropertiesService) Create(ctx context.Context, name string, value string, pr *PropertyRequest) (responseIsValid bool, resp *APIResponse, err error)](#PropertiesService.Create)
   * [func (ps *PropertiesService) Get(ctx context.Context, name string, pr *PropertyRequest) (*Properties, *APIResponse, error)](#PropertiesService.Get)
   * [func (ps *PropertiesService) List(ctx context.Context, pr *PropertyRequest) (*Properties, *APIResponse, error)](#PropertiesService.List)
   * [func (ps *PropertiesService) ListHistorical(ctx context.Context, pr *PropertyRequest) (*Properties, *APIResponse, error)](#PropertiesService.ListHistorical)
@@ -310,12 +339,15 @@ the structure of the GoCD API documentation at
   * [func (t *TaskAttributes) ValidateAnt() error](#TaskAttributes.ValidateAnt)
   * [func (t *TaskAttributes) ValidateExec() error](#TaskAttributes.ValidateExec)
 * [type TaskPluginConfiguration](#TaskPluginConfiguration)
+* [type TimeoutField](#TimeoutField)
+  * [func (tf TimeoutField) MarshalJSON() (b []byte, err error)](#TimeoutField.MarshalJSON)
+  * [func (tf *TimeoutField) UnmarshalJSON(b []byte) (err error)](#TimeoutField.UnmarshalJSON)
 * [type Version](#Version)
 * [type Versioned](#Versioned)
 
 
 #### <a name="pkg-files">Package files</a>
-[agent.go](/src/github.com/drewsonne/go-gocd/gocd/agent.go) [approval.go](/src/github.com/drewsonne/go-gocd/gocd/approval.go) [authentication.go](/src/github.com/drewsonne/go-gocd/gocd/authentication.go) [client.go](/src/github.com/drewsonne/go-gocd/gocd/client.go) [config.go](/src/github.com/drewsonne/go-gocd/gocd/config.go) [configuration.go](/src/github.com/drewsonne/go-gocd/gocd/configuration.go) [configuration_task.go](/src/github.com/drewsonne/go-gocd/gocd/configuration_task.go) [doc.go](/src/github.com/drewsonne/go-gocd/gocd/doc.go) [encryption.go](/src/github.com/drewsonne/go-gocd/gocd/encryption.go) [environment.go](/src/github.com/drewsonne/go-gocd/gocd/environment.go) [genericactions.go](/src/github.com/drewsonne/go-gocd/gocd/genericactions.go) [gocd.go](/src/github.com/drewsonne/go-gocd/gocd/gocd.go) [jobs.go](/src/github.com/drewsonne/go-gocd/gocd/jobs.go) [jobs_validation.go](/src/github.com/drewsonne/go-gocd/gocd/jobs_validation.go) [links.go](/src/github.com/drewsonne/go-gocd/gocd/links.go) [logging.go](/src/github.com/drewsonne/go-gocd/gocd/logging.go) [pipeline.go](/src/github.com/drewsonne/go-gocd/gocd/pipeline.go) [pipeline_material.go](/src/github.com/drewsonne/go-gocd/gocd/pipeline_material.go) [pipelineconfig.go](/src/github.com/drewsonne/go-gocd/gocd/pipelineconfig.go) [pipelinegroups.go](/src/github.com/drewsonne/go-gocd/gocd/pipelinegroups.go) [pipelinetemplate.go](/src/github.com/drewsonne/go-gocd/gocd/pipelinetemplate.go) [plugin.go](/src/github.com/drewsonne/go-gocd/gocd/plugin.go) [properties.go](/src/github.com/drewsonne/go-gocd/gocd/properties.go) [resource.go](/src/github.com/drewsonne/go-gocd/gocd/resource.go) [resource_agent.go](/src/github.com/drewsonne/go-gocd/gocd/resource_agent.go) [resource_approval.go](/src/github.com/drewsonne/go-gocd/gocd/resource_approval.go) [resource_environment.go](/src/github.com/drewsonne/go-gocd/gocd/resource_environment.go) [resource_jobs.go](/src/github.com/drewsonne/go-gocd/gocd/resource_jobs.go) [resource_pipeline.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline.go) [resource_pipeline_material.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material.go) [resource_pipeline_material_dependency.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_dependency.go) [resource_pipeline_material_git.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_git.go) [resource_pipeline_material_hg.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_hg.go) [resource_pipeline_material_p4.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_p4.go) [resource_pipeline_material_pkg.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_pkg.go) [resource_pipeline_material_plugin.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_plugin.go) [resource_pipeline_material_svn.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_svn.go) [resource_pipeline_material_tfs.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipeline_material_tfs.go) [resource_pipelinegroups.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipelinegroups.go) [resource_pipelinetemplate.go](/src/github.com/drewsonne/go-gocd/gocd/resource_pipelinetemplate.go) [resource_properties.go](/src/github.com/drewsonne/go-gocd/gocd/resource_properties.go) [resource_stages.go](/src/github.com/drewsonne/go-gocd/gocd/resource_stages.go) [resource_task.go](/src/github.com/drewsonne/go-gocd/gocd/resource_task.go) [stages.go](/src/github.com/drewsonne/go-gocd/gocd/stages.go) 
+[agent.go](/src/github.com/beamly/go-gocd/gocd/agent.go) [approval.go](/src/github.com/beamly/go-gocd/gocd/approval.go) [authentication.go](/src/github.com/beamly/go-gocd/gocd/authentication.go) [config.go](/src/github.com/beamly/go-gocd/gocd/config.go) [configuration.go](/src/github.com/beamly/go-gocd/gocd/configuration.go) [configuration_task.go](/src/github.com/beamly/go-gocd/gocd/configuration_task.go) [doc.go](/src/github.com/beamly/go-gocd/gocd/doc.go) [encryption.go](/src/github.com/beamly/go-gocd/gocd/encryption.go) [environment.go](/src/github.com/beamly/go-gocd/gocd/environment.go) [genericactions.go](/src/github.com/beamly/go-gocd/gocd/genericactions.go) [gocd.go](/src/github.com/beamly/go-gocd/gocd/gocd.go) [jobs.go](/src/github.com/beamly/go-gocd/gocd/jobs.go) [jobs_validation.go](/src/github.com/beamly/go-gocd/gocd/jobs_validation.go) [links.go](/src/github.com/beamly/go-gocd/gocd/links.go) [logging.go](/src/github.com/beamly/go-gocd/gocd/logging.go) [pipeline.go](/src/github.com/beamly/go-gocd/gocd/pipeline.go) [pipeline_material.go](/src/github.com/beamly/go-gocd/gocd/pipeline_material.go) [pipelineconfig.go](/src/github.com/beamly/go-gocd/gocd/pipelineconfig.go) [pipelinegroups.go](/src/github.com/beamly/go-gocd/gocd/pipelinegroups.go) [pipelinetemplate.go](/src/github.com/beamly/go-gocd/gocd/pipelinetemplate.go) [plugin.go](/src/github.com/beamly/go-gocd/gocd/plugin.go) [properties.go](/src/github.com/beamly/go-gocd/gocd/properties.go) [resource.go](/src/github.com/beamly/go-gocd/gocd/resource.go) [resource_agent.go](/src/github.com/beamly/go-gocd/gocd/resource_agent.go) [resource_approval.go](/src/github.com/beamly/go-gocd/gocd/resource_approval.go) [resource_environment.go](/src/github.com/beamly/go-gocd/gocd/resource_environment.go) [resource_jobs.go](/src/github.com/beamly/go-gocd/gocd/resource_jobs.go) [resource_pipeline.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline.go) [resource_pipeline_material.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material.go) [resource_pipeline_material_dependency.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_dependency.go) [resource_pipeline_material_git.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_git.go) [resource_pipeline_material_hg.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_hg.go) [resource_pipeline_material_p4.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_p4.go) [resource_pipeline_material_pkg.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_pkg.go) [resource_pipeline_material_plugin.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_plugin.go) [resource_pipeline_material_svn.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_svn.go) [resource_pipeline_material_tfs.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_tfs.go) [resource_pipelinegroups.go](/src/github.com/beamly/go-gocd/gocd/resource_pipelinegroups.go) [resource_pipelinetemplate.go](/src/github.com/beamly/go-gocd/gocd/resource_pipelinetemplate.go) [resource_properties.go](/src/github.com/beamly/go-gocd/gocd/resource_properties.go) [resource_stages.go](/src/github.com/beamly/go-gocd/gocd/resource_stages.go) [resource_task.go](/src/github.com/beamly/go-gocd/gocd/resource_task.go) [stages.go](/src/github.com/beamly/go-gocd/gocd/stages.go) 
 
 
 ## <a name="pkg-constants">Constants</a>
@@ -351,20 +383,20 @@ Set logging level and type constants
 ``` go
 const ConfigDirectoryPath = "~/.gocd.conf"
 ```
-ConfigDirectoryPath is the location where the authentication information is stored
+ConfigDirectoryPath is the default location of the `.gocdconf` configuration file
 
 
 
 
-## <a name="CheckResponse">func</a> [CheckResponse](/src/target/gocd.go?s=7605:7654#L309)
+## <a name="CheckResponse">func</a> [CheckResponse](/src/target/gocd.go?s=7629:7682#L309)
 ``` go
-func CheckResponse(response *http.Response) error
+func CheckResponse(response *APIResponse) (err error)
 ```
 CheckResponse asserts that the http response status code was 2xx.
 
 
 
-## <a name="ConfigFilePath">func</a> [ConfigFilePath](/src/target/config.go?s=1981:2033#L86)
+## <a name="ConfigFilePath">func</a> [ConfigFilePath](/src/target/config.go?s=1948:2000#L88)
 ``` go
 func ConfigFilePath() (configPath string, err error)
 ```
@@ -372,19 +404,19 @@ ConfigFilePath specifies the default path to a config file
 
 
 
-## <a name="LoadConfigByName">func</a> [LoadConfigByName](/src/target/config.go?s=891:957#L34)
+## <a name="LoadConfigByName">func</a> [LoadConfigByName](/src/target/config.go?s=863:929#L34)
 ``` go
 func LoadConfigByName(name string, cfg *Configuration) (err error)
 ```
-LoadConfigByName loads configurations from yaml at default file location
+LoadConfigByName loads configurations from yaml at the default file location
 
 
 
-## <a name="LoadConfigFromFile">func</a> [LoadConfigFromFile](/src/target/config.go?s=1516:1585#L64)
+## <a name="LoadConfigFromFile">func</a> [LoadConfigFromFile](/src/target/config.go?s=1495:1564#L64)
 ``` go
 func LoadConfigFromFile() (cfgs map[string]*Configuration, err error)
 ```
-LoadConfigFromFile on disk and return it as a Config item
+LoadConfigFromFile on disk and return it as a Configuration item
 
 
 
@@ -473,7 +505,7 @@ encapsulating the response from the API.
 
 
 
-## <a name="Agent">type</a> [Agent](/src/target/agent.go?s=443:1448#L20)
+## <a name="Agent">type</a> [Agent](/src/target/agent.go?s=442:1447#L20)
 ``` go
 type Agent struct {
     UUID             string        `json:"uuid,omitempty"`
@@ -494,7 +526,7 @@ type Agent struct {
     // contains filtered or unexported fields
 }
 ```
-Agent represents agent in GoCD.
+Agent represents agent in GoCD
 
 
 
@@ -523,7 +555,7 @@ RemoveLinks sets the `Link` attribute as `nil`. Used when rendering an `Agent` s
 
 
 
-## <a name="AgentBulkOperationUpdate">type</a> [AgentBulkOperationUpdate](/src/target/agent.go?s=2240:2363#L54)
+## <a name="AgentBulkOperationUpdate">type</a> [AgentBulkOperationUpdate](/src/target/agent.go?s=2239:2362#L54)
 ``` go
 type AgentBulkOperationUpdate struct {
     Add    []string `json:"add,omitempty"`
@@ -541,7 +573,7 @@ AgentBulkOperationUpdate describes an action to be performed on an Environment o
 
 
 
-## <a name="AgentBulkOperationsUpdate">type</a> [AgentBulkOperationsUpdate](/src/target/agent.go?s=1938:2120#L48)
+## <a name="AgentBulkOperationsUpdate">type</a> [AgentBulkOperationsUpdate](/src/target/agent.go?s=1937:2119#L48)
 ``` go
 type AgentBulkOperationsUpdate struct {
     Environments *AgentBulkOperationUpdate `json:"environments,omitempty"`
@@ -560,7 +592,7 @@ updating multiple agents
 
 
 
-## <a name="AgentBulkUpdate">type</a> [AgentBulkUpdate](/src/target/agent.go?s=1543:1792#L40)
+## <a name="AgentBulkUpdate">type</a> [AgentBulkUpdate](/src/target/agent.go?s=1542:1791#L40)
 ``` go
 type AgentBulkUpdate struct {
     Uuids            []string                   `json:"uuids"`
@@ -588,7 +620,7 @@ type AgentsResponse struct {
     } `json:"_embedded,omitempty"`
 }
 ```
-AgentsResponse describes the structure of the API response when listing collections of agent object.
+AgentsResponse describes the structure of the API response when listing collections of agent objects
 
 
 
@@ -603,7 +635,7 @@ AgentsResponse describes the structure of the API response when listing collecti
 ``` go
 type AgentsService service
 ```
-AgentsService describes Actions which can be performed on agents
+AgentsService describes actions which can be performed on agents
 
 
 
@@ -614,16 +646,16 @@ AgentsService describes Actions which can be performed on agents
 
 
 
-### <a name="AgentsService.BulkUpdate">func</a> (\*AgentsService) [BulkUpdate](/src/target/agent.go?s=3849:3958#L99)
+### <a name="AgentsService.BulkUpdate">func</a> (\*AgentsService) [BulkUpdate](/src/target/agent.go?s=3862:3988#L100)
 ``` go
-func (s *AgentsService) BulkUpdate(ctx context.Context, agents AgentBulkUpdate) (string, *APIResponse, error)
+func (s *AgentsService) BulkUpdate(ctx context.Context, agents AgentBulkUpdate) (message string, resp *APIResponse, err error)
 ```
 BulkUpdate will change the configuration for multiple agents in a single request.
 
 
 
 
-### <a name="AgentsService.Delete">func</a> (\*AgentsService) [Delete](/src/target/agent.go?s=3606:3700#L94)
+### <a name="AgentsService.Delete">func</a> (\*AgentsService) [Delete](/src/target/agent.go?s=3619:3713#L95)
 ``` go
 func (s *AgentsService) Delete(ctx context.Context, uuid string) (string, *APIResponse, error)
 ```
@@ -632,7 +664,7 @@ Delete will remove an existing agent. Note: The agent must be disabled, and not 
 
 
 
-### <a name="AgentsService.Get">func</a> (\*AgentsService) [Get](/src/target/agent.go?s=3106:3197#L84)
+### <a name="AgentsService.Get">func</a> (\*AgentsService) [Get](/src/target/agent.go?s=3119:3210#L85)
 ``` go
 func (s *AgentsService) Get(ctx context.Context, uuid string) (*Agent, *APIResponse, error)
 ```
@@ -641,25 +673,25 @@ Get will retrieve a single agent based on the provided UUID.
 
 
 
-### <a name="AgentsService.JobRunHistory">func</a> (\*AgentsService) [JobRunHistory](/src/target/agent.go?s=4238:4339#L111)
+### <a name="AgentsService.JobRunHistory">func</a> (\*AgentsService) [JobRunHistory](/src/target/agent.go?s=4287:4402#L113)
 ``` go
-func (s *AgentsService) JobRunHistory(ctx context.Context, uuid string) ([]*Job, *APIResponse, error)
+func (s *AgentsService) JobRunHistory(ctx context.Context, uuid string) (jobs []*Job, resp *APIResponse, err error)
 ```
-JobRunHistory will return a list of Jobs run on this agent.
+JobRunHistory will return a list of Jobs run on the agent identified by `uuid`.
 
 
 
 
-### <a name="AgentsService.List">func</a> (\*AgentsService) [List](/src/target/agent.go?s=2688:2769#L68)
+### <a name="AgentsService.List">func</a> (\*AgentsService) [List](/src/target/agent.go?s=2687:2784#L68)
 ``` go
-func (s *AgentsService) List(ctx context.Context) ([]*Agent, *APIResponse, error)
+func (s *AgentsService) List(ctx context.Context) (agents []*Agent, resp *APIResponse, err error)
 ```
 List will retrieve all agents, their status, and metadata from the GoCD Server.
 
 
 
 
-### <a name="AgentsService.Update">func</a> (\*AgentsService) [Update](/src/target/agent.go?s=3319:3427#L89)
+### <a name="AgentsService.Update">func</a> (\*AgentsService) [Update](/src/target/agent.go?s=3332:3440#L90)
 ``` go
 func (s *AgentsService) Update(ctx context.Context, uuid string, agent *Agent) (*Agent, *APIResponse, error)
 ```
@@ -696,7 +728,7 @@ empty elements are not printed to json.
 
 
 
-## <a name="Artifact">type</a> [Artifact](/src/target/jobs.go?s=2071:2206#L44)
+## <a name="Artifact">type</a> [Artifact](/src/target/jobs.go?s=2072:2207#L44)
 ``` go
 type Artifact struct {
     Type        string `json:"type"`
@@ -734,15 +766,15 @@ subsequent requests.
 
 
 
-## <a name="Authorization">type</a> [Authorization](/src/target/approval.go?s=432:543#L11)
+## <a name="Authorization">type</a> [Authorization](/src/target/approval.go?s=431:542#L11)
 ``` go
 type Authorization struct {
     Users []string `json:"users,omitempty"`
     Roles []string `json:"roles,omitempty"`
 }
 ```
-Authorization describes the access control for a "manual" approval type. Specifies whoe (role or users) can approve
-the job to move to the next stage of the pipeline.
+Authorization describes the access control for a "manual" approval type. Specifies who (role or users) can approve
+the job to move to the next stage in the pipeline.
 
 
 
@@ -773,7 +805,7 @@ BuildCause describes the triggers which caused the build to start.
 
 
 
-## <a name="BuildDetails">type</a> [BuildDetails](/src/target/agent.go?s=2433:2603#L60)
+## <a name="BuildDetails">type</a> [BuildDetails](/src/target/agent.go?s=2432:2602#L60)
 ``` go
 type BuildDetails struct {
     Links    *HALLinks `json:"_links"`
@@ -856,7 +888,7 @@ allow overriding of http client structures.
 
 
 
-### <a name="Client.Do">func</a> (\*Client) [Do](/src/target/gocd.go?s=6426:6541#L256)
+### <a name="Client.Do">func</a> (\*Client) [Do](/src/target/gocd.go?s=6419:6534#L253)
 ``` go
 func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}, responseType string) (*APIResponse, error)
 ```
@@ -865,7 +897,7 @@ Do takes an HTTP request and resposne the response from the GoCD API endpoint.
 
 
 
-### <a name="Client.Lock">func</a> (\*Client) [Lock](/src/target/gocd.go?s=4551:4574#L177)
+### <a name="Client.Lock">func</a> (\*Client) [Lock](/src/target/gocd.go?s=4544:4567#L174)
 ``` go
 func (c *Client) Lock()
 ```
@@ -874,9 +906,9 @@ Lock the client until release
 
 
 
-### <a name="Client.Login">func</a> (\*Client) [Login](/src/target/authentication.go?s=167:216#L7)
+### <a name="Client.Login">func</a> (\*Client) [Login](/src/target/authentication.go?s=167:222#L7)
 ``` go
-func (c *Client) Login(ctx context.Context) error
+func (c *Client) Login(ctx context.Context) (err error)
 ```
 Login sends basic auth to the GoCD Server and sets an auth cookie in the client to enable cookie based auth
 for future requests.
@@ -884,7 +916,7 @@ for future requests.
 
 
 
-### <a name="Client.NewRequest">func</a> (\*Client) [NewRequest](/src/target/gocd.go?s=4758:4874#L187)
+### <a name="Client.NewRequest">func</a> (\*Client) [NewRequest](/src/target/gocd.go?s=4751:4867#L184)
 ``` go
 func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion string) (req *APIRequest, err error)
 ```
@@ -893,7 +925,7 @@ NewRequest creates an HTTP requests to the GoCD API endpoints.
 
 
 
-### <a name="Client.Unlock">func</a> (\*Client) [Unlock](/src/target/gocd.go?s=4640:4665#L182)
+### <a name="Client.Unlock">func</a> (\*Client) [Unlock](/src/target/gocd.go?s=4633:4658#L179)
 ``` go
 func (c *Client) Unlock()
 ```
@@ -1409,7 +1441,7 @@ ConfigXML part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="Configuration">type</a> [Configuration](/src/target/config.go?s=586:813#L26)
+## <a name="Configuration">type</a> [Configuration](/src/target/config.go?s=554:781#L26)
 ``` go
 type Configuration struct {
     Server       string
@@ -1418,7 +1450,7 @@ type Configuration struct {
     SkipSslCheck bool   `yaml:"skip_ssl_check,omitempty" survey:"skip_ssl_check"`
 }
 ```
-Configuration object used to initialise a gocd lib client to interact with the GoCD server.
+Configuration describes a single connection to a GoCD server
 
 
 
@@ -1462,21 +1494,20 @@ ConfigurationService describes the HAL _link resource for the api response objec
 
 
 
-### <a name="ConfigurationService.Get">func</a> (\*ConfigurationService) [Get](/src/target/configuration.go?s=8526:8616#L218)
+### <a name="ConfigurationService.Get">func</a> (\*ConfigurationService) [Get](/src/target/configuration.go?s=8459:8561#L217)
 ``` go
-func (cs *ConfigurationService) Get(ctx context.Context) (*ConfigXML, *APIResponse, error)
+func (cs *ConfigurationService) Get(ctx context.Context) (cx *ConfigXML, resp *APIResponse, err error)
 ```
-Get will retrieve all agents, their status, and metadata from the GoCD Server.
-Get returns a list of pipeline instanves describing the pipeline history.
+Get the config.xml document from the server and... render it as JSON... 'cause... eyugh.
 
 
 
 
-### <a name="ConfigurationService.GetVersion">func</a> (\*ConfigurationService) [GetVersion](/src/target/configuration.go?s=8888:8983#L229)
+### <a name="ConfigurationService.GetVersion">func</a> (\*ConfigurationService) [GetVersion](/src/target/configuration.go?s=8827:8933#L228)
 ``` go
-func (cs *ConfigurationService) GetVersion(ctx context.Context) (*Version, *APIResponse, error)
+func (cs *ConfigurationService) GetVersion(ctx context.Context) (v *Version, resp *APIResponse, err error)
 ```
-GetVersion will return version information about the GoCD server.
+GetVersion of the GoCD server and other metadata about the software version.
 
 
 
@@ -1513,9 +1544,9 @@ EncryptionService describes the HAL _link resource for the api response object f
 
 
 
-### <a name="EncryptionService.Encrypt">func</a> (\*EncryptionService) [Encrypt](/src/target/encryption.go?s=430:540#L17)
+### <a name="EncryptionService.Encrypt">func</a> (\*EncryptionService) [Encrypt](/src/target/encryption.go?s=430:551#L17)
 ``` go
-func (es *EncryptionService) Encrypt(ctx context.Context, plaintext string) (*CipherText, *APIResponse, error)
+func (es *EncryptionService) Encrypt(ctx context.Context, plaintext string) (c *CipherText, resp *APIResponse, err error)
 ```
 Encrypt takes a plaintext value and returns a cipher text.
 
@@ -1599,7 +1630,7 @@ EnvironmentPatchRequest describes the actions to perform on an environment
 
 
 
-## <a name="EnvironmentVariable">type</a> [EnvironmentVariable](/src/target/jobs.go?s=2550:2767#L64)
+## <a name="EnvironmentVariable">type</a> [EnvironmentVariable](/src/target/jobs.go?s=2551:2768#L64)
 ``` go
 type EnvironmentVariable struct {
     Name           string `json:"name"`
@@ -1688,16 +1719,16 @@ EnvironmentsService exposes calls for interacting with Environment objects in th
 
 
 
-### <a name="EnvironmentsService.Create">func</a> (\*EnvironmentsService) [Create](/src/target/environment.go?s=2335:2442#L68)
+### <a name="EnvironmentsService.Create">func</a> (\*EnvironmentsService) [Create](/src/target/environment.go?s=2330:2448#L68)
 ``` go
-func (es *EnvironmentsService) Create(ctx context.Context, name string) (*Environment, *APIResponse, error)
+func (es *EnvironmentsService) Create(ctx context.Context, name string) (e *Environment, resp *APIResponse, err error)
 ```
 Create an environment
 
 
 
 
-### <a name="EnvironmentsService.Delete">func</a> (\*EnvironmentsService) [Delete](/src/target/environment.go?s=2132:2233#L63)
+### <a name="EnvironmentsService.Delete">func</a> (\*EnvironmentsService) [Delete](/src/target/environment.go?s=2127:2228#L63)
 ``` go
 func (es *EnvironmentsService) Delete(ctx context.Context, name string) (string, *APIResponse, error)
 ```
@@ -1706,27 +1737,27 @@ Delete an environment
 
 
 
-### <a name="EnvironmentsService.Get">func</a> (\*EnvironmentsService) [Get](/src/target/environment.go?s=2715:2819#L83)
+### <a name="EnvironmentsService.Get">func</a> (\*EnvironmentsService) [Get](/src/target/environment.go?s=2686:2801#L82)
 ``` go
-func (es *EnvironmentsService) Get(ctx context.Context, name string) (*Environment, *APIResponse, error)
+func (es *EnvironmentsService) Get(ctx context.Context, name string) (e *Environment, resp *APIResponse, err error)
 ```
 Get a single environment by name
 
 
 
 
-### <a name="EnvironmentsService.List">func</a> (\*EnvironmentsService) [List](/src/target/environment.go?s=1802:1903#L51)
+### <a name="EnvironmentsService.List">func</a> (\*EnvironmentsService) [List](/src/target/environment.go?s=1802:1914#L51)
 ``` go
-func (es *EnvironmentsService) List(ctx context.Context) (*EnvironmentsResponse, *APIResponse, error)
+func (es *EnvironmentsService) List(ctx context.Context) (e *EnvironmentsResponse, resp *APIResponse, err error)
 ```
 List all environments
 
 
 
 
-### <a name="EnvironmentsService.Patch">func</a> (\*EnvironmentsService) [Patch](/src/target/environment.go?s=3124:3262#L95)
+### <a name="EnvironmentsService.Patch">func</a> (\*EnvironmentsService) [Patch](/src/target/environment.go?s=3090:3239#L94)
 ``` go
-func (es *EnvironmentsService) Patch(ctx context.Context, name string, patch *EnvironmentPatchRequest) (*Environment, *APIResponse, error)
+func (es *EnvironmentsService) Patch(ctx context.Context, name string, patch *EnvironmentPatchRequest) (e *Environment, resp *APIResponse, err error)
 ```
 Patch an environments configuration by adding or removing pipelines, agents, environment variables
 
@@ -1769,7 +1800,7 @@ HALContainer represents objects with HAL _link and _embedded resources.
 
 
 
-## <a name="HALLink">type</a> [HALLink](/src/target/resource.go?s=632:718#L29)
+## <a name="HALLink">type</a> [HALLink](/src/target/resource.go?s=632:683#L29)
 ``` go
 type HALLink struct {
     Name string
@@ -1813,34 +1844,34 @@ Add a link
 
 
 
-### <a name="HALLinks.Get">func</a> (HALLinks) [Get](/src/target/links.go?s=368:412#L25)
+### <a name="HALLinks.Get">func</a> (HALLinks) [Get](/src/target/links.go?s=368:419#L25)
 ``` go
-func (al HALLinks) Get(name string) *HALLink
+func (al HALLinks) Get(name string) (link *HALLink)
 ```
 Get a HALLink by name
 
 
 
 
-### <a name="HALLinks.GetOk">func</a> (HALLinks) [GetOk](/src/target/links.go?s=524:578#L31)
+### <a name="HALLinks.GetOk">func</a> (HALLinks) [GetOk](/src/target/links.go?s=525:587#L31)
 ``` go
-func (al HALLinks) GetOk(name string) (*HALLink, bool)
+func (al HALLinks) GetOk(name string) (link *HALLink, ok bool)
 ```
 GetOk a HALLink by name, and if it doesn't exist, return false
 
 
 
 
-### <a name="HALLinks.Keys">func</a> (HALLinks) [Keys](/src/target/links.go?s=767:801#L41)
+### <a name="HALLinks.Keys">func</a> (HALLinks) [Keys](/src/target/links.go?s=778:819#L43)
 ``` go
-func (al HALLinks) Keys() []string
+func (al HALLinks) Keys() (keys []string)
 ```
 Keys returns a string list of link names
 
 
 
 
-### <a name="HALLinks.MarshallJSON">func</a> (HALLinks) [MarshallJSON](/src/target/links.go?s=966:1015#L50)
+### <a name="HALLinks.MarshallJSON">func</a> (HALLinks) [MarshallJSON](/src/target/links.go?s=978:1027#L52)
 ``` go
 func (al HALLinks) MarshallJSON() ([]byte, error)
 ```
@@ -1849,16 +1880,16 @@ MarshallJSON allows the encoding of links into JSON
 
 
 
-### <a name="HALLinks.UnmarshalJSON">func</a> (\*HALLinks) [UnmarshalJSON](/src/target/links.go?s=1218:1271#L59)
+### <a name="HALLinks.UnmarshalJSON">func</a> (\*HALLinks) [UnmarshalJSON](/src/target/links.go?s=1230:1285#L61)
 ``` go
-func (al *HALLinks) UnmarshalJSON(j []byte) (e error)
+func (al *HALLinks) UnmarshalJSON(j []byte) (err error)
 ```
 UnmarshalJSON allows the decoding of links from JSON
 
 
 
 
-## <a name="Job">type</a> [Job](/src/target/jobs.go?s=353:2027#L18)
+## <a name="Job">type</a> [Job](/src/target/jobs.go?s=354:2028#L18)
 ``` go
 type Job struct {
     AgentUUID            string                 `json:"agent_uuid,omitempty"`
@@ -1875,7 +1906,7 @@ type Job struct {
     StageCounter         string                 `json:"stage_counter,omitempty"`
     StageName            string                 `json:"stage_name,omitempty"`
     RunInstanceCount     int                    `json:"run_instance_count,omitempty"`
-    Timeout              int                    `json:"timeout,omitempty"`
+    Timeout              TimeoutField           `json:"timeout,omitempty"`
     EnvironmentVariables []*EnvironmentVariable `json:"environment_variables,omitempty"`
     Properties           []*JobProperty         `json:"properties,omitempty"`
     Resources            []string               `json:"resources,omitempty"`
@@ -1885,7 +1916,7 @@ type Job struct {
     ElasticProfileID     string                 `json:"elastic_profile_id,omitempty"`
 }
 ```
-Job describes a job object.
+Job describes a job which can be performed in GoCD
 
 
 
@@ -1896,25 +1927,25 @@ Job describes a job object.
 
 
 
-### <a name="Job.JSONString">func</a> (\*Job) [JSONString](/src/target/resource_jobs.go?s=116:158#L9)
+### <a name="Job.JSONString">func</a> (\*Job) [JSONString](/src/target/resource_jobs.go?s=127:178#L10)
 ``` go
-func (j *Job) JSONString() (string, error)
+func (j *Job) JSONString() (body string, err error)
 ```
 JSONString returns a string of this stage as a JSON object.
 
 
 
 
-### <a name="Job.Validate">func</a> (\*Job) [Validate](/src/target/resource_jobs.go?s=362:392#L20)
+### <a name="Job.Validate">func</a> (\*Job) [Validate](/src/target/resource_jobs.go?s=377:413#L23)
 ``` go
-func (j *Job) Validate() error
+func (j *Job) Validate() (err error)
 ```
 Validate a job structure has non-nil values on correct attributes
 
 
 
 
-## <a name="JobProperty">type</a> [JobProperty](/src/target/jobs.go?s=2364:2481#L57)
+## <a name="JobProperty">type</a> [JobProperty](/src/target/jobs.go?s=2365:2482#L57)
 ``` go
 type JobProperty struct {
     Name   string `json:"name"`
@@ -1933,7 +1964,7 @@ JobProperty describes the property for a job
 
 
 
-## <a name="JobRunHistoryResponse">type</a> [JobRunHistoryResponse](/src/target/jobs.go?s=5356:5511#L129)
+## <a name="JobRunHistoryResponse">type</a> [JobRunHistoryResponse](/src/target/jobs.go?s=5357:5512#L129)
 ``` go
 type JobRunHistoryResponse struct {
     Jobs       []*Job              `json:"jobs,omitempty"`
@@ -1951,7 +1982,7 @@ JobRunHistoryResponse describes the api response from
 
 
 
-## <a name="JobSchedule">type</a> [JobSchedule](/src/target/jobs.go?s=5688:6116#L140)
+## <a name="JobSchedule">type</a> [JobSchedule](/src/target/jobs.go?s=5689:6117#L140)
 ``` go
 type JobSchedule struct {
     Name                 string               `xml:"name,attr"`
@@ -1973,7 +2004,7 @@ JobSchedule describes the event causes for a job
 
 
 
-## <a name="JobScheduleEnvVar">type</a> [JobScheduleEnvVar](/src/target/jobs.go?s=6194:6291#L150)
+## <a name="JobScheduleEnvVar">type</a> [JobScheduleEnvVar](/src/target/jobs.go?s=6195:6292#L150)
 ``` go
 type JobScheduleEnvVar struct {
     Name  string `xml:"name,attr"`
@@ -1991,7 +2022,7 @@ JobScheduleEnvVar describes the environmnet variables for a job schedule
 
 
 
-## <a name="JobScheduleLink">type</a> [JobScheduleLink](/src/target/jobs.go?s=6355:6447#L156)
+## <a name="JobScheduleLink">type</a> [JobScheduleLink](/src/target/jobs.go?s=6356:6448#L156)
 ``` go
 type JobScheduleLink struct {
     Rel  string `xml:"rel,attr"`
@@ -2009,7 +2040,7 @@ JobScheduleLink describes the HAL links for a job schedule
 
 
 
-## <a name="JobScheduleResponse">type</a> [JobScheduleResponse](/src/target/jobs.go?s=5566:5634#L135)
+## <a name="JobScheduleResponse">type</a> [JobScheduleResponse](/src/target/jobs.go?s=5567:5635#L135)
 ``` go
 type JobScheduleResponse struct {
     Jobs []*JobSchedule `xml:"job"`
@@ -2026,7 +2057,7 @@ JobScheduleResponse contains a collection of jobs
 
 
 
-## <a name="JobStateTransition">type</a> [JobStateTransition](/src/target/jobs.go?s=5107:5297#L122)
+## <a name="JobStateTransition">type</a> [JobStateTransition](/src/target/jobs.go?s=5108:5298#L122)
 ``` go
 type JobStateTransition struct {
     StateChangeTime int    `json:"state_change_time,omitempty"`
@@ -2045,11 +2076,11 @@ JobStateTransition describes a State Transition object in a GoCD api response
 
 
 
-## <a name="JobsService">type</a> [JobsService](/src/target/jobs.go?s=296:320#L15)
+## <a name="JobsService">type</a> [JobsService](/src/target/jobs.go?s=274:298#L15)
 ``` go
 type JobsService service
 ```
-JobsService describes the HAL _link resource for the api response object for a job
+JobsService describes actions which can be performed on jobs
 
 
 
@@ -2060,9 +2091,9 @@ JobsService describes the HAL _link resource for the api response object for a j
 
 
 
-### <a name="JobsService.ListScheduled">func</a> (\*JobsService) [ListScheduled](/src/target/jobs.go?s=6488:6583#L162)
+### <a name="JobsService.ListScheduled">func</a> (\*JobsService) [ListScheduled](/src/target/jobs.go?s=6619:6728#L165)
 ``` go
-func (js *JobsService) ListScheduled(ctx context.Context) ([]*JobSchedule, *APIResponse, error)
+func (js *JobsService) ListScheduled(ctx context.Context) (jobs []*JobSchedule, resp *APIResponse, err error)
 ```
 ListScheduled lists Pipeline groups
 
@@ -2119,18 +2150,57 @@ Equal is true if the two materials are logically equivalent. Not neccesarily lit
 
 
 
-### <a name="Material.UnmarshalJSON">func</a> (\*Material) [UnmarshalJSON](/src/target/resource_pipeline_material.go?s=367:415#L21)
+### <a name="Material.Ingest">func</a> (\*Material) [Ingest](/src/target/resource_pipeline_material.go?s=557:626#L29)
 ``` go
-func (m *Material) UnmarshalJSON(b []byte) error
+func (m *Material) Ingest(payload map[string]interface{}) (err error)
+```
+Ingest an abstract structure
+
+
+
+
+### <a name="Material.IngestAttributeGenerics">func</a> (\*Material) [IngestAttributeGenerics](/src/target/resource_pipeline_material.go?s=1360:1429#L65)
+``` go
+func (m *Material) IngestAttributeGenerics(i interface{}) (err error)
+```
+IngestAttributeGenerics to Material and perform some error checking
+
+
+
+
+### <a name="Material.IngestAttributes">func</a> (\*Material) [IngestAttributes](/src/target/resource_pipeline_material.go?s=1585:1670#L73)
+``` go
+func (m *Material) IngestAttributes(rawAttributes map[string]interface{}) (err error)
+```
+IngestAttributes to Material from an abstract structure
+
+
+
+
+### <a name="Material.IngestType">func</a> (\*Material) [IngestType](/src/target/resource_pipeline_material.go?s=1095:1156#L57)
+``` go
+func (m *Material) IngestType(payload map[string]interface{})
+```
+IngestType of Material if it is provided
+
+
+
+
+### <a name="Material.UnmarshalJSON">func</a> (\*Material) [UnmarshalJSON](/src/target/resource_pipeline_material.go?s=350:404#L19)
+``` go
+func (m *Material) UnmarshalJSON(b []byte) (err error)
 ```
 UnmarshalJSON string into a Material struct
 
 
 
 
-## <a name="MaterialAttribute">type</a> [MaterialAttribute](/src/target/pipeline_material.go?s=106:193#L4)
+## <a name="MaterialAttribute">type</a> [MaterialAttribute](/src/target/pipeline_material.go?s=106:282#L4)
 ``` go
 type MaterialAttribute interface {
+    GenerateGeneric() map[string]interface{}
+    HasFilter() bool
+    GetFilter() *MaterialFilter
     // contains filtered or unexported methods
 }
 ```
@@ -2145,10 +2215,10 @@ MaterialAttribute describes the behaviour of the GoCD material structures for a 
 
 
 
-## <a name="MaterialAttributesDependency">type</a> [MaterialAttributesDependency](/src/target/pipeline_material.go?s=3021:3219#L86)
+## <a name="MaterialAttributesDependency">type</a> [MaterialAttributesDependency](/src/target/pipeline_material.go?s=3140:3348#L89)
 ``` go
 type MaterialAttributesDependency struct {
-    Name       string `json:"name"`
+    Name       string `json:"name,omitempty"`
     Pipeline   string `json:"pipeline"`
     Stage      string `json:"stage"`
     AutoUpdate bool   `json:"auto_update,omitempty"`
@@ -2165,7 +2235,34 @@ MaterialAttributesDependency describes a Pipeline dependency material
 
 
 
-## <a name="MaterialAttributesGit">type</a> [MaterialAttributesGit](/src/target/pipeline_material.go?s=245:750#L9)
+### <a name="MaterialAttributesDependency.GenerateGeneric">func</a> (MaterialAttributesDependency) [GenerateGeneric](/src/target/resource_pipeline_material_dependency.go?s=418:503#L19)
+``` go
+func (mad MaterialAttributesDependency) GenerateGeneric() (ma map[string]interface{})
+```
+GenerateGeneric form (map[string]interface) of the material filter
+
+
+
+
+### <a name="MaterialAttributesDependency.GetFilter">func</a> (MaterialAttributesDependency) [GetFilter](/src/target/resource_pipeline_material_dependency.go?s=928:995#L45)
+``` go
+func (mad MaterialAttributesDependency) GetFilter() *MaterialFilter
+```
+GetFilter from material attribute
+
+
+
+
+### <a name="MaterialAttributesDependency.HasFilter">func</a> (MaterialAttributesDependency) [HasFilter](/src/target/resource_pipeline_material_dependency.go?s=815:871#L40)
+``` go
+func (mad MaterialAttributesDependency) HasFilter() bool
+```
+HasFilter in this material attribute
+
+
+
+
+## <a name="MaterialAttributesGit">type</a> [MaterialAttributesGit](/src/target/pipeline_material.go?s=334:839#L12)
 ``` go
 type MaterialAttributesGit struct {
     Name   string `json:"name,omitempty"`
@@ -2192,10 +2289,37 @@ MaterialAttributesGit describes a git material
 
 
 
-## <a name="MaterialAttributesHg">type</a> [MaterialAttributesHg](/src/target/pipeline_material.go?s=1422:1733#L40)
+### <a name="MaterialAttributesGit.GenerateGeneric">func</a> (MaterialAttributesGit) [GenerateGeneric](/src/target/resource_pipeline_material_git.go?s=559:637#L25)
+``` go
+func (mag MaterialAttributesGit) GenerateGeneric() (ma map[string]interface{})
+```
+GenerateGeneric form (map[string]interface) of the material filter
+
+
+
+
+### <a name="MaterialAttributesGit.GetFilter">func</a> (MaterialAttributesGit) [GetFilter](/src/target/resource_pipeline_material_git.go?s=1198:1258#L48)
+``` go
+func (mag MaterialAttributesGit) GetFilter() *MaterialFilter
+```
+GetFilter from material attribute
+
+
+
+
+### <a name="MaterialAttributesGit.HasFilter">func</a> (MaterialAttributesGit) [HasFilter](/src/target/resource_pipeline_material_git.go?s=1093:1142#L43)
+``` go
+func (mag MaterialAttributesGit) HasFilter() bool
+```
+HasFilter in this material attribute
+
+
+
+
+## <a name="MaterialAttributesHg">type</a> [MaterialAttributesHg](/src/target/pipeline_material.go?s=1511:1832#L43)
 ``` go
 type MaterialAttributesHg struct {
-    Name string `json:"name"`
+    Name string `json:"name,omitempty"`
     URL  string `json:"url"`
 
     Destination  string          `json:"destination"`
@@ -2215,10 +2339,37 @@ MaterialAttributesHg describes a Mercurial material type
 
 
 
-## <a name="MaterialAttributesP4">type</a> [MaterialAttributesP4](/src/target/pipeline_material.go?s=1794:2334#L51)
+### <a name="MaterialAttributesHg.GenerateGeneric">func</a> (MaterialAttributesHg) [GenerateGeneric](/src/target/resource_pipeline_material_hg.go?s=443:520#L18)
+``` go
+func (mhg MaterialAttributesHg) GenerateGeneric() (ma map[string]interface{})
+```
+GenerateGeneric form (map[string]interface) of the material filter
+
+
+
+
+### <a name="MaterialAttributesHg.GetFilter">func</a> (MaterialAttributesHg) [GetFilter](/src/target/resource_pipeline_material_hg.go?s=713:772#L29)
+``` go
+func (mhg MaterialAttributesHg) GetFilter() *MaterialFilter
+```
+GetFilter from material attribute
+
+
+
+
+### <a name="MaterialAttributesHg.HasFilter">func</a> (MaterialAttributesHg) [HasFilter](/src/target/resource_pipeline_material_hg.go?s=609:657#L24)
+``` go
+func (mhg MaterialAttributesHg) HasFilter() bool
+```
+HasFilter in this material attribute
+
+
+
+
+## <a name="MaterialAttributesP4">type</a> [MaterialAttributesP4](/src/target/pipeline_material.go?s=1893:2443#L54)
 ``` go
 type MaterialAttributesP4 struct {
-    Name       string `json:"name"`
+    Name       string `json:"name,omitempty"`
     Port       string `json:"port"`
     UseTickets bool   `json:"use_tickets"`
     View       string `json:"view"`
@@ -2244,7 +2395,34 @@ MaterialAttributesP4 describes a Perforce material type
 
 
 
-## <a name="MaterialAttributesPackage">type</a> [MaterialAttributesPackage](/src/target/pipeline_material.go?s=3280:3346#L94)
+### <a name="MaterialAttributesP4.GenerateGeneric">func</a> (MaterialAttributesP4) [GenerateGeneric](/src/target/resource_pipeline_material_p4.go?s=491:568#L20)
+``` go
+func (mp4 MaterialAttributesP4) GenerateGeneric() (ma map[string]interface{})
+```
+GenerateGeneric form (map[string]interface) of the material filter
+
+
+
+
+### <a name="MaterialAttributesP4.GetFilter">func</a> (MaterialAttributesP4) [GetFilter](/src/target/resource_pipeline_material_p4.go?s=761:820#L31)
+``` go
+func (mp4 MaterialAttributesP4) GetFilter() *MaterialFilter
+```
+GetFilter from material attribute
+
+
+
+
+### <a name="MaterialAttributesP4.HasFilter">func</a> (MaterialAttributesP4) [HasFilter](/src/target/resource_pipeline_material_p4.go?s=657:705#L26)
+``` go
+func (mp4 MaterialAttributesP4) HasFilter() bool
+```
+HasFilter in this material attribute
+
+
+
+
+## <a name="MaterialAttributesPackage">type</a> [MaterialAttributesPackage](/src/target/pipeline_material.go?s=3409:3475#L97)
 ``` go
 type MaterialAttributesPackage struct {
     Ref string `json:"ref"`
@@ -2261,7 +2439,34 @@ MaterialAttributesPackage describes a package reference
 
 
 
-## <a name="MaterialAttributesPlugin">type</a> [MaterialAttributesPlugin](/src/target/pipeline_material.go?s=3404:3630#L99)
+### <a name="MaterialAttributesPackage.GenerateGeneric">func</a> (MaterialAttributesPackage) [GenerateGeneric](/src/target/resource_pipeline_material_pkg.go?s=372:455#L16)
+``` go
+func (mapk MaterialAttributesPackage) GenerateGeneric() (ma map[string]interface{})
+```
+GenerateGeneric form (map[string]interface) of the material filter
+
+
+
+
+### <a name="MaterialAttributesPackage.GetFilter">func</a> (MaterialAttributesPackage) [GetFilter](/src/target/resource_pipeline_material_pkg.go?s=655:720#L27)
+``` go
+func (mapk MaterialAttributesPackage) GetFilter() *MaterialFilter
+```
+GetFilter from material attribute
+
+
+
+
+### <a name="MaterialAttributesPackage.HasFilter">func</a> (MaterialAttributesPackage) [HasFilter](/src/target/resource_pipeline_material_pkg.go?s=544:598#L22)
+``` go
+func (mapk MaterialAttributesPackage) HasFilter() bool
+```
+HasFilter in this material attribute
+
+
+
+
+## <a name="MaterialAttributesPlugin">type</a> [MaterialAttributesPlugin](/src/target/pipeline_material.go?s=3533:3759#L102)
 ``` go
 type MaterialAttributesPlugin struct {
     Ref string `json:"ref"`
@@ -2282,7 +2487,34 @@ MaterialAttributesPlugin describes a plugin material
 
 
 
-## <a name="MaterialAttributesSvn">type</a> [MaterialAttributesSvn](/src/target/pipeline_material.go?s=803:1360#L24)
+### <a name="MaterialAttributesPlugin.GenerateGeneric">func</a> (MaterialAttributesPlugin) [GenerateGeneric](/src/target/resource_pipeline_material_plugin.go?s=416:498#L18)
+``` go
+func (mapp MaterialAttributesPlugin) GenerateGeneric() (ma map[string]interface{})
+```
+GenerateGeneric form (map[string]interface) of the material filter
+
+
+
+
+### <a name="MaterialAttributesPlugin.GetFilter">func</a> (MaterialAttributesPlugin) [GetFilter](/src/target/resource_pipeline_material_plugin.go?s=696:760#L29)
+``` go
+func (mapp MaterialAttributesPlugin) GetFilter() *MaterialFilter
+```
+GetFilter from material attribute
+
+
+
+
+### <a name="MaterialAttributesPlugin.HasFilter">func</a> (MaterialAttributesPlugin) [HasFilter](/src/target/resource_pipeline_material_plugin.go?s=587:640#L24)
+``` go
+func (mapp MaterialAttributesPlugin) HasFilter() bool
+```
+HasFilter in this material attribute
+
+
+
+
+## <a name="MaterialAttributesSvn">type</a> [MaterialAttributesSvn](/src/target/pipeline_material.go?s=892:1449#L27)
 ``` go
 type MaterialAttributesSvn struct {
     Name              string `json:"name,omitempty"`
@@ -2310,10 +2542,37 @@ MaterialAttributesSvn describes a material type
 
 
 
-## <a name="MaterialAttributesTfs">type</a> [MaterialAttributesTfs](/src/target/pipeline_material.go?s=2405:2946#L68)
+### <a name="MaterialAttributesSvn.GenerateGeneric">func</a> (MaterialAttributesSvn) [GenerateGeneric](/src/target/resource_pipeline_material_svn.go?s=471:549#L18)
+``` go
+func (mas MaterialAttributesSvn) GenerateGeneric() (ma map[string]interface{})
+```
+GenerateGeneric form (map[string]interface) of the material filter
+
+
+
+
+### <a name="MaterialAttributesSvn.GetFilter">func</a> (MaterialAttributesSvn) [GetFilter](/src/target/resource_pipeline_material_svn.go?s=743:803#L29)
+``` go
+func (mas MaterialAttributesSvn) GetFilter() *MaterialFilter
+```
+GetFilter from material attribute
+
+
+
+
+### <a name="MaterialAttributesSvn.HasFilter">func</a> (MaterialAttributesSvn) [HasFilter](/src/target/resource_pipeline_material_svn.go?s=638:687#L24)
+``` go
+func (mas MaterialAttributesSvn) HasFilter() bool
+```
+HasFilter in this material attribute
+
+
+
+
+## <a name="MaterialAttributesTfs">type</a> [MaterialAttributesTfs](/src/target/pipeline_material.go?s=2514:3065#L71)
 ``` go
 type MaterialAttributesTfs struct {
-    Name string `json:"name"`
+    Name string `json:"name,omitempty"`
 
     URL         string `json:"url"`
     ProjectPath string `json:"project_path"`
@@ -2340,6 +2599,33 @@ MaterialAttributesTfs describes a Team Foundation Server material
 
 
 
+### <a name="MaterialAttributesTfs.GenerateGeneric">func</a> (MaterialAttributesTfs) [GenerateGeneric](/src/target/resource_pipeline_material_tfs.go?s=659:738#L28)
+``` go
+func (mtfs MaterialAttributesTfs) GenerateGeneric() (ma map[string]interface{})
+```
+GenerateGeneric form (map[string]interface) of the material filter
+
+
+
+
+### <a name="MaterialAttributesTfs.GetFilter">func</a> (MaterialAttributesTfs) [GetFilter](/src/target/resource_pipeline_material_tfs.go?s=933:994#L39)
+``` go
+func (mtfs MaterialAttributesTfs) GetFilter() *MaterialFilter
+```
+GetFilter from material attribute
+
+
+
+
+### <a name="MaterialAttributesTfs.HasFilter">func</a> (MaterialAttributesTfs) [HasFilter](/src/target/resource_pipeline_material_tfs.go?s=827:877#L34)
+``` go
+func (mtfs MaterialAttributesTfs) HasFilter() bool
+```
+HasFilter in this material attribute
+
+
+
+
 ## <a name="MaterialFilter">type</a> [MaterialFilter](/src/target/pipeline.go?s=2165:2228#L57)
 ``` go
 type MaterialFilter struct {
@@ -2353,6 +2639,15 @@ MaterialFilter describes which globs to ignore
 
 
 
+
+
+
+
+### <a name="MaterialFilter.GenerateGeneric">func</a> (\*MaterialFilter) [GenerateGeneric](/src/target/resource_pipeline_material.go?s=2884:2954#L115)
+``` go
+func (mf *MaterialFilter) GenerateGeneric() (g map[string]interface{})
+```
+GenerateGeneric form (map[string]interface) of the material filter
 
 
 
@@ -2504,7 +2799,7 @@ Pipeline describes a pipeline object
 
 
 
-### <a name="Pipeline.AddStage">func</a> (\*Pipeline) [AddStage](/src/target/resource_pipeline.go?s=748:789#L39)
+### <a name="Pipeline.AddStage">func</a> (\*Pipeline) [AddStage](/src/target/resource_pipeline.go?s=750:791#L40)
 ``` go
 func (p *Pipeline) AddStage(stage *Stage)
 ```
@@ -2513,7 +2808,7 @@ AddStage appends a stage to this pipeline
 
 
 
-### <a name="Pipeline.GetLinks">func</a> (\*Pipeline) [GetLinks](/src/target/resource_pipeline.go?s=445:484#L24)
+### <a name="Pipeline.GetLinks">func</a> (\*Pipeline) [GetLinks](/src/target/resource_pipeline.go?s=447:486#L25)
 ``` go
 func (p *Pipeline) GetLinks() *HALLinks
 ```
@@ -2522,7 +2817,7 @@ GetLinks from pipeline
 
 
 
-### <a name="Pipeline.GetName">func</a> (\*Pipeline) [GetName](/src/target/resource_pipeline.go?s=533:568#L29)
+### <a name="Pipeline.GetName">func</a> (\*Pipeline) [GetName](/src/target/resource_pipeline.go?s=535:570#L30)
 ``` go
 func (p *Pipeline) GetName() string
 ```
@@ -2531,9 +2826,9 @@ GetName of the pipeline
 
 
 
-### <a name="Pipeline.GetStage">func</a> (\*Pipeline) [GetStage](/src/target/resource_pipeline.go?s=146:198#L9)
+### <a name="Pipeline.GetStage">func</a> (\*Pipeline) [GetStage](/src/target/resource_pipeline.go?s=146:206#L9)
 ``` go
-func (p *Pipeline) GetStage(stageName string) *Stage
+func (p *Pipeline) GetStage(stageName string) (stage *Stage)
 ```
 GetStage from the pipeline template
 
@@ -2549,7 +2844,7 @@ GetStages from the pipeline
 
 
 
-### <a name="Pipeline.GetVersion">func</a> (\*Pipeline) [GetVersion](/src/target/resource_pipeline.go?s=1250:1298#L60)
+### <a name="Pipeline.GetVersion">func</a> (\*Pipeline) [GetVersion](/src/target/resource_pipeline.go?s=1252:1300#L61)
 ``` go
 func (p *Pipeline) GetVersion() (version string)
 ```
@@ -2558,7 +2853,7 @@ GetVersion retrieves a version string for this pipeline
 
 
 
-### <a name="Pipeline.RemoveLinks">func</a> (\*Pipeline) [RemoveLinks](/src/target/resource_pipeline.go?s=366:398#L19)
+### <a name="Pipeline.RemoveLinks">func</a> (\*Pipeline) [RemoveLinks](/src/target/resource_pipeline.go?s=368:400#L20)
 ``` go
 func (p *Pipeline) RemoveLinks()
 ```
@@ -2567,7 +2862,7 @@ RemoveLinks from the pipeline object for json marshalling.
 
 
 
-### <a name="Pipeline.SetStage">func</a> (\*Pipeline) [SetStage](/src/target/resource_pipeline.go?s=881:925#L44)
+### <a name="Pipeline.SetStage">func</a> (\*Pipeline) [SetStage](/src/target/resource_pipeline.go?s=883:927#L45)
 ``` go
 func (p *Pipeline) SetStage(newStage *Stage)
 ```
@@ -2576,7 +2871,7 @@ SetStage replaces a stage if it already exists
 
 
 
-### <a name="Pipeline.SetStages">func</a> (\*Pipeline) [SetStages](/src/target/resource_pipeline.go?s=633:678#L34)
+### <a name="Pipeline.SetStages">func</a> (\*Pipeline) [SetStages](/src/target/resource_pipeline.go?s=635:680#L35)
 ``` go
 func (p *Pipeline) SetStages(stages []*Stage)
 ```
@@ -2585,7 +2880,7 @@ SetStages overwrites any existing stages
 
 
 
-### <a name="Pipeline.SetVersion">func</a> (\*Pipeline) [SetVersion](/src/target/resource_pipeline.go?s=1119:1164#L55)
+### <a name="Pipeline.SetVersion">func</a> (\*Pipeline) [SetVersion](/src/target/resource_pipeline.go?s=1121:1166#L56)
 ``` go
 func (p *Pipeline) SetVersion(version string)
 ```
@@ -2630,7 +2925,7 @@ PipelineConfigRequest describes a request object for creating or updating pipeli
 
 
 
-### <a name="PipelineConfigRequest.GetVersion">func</a> (\*PipelineConfigRequest) [GetVersion](/src/target/resource_pipeline.go?s=1355:1417#L65)
+### <a name="PipelineConfigRequest.GetVersion">func</a> (\*PipelineConfigRequest) [GetVersion](/src/target/resource_pipeline.go?s=1357:1419#L66)
 ``` go
 func (pr *PipelineConfigRequest) GetVersion() (version string)
 ```
@@ -2639,7 +2934,7 @@ GetVersion of pipeline config
 
 
 
-### <a name="PipelineConfigRequest.SetVersion">func</a> (\*PipelineConfigRequest) [SetVersion](/src/target/resource_pipeline.go?s=1489:1548#L70)
+### <a name="PipelineConfigRequest.SetVersion">func</a> (\*PipelineConfigRequest) [SetVersion](/src/target/resource_pipeline.go?s=1491:1550#L71)
 ``` go
 func (pr *PipelineConfigRequest) SetVersion(version string)
 ```
@@ -2663,16 +2958,16 @@ PipelineConfigsService describes the HAL _link resource for the api response obj
 
 
 
-### <a name="PipelineConfigsService.Create">func</a> (\*PipelineConfigsService) [Create](/src/target/pipelineconfig.go?s=1209:1331#L46)
+### <a name="PipelineConfigsService.Create">func</a> (\*PipelineConfigsService) [Create](/src/target/pipelineconfig.go?s=1199:1333#L46)
 ``` go
-func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *Pipeline) (*Pipeline, *APIResponse, error)
+func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *Pipeline) (pr *Pipeline, resp *APIResponse, err error)
 ```
 Create a pipeline configuration
 
 
 
 
-### <a name="PipelineConfigsService.Delete">func</a> (\*PipelineConfigsService) [Delete](/src/target/pipelineconfig.go?s=1637:1742#L63)
+### <a name="PipelineConfigsService.Delete">func</a> (\*PipelineConfigsService) [Delete](/src/target/pipelineconfig.go?s=1622:1727#L63)
 ``` go
 func (pcs *PipelineConfigsService) Delete(ctx context.Context, name string) (string, *APIResponse, error)
 ```
@@ -2681,18 +2976,18 @@ Delete a pipeline configuration
 
 
 
-### <a name="PipelineConfigsService.Get">func</a> (\*PipelineConfigsService) [Get](/src/target/pipelineconfig.go?s=457:562#L18)
+### <a name="PipelineConfigsService.Get">func</a> (\*PipelineConfigsService) [Get](/src/target/pipelineconfig.go?s=457:573#L18)
 ``` go
-func (pcs *PipelineConfigsService) Get(ctx context.Context, name string) (*Pipeline, *APIResponse, error)
+func (pcs *PipelineConfigsService) Get(ctx context.Context, name string) (p *Pipeline, resp *APIResponse, err error)
 ```
 Get a single PipelineTemplate object in the GoCD API.
 
 
 
 
-### <a name="PipelineConfigsService.Update">func</a> (\*PipelineConfigsService) [Update](/src/target/pipelineconfig.go?s=795:916#L30)
+### <a name="PipelineConfigsService.Update">func</a> (\*PipelineConfigsService) [Update](/src/target/pipelineconfig.go?s=790:923#L30)
 ``` go
-func (pcs *PipelineConfigsService) Update(ctx context.Context, name string, p *Pipeline) (*Pipeline, *APIResponse, error)
+func (pcs *PipelineConfigsService) Update(ctx context.Context, name string, p *Pipeline) (pr *Pipeline, resp *APIResponse, err error)
 ```
 Update a pipeline configuration
 
@@ -3074,16 +3369,16 @@ PipelineTemplatesService describes the HAL _link resource for the api response o
 
 
 
-### <a name="PipelineTemplatesService.Create">func</a> (\*PipelineTemplatesService) [Create](/src/target/pipelinetemplate.go?s=2401:2532#L76)
+### <a name="PipelineTemplatesService.Create">func</a> (\*PipelineTemplatesService) [Create](/src/target/pipelinetemplate.go?s=2299:2443#L75)
 ``` go
-func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st []*Stage) (*PipelineTemplate, *APIResponse, error)
+func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st []*Stage) (ptr *PipelineTemplate, resp *APIResponse, err error)
 ```
 Create a new PipelineTemplate object in the GoCD API.
 
 
 
 
-### <a name="PipelineTemplatesService.Delete">func</a> (\*PipelineTemplatesService) [Delete](/src/target/pipelinetemplate.go?s=3417:3524#L116)
+### <a name="PipelineTemplatesService.Delete">func</a> (\*PipelineTemplatesService) [Delete](/src/target/pipelinetemplate.go?s=3293:3400#L113)
 ``` go
 func (pts *PipelineTemplatesService) Delete(ctx context.Context, name string) (string, *APIResponse, error)
 ```
@@ -3092,27 +3387,27 @@ Delete a PipelineTemplate from the GoCD API.
 
 
 
-### <a name="PipelineTemplatesService.Get">func</a> (\*PipelineTemplatesService) [Get](/src/target/pipelinetemplate.go?s=1527:1642#L50)
+### <a name="PipelineTemplatesService.Get">func</a> (\*PipelineTemplatesService) [Get](/src/target/pipelinetemplate.go?s=1527:1654#L50)
 ``` go
-func (pts *PipelineTemplatesService) Get(ctx context.Context, name string) (*PipelineTemplate, *APIResponse, error)
+func (pts *PipelineTemplatesService) Get(ctx context.Context, name string) (pt *PipelineTemplate, resp *APIResponse, err error)
 ```
 Get a single PipelineTemplate object in the GoCD API.
 
 
 
 
-### <a name="PipelineTemplatesService.List">func</a> (\*PipelineTemplatesService) [List](/src/target/pipelinetemplate.go?s=2007:2112#L63)
+### <a name="PipelineTemplatesService.List">func</a> (\*PipelineTemplatesService) [List](/src/target/pipelinetemplate.go?s=1900:2017#L62)
 ``` go
-func (pts *PipelineTemplatesService) List(ctx context.Context) ([]*PipelineTemplate, *APIResponse, error)
+func (pts *PipelineTemplatesService) List(ctx context.Context) (pt []*PipelineTemplate, resp *APIResponse, err error)
 ```
 List all PipelineTemplate objects in the GoCD API.
 
 
 
 
-### <a name="PipelineTemplatesService.Update">func</a> (\*PipelineTemplatesService) [Update](/src/target/pipelinetemplate.go?s=2879:3025#L96)
+### <a name="PipelineTemplatesService.Update">func</a> (\*PipelineTemplatesService) [Update](/src/target/pipelinetemplate.go?s=2772:2931#L95)
 ``` go
-func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, template *PipelineTemplate) (*PipelineTemplate, *APIResponse, error)
+func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, template *PipelineTemplate) (ptr *PipelineTemplate, resp *APIResponse, err error)
 ```
 Update an PipelineTemplate object in the GoCD API.
 
@@ -3134,34 +3429,34 @@ PipelinesService describes the HAL _link resource for the api response object fo
 
 
 
-### <a name="PipelinesService.GetHistory">func</a> (\*PipelinesService) [GetHistory](/src/target/pipeline.go?s=5599:5724#L153)
+### <a name="PipelinesService.GetHistory">func</a> (\*PipelinesService) [GetHistory](/src/target/pipeline.go?s=5576:5713#L152)
 ``` go
-func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset int) (*PipelineHistory, *APIResponse, error)
+func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset int) (pt *PipelineHistory, resp *APIResponse, err error)
 ```
 GetHistory returns a list of pipeline instances describing the pipeline history.
 
 
 
 
-### <a name="PipelinesService.GetInstance">func</a> (\*PipelinesService) [GetInstance](/src/target/pipeline.go?s=5145:5272#L140)
+### <a name="PipelinesService.GetInstance">func</a> (\*PipelinesService) [GetInstance](/src/target/pipeline.go?s=5140:5279#L140)
 ``` go
-func (pgs *PipelinesService) GetInstance(ctx context.Context, name string, offset int) (*PipelineInstance, *APIResponse, error)
+func (pgs *PipelinesService) GetInstance(ctx context.Context, name string, offset int) (pt *PipelineInstance, resp *APIResponse, err error)
 ```
 GetInstance of a pipeline run.
 
 
 
 
-### <a name="PipelinesService.GetStatus">func</a> (\*PipelinesService) [GetStatus](/src/target/pipeline.go?s=4157:4280#L114)
+### <a name="PipelinesService.GetStatus">func</a> (\*PipelinesService) [GetStatus](/src/target/pipeline.go?s=4157:4292#L114)
 ``` go
-func (pgs *PipelinesService) GetStatus(ctx context.Context, name string, offset int) (*PipelineStatus, *APIResponse, error)
+func (pgs *PipelinesService) GetStatus(ctx context.Context, name string, offset int) (ps *PipelineStatus, resp *APIResponse, err error)
 ```
 GetStatus returns a list of pipeline instanves describing the pipeline history.
 
 
 
 
-### <a name="PipelinesService.Pause">func</a> (\*PipelinesService) [Pause](/src/target/pipeline.go?s=4533:4629#L125)
+### <a name="PipelinesService.Pause">func</a> (\*PipelinesService) [Pause](/src/target/pipeline.go?s=4528:4624#L125)
 ``` go
 func (pgs *PipelinesService) Pause(ctx context.Context, name string) (bool, *APIResponse, error)
 ```
@@ -3170,7 +3465,7 @@ Pause allows a pipeline to handle new build events
 
 
 
-### <a name="PipelinesService.ReleaseLock">func</a> (\*PipelinesService) [ReleaseLock](/src/target/pipeline.go?s=4950:5052#L135)
+### <a name="PipelinesService.ReleaseLock">func</a> (\*PipelinesService) [ReleaseLock](/src/target/pipeline.go?s=4945:5047#L135)
 ``` go
 func (pgs *PipelinesService) ReleaseLock(ctx context.Context, name string) (bool, *APIResponse, error)
 ```
@@ -3179,7 +3474,7 @@ ReleaseLock frees a pipeline to handle new build events
 
 
 
-### <a name="PipelinesService.Unpause">func</a> (\*PipelinesService) [Unpause](/src/target/pipeline.go?s=4738:4836#L130)
+### <a name="PipelinesService.Unpause">func</a> (\*PipelinesService) [Unpause](/src/target/pipeline.go?s=4733:4831#L130)
 ``` go
 func (pgs *PipelinesService) Unpause(ctx context.Context, name string) (bool, *APIResponse, error)
 ```
@@ -3229,7 +3524,7 @@ Plugin describes a single plugin resource.
 
 
 
-## <a name="PluginConfiguration">type</a> [PluginConfiguration](/src/target/jobs.go?s=2829:2971#L72)
+## <a name="PluginConfiguration">type</a> [PluginConfiguration](/src/target/jobs.go?s=2830:2972#L72)
 ``` go
 type PluginConfiguration struct {
     Key      string                      `json:"key"`
@@ -3247,7 +3542,7 @@ PluginConfiguration describes how to reference a plugin.
 
 
 
-## <a name="PluginConfigurationKVPair">type</a> [PluginConfigurationKVPair](/src/target/jobs.go?s=3322:3419#L85)
+## <a name="PluginConfigurationKVPair">type</a> [PluginConfigurationKVPair](/src/target/jobs.go?s=3323:3420#L85)
 ``` go
 type PluginConfigurationKVPair struct {
     Key   string `json:"key"`
@@ -3265,7 +3560,7 @@ PluginConfigurationKVPair describes a key/value pair of plugin configurations.
 
 
 
-## <a name="PluginConfigurationMetadata">type</a> [PluginConfigurationMetadata](/src/target/jobs.go?s=3072:3238#L78)
+## <a name="PluginConfigurationMetadata">type</a> [PluginConfigurationMetadata](/src/target/jobs.go?s=3073:3239#L78)
 ``` go
 type PluginConfigurationMetadata struct {
     Secure         bool `json:"secure"`
@@ -3336,9 +3631,9 @@ PluginsService exposes calls for interacting with Plugin objects in the GoCD API
 
 
 
-### <a name="PluginsService.Get">func</a> (\*PluginsService) [Get](/src/target/plugin.go?s=1668:1762#L54)
+### <a name="PluginsService.Get">func</a> (\*PluginsService) [Get](/src/target/plugin.go?s=1668:1773#L54)
 ``` go
-func (ps *PluginsService) Get(ctx context.Context, name string) (*Plugin, *APIResponse, error)
+func (ps *PluginsService) Get(ctx context.Context, name string) (p *Plugin, resp *APIResponse, err error)
 ```
 Get retrieves information about a specific plugin.
 
@@ -3354,7 +3649,7 @@ List retrieves all plugins
 
 
 
-## <a name="Properties">type</a> [Properties](/src/target/resource_properties.go?s=161:305#L13)
+## <a name="Properties">type</a> [Properties](/src/target/resource_properties.go?s=289:433#L21)
 ``` go
 type Properties struct {
     UnmarshallWithHeader bool
@@ -3371,7 +3666,7 @@ Properties describes a properties resource in the GoCD API.
 
 
 
-### <a name="NewPropertiesFrame">func</a> [NewPropertiesFrame](/src/target/resource_properties.go?s=385:438#L21)
+### <a name="NewPropertiesFrame">func</a> [NewPropertiesFrame](/src/target/resource_properties.go?s=513:566#L29)
 ``` go
 func NewPropertiesFrame(frame [][]string) *Properties
 ```
@@ -3381,7 +3676,7 @@ NewPropertiesFrame generate a new data frame for properties on a gocd job.
 
 
 
-### <a name="Properties.AddRow">func</a> (\*Properties) [AddRow](/src/target/resource_properties.go?s=875:915#L45)
+### <a name="Properties.AddRow">func</a> (\*Properties) [AddRow](/src/target/resource_properties.go?s=1003:1043#L53)
 ``` go
 func (pr *Properties) AddRow(r []string)
 ```
@@ -3390,7 +3685,7 @@ AddRow to an existing properties data frame
 
 
 
-### <a name="Properties.Get">func</a> (Properties) [Get](/src/target/resource_properties.go?s=633:688#L34)
+### <a name="Properties.Get">func</a> (Properties) [Get](/src/target/resource_properties.go?s=761:816#L42)
 ``` go
 func (pr Properties) Get(row int, column string) string
 ```
@@ -3399,7 +3694,7 @@ Get a single parameter value for a given run of the job.
 
 
 
-### <a name="Properties.MarshalJSON">func</a> (\*Properties) [MarshalJSON](/src/target/resource_properties.go?s=2312:2363#L108)
+### <a name="Properties.MarshalJSON">func</a> (\*Properties) [MarshalJSON](/src/target/resource_properties.go?s=2440:2491#L116)
 ``` go
 func (pr *Properties) MarshalJSON() ([]byte, error)
 ```
@@ -3408,7 +3703,7 @@ MarshalJSON converts the properties structure to a list of maps
 
 
 
-### <a name="Properties.MarshallCSV">func</a> (Properties) [MarshallCSV](/src/target/resource_properties.go?s=1203:1253#L58)
+### <a name="Properties.MarshallCSV">func</a> (Properties) [MarshallCSV](/src/target/resource_properties.go?s=1331:1381#L66)
 ``` go
 func (pr Properties) MarshallCSV() (string, error)
 ```
@@ -3417,7 +3712,7 @@ MarshallCSV returns the data frame as a string
 
 
 
-### <a name="Properties.SetRow">func</a> (\*Properties) [SetRow](/src/target/resource_properties.go?s=990:1039#L50)
+### <a name="Properties.SetRow">func</a> (\*Properties) [SetRow](/src/target/resource_properties.go?s=1118:1167#L58)
 ``` go
 func (pr *Properties) SetRow(row int, r []string)
 ```
@@ -3426,7 +3721,7 @@ SetRow in an existing data frame
 
 
 
-### <a name="Properties.UnmarshallCSV">func</a> (\*Properties) [UnmarshallCSV](/src/target/resource_properties.go?s=1588:1641#L75)
+### <a name="Properties.UnmarshallCSV">func</a> (\*Properties) [UnmarshallCSV](/src/target/resource_properties.go?s=1716:1769#L83)
 ``` go
 func (pr *Properties) UnmarshallCSV(raw string) error
 ```
@@ -3435,7 +3730,7 @@ UnmarshallCSV returns the data frame from a string
 
 
 
-### <a name="Properties.Write">func</a> (\*Properties) [Write](/src/target/resource_properties.go?s=2025:2081#L96)
+### <a name="Properties.Write">func</a> (\*Properties) [Write](/src/target/resource_properties.go?s=2153:2209#L104)
 ``` go
 func (pr *Properties) Write(p []byte) (n int, err error)
 ```
@@ -3444,7 +3739,7 @@ Write the data frame to a byte stream as a csv.
 
 
 
-## <a name="PropertiesService">type</a> [PropertiesService](/src/target/properties.go?s=136:166#L11)
+## <a name="PropertiesService">type</a> [PropertiesService](/src/target/properties.go?s=125:155#L10)
 ``` go
 type PropertiesService service
 ```
@@ -3459,16 +3754,16 @@ PropertiesService describes Actions which can be performed on agents
 
 
 
-### <a name="PropertiesService.Create">func</a> (\*PropertiesService) [Create](/src/target/properties.go?s=1604:1736#L54)
+### <a name="PropertiesService.Create">func</a> (\*PropertiesService) [Create](/src/target/properties.go?s=1566:1723#L52)
 ``` go
-func (ps *PropertiesService) Create(ctx context.Context, name string, value string, pr *PropertyRequest) (bool, *APIResponse, error)
+func (ps *PropertiesService) Create(ctx context.Context, name string, value string, pr *PropertyRequest) (responseIsValid bool, resp *APIResponse, err error)
 ```
 Create a specific property for the given job/pipeline/stage run.
 
 
 
 
-### <a name="PropertiesService.Get">func</a> (\*PropertiesService) [Get](/src/target/properties.go?s=1139:1261#L43)
+### <a name="PropertiesService.Get">func</a> (\*PropertiesService) [Get](/src/target/properties.go?s=1115:1237#L42)
 ``` go
 func (ps *PropertiesService) Get(ctx context.Context, name string, pr *PropertyRequest) (*Properties, *APIResponse, error)
 ```
@@ -3477,7 +3772,7 @@ Get a specific property for the given job/pipeline/stage run.
 
 
 
-### <a name="PropertiesService.List">func</a> (\*PropertiesService) [List](/src/target/properties.go?s=692:802#L32)
+### <a name="PropertiesService.List">func</a> (\*PropertiesService) [List](/src/target/properties.go?s=681:791#L31)
 ``` go
 func (ps *PropertiesService) List(ctx context.Context, pr *PropertyRequest) (*Properties, *APIResponse, error)
 ```
@@ -3486,7 +3781,7 @@ List the properties for the given job/pipeline/stage run.
 
 
 
-### <a name="PropertiesService.ListHistorical">func</a> (\*PropertiesService) [ListHistorical](/src/target/properties.go?s=2508:2628#L82)
+### <a name="PropertiesService.ListHistorical">func</a> (\*PropertiesService) [ListHistorical](/src/target/properties.go?s=2448:2568#L76)
 ``` go
 func (ps *PropertiesService) ListHistorical(ctx context.Context, pr *PropertyRequest) (*Properties, *APIResponse, error)
 ```
@@ -3495,7 +3790,7 @@ ListHistorical properties for a given pipeline, stage, job.
 
 
 
-## <a name="PropertyCreateResponse">type</a> [PropertyCreateResponse](/src/target/properties.go?s=563:629#L26)
+## <a name="PropertyCreateResponse">type</a> [PropertyCreateResponse](/src/target/properties.go?s=552:618#L25)
 ``` go
 type PropertyCreateResponse struct {
     Name  string
@@ -3513,7 +3808,7 @@ PropertyCreateResponse handles the parsing of the response when creating a prope
 
 
 
-## <a name="PropertyRequest">type</a> [PropertyRequest](/src/target/properties.go?s=262:474#L14)
+## <a name="PropertyRequest">type</a> [PropertyRequest](/src/target/properties.go?s=251:463#L13)
 ``` go
 type PropertyRequest struct {
     Pipeline        string
@@ -3643,7 +3938,7 @@ StringResponse handles the unmarshaling of the single string response from DELET
 
 
 
-## <a name="Tab">type</a> [Tab](/src/target/jobs.go?s=2241:2314#L51)
+## <a name="Tab">type</a> [Tab](/src/target/jobs.go?s=2242:2315#L51)
 ``` go
 type Tab struct {
     Name string `json:"name"`
@@ -3661,7 +3956,7 @@ Tab description in a gocd job
 
 
 
-## <a name="Task">type</a> [Task](/src/target/jobs.go?s=3470:3578#L91)
+## <a name="Task">type</a> [Task](/src/target/jobs.go?s=3471:3579#L91)
 ``` go
 type Task struct {
     Type       string         `json:"type"`
@@ -3688,7 +3983,7 @@ Validate each of the possible task types.
 
 
 
-## <a name="TaskAttributes">type</a> [TaskAttributes](/src/target/jobs.go?s=3639:4850#L97)
+## <a name="TaskAttributes">type</a> [TaskAttributes](/src/target/jobs.go?s=3640:4851#L97)
 ``` go
 type TaskAttributes struct {
     RunIf               []string                    `json:"run_if,omitempty"`
@@ -3737,7 +4032,7 @@ ValidateExec checks that the specified values for the Task struct are correct fo
 
 
 
-## <a name="TaskPluginConfiguration">type</a> [TaskPluginConfiguration](/src/target/jobs.go?s=4924:5024#L116)
+## <a name="TaskPluginConfiguration">type</a> [TaskPluginConfiguration](/src/target/jobs.go?s=4925:5025#L116)
 ``` go
 type TaskPluginConfiguration struct {
     ID      string `json:"id"`
@@ -3751,6 +4046,39 @@ TaskPluginConfiguration is for specifying options for pluggable task
 
 
 
+
+
+
+
+## <a name="TimeoutField">type</a> [TimeoutField](/src/target/jobs.go?s=6557:6578#L162)
+``` go
+type TimeoutField int
+```
+TimeoutField helps manage the marshalling of the timoeut field which can be both "never" and an integer
+
+
+
+
+
+
+
+
+
+
+### <a name="TimeoutField.MarshalJSON">func</a> (TimeoutField) [MarshalJSON](/src/target/resource_jobs.go?s=885:943#L48)
+``` go
+func (tf TimeoutField) MarshalJSON() (b []byte, err error)
+```
+MarshallJSON of TimeoutField into a string
+
+
+
+
+### <a name="TimeoutField.UnmarshalJSON">func</a> (\*TimeoutField) [UnmarshalJSON](/src/target/resource_jobs.go?s=556:615#L31)
+``` go
+func (tf *TimeoutField) UnmarshalJSON(b []byte) (err error)
+```
+UnmarshalJSON and handle "never", "null", and integers.
 
 
 

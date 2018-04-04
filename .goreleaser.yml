@@ -31,7 +31,7 @@ archive:
     - CHANGELOG.md
 
 fpm:
-  homepage: https://github.com/drewsonne/go-gocd
+  homepage: https://github.com/beamly/go-gocd
   maintainer: Drew J. Sonne <drew.sonne@gmail.com>
   license: Apache2
   formats:
@@ -42,9 +42,9 @@ fpm:
 
 brew:
   github:
-    owner: drewsonne
+    owner: beamly
     name: homebrew-devops
-  homepage: https://github.com/drewsonne/terraform-provider-gocd
+  homepage: https://github.com/beamly/terraform-provider-gocd
   description: Terraform Provider for ThoughtWorks GoCD
   dependencies:
     - drewsonne/homebrew-tap/tf-install-provider

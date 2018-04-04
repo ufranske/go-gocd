@@ -4,8 +4,8 @@
     {
       "type": "git",
       "attributes": {
-        "url": "https://github.com/drewsonne/go-gocd",
-        "destination": "src/github.com/drewsonne/go-gocd"
+        "url": "https://github.com/beamly/go-gocd",
+        "destination": "src/github.com/beamly/go-gocd"
       }
     }
   ],

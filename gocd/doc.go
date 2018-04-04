@@ -8,7 +8,7 @@ Package gocd provides a client for using the GoCD Server API.
 
 Usage:
 
-	import "github.com/drewsonne/go-gocd/gocd"
+	import "github.com/beamly/go-gocd/gocd"
 
 Construct a new GoCD client and supply the URL to your GoCD server and if required, username and password. Then use the
 various services on the client to access different parts of the GoCD API.
@@ -16,7 +16,7 @@ For example:
 
 	package main
 	import (
-		"github.com/drewsonne/go-gocd/gocd"
+		"github.com/beamly/go-gocd/gocd"
 		"context"
 		"fmt"
 	)
@@ -51,7 +51,7 @@ If you wish to use your own http client, you can use the following idiom
 	package main
 
 	import (
-		"github.com/drewsonne/go-gocd/gocd"
+		"github.com/beamly/go-gocd/gocd"
 		"net/http"
 		"context"
 	)

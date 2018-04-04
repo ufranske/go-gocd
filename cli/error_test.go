@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/drewsonne/go-gocd/gocd"
+	"github.com/beamly/go-gocd/gocd"
 	"github.com/stretchr/testify/assert"
 	"github.com/urfave/cli"
 )
