@@ -14,3 +14,10 @@
 
  - Right now, the best feature you can implement is one of the API resources. If you would like to add a new endpoint for the API, have a look at the [Encryption endpoint](https://github.com/drewsonne/go-gocd/blob/master/gocd/encryption.go) as a basic example of the structure of an API action.
  - Make sure to run `make format` and `make test` before submitting a PR.
+
+## Running Tests
+
+    go get github.com/drewsonne/go-gocd
+    cd $GOPATH/src/github.com/drewsonne/go-gocd
+    make before_install
+    make test
