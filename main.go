@@ -3,8 +3,8 @@
 package main
 
 import (
-	gocli "github.com/drewsonne/go-gocd/cli"
-	"github.com/drewsonne/go-gocd/gocd"
+	gocli "github.com/beamly/go-gocd/cli"
+	"github.com/beamly/go-gocd/gocd"
 	"github.com/urfave/cli"
 	"os"
 	"sort"

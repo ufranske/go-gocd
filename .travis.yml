@@ -3,8 +3,6 @@ go:
   - 1.8.x
   - 1.9.x
   - 1.10.x
-#  - release
-#  - tip
 
 env:
  - CODECLIMATE_API_HOST=https://codebeat.co/webhooks/code_coverage
@@ -16,9 +14,6 @@ addons:
     - rpm
 
 matrix:
-#  allow_failures:
-#    - go: release
-#    - go: tip
   fast_finish: true
 
 before_install:
@@ -40,10 +35,10 @@ deploy:
     script: make deploy_on_tag
     on:
       tags: true
-      condition: $TRAVIS_GO_VERSION =~ ^1\.9(\.[0-9]+)?$
+      condition: $TRAVIS_GO_VERSION =~ ^1\.10(\.[0-9]+)?$
   - provider: script
     skip_cleanup: true
     script: make deploy_on_develop
     on:
       branch: develop
-      condition: $TRAVIS_GO_VERSION =~ ^1\.9(\.[0-9]+)?$
+      condition: $TRAVIS_GO_VERSION =~ ^1\.10(\.[0-9]+)?$

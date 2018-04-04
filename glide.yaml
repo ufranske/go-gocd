@@ -1,4 +1,4 @@
-package: github.com/drewsonne/go-gocd
+package: github.com/beamly/go-gocd
 import:
 - package: github.com/urakozz/go-json-schema-generator
 - package: github.com/urfave/cli
