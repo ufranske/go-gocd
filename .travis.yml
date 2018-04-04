@@ -17,8 +17,6 @@ matrix:
   fast_finish: true
 
 before_install:
-  - pip install --upgrade pip
-  - pip install codecov
   - make before_install
 
 script:
@@ -26,7 +24,7 @@ script:
   - make test
 
 after_success:
-  - codecov
+  - bash <(curl -s https://codecov.io/bash)
   - go get github.com/goreleaser/goreleaser
   - npm install -g codeclimate-test-reporter
   - codeclimate-test-reporter < coverage.out
