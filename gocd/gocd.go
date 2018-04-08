@@ -86,6 +86,7 @@ type Client struct {
 	Pipelines         *PipelinesService
 	PipelineConfigs   *PipelineConfigsService
 	Configuration     *ConfigurationService
+	ConfigRepos       *ConfigRepoService
 	Encryption        *EncryptionService
 	Plugins           *PluginsService
 	Environments      *EnvironmentsService
@@ -160,6 +161,7 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 	c.Pipelines = (*PipelinesService)(&c.common)
 	c.PipelineConfigs = (*PipelineConfigsService)(&c.common)
 	c.Configuration = (*ConfigurationService)(&c.common)
+	c.ConfigRepos = (*ConfigRepoService)(&c.common)
 	c.Encryption = (*EncryptionService)(&c.common)
 	c.Plugins = (*PluginsService)(&c.common)
 	c.Environments = (*EnvironmentsService)(&c.common)
