@@ -2,6 +2,7 @@ package gocd
 
 import (
 	"context"
+	"fmt"
 )
 
 // ConfigRepoService allows admin users to define and manage config repos using
@@ -24,6 +25,7 @@ type ConfigRepo struct {
 	Material      Material              `json:"material"`
 	Configuration []*ConfigRepoProperty `json:"configuration"`
 	Links         *HALLinks             `json:"_links,omitempty,omitempty"`
+	Version       string                `json:"version,omitempty"`
 	client        *Client
 }
 
@@ -49,5 +51,18 @@ func (s *ConfigRepoService) List(ctx context.Context) (repos []*ConfigRepo, resp
 	}
 	repos = r.Embedded.Repos
 
+	return
+}
+
+// Get fetches the config repo object for a specified id
+func (s *ConfigRepoService) Get(ctx context.Context, id string) (repo *ConfigRepo, resp *APIResponse, err error) {
+	repo = &ConfigRepo{}
+	_, resp, err = s.client.getAction(ctx, &APIClientRequest{
+		Path:         fmt.Sprintf("admin/config_repos/%s", id),
+		ResponseBody: repo,
+		APIVersion:   apiV1,
+	})
+
+	repo.client = s.client
 	return
 }

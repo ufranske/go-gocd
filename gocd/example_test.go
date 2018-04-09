@@ -43,6 +43,7 @@ func ExampleConfigRepoService_List() {
 	if err != nil {
 		panic(err)
 	}
+	// Loops through the list of repositories to display some basic informations
 	for _, r := range l {
 		fmt.Printf("Pipeline: %s\n\tMaterial type: %s\n", r.ID, r.Material.Type)
 		if r.Material.Type == "git" {
@@ -50,4 +51,24 @@ func ExampleConfigRepoService_List() {
 		}
 		fmt.Printf("\tNumber of configuration parameters: %d\n\n", len(r.Configuration))
 	}
+}
+
+func ExampleConfigRepoService_Get() {
+	cfg := gocd.Configuration{
+		Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+		Username: "ApiUser",
+		Password: "MySecretPassword",
+	}
+
+	c := cfg.Client()
+
+	r, _, err := c.ConfigRepos.Get(context.Background(), "my_repo_config_id")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Pipeline: %s\n\tMaterial type: %s\n", r.ID, r.Material.Type)
+	if r.Material.Type == "git" {
+		fmt.Printf("\tMaterial url: %s\n", r.Material.Attributes.(*gocd.MaterialAttributesGit).URL)
+	}
+	fmt.Printf("\tNumber of configuration parameters: %d\n\n", len(r.Configuration))
 }

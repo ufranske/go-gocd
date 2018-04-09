@@ -13,7 +13,26 @@ func TestConfigRepo(t *testing.T) {
 	setup()
 	defer teardown()
 
+	t.Run("Get", testConfigRepoGet)
 	t.Run("List", testConfigRepoList)
+}
+
+func testConfigRepoGet(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/admin/config_repos/repo1", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
+		j, _ := ioutil.ReadFile("test/resources/configrepos.0.json")
+		w.Header().Set("Etag", "mock-etag")
+		fmt.Fprint(w, string(j))
+	})
+
+	repo, _, err := client.ConfigRepos.Get(context.Background(), "repo1")
+
+	assert.Nil(t, err)
+	assert.Equal(t, "mock-etag", repo.Version)
+	testConfigRepo(t, repo)
 }
 
 func testConfigRepoList(t *testing.T) {
