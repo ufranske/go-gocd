@@ -6,7 +6,7 @@ import (
 	"github.com/beamly/go-gocd/gocd"
 )
 
-func ExampleAgent_List() {
+func ExampleAgentsService_List() {
 	cfg := gocd.Configuration{
 		Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
 		Username: "ApiUser",
@@ -28,4 +28,26 @@ func ExampleAgent_List() {
 	}
 
 	fmt.Println(a)
+}
+
+func ExampleConfigRepoService_List() {
+	cfg := gocd.Configuration{
+		Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+		Username: "ApiUser",
+		Password: "MySecretPassword",
+	}
+
+	c := cfg.Client()
+
+	l, _, err := c.ConfigRepos.List(context.Background())
+	if err != nil {
+		panic(err)
+	}
+	for _, r := range l {
+		fmt.Printf("Pipeline: %s\n\tMaterial type: %s\n", r.ID, r.Material.Type)
+		if r.Material.Type == "git" {
+			fmt.Printf("\tMaterial url: %s\n", r.Material.Attributes.(*gocd.MaterialAttributesGit).URL)
+		}
+		fmt.Printf("\tNumber of configuration parameters: %d\n\n", len(r.Configuration))
+	}
 }

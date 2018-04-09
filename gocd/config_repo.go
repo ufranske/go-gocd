@@ -34,7 +34,7 @@ type ConfigRepoProperty struct {
 	EncryptedValue string `json:"encrypted_value,omitempty"`
 }
 
-// List lists all available config repos, these are config repositories that
+// List returns all available config repos, these are config repositories that
 // are present in the in `cruise-config.xml`
 func (s *ConfigRepoService) List(ctx context.Context) (repos []*ConfigRepo, resp *APIResponse, err error) {
 	r := &ConfigReposListResponse{}
