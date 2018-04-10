@@ -23,7 +23,7 @@ type ConfigRepo struct {
 	ID            string                `json:"id"`
 	PluginID      string                `json:"plugin_id"`
 	Material      Material              `json:"material"`
-	Configuration []*ConfigRepoProperty `json:"configuration"`
+	Configuration []*ConfigRepoProperty `json:"configuration,omitempty"`
 	Links         *HALLinks             `json:"_links,omitempty,omitempty"`
 	Version       string                `json:"version,omitempty"`
 	client        *Client
@@ -64,5 +64,19 @@ func (s *ConfigRepoService) Get(ctx context.Context, id string) (repo *ConfigRep
 	})
 
 	repo.client = s.client
+	return
+}
+
+// Create a config repo
+func (s *ConfigRepoService) Create(ctx context.Context, cr *ConfigRepo) (out *ConfigRepo, resp *APIResponse, err error) {
+
+	out = &ConfigRepo{}
+	_, resp, err = s.client.postAction(ctx, &APIClientRequest{
+		Path:         "admin/config_repos",
+		RequestBody:  cr,
+		ResponseBody: out,
+		APIVersion:   apiV1,
+	})
+
 	return
 }

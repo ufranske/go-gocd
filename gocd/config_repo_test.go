@@ -15,6 +15,7 @@ func TestConfigRepo(t *testing.T) {
 
 	t.Run("Get", testConfigRepoGet)
 	t.Run("List", testConfigRepoList)
+	t.Run("Create", testConfigRepoCreate)
 }
 
 func testConfigRepoGet(t *testing.T) {
@@ -51,6 +52,25 @@ func testConfigRepoList(t *testing.T) {
 	assert.Len(t, repos, 1)
 
 	testConfigRepo(t, repos[0])
+}
+
+func testConfigRepoCreate(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/admin/config_repos", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Unexpected HTTP method")
+		j, _ := ioutil.ReadFile("test/resources/configrepos.0.json")
+		fmt.Fprint(w, string(j))
+	})
+
+	r := ConfigRepo{ID: "repo1", PluginID: "json.config.plugin", Material: Material{Type: "git", Attributes: &MaterialAttributesGit{URL: "https://github.com/config-repo/gocd-json-config-example.git", Branch: "master", AutoUpdate: true}}}
+	repo, _, err := client.ConfigRepos.Create(context.Background(), &r)
+	if err != nil {
+		t.Error(t, err)
+	}
+
+	assert.NotNil(t, repo)
 }
 
 func testConfigRepo(t *testing.T, repo *ConfigRepo) {
