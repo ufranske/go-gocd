@@ -38,16 +38,16 @@ type ConfigRepoProperty struct {
 
 // List returns all available config repos, these are config repositories that
 // are present in the in `cruise-config.xml`
-func (s *ConfigRepoService) List(ctx context.Context) (repos []*ConfigRepo, resp *APIResponse, err error) {
+func (crs *ConfigRepoService) List(ctx context.Context) (repos []*ConfigRepo, resp *APIResponse, err error) {
 	r := &ConfigReposListResponse{}
-	_, resp, err = s.client.getAction(ctx, &APIClientRequest{
+	_, resp, err = crs.client.getAction(ctx, &APIClientRequest{
 		Path:         "admin/config_repos",
 		ResponseBody: r,
 		APIVersion:   apiV1,
 	})
 
 	for _, repos := range r.Embedded.Repos {
-		repos.client = s.client
+		repos.client = crs.client
 	}
 	repos = r.Embedded.Repos
 
@@ -55,47 +55,47 @@ func (s *ConfigRepoService) List(ctx context.Context) (repos []*ConfigRepo, resp
 }
 
 // Get fetches the config repo object for a specified id
-func (s *ConfigRepoService) Get(ctx context.Context, id string) (out *ConfigRepo, resp *APIResponse, err error) {
+func (crs *ConfigRepoService) Get(ctx context.Context, id string) (out *ConfigRepo, resp *APIResponse, err error) {
 	out = &ConfigRepo{}
-	_, resp, err = s.client.getAction(ctx, &APIClientRequest{
+	_, resp, err = crs.client.getAction(ctx, &APIClientRequest{
 		Path:         fmt.Sprintf("admin/config_repos/%s", id),
 		ResponseBody: out,
 		APIVersion:   apiV1,
 	})
 
-	out.client = s.client
+	out.client = crs.client
 	return
 }
 
 // Create a config repo
-func (s *ConfigRepoService) Create(ctx context.Context, cr *ConfigRepo) (out *ConfigRepo, resp *APIResponse, err error) {
+func (crs *ConfigRepoService) Create(ctx context.Context, cr *ConfigRepo) (out *ConfigRepo, resp *APIResponse, err error) {
 	out = &ConfigRepo{}
-	_, resp, err = s.client.postAction(ctx, &APIClientRequest{
+	_, resp, err = crs.client.postAction(ctx, &APIClientRequest{
 		Path:         "admin/config_repos",
 		RequestBody:  cr,
 		ResponseBody: out,
 		APIVersion:   apiV1,
 	})
 
-	out.client = s.client
+	out.client = crs.client
 	return
 }
 
 // Update config repos for specified config repo id
-func (s *ConfigRepoService) Update(ctx context.Context, id string, cr *ConfigRepo) (out *ConfigRepo, resp *APIResponse, err error) {
+func (crs *ConfigRepoService) Update(ctx context.Context, id string, cr *ConfigRepo) (out *ConfigRepo, resp *APIResponse, err error) {
 	out = &ConfigRepo{}
-	_, resp, err = s.client.putAction(ctx, &APIClientRequest{
+	_, resp, err = crs.client.putAction(ctx, &APIClientRequest{
 		Path:         fmt.Sprintf("admin/config_repos/%s", id),
 		RequestBody:  cr,
 		ResponseBody: out,
 		APIVersion:   apiV1,
 	})
 
-	out.client = s.client
+	out.client = crs.client
 	return
 }
 
 // Delete the specified config repo
-func (s *ConfigRepoService) Delete(ctx context.Context, id string) (string, *APIResponse, error) {
-	return s.client.deleteAction(ctx, fmt.Sprintf("admin/config_repos/%s", id), apiV1)
+func (crs *ConfigRepoService) Delete(ctx context.Context, id string) (string, *APIResponse, error) {
+	return crs.client.deleteAction(ctx, fmt.Sprintf("admin/config_repos/%s", id), apiV1)
 }
