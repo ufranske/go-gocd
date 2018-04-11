@@ -1,11 +1,11 @@
 package gocd
 
 // SetVersion sets a version string for this config repo
-func (p *ConfigRepo) SetVersion(version string) {
-	p.Version = version
+func (c *ConfigRepo) SetVersion(version string) {
+	c.Version = version
 }
 
 // GetVersion retrieves a version string for this config repo
-func (p *ConfigRepo) GetVersion() (version string) {
-	return p.Version
+func (c *ConfigRepo) GetVersion() (version string) {
+	return c.Version
 }
