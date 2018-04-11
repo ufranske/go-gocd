@@ -94,3 +94,8 @@ func (s *ConfigRepoService) Update(ctx context.Context, id string, cr *ConfigRep
 	out.client = s.client
 	return
 }
+
+// Delete the specified config repo
+func (s *ConfigRepoService) Delete(ctx context.Context, id string) (string, *APIResponse, error) {
+	return s.client.deleteAction(ctx, fmt.Sprintf("admin/config_repos/%s", id), apiV1)
+}

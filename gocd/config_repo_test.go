@@ -13,10 +13,29 @@ func TestConfigRepo(t *testing.T) {
 	setup()
 	defer teardown()
 
-	t.Run("Get", testConfigRepoGet)
 	t.Run("List", testConfigRepoList)
+	t.Run("Get", testConfigRepoGet)
 	t.Run("Create", testConfigRepoCreate)
 	t.Run("Update", testConfigRepoUpdate)
+	t.Run("Delete", testConfigRepoDelete)
+}
+
+func testConfigRepoList(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/admin/config_repos", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
+		j, _ := ioutil.ReadFile("test/resources/configrepos.1.json")
+		fmt.Fprint(w, string(j))
+	})
+
+	repos, _, err := client.ConfigRepos.List(context.Background())
+
+	assert.Nil(t, err)
+	assert.Len(t, repos, 1)
+
+	testConfigRepo(t, repos[0])
 }
 
 func testConfigRepoGet(t *testing.T) {
@@ -35,23 +54,6 @@ func testConfigRepoGet(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, "mock-etag", repo.Version)
 	testConfigRepo(t, repo)
-}
-func testConfigRepoList(t *testing.T) {
-	setup()
-	defer teardown()
-
-	mux.HandleFunc("/api/admin/config_repos", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
-		j, _ := ioutil.ReadFile("test/resources/configrepos.1.json")
-		fmt.Fprint(w, string(j))
-	})
-
-	repos, _, err := client.ConfigRepos.List(context.Background())
-
-	assert.Nil(t, err)
-	assert.Len(t, repos, 1)
-
-	testConfigRepo(t, repos[0])
 }
 
 func testConfigRepoCreate(t *testing.T) {
@@ -91,6 +93,24 @@ func testConfigRepoUpdate(t *testing.T) {
 	assert.NotNil(t, repo)
 	testConfigRepo(t, repo)
 	assert.Equal(t, repo.Version, "mock-version")
+}
+
+func testConfigRepoDelete(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/admin/config_repos/repo1", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "DELETE", "Unexpected HTTP method")
+		assert.Equal(t, r.Header.Get("Accept"), apiV1)
+		fmt.Fprint(w, `{
+										  "message": "The config repo 'repo1' was deleted successfully."
+										}`)
+	})
+	message, resp, err := client.ConfigRepos.Delete(context.Background(), "repo1")
+
+	assert.Nil(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, "The config repo 'repo1' was deleted successfully.", message)
 }
 
 func testConfigRepo(t *testing.T, repo *ConfigRepo) {
