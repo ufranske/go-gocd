@@ -55,21 +55,20 @@ func (s *ConfigRepoService) List(ctx context.Context) (repos []*ConfigRepo, resp
 }
 
 // Get fetches the config repo object for a specified id
-func (s *ConfigRepoService) Get(ctx context.Context, id string) (repo *ConfigRepo, resp *APIResponse, err error) {
-	repo = &ConfigRepo{}
+func (s *ConfigRepoService) Get(ctx context.Context, id string) (out *ConfigRepo, resp *APIResponse, err error) {
+	out = &ConfigRepo{}
 	_, resp, err = s.client.getAction(ctx, &APIClientRequest{
 		Path:         fmt.Sprintf("admin/config_repos/%s", id),
-		ResponseBody: repo,
+		ResponseBody: out,
 		APIVersion:   apiV1,
 	})
 
-	repo.client = s.client
+	out.client = s.client
 	return
 }
 
 // Create a config repo
 func (s *ConfigRepoService) Create(ctx context.Context, cr *ConfigRepo) (out *ConfigRepo, resp *APIResponse, err error) {
-
 	out = &ConfigRepo{}
 	_, resp, err = s.client.postAction(ctx, &APIClientRequest{
 		Path:         "admin/config_repos",
@@ -78,5 +77,20 @@ func (s *ConfigRepoService) Create(ctx context.Context, cr *ConfigRepo) (out *Co
 		APIVersion:   apiV1,
 	})
 
+	out.client = s.client
+	return
+}
+
+// Update config repos for specified config repo id
+func (s *ConfigRepoService) Update(ctx context.Context, id string, cr *ConfigRepo) (out *ConfigRepo, resp *APIResponse, err error) {
+	out = &ConfigRepo{}
+	_, resp, err = s.client.putAction(ctx, &APIClientRequest{
+		Path:         fmt.Sprintf("admin/config_repos/%s", id),
+		RequestBody:  cr,
+		ResponseBody: out,
+		APIVersion:   apiV1,
+	})
+
+	out.client = s.client
 	return
 }

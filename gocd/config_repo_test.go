@@ -16,6 +16,7 @@ func TestConfigRepo(t *testing.T) {
 	t.Run("Get", testConfigRepoGet)
 	t.Run("List", testConfigRepoList)
 	t.Run("Create", testConfigRepoCreate)
+	t.Run("Update", testConfigRepoUpdate)
 }
 
 func testConfigRepoGet(t *testing.T) {
@@ -35,7 +36,6 @@ func testConfigRepoGet(t *testing.T) {
 	assert.Equal(t, "mock-etag", repo.Version)
 	testConfigRepo(t, repo)
 }
-
 func testConfigRepoList(t *testing.T) {
 	setup()
 	defer teardown()
@@ -66,11 +66,31 @@ func testConfigRepoCreate(t *testing.T) {
 
 	r := ConfigRepo{ID: "repo1", PluginID: "json.config.plugin", Material: Material{Type: "git", Attributes: &MaterialAttributesGit{URL: "https://github.com/config-repo/gocd-json-config-example.git", Branch: "master", AutoUpdate: true}}}
 	repo, _, err := client.ConfigRepos.Create(context.Background(), &r)
-	if err != nil {
-		t.Error(t, err)
-	}
 
+	assert.Nil(t, err)
 	assert.NotNil(t, repo)
+	testConfigRepo(t, repo)
+}
+
+func testConfigRepoUpdate(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/admin/config_repos/repo1", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Unexpected HTTP method")
+		j, _ := ioutil.ReadFile("test/resources/configrepos.0.json")
+		assert.Equal(t, `"test-version"`, r.Header.Get("If-Match"))
+		w.Header().Set("ETag", `"mock-version"`)
+		fmt.Fprint(w, string(j))
+	})
+
+	r := ConfigRepo{ID: "repo1", PluginID: "json.config.plugin", Material: Material{Type: "git", Attributes: &MaterialAttributesGit{URL: "https://github.com/config-repo/gocd-json-config-example.git", Branch: "master", AutoUpdate: true}}, Version: "test-version"}
+	repo, _, err := client.ConfigRepos.Update(context.Background(), "repo1", &r)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, repo)
+	testConfigRepo(t, repo)
+	assert.Equal(t, repo.Version, "mock-version")
 }
 
 func testConfigRepo(t *testing.T, repo *ConfigRepo) {
