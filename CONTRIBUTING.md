@@ -21,3 +21,9 @@
     cd $GOPATH/src/github.com/beamly/go-gocd
     make before_install
     make test
+
+## Opening PR's
+
+ - Make sure all tests pass in travis
+ - Add test cases to any code you change
+ - Update the library readme by running `make doc`
