@@ -8,14 +8,15 @@ import (
 type RoleService service
 
 type Role struct {
-	Name       string `json:"name"`
-	Type       string
-	Attributes interface{}
+	Name       string              `json:"name"`
+	Type       string              `json:"type"`
+	Attributes *RoleAttributesGoCD `json:"attributes"`
 }
 
 type RoleAttributesGoCD struct {
-	Users []string
+	Users []string `json:"users"`
 }
+
 type RoleAttributesPlugin struct{}
 
 // Create a role
