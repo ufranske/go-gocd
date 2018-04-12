@@ -22,6 +22,7 @@ type RoleAttributesPlugin struct{}
 func (rs *RoleService) Create(ctx context.Context, role *Role) (r *Role, resp *APIResponse, err error) {
 	r = &Role{}
 	_, resp, err = rs.client.postAction(ctx, &APIClientRequest{
+		APIVersion:   apiV1,
 		Path:         "admin/security/roles",
 		RequestBody:  role,
 		ResponseBody: r,
