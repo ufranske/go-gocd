@@ -61,14 +61,14 @@ func testMaterialAttributeGeneric(t *testing.T) {
 			m: map[string]interface{}{
 				"name":               "mock-name",
 				"url":                "mock-url",
-				"autoUpdate":         true,
+				"auto_update":        true,
 				"username":           "mock-username",
 				"password":           "mock-password",
 				"encrypted_password": "mock-encrypted-password",
 				"check_externals":    true,
 				"destination":        "mock-destination",
 				"filter": map[string]interface{}{
-					"ignore": []string{"mock-ignore"},
+					"ignore": []interface{}{"mock-ignore"},
 				},
 				"invert_filter": true,
 			},
@@ -87,10 +87,10 @@ func testMaterialAttributeGeneric(t *testing.T) {
 			m: map[string]interface{}{
 				"name":        "mock-name",
 				"url":         "mock-url",
-				"autoUpdate":  true,
+				"auto_update": true,
 				"destination": "mock-destination",
 				"filter": map[string]interface{}{
-					"ignore": []string{"mock-ignore"},
+					"ignore": []interface{}{"mock-ignore"},
 				},
 				"invert_filter": true,
 			},
