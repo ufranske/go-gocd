@@ -7,7 +7,6 @@ go:
 env:
  - CODECLIMATE_API_HOST=https://codebeat.co/webhooks/code_coverage
 
-
 addons:
   apt:
     packages:
