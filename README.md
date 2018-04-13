@@ -17,7 +17,7 @@ CLI tool to interface with GoCD Server.
 ##### Homebrew
 
 ``` bash
-brew tap drewsonne/tap
+brew tap beamly/tap
 brew install go-gocd
 ```
 
