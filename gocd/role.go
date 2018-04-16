@@ -19,8 +19,6 @@ type RoleAttributesGoCD struct {
 	Users []string `json:"users"`
 }
 
-type RoleAttributesPlugin struct{}
-
 // Create a role
 func (rs *RoleService) Create(ctx context.Context, role *Role) (r *Role, resp *APIResponse, err error) {
 	r = &Role{}
