@@ -5,6 +5,7 @@
 
 * [Overview](#pkg-overview)
 * [Index](#pkg-index)
+* [Examples](#pkg-examples)
 * [Subdirectories](#pkg-subdirectories)
 
 ## <a name="pkg-overview">Overview</a>
@@ -131,6 +132,17 @@ the structure of the GoCD API documentation at
 * [type ConfigPipelineGroup](#ConfigPipelineGroup)
 * [type ConfigPluginConfiguration](#ConfigPluginConfiguration)
 * [type ConfigProperty](#ConfigProperty)
+* [type ConfigRepo](#ConfigRepo)
+  * [func (c *ConfigRepo) GetVersion() (version string)](#ConfigRepo.GetVersion)
+  * [func (c *ConfigRepo) SetVersion(version string)](#ConfigRepo.SetVersion)
+* [type ConfigRepoProperty](#ConfigRepoProperty)
+* [type ConfigRepoService](#ConfigRepoService)
+  * [func (crs *ConfigRepoService) Create(ctx context.Context, cr *ConfigRepo) (out *ConfigRepo, resp *APIResponse, err error)](#ConfigRepoService.Create)
+  * [func (crs *ConfigRepoService) Delete(ctx context.Context, id string) (string, *APIResponse, error)](#ConfigRepoService.Delete)
+  * [func (crs *ConfigRepoService) Get(ctx context.Context, id string) (out *ConfigRepo, resp *APIResponse, err error)](#ConfigRepoService.Get)
+  * [func (crs *ConfigRepoService) List(ctx context.Context) (repos []*ConfigRepo, resp *APIResponse, err error)](#ConfigRepoService.List)
+  * [func (crs *ConfigRepoService) Update(ctx context.Context, id string, cr *ConfigRepo) (out *ConfigRepo, resp *APIResponse, err error)](#ConfigRepoService.Update)
+* [type ConfigReposListResponse](#ConfigReposListResponse)
 * [type ConfigRepository](#ConfigRepository)
 * [type ConfigRepositoryGit](#ConfigRepositoryGit)
 * [type ConfigRole](#ConfigRole)
@@ -345,9 +357,19 @@ the structure of the GoCD API documentation at
 * [type Version](#Version)
 * [type Versioned](#Versioned)
 
+#### <a name="pkg-examples">Examples</a>
+* [AgentsService.List](#example-agentsservicelist)
+* [ConfigRepoService.Create](#example-configreposervicecreate)
+* [ConfigRepoService.Get](#example-configreposerviceget)
+* [ConfigRepoService.List](#example-configreposervicelist)
+* [PipelineConfigsService.Delete](#example-pipelineconfigsservicedelete)
+* [PipelineConfigsService.Get](#example-pipelineconfigsserviceget)
+* [PipelineGroupsService.List](#example-pipelinegroupsservicelist)
+* [PipelinesService.Pause](#example-pipelinesservicepause)
+* [PipelinesService.Unpause](#example-pipelinesserviceunpause)
 
 #### <a name="pkg-files">Package files</a>
-[agent.go](/src/github.com/beamly/go-gocd/gocd/agent.go) [approval.go](/src/github.com/beamly/go-gocd/gocd/approval.go) [authentication.go](/src/github.com/beamly/go-gocd/gocd/authentication.go) [config.go](/src/github.com/beamly/go-gocd/gocd/config.go) [configuration.go](/src/github.com/beamly/go-gocd/gocd/configuration.go) [configuration_task.go](/src/github.com/beamly/go-gocd/gocd/configuration_task.go) [doc.go](/src/github.com/beamly/go-gocd/gocd/doc.go) [encryption.go](/src/github.com/beamly/go-gocd/gocd/encryption.go) [environment.go](/src/github.com/beamly/go-gocd/gocd/environment.go) [genericactions.go](/src/github.com/beamly/go-gocd/gocd/genericactions.go) [gocd.go](/src/github.com/beamly/go-gocd/gocd/gocd.go) [jobs.go](/src/github.com/beamly/go-gocd/gocd/jobs.go) [jobs_validation.go](/src/github.com/beamly/go-gocd/gocd/jobs_validation.go) [links.go](/src/github.com/beamly/go-gocd/gocd/links.go) [logging.go](/src/github.com/beamly/go-gocd/gocd/logging.go) [pipeline.go](/src/github.com/beamly/go-gocd/gocd/pipeline.go) [pipeline_material.go](/src/github.com/beamly/go-gocd/gocd/pipeline_material.go) [pipelineconfig.go](/src/github.com/beamly/go-gocd/gocd/pipelineconfig.go) [pipelinegroups.go](/src/github.com/beamly/go-gocd/gocd/pipelinegroups.go) [pipelinetemplate.go](/src/github.com/beamly/go-gocd/gocd/pipelinetemplate.go) [plugin.go](/src/github.com/beamly/go-gocd/gocd/plugin.go) [properties.go](/src/github.com/beamly/go-gocd/gocd/properties.go) [resource.go](/src/github.com/beamly/go-gocd/gocd/resource.go) [resource_agent.go](/src/github.com/beamly/go-gocd/gocd/resource_agent.go) [resource_approval.go](/src/github.com/beamly/go-gocd/gocd/resource_approval.go) [resource_environment.go](/src/github.com/beamly/go-gocd/gocd/resource_environment.go) [resource_jobs.go](/src/github.com/beamly/go-gocd/gocd/resource_jobs.go) [resource_pipeline.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline.go) [resource_pipeline_material.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material.go) [resource_pipeline_material_dependency.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_dependency.go) [resource_pipeline_material_git.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_git.go) [resource_pipeline_material_hg.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_hg.go) [resource_pipeline_material_p4.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_p4.go) [resource_pipeline_material_pkg.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_pkg.go) [resource_pipeline_material_plugin.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_plugin.go) [resource_pipeline_material_svn.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_svn.go) [resource_pipeline_material_tfs.go](/src/github.com/beamly/go-gocd/gocd/resource_pipeline_material_tfs.go) [resource_pipelinegroups.go](/src/github.com/beamly/go-gocd/gocd/resource_pipelinegroups.go) [resource_pipelinetemplate.go](/src/github.com/beamly/go-gocd/gocd/resource_pipelinetemplate.go) [resource_properties.go](/src/github.com/beamly/go-gocd/gocd/resource_properties.go) [resource_stages.go](/src/github.com/beamly/go-gocd/gocd/resource_stages.go) [resource_task.go](/src/github.com/beamly/go-gocd/gocd/resource_task.go) [stages.go](/src/github.com/beamly/go-gocd/gocd/stages.go) 
+[agent.go](https://github.com/beamly/go-gocd/tree/master/gocd/agent.go) [approval.go](https://github.com/beamly/go-gocd/tree/master/gocd/approval.go) [authentication.go](https://github.com/beamly/go-gocd/tree/master/gocd/authentication.go) [config.go](https://github.com/beamly/go-gocd/tree/master/gocd/config.go) [config_repo.go](https://github.com/beamly/go-gocd/tree/master/gocd/config_repo.go) [configuration.go](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go) [configuration_task.go](https://github.com/beamly/go-gocd/tree/master/gocd/configuration_task.go) [doc.go](https://github.com/beamly/go-gocd/tree/master/gocd/doc.go) [encryption.go](https://github.com/beamly/go-gocd/tree/master/gocd/encryption.go) [environment.go](https://github.com/beamly/go-gocd/tree/master/gocd/environment.go) [genericactions.go](https://github.com/beamly/go-gocd/tree/master/gocd/genericactions.go) [gocd.go](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go) [jobs.go](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go) [jobs_validation.go](https://github.com/beamly/go-gocd/tree/master/gocd/jobs_validation.go) [links.go](https://github.com/beamly/go-gocd/tree/master/gocd/links.go) [logging.go](https://github.com/beamly/go-gocd/tree/master/gocd/logging.go) [pipeline.go](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go) [pipeline_material.go](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline_material.go) [pipelineconfig.go](https://github.com/beamly/go-gocd/tree/master/gocd/pipelineconfig.go) [pipelinegroups.go](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinegroups.go) [pipelinetemplate.go](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinetemplate.go) [plugin.go](https://github.com/beamly/go-gocd/tree/master/gocd/plugin.go) [properties.go](https://github.com/beamly/go-gocd/tree/master/gocd/properties.go) [resource.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource.go) [resource_agent.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_agent.go) [resource_approval.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_approval.go) [resource_config_repo.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_config_repo.go) [resource_environment.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_environment.go) [resource_jobs.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_jobs.go) [resource_pipeline.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline.go) [resource_pipeline_material.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material.go) [resource_pipeline_material_dependency.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_dependency.go) [resource_pipeline_material_git.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_git.go) [resource_pipeline_material_hg.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_hg.go) [resource_pipeline_material_p4.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_p4.go) [resource_pipeline_material_pkg.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_pkg.go) [resource_pipeline_material_plugin.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_plugin.go) [resource_pipeline_material_svn.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_svn.go) [resource_pipeline_material_tfs.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_tfs.go) [resource_pipelinegroups.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinegroups.go) [resource_pipelinetemplate.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinetemplate.go) [resource_properties.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_properties.go) [resource_stages.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_stages.go) [resource_task.go](https://github.com/beamly/go-gocd/tree/master/gocd/resource_task.go) [stages.go](https://github.com/beamly/go-gocd/tree/master/gocd/stages.go)
 
 
 ## <a name="pkg-constants">Constants</a>
@@ -388,7 +410,7 @@ ConfigDirectoryPath is the default location of the `.gocdconf` configuration fil
 
 
 
-## <a name="CheckResponse">func</a> [CheckResponse](/src/target/gocd.go?s=7629:7682#L309)
+## <a name="CheckResponse">func</a> [CheckResponse](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go?s=7716:7769#L311)
 ``` go
 func CheckResponse(response *APIResponse) (err error)
 ```
@@ -396,7 +418,7 @@ CheckResponse asserts that the http response status code was 2xx.
 
 
 
-## <a name="ConfigFilePath">func</a> [ConfigFilePath](/src/target/config.go?s=1948:2000#L88)
+## <a name="ConfigFilePath">func</a> [ConfigFilePath](https://github.com/beamly/go-gocd/tree/master/gocd/config.go?s=1948:2000#L88)
 ``` go
 func ConfigFilePath() (configPath string, err error)
 ```
@@ -404,7 +426,7 @@ ConfigFilePath specifies the default path to a config file
 
 
 
-## <a name="LoadConfigByName">func</a> [LoadConfigByName](/src/target/config.go?s=863:929#L34)
+## <a name="LoadConfigByName">func</a> [LoadConfigByName](https://github.com/beamly/go-gocd/tree/master/gocd/config.go?s=863:929#L34)
 ``` go
 func LoadConfigByName(name string, cfg *Configuration) (err error)
 ```
@@ -412,7 +434,7 @@ LoadConfigByName loads configurations from yaml at the default file location
 
 
 
-## <a name="LoadConfigFromFile">func</a> [LoadConfigFromFile](/src/target/config.go?s=1495:1564#L64)
+## <a name="LoadConfigFromFile">func</a> [LoadConfigFromFile](https://github.com/beamly/go-gocd/tree/master/gocd/config.go?s=1495:1564#L64)
 ``` go
 func LoadConfigFromFile() (cfgs map[string]*Configuration, err error)
 ```
@@ -420,7 +442,7 @@ LoadConfigFromFile on disk and return it as a Configuration item
 
 
 
-## <a name="SetupLogging">func</a> [SetupLogging](/src/target/logging.go?s=885:922#L46)
+## <a name="SetupLogging">func</a> [SetupLogging](https://github.com/beamly/go-gocd/tree/master/gocd/logging.go?s=885:922#L46)
 ``` go
 func SetupLogging(log *logrus.Logger)
 ```
@@ -444,7 +466,7 @@ SetupLogging based on Environment Variables
 
 
 
-## <a name="APIClientRequest">type</a> [APIClientRequest](/src/target/genericactions.go?s=175:375#L14)
+## <a name="APIClientRequest">type</a> [APIClientRequest](https://github.com/beamly/go-gocd/tree/master/gocd/genericactions.go?s=175:375#L14)
 ``` go
 type APIClientRequest struct {
     Method       string
@@ -467,7 +489,7 @@ APIClientRequest helper struct to reduce amount of code.
 
 
 
-## <a name="APIRequest">type</a> [APIRequest](/src/target/gocd.go?s=1392:1451#L63)
+## <a name="APIRequest">type</a> [APIRequest](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go?s=1392:1451#L63)
 ``` go
 type APIRequest struct {
     HTTP *http.Request
@@ -485,7 +507,7 @@ APIRequest encapsulates the net/http.Request object, and a string representing t
 
 
 
-## <a name="APIResponse">type</a> [APIResponse](/src/target/gocd.go?s=1210:1298#L56)
+## <a name="APIResponse">type</a> [APIResponse](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go?s=1210:1298#L56)
 ``` go
 type APIResponse struct {
     HTTP    *http.Response
@@ -505,7 +527,7 @@ encapsulating the response from the API.
 
 
 
-## <a name="Agent">type</a> [Agent](/src/target/agent.go?s=442:1447#L20)
+## <a name="Agent">type</a> [Agent](https://github.com/beamly/go-gocd/tree/master/gocd/agent.go?s=442:1447#L20)
 ``` go
 type Agent struct {
     UUID             string        `json:"uuid,omitempty"`
@@ -537,7 +559,7 @@ Agent represents agent in GoCD
 
 
 
-### <a name="Agent.GetLinks">func</a> (\*Agent) [GetLinks](/src/target/resource_agent.go?s=54:90#L4)
+### <a name="Agent.GetLinks">func</a> (\*Agent) [GetLinks](https://github.com/beamly/go-gocd/tree/master/gocd/resource_agent.go?s=54:90#L4)
 ``` go
 func (a *Agent) GetLinks() *HALLinks
 ```
@@ -546,7 +568,7 @@ GetLinks returns HAL links for agent
 
 
 
-### <a name="Agent.RemoveLinks">func</a> (\*Agent) [RemoveLinks](/src/target/resource_agent.go?s=210:239#L9)
+### <a name="Agent.RemoveLinks">func</a> (\*Agent) [RemoveLinks](https://github.com/beamly/go-gocd/tree/master/gocd/resource_agent.go?s=210:239#L9)
 ``` go
 func (a *Agent) RemoveLinks()
 ```
@@ -555,7 +577,7 @@ RemoveLinks sets the `Link` attribute as `nil`. Used when rendering an `Agent` s
 
 
 
-## <a name="AgentBulkOperationUpdate">type</a> [AgentBulkOperationUpdate](/src/target/agent.go?s=2239:2362#L54)
+## <a name="AgentBulkOperationUpdate">type</a> [AgentBulkOperationUpdate](https://github.com/beamly/go-gocd/tree/master/gocd/agent.go?s=2239:2362#L54)
 ``` go
 type AgentBulkOperationUpdate struct {
     Add    []string `json:"add,omitempty"`
@@ -573,7 +595,7 @@ AgentBulkOperationUpdate describes an action to be performed on an Environment o
 
 
 
-## <a name="AgentBulkOperationsUpdate">type</a> [AgentBulkOperationsUpdate](/src/target/agent.go?s=1937:2119#L48)
+## <a name="AgentBulkOperationsUpdate">type</a> [AgentBulkOperationsUpdate](https://github.com/beamly/go-gocd/tree/master/gocd/agent.go?s=1937:2119#L48)
 ``` go
 type AgentBulkOperationsUpdate struct {
     Environments *AgentBulkOperationUpdate `json:"environments,omitempty"`
@@ -592,7 +614,7 @@ updating multiple agents
 
 
 
-## <a name="AgentBulkUpdate">type</a> [AgentBulkUpdate](/src/target/agent.go?s=1542:1791#L40)
+## <a name="AgentBulkUpdate">type</a> [AgentBulkUpdate](https://github.com/beamly/go-gocd/tree/master/gocd/agent.go?s=1542:1791#L40)
 ``` go
 type AgentBulkUpdate struct {
     Uuids            []string                   `json:"uuids"`
@@ -611,7 +633,7 @@ AgentBulkUpdate describes the structure for the PUT payload when updating multip
 
 
 
-## <a name="AgentsResponse">type</a> [AgentsResponse](/src/target/agent.go?s=244:406#L12)
+## <a name="AgentsResponse">type</a> [AgentsResponse](https://github.com/beamly/go-gocd/tree/master/gocd/agent.go?s=244:406#L12)
 ``` go
 type AgentsResponse struct {
     Links    *HALLinks `json:"_links,omitempty"`
@@ -631,7 +653,7 @@ AgentsResponse describes the structure of the API response when listing collecti
 
 
 
-## <a name="AgentsService">type</a> [AgentsService](/src/target/agent.go?s=112:138#L9)
+## <a name="AgentsService">type</a> [AgentsService](https://github.com/beamly/go-gocd/tree/master/gocd/agent.go?s=112:138#L9)
 ``` go
 type AgentsService service
 ```
@@ -646,7 +668,7 @@ AgentsService describes actions which can be performed on agents
 
 
 
-### <a name="AgentsService.BulkUpdate">func</a> (\*AgentsService) [BulkUpdate](/src/target/agent.go?s=3862:3988#L100)
+### <a name="AgentsService.BulkUpdate">func</a> (\*AgentsService) [BulkUpdate](https://github.com/beamly/go-gocd/tree/master/gocd/agent.go?s=3862:3988#L100)
 ``` go
 func (s *AgentsService) BulkUpdate(ctx context.Context, agents AgentBulkUpdate) (message string, resp *APIResponse, err error)
 ```
@@ -655,7 +677,7 @@ BulkUpdate will change the configuration for multiple agents in a single request
 
 
 
-### <a name="AgentsService.Delete">func</a> (\*AgentsService) [Delete](/src/target/agent.go?s=3619:3713#L95)
+### <a name="AgentsService.Delete">func</a> (\*AgentsService) [Delete](https://github.com/beamly/go-gocd/tree/master/gocd/agent.go?s=3619:3713#L95)
 ``` go
 func (s *AgentsService) Delete(ctx context.Context, uuid string) (string, *APIResponse, error)
 ```
@@ -664,7 +686,7 @@ Delete will remove an existing agent. Note: The agent must be disabled, and not 
 
 
 
-### <a name="AgentsService.Get">func</a> (\*AgentsService) [Get](/src/target/agent.go?s=3119:3210#L85)
+### <a name="AgentsService.Get">func</a> (\*AgentsService) [Get](https://github.com/beamly/go-gocd/tree/master/gocd/agent.go?s=3119:3210#L85)
 ``` go
 func (s *AgentsService) Get(ctx context.Context, uuid string) (*Agent, *APIResponse, error)
 ```
@@ -673,7 +695,7 @@ Get will retrieve a single agent based on the provided UUID.
 
 
 
-### <a name="AgentsService.JobRunHistory">func</a> (\*AgentsService) [JobRunHistory](/src/target/agent.go?s=4287:4402#L113)
+### <a name="AgentsService.JobRunHistory">func</a> (\*AgentsService) [JobRunHistory](https://github.com/beamly/go-gocd/tree/master/gocd/agent.go?s=4287:4402#L113)
 ``` go
 func (s *AgentsService) JobRunHistory(ctx context.Context, uuid string) (jobs []*Job, resp *APIResponse, err error)
 ```
@@ -682,16 +704,41 @@ JobRunHistory will return a list of Jobs run on the agent identified by `uuid`.
 
 
 
-### <a name="AgentsService.List">func</a> (\*AgentsService) [List](/src/target/agent.go?s=2687:2784#L68)
+### <a name="AgentsService.List">func</a> (\*AgentsService) [List](https://github.com/beamly/go-gocd/tree/master/gocd/agent.go?s=2687:2784#L68)
 ``` go
 func (s *AgentsService) List(ctx context.Context) (agents []*Agent, resp *APIResponse, err error)
 ```
 List will retrieve all agents, their status, and metadata from the GoCD Server.
 
 
+##### Example AgentsService.List:
+``` go
+    cfg := gocd.Configuration{
+        Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+        Username: "ApiUser",
+        Password: "MySecretPassword",
+    }
+
+    c := cfg.Client()
+
+    // list all agents in use by the GoCD Server
+    var a []*gocd.Agent
+    var err error
+    var r *gocd.APIResponse
+    if a, r, err = c.Agents.List(context.Background()); err != nil {
+        if r.HTTP.StatusCode == 404 {
+            fmt.Println("Couldn't find agent")
+        } else {
+            panic(err)
+        }
+    }
+
+    fmt.Println(a)
+```
 
 
-### <a name="AgentsService.Update">func</a> (\*AgentsService) [Update](/src/target/agent.go?s=3332:3440#L90)
+
+### <a name="AgentsService.Update">func</a> (\*AgentsService) [Update](https://github.com/beamly/go-gocd/tree/master/gocd/agent.go?s=3332:3440#L90)
 ``` go
 func (s *AgentsService) Update(ctx context.Context, uuid string, agent *Agent) (*Agent, *APIResponse, error)
 ```
@@ -700,7 +747,7 @@ Update will modify the configuration for an existing agents.
 
 
 
-## <a name="Approval">type</a> [Approval](/src/target/approval.go?s=116:257#L4)
+## <a name="Approval">type</a> [Approval](https://github.com/beamly/go-gocd/tree/master/gocd/approval.go?s=116:257#L4)
 ``` go
 type Approval struct {
     Type          string         `json:"type,omitempty"`
@@ -718,7 +765,7 @@ Approval represents a request/response object describing the approval configurat
 
 
 
-### <a name="Approval.Clean">func</a> (\*Approval) [Clean](/src/target/resource_approval.go?s=113:139#L5)
+### <a name="Approval.Clean">func</a> (\*Approval) [Clean](https://github.com/beamly/go-gocd/tree/master/gocd/resource_approval.go?s=113:139#L5)
 ``` go
 func (a *Approval) Clean()
 ```
@@ -728,7 +775,7 @@ empty elements are not printed to json.
 
 
 
-## <a name="Artifact">type</a> [Artifact](/src/target/jobs.go?s=2072:2207#L44)
+## <a name="Artifact">type</a> [Artifact](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=2072:2207#L44)
 ``` go
 type Artifact struct {
     Type        string `json:"type"`
@@ -747,7 +794,7 @@ Artifact describes the result of a job
 
 
 
-## <a name="Auth">type</a> [Auth](/src/target/gocd.go?s=2763:2817#L113)
+## <a name="Auth">type</a> [Auth](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go?s=2801:2855#L114)
 ``` go
 type Auth struct {
     Username string
@@ -766,7 +813,7 @@ subsequent requests.
 
 
 
-## <a name="Authorization">type</a> [Authorization](/src/target/approval.go?s=431:542#L11)
+## <a name="Authorization">type</a> [Authorization](https://github.com/beamly/go-gocd/tree/master/gocd/approval.go?s=431:542#L11)
 ``` go
 type Authorization struct {
     Users []string `json:"users,omitempty"`
@@ -785,7 +832,7 @@ the job to move to the next stage in the pipeline.
 
 
 
-## <a name="BuildCause">type</a> [BuildCause](/src/target/pipeline.go?s=2791:3074#L77)
+## <a name="BuildCause">type</a> [BuildCause](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=2791:3074#L77)
 ``` go
 type BuildCause struct {
     Approver          string             `json:"approver,omitempty"`
@@ -805,7 +852,7 @@ BuildCause describes the triggers which caused the build to start.
 
 
 
-## <a name="BuildDetails">type</a> [BuildDetails](/src/target/agent.go?s=2432:2602#L60)
+## <a name="BuildDetails">type</a> [BuildDetails](https://github.com/beamly/go-gocd/tree/master/gocd/agent.go?s=2432:2602#L60)
 ``` go
 type BuildDetails struct {
     Links    *HALLinks `json:"_links"`
@@ -825,7 +872,7 @@ BuildDetails describes the builds being performed on this agent.
 
 
 
-## <a name="CipherText">type</a> [CipherText](/src/target/encryption.go?s=247:366#L11)
+## <a name="CipherText">type</a> [CipherText](https://github.com/beamly/go-gocd/tree/master/gocd/encryption.go?s=247:366#L11)
 ``` go
 type CipherText struct {
     EncryptedValue string    `json:"encrypted_value"`
@@ -843,7 +890,7 @@ CipherText sescribes the response from the api with an encrypted value.
 
 
 
-## <a name="Client">type</a> [Client](/src/target/gocd.go?s=1552:2264#L69)
+## <a name="Client">type</a> [Client](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go?s=1552:2302#L69)
 ``` go
 type Client struct {
     BaseURL  *url.URL
@@ -862,6 +909,7 @@ type Client struct {
     Pipelines         *PipelinesService
     PipelineConfigs   *PipelineConfigsService
     Configuration     *ConfigurationService
+    ConfigRepos       *ConfigRepoService
     Encryption        *EncryptionService
     Plugins           *PluginsService
     Environments      *EnvironmentsService
@@ -877,7 +925,7 @@ Client struct which acts as an interface to the GoCD Server. Exposes resource se
 
 
 
-### <a name="NewClient">func</a> [NewClient](/src/target/gocd.go?s=3317:3384#L130)
+### <a name="NewClient">func</a> [NewClient](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go?s=3355:3422#L131)
 ``` go
 func NewClient(cfg *Configuration, httpClient *http.Client) *Client
 ```
@@ -888,7 +936,7 @@ allow overriding of http client structures.
 
 
 
-### <a name="Client.Do">func</a> (\*Client) [Do](/src/target/gocd.go?s=6419:6534#L253)
+### <a name="Client.Do">func</a> (\*Client) [Do](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go?s=6506:6621#L255)
 ``` go
 func (c *Client) Do(ctx context.Context, req *APIRequest, v interface{}, responseType string) (*APIResponse, error)
 ```
@@ -897,7 +945,7 @@ Do takes an HTTP request and resposne the response from the GoCD API endpoint.
 
 
 
-### <a name="Client.Lock">func</a> (\*Client) [Lock](/src/target/gocd.go?s=4544:4567#L174)
+### <a name="Client.Lock">func</a> (\*Client) [Lock](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go?s=4631:4654#L176)
 ``` go
 func (c *Client) Lock()
 ```
@@ -906,7 +954,7 @@ Lock the client until release
 
 
 
-### <a name="Client.Login">func</a> (\*Client) [Login](/src/target/authentication.go?s=167:222#L7)
+### <a name="Client.Login">func</a> (\*Client) [Login](https://github.com/beamly/go-gocd/tree/master/gocd/authentication.go?s=167:222#L7)
 ``` go
 func (c *Client) Login(ctx context.Context) (err error)
 ```
@@ -916,7 +964,7 @@ for future requests.
 
 
 
-### <a name="Client.NewRequest">func</a> (\*Client) [NewRequest](/src/target/gocd.go?s=4751:4867#L184)
+### <a name="Client.NewRequest">func</a> (\*Client) [NewRequest](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go?s=4838:4954#L186)
 ``` go
 func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion string) (req *APIRequest, err error)
 ```
@@ -925,7 +973,7 @@ NewRequest creates an HTTP requests to the GoCD API endpoints.
 
 
 
-### <a name="Client.Unlock">func</a> (\*Client) [Unlock](/src/target/gocd.go?s=4633:4658#L179)
+### <a name="Client.Unlock">func</a> (\*Client) [Unlock](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go?s=4720:4745#L181)
 ``` go
 func (c *Client) Unlock()
 ```
@@ -934,7 +982,7 @@ Unlock the client after a lock action
 
 
 
-## <a name="ConfigApproval">type</a> [ConfigApproval](/src/target/configuration.go?s=2573:2662#L60)
+## <a name="ConfigApproval">type</a> [ConfigApproval](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=2573:2662#L60)
 ``` go
 type ConfigApproval struct {
     Type string `xml:"type,attr,omitempty" json:",omitempty"`
@@ -951,7 +999,7 @@ ConfigApproval part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigArtifact">type</a> [ConfigArtifact](/src/target/configuration.go?s=2365:2498#L54)
+## <a name="ConfigArtifact">type</a> [ConfigArtifact](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=2365:2498#L54)
 ``` go
 type ConfigArtifact struct {
     Src         string `xml:"src,attr"`
@@ -969,7 +1017,7 @@ ConfigArtifact part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigAuthConfig">type</a> [ConfigAuthConfig](/src/target/configuration.go?s=7269:7443#L182)
+## <a name="ConfigAuthConfig">type</a> [ConfigAuthConfig](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=7269:7443#L182)
 ``` go
 type ConfigAuthConfig struct {
     ID         string           `xml:"id,attr"`
@@ -988,7 +1036,7 @@ ConfigAuthConfig part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigElastic">type</a> [ConfigElastic](/src/target/configuration.go?s=7517:7604#L189)
+## <a name="ConfigElastic">type</a> [ConfigElastic](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=7517:7604#L189)
 ``` go
 type ConfigElastic struct {
     Profiles []ConfigElasticProfile `xml:"profiles>profile"`
@@ -1005,7 +1053,7 @@ ConfigElastic part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigElasticProfile">type</a> [ConfigElasticProfile](/src/target/configuration.go?s=7685:7863#L194)
+## <a name="ConfigElasticProfile">type</a> [ConfigElasticProfile](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=7685:7863#L194)
 ``` go
 type ConfigElasticProfile struct {
     ID         string           `xml:"id,attr"`
@@ -1024,7 +1072,7 @@ ConfigElasticProfile part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigEnvironmentVariable">type</a> [ConfigEnvironmentVariable](/src/target/configuration.go?s=2748:2849#L65)
+## <a name="ConfigEnvironmentVariable">type</a> [ConfigEnvironmentVariable](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=2748:2849#L65)
 ``` go
 type ConfigEnvironmentVariable struct {
     Name  string `xml:"name,attr"`
@@ -1042,7 +1090,7 @@ ConfigEnvironmentVariable part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigFilter">type</a> [ConfigFilter](/src/target/configuration.go?s=3385:3459#L84)
+## <a name="ConfigFilter">type</a> [ConfigFilter](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=3385:3459#L84)
 ``` go
 type ConfigFilter struct {
     Ignore string `xml:"pattern,attr,omitempty"`
@@ -1059,7 +1107,7 @@ ConfigFilter part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigJob">type</a> [ConfigJob](/src/target/configuration.go?s=1837:2290#L45)
+## <a name="ConfigJob">type</a> [ConfigJob](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=1837:2290#L45)
 ``` go
 type ConfigJob struct {
     Name                 string                      `xml:"name,attr"`
@@ -1080,7 +1128,7 @@ ConfigJob part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigMaterialRepository">type</a> [ConfigMaterialRepository](/src/target/configuration.go?s=4468:4861#L115)
+## <a name="ConfigMaterialRepository">type</a> [ConfigMaterialRepository](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=4468:4861#L115)
 ``` go
 type ConfigMaterialRepository struct {
     ID                  string                    `xml:"id,attr"`
@@ -1101,7 +1149,7 @@ ConfigMaterialRepository part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigPackage">type</a> [ConfigPackage](/src/target/configuration.go?s=4935:5125#L124)
+## <a name="ConfigPackage">type</a> [ConfigPackage](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=4935:5125#L124)
 ``` go
 type ConfigPackage struct {
     ID            string           `xml:"id,attr"`
@@ -1120,7 +1168,7 @@ ConfigPackage part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigParam">type</a> [ConfigParam](/src/target/configuration.go?s=3531:3622#L89)
+## <a name="ConfigParam">type</a> [ConfigParam](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=3531:3622#L89)
 ``` go
 type ConfigParam struct {
     Name  string `xml:"name,attr"`
@@ -1138,7 +1186,7 @@ ConfigParam part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigPipeline">type</a> [ConfigPipeline](/src/target/configuration.go?s=882:1513#L26)
+## <a name="ConfigPipeline">type</a> [ConfigPipeline](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=882:1513#L26)
 ``` go
 type ConfigPipeline struct {
     Name                 string                      `xml:"name,attr"`
@@ -1162,7 +1210,7 @@ ConfigPipeline part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigPipelineGroup">type</a> [ConfigPipelineGroup](/src/target/configuration.go?s=680:807#L20)
+## <a name="ConfigPipelineGroup">type</a> [ConfigPipelineGroup](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=680:807#L20)
 ``` go
 type ConfigPipelineGroup struct {
     Name      string           `xml:"group,attr"`
@@ -1180,7 +1228,7 @@ ConfigPipelineGroup contains a single pipeline groups
 
 
 
-## <a name="ConfigPluginConfiguration">type</a> [ConfigPluginConfiguration](/src/target/configuration.go?s=5211:5321#L131)
+## <a name="ConfigPluginConfiguration">type</a> [ConfigPluginConfiguration](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=5211:5321#L131)
 ``` go
 type ConfigPluginConfiguration struct {
     ID      string `xml:"id,attr"`
@@ -1198,7 +1246,7 @@ ConfigPluginConfiguration part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigProperty">type</a> [ConfigProperty](/src/target/configuration.go?s=7938:8022#L201)
+## <a name="ConfigProperty">type</a> [ConfigProperty](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=7938:8022#L201)
 ``` go
 type ConfigProperty struct {
     Key   string `xml:"key"`
@@ -1216,7 +1264,222 @@ ConfigProperty part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigRepository">type</a> [ConfigRepository](/src/target/configuration.go?s=3699:3863#L95)
+## <a name="ConfigRepo">type</a> [ConfigRepo](https://github.com/beamly/go-gocd/tree/master/gocd/config_repo.go?s=646:1062#L22)
+``` go
+type ConfigRepo struct {
+    ID            string                `json:"id"`
+    PluginID      string                `json:"plugin_id"`
+    Material      Material              `json:"material"`
+    Configuration []*ConfigRepoProperty `json:"configuration,omitempty"`
+    Links         *HALLinks             `json:"_links,omitempty,omitempty"`
+    Version       string                `json:"version,omitempty"`
+    // contains filtered or unexported fields
+}
+```
+ConfigRepo represents a config repo object in GoCD
+
+
+
+
+
+
+
+
+
+
+### <a name="ConfigRepo.GetVersion">func</a> (\*ConfigRepo) [GetVersion](https://github.com/beamly/go-gocd/tree/master/gocd/resource_config_repo.go?s=207:257#L9)
+``` go
+func (c *ConfigRepo) GetVersion() (version string)
+```
+GetVersion retrieves a version string for this config repo
+
+
+
+
+### <a name="ConfigRepo.SetVersion">func</a> (\*ConfigRepo) [SetVersion](https://github.com/beamly/go-gocd/tree/master/gocd/resource_config_repo.go?s=71:118#L4)
+``` go
+func (c *ConfigRepo) SetVersion(version string)
+```
+SetVersion sets a version string for this config repo
+
+
+
+
+## <a name="ConfigRepoProperty">type</a> [ConfigRepoProperty](https://github.com/beamly/go-gocd/tree/master/gocd/config_repo.go?s=1137:1313#L33)
+``` go
+type ConfigRepoProperty struct {
+    Key            string `json:"key"`
+    Value          string `json:"value,omitempty"`
+    EncryptedValue string `json:"encrypted_value,omitempty"`
+}
+```
+ConfigRepoProperty represents a configuration related to a ConfigRepo
+
+
+
+
+
+
+
+
+
+
+## <a name="ConfigRepoService">type</a> [ConfigRepoService](https://github.com/beamly/go-gocd/tree/master/gocd/config_repo.go?s=259:289#L11)
+``` go
+type ConfigRepoService service
+```
+ConfigRepoService allows admin users to define and manage config repos using
+which pipelines defined in external repositories can be included in GoCD,
+thereby allowing users to have their Pipeline as code.
+
+
+
+
+
+
+
+
+
+
+### <a name="ConfigRepoService.Create">func</a> (\*ConfigRepoService) [Create](https://github.com/beamly/go-gocd/tree/master/gocd/config_repo.go?s=2261:2382#L71)
+``` go
+func (crs *ConfigRepoService) Create(ctx context.Context, cr *ConfigRepo) (out *ConfigRepo, resp *APIResponse, err error)
+```
+Create a config repo
+
+
+##### Example ConfigRepoService.Create:
+``` go
+    // This example creates a config repo that uses a git material and a json config plugin
+    cfg := gocd.Configuration{
+        Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+        Username: "ApiUser",
+        Password: "MySecretPassword",
+    }
+
+    c := cfg.Client()
+
+    name := "my_pipeline_name"
+    repoURL := "git@github.com:example/myrepo.git"
+    repo := gocd.ConfigRepo{ID: name, PluginID: "json.config.plugin", Material: gocd.Material{Type: "git", Attributes: &gocd.MaterialAttributesGit{Name: name, URL: repoURL, Branch: "master", AutoUpdate: true}}}
+
+    r, _, err := c.ConfigRepos.Create(context.Background(), &repo)
+    if err != nil {
+        panic(err)
+    }
+
+    fmt.Printf("Pipeline created:\n\tName: %s\n\tMaterial type: %s\n", r.ID, r.Material.Type)
+    if r.Material.Type == "git" {
+        fmt.Printf("\tMaterial url: %s\n", r.Material.Attributes.(*gocd.MaterialAttributesGit).URL)
+    }
+    fmt.Printf("\tNumber of configuration parameters: %d\n\n", len(r.Configuration))
+```
+
+
+
+### <a name="ConfigRepoService.Delete">func</a> (\*ConfigRepoService) [Delete](https://github.com/beamly/go-gocd/tree/master/gocd/config_repo.go?s=3079:3177#L99)
+``` go
+func (crs *ConfigRepoService) Delete(ctx context.Context, id string) (string, *APIResponse, error)
+```
+Delete the specified config repo
+
+
+
+
+### <a name="ConfigRepoService.Get">func</a> (\*ConfigRepoService) [Get](https://github.com/beamly/go-gocd/tree/master/gocd/config_repo.go?s=1896:2009#L58)
+``` go
+func (crs *ConfigRepoService) Get(ctx context.Context, id string) (out *ConfigRepo, resp *APIResponse, err error)
+```
+Get fetches the config repo object for a specified id
+
+
+##### Example ConfigRepoService.Get:
+``` go
+    cfg := gocd.Configuration{
+        Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+        Username: "ApiUser",
+        Password: "MySecretPassword",
+    }
+
+    c := cfg.Client()
+
+    r, _, err := c.ConfigRepos.Get(context.Background(), "my_repo_config_id")
+    if err != nil {
+        panic(err)
+    }
+    fmt.Printf("Pipeline: %s\n\tMaterial type: %s\n", r.ID, r.Material.Type)
+    if r.Material.Type == "git" {
+        fmt.Printf("\tMaterial url: %s\n", r.Material.Attributes.(*gocd.MaterialAttributesGit).URL)
+    }
+    fmt.Printf("\tNumber of configuration parameters: %d\n\n", len(r.Configuration))
+```
+
+
+
+### <a name="ConfigRepoService.List">func</a> (\*ConfigRepoService) [List](https://github.com/beamly/go-gocd/tree/master/gocd/config_repo.go?s=1439:1546#L41)
+``` go
+func (crs *ConfigRepoService) List(ctx context.Context) (repos []*ConfigRepo, resp *APIResponse, err error)
+```
+List returns all available config repos, these are config repositories that
+are present in the in `cruise-config.xml`
+
+
+##### Example ConfigRepoService.List:
+``` go
+    cfg := gocd.Configuration{
+        Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+        Username: "ApiUser",
+        Password: "MySecretPassword",
+    }
+
+    c := cfg.Client()
+
+    l, _, err := c.ConfigRepos.List(context.Background())
+    if err != nil {
+        panic(err)
+    }
+    // Loops through the list of repositories to display some basic informations
+    for _, r := range l {
+        fmt.Printf("Pipeline: %s\n\tMaterial type: %s\n", r.ID, r.Material.Type)
+        if r.Material.Type == "git" {
+            fmt.Printf("\tMaterial url: %s\n", r.Material.Attributes.(*gocd.MaterialAttributesGit).URL)
+        }
+        fmt.Printf("\tNumber of configuration parameters: %d\n\n", len(r.Configuration))
+    }
+```
+
+
+
+### <a name="ConfigRepoService.Update">func</a> (\*ConfigRepoService) [Update](https://github.com/beamly/go-gocd/tree/master/gocd/config_repo.go?s=2663:2795#L85)
+``` go
+func (crs *ConfigRepoService) Update(ctx context.Context, id string, cr *ConfigRepo) (out *ConfigRepo, resp *APIResponse, err error)
+```
+Update config repos for specified config repo id
+
+
+
+
+## <a name="ConfigReposListResponse">type</a> [ConfigReposListResponse](https://github.com/beamly/go-gocd/tree/master/gocd/config_repo.go?s=409:590#L14)
+``` go
+type ConfigReposListResponse struct {
+    Links    *HALLinks `json:"_links,omitempty"`
+    Embedded *struct {
+        Repos []*ConfigRepo `json:"config_repos"`
+    } `json:"_embedded,omitempty"`
+}
+```
+ConfigReposListResponse describes the structure of the API response when listing collections of ConfigRepo objects
+
+
+
+
+
+
+
+
+
+
+## <a name="ConfigRepository">type</a> [ConfigRepository](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=3699:3863#L95)
 ``` go
 type ConfigRepository struct {
     Plugin string              `xml:"plugin,attr"`
@@ -1235,7 +1498,7 @@ ConfigRepository part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigRepositoryGit">type</a> [ConfigRepositoryGit](/src/target/configuration.go?s=3943:4007#L102)
+## <a name="ConfigRepositoryGit">type</a> [ConfigRepositoryGit](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=3943:4007#L102)
 ``` go
 type ConfigRepositoryGit struct {
     URL string `xml:"url,attr"`
@@ -1252,7 +1515,7 @@ ConfigRepositoryGit part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigRole">type</a> [ConfigRole](/src/target/configuration.go?s=7097:7192#L176)
+## <a name="ConfigRole">type</a> [ConfigRole](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=7097:7192#L176)
 ``` go
 type ConfigRole struct {
     Name  string   `xml:"name,attr"`
@@ -1270,7 +1533,7 @@ ConfigRole part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigSCM">type</a> [ConfigSCM](/src/target/configuration.go?s=4077:4383#L107)
+## <a name="ConfigSCM">type</a> [ConfigSCM](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=4077:4383#L107)
 ``` go
 type ConfigSCM struct {
     ID                  string                    `xml:"id,attr"`
@@ -1290,7 +1553,7 @@ ConfigSCM part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigSecurity">type</a> [ConfigSecurity](/src/target/configuration.go?s=6632:6885#L163)
+## <a name="ConfigSecurity">type</a> [ConfigSecurity](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=6632:6885#L163)
 ``` go
 type ConfigSecurity struct {
     AuthConfigs  []ConfigAuthConfig `xml:"authConfigs>authConfig"`
@@ -1310,7 +1573,7 @@ ConfigSecurity part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigServer">type</a> [ConfigServer](/src/target/configuration.go?s=5394:6285#L137)
+## <a name="ConfigServer">type</a> [ConfigServer](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=5394:6285#L137)
 ``` go
 type ConfigServer struct {
     MailHost                  MailHost       `xml:"mailhost"`
@@ -1339,7 +1602,7 @@ ConfigServer part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigStage">type</a> [ConfigStage](/src/target/configuration.go?s=1585:1767#L38)
+## <a name="ConfigStage">type</a> [ConfigStage](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=1585:1767#L38)
 ``` go
 type ConfigStage struct {
     Name     string         `xml:"name,attr"`
@@ -1358,7 +1621,7 @@ ConfigStage part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigTask">type</a> [ConfigTask](/src/target/configuration_task.go?s=243:1076#L13)
+## <a name="ConfigTask">type</a> [ConfigTask](https://github.com/beamly/go-gocd/tree/master/gocd/configuration_task.go?s=243:1076#L13)
 ``` go
 type ConfigTask struct {
     // Because we need to preserve the order of tasks, and we have an array of elements with mixed types,
@@ -1386,7 +1649,7 @@ ConfigTask part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigTaskRunIf">type</a> [ConfigTaskRunIf](/src/target/configuration_task.go?s=1152:1218#L29)
+## <a name="ConfigTaskRunIf">type</a> [ConfigTaskRunIf](https://github.com/beamly/go-gocd/tree/master/gocd/configuration_task.go?s=1152:1218#L29)
 ``` go
 type ConfigTaskRunIf struct {
     Status string `xml:"status,attr"`
@@ -1403,7 +1666,7 @@ ConfigTaskRunIf part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigTasks">type</a> [ConfigTasks](/src/target/configuration_task.go?s=112:172#L8)
+## <a name="ConfigTasks">type</a> [ConfigTasks](https://github.com/beamly/go-gocd/tree/master/gocd/configuration_task.go?s=112:172#L8)
 ``` go
 type ConfigTasks struct {
     Tasks []ConfigTask `xml:",any"`
@@ -1420,7 +1683,7 @@ ConfigTasks part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="ConfigXML">type</a> [ConfigXML](/src/target/configuration.go?s=246:621#L11)
+## <a name="ConfigXML">type</a> [ConfigXML](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=246:621#L11)
 ``` go
 type ConfigXML struct {
     Repositories       []ConfigMaterialRepository `xml:"repositories>repository"`
@@ -1441,7 +1704,7 @@ ConfigXML part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="Configuration">type</a> [Configuration](/src/target/config.go?s=554:781#L26)
+## <a name="Configuration">type</a> [Configuration](https://github.com/beamly/go-gocd/tree/master/gocd/config.go?s=554:781#L26)
 ``` go
 type Configuration struct {
     Server       string
@@ -1461,7 +1724,7 @@ Configuration describes a single connection to a GoCD server
 
 
 
-### <a name="Configuration.Client">func</a> (\*Configuration) [Client](/src/target/gocd.go?s=3081:3121#L124)
+### <a name="Configuration.Client">func</a> (\*Configuration) [Client](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go?s=3119:3159#L125)
 ``` go
 func (c *Configuration) Client() *Client
 ```
@@ -1470,7 +1733,7 @@ Client returns a client which allows us to interact with the GoCD Server.
 
 
 
-### <a name="Configuration.HasAuth">func</a> (\*Configuration) [HasAuth](/src/target/gocd.go?s=2911:2949#L119)
+### <a name="Configuration.HasAuth">func</a> (\*Configuration) [HasAuth](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go?s=2949:2987#L120)
 ``` go
 func (c *Configuration) HasAuth() bool
 ```
@@ -1479,7 +1742,7 @@ HasAuth checks whether or not we have the required Username/Password variables p
 
 
 
-## <a name="ConfigurationService">type</a> [ConfigurationService](/src/target/configuration.go?s=143:176#L8)
+## <a name="ConfigurationService">type</a> [ConfigurationService](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=143:176#L8)
 ``` go
 type ConfigurationService service
 ```
@@ -1494,7 +1757,7 @@ ConfigurationService describes the HAL _link resource for the api response objec
 
 
 
-### <a name="ConfigurationService.Get">func</a> (\*ConfigurationService) [Get](/src/target/configuration.go?s=8459:8561#L217)
+### <a name="ConfigurationService.Get">func</a> (\*ConfigurationService) [Get](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=8459:8561#L217)
 ``` go
 func (cs *ConfigurationService) Get(ctx context.Context) (cx *ConfigXML, resp *APIResponse, err error)
 ```
@@ -1503,7 +1766,7 @@ Get the config.xml document from the server and... render it as JSON... 'cause..
 
 
 
-### <a name="ConfigurationService.GetVersion">func</a> (\*ConfigurationService) [GetVersion](/src/target/configuration.go?s=8827:8933#L228)
+### <a name="ConfigurationService.GetVersion">func</a> (\*ConfigurationService) [GetVersion](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=8827:8933#L228)
 ``` go
 func (cs *ConfigurationService) GetVersion(ctx context.Context) (v *Version, resp *APIResponse, err error)
 ```
@@ -1512,7 +1775,7 @@ GetVersion of the GoCD server and other metadata about the software version.
 
 
 
-## <a name="EmbeddedEnvironments">type</a> [EmbeddedEnvironments](/src/target/environment.go?s=440:527#L17)
+## <a name="EmbeddedEnvironments">type</a> [EmbeddedEnvironments](https://github.com/beamly/go-gocd/tree/master/gocd/environment.go?s=440:527#L17)
 ``` go
 type EmbeddedEnvironments struct {
     Environments []*Environment `json:"environments"`
@@ -1529,7 +1792,7 @@ EmbeddedEnvironments encapsulates the environment struct
 
 
 
-## <a name="EncryptionService">type</a> [EncryptionService](/src/target/encryption.go?s=140:170#L8)
+## <a name="EncryptionService">type</a> [EncryptionService](https://github.com/beamly/go-gocd/tree/master/gocd/encryption.go?s=140:170#L8)
 ``` go
 type EncryptionService service
 ```
@@ -1544,7 +1807,7 @@ EncryptionService describes the HAL _link resource for the api response object f
 
 
 
-### <a name="EncryptionService.Encrypt">func</a> (\*EncryptionService) [Encrypt](/src/target/encryption.go?s=430:551#L17)
+### <a name="EncryptionService.Encrypt">func</a> (\*EncryptionService) [Encrypt](https://github.com/beamly/go-gocd/tree/master/gocd/encryption.go?s=430:551#L17)
 ``` go
 func (es *EncryptionService) Encrypt(ctx context.Context, plaintext string) (c *CipherText, resp *APIResponse, err error)
 ```
@@ -1553,7 +1816,7 @@ Encrypt takes a plaintext value and returns a cipher text.
 
 
 
-## <a name="Environment">type</a> [Environment](/src/target/environment.go?s=586:1036#L22)
+## <a name="Environment">type</a> [Environment](https://github.com/beamly/go-gocd/tree/master/gocd/environment.go?s=586:1036#L22)
 ``` go
 type Environment struct {
     Links                *HALLinks              `json:"_links,omitempty"`
@@ -1575,7 +1838,7 @@ Environment describes a group of pipelines and agents
 
 
 
-### <a name="Environment.GetLinks">func</a> (\*Environment) [GetLinks](/src/target/resource_environment.go?s=629:673#L28)
+### <a name="Environment.GetLinks">func</a> (\*Environment) [GetLinks](https://github.com/beamly/go-gocd/tree/master/gocd/resource_environment.go?s=629:673#L28)
 ``` go
 func (env *Environment) GetLinks() *HALLinks
 ```
@@ -1584,7 +1847,7 @@ GetLinks from the Environment
 
 
 
-### <a name="Environment.GetVersion">func</a> (\*Environment) [GetVersion](/src/target/resource_environment.go?s=889:942#L38)
+### <a name="Environment.GetVersion">func</a> (\*Environment) [GetVersion](https://github.com/beamly/go-gocd/tree/master/gocd/resource_environment.go?s=889:942#L38)
 ``` go
 func (env *Environment) GetVersion() (version string)
 ```
@@ -1593,7 +1856,7 @@ GetVersion retrieves a version string for this pipeline
 
 
 
-### <a name="Environment.RemoveLinks">func</a> (\*Environment) [RemoveLinks](/src/target/resource_environment.go?s=427:464#L17)
+### <a name="Environment.RemoveLinks">func</a> (\*Environment) [RemoveLinks](https://github.com/beamly/go-gocd/tree/master/gocd/resource_environment.go?s=427:464#L17)
 ``` go
 func (env *Environment) RemoveLinks()
 ```
@@ -1602,7 +1865,7 @@ RemoveLinks gets the Environment ready to be submitted to the GoCD API.
 
 
 
-### <a name="Environment.SetVersion">func</a> (\*Environment) [SetVersion](/src/target/resource_environment.go?s=751:801#L33)
+### <a name="Environment.SetVersion">func</a> (\*Environment) [SetVersion](https://github.com/beamly/go-gocd/tree/master/gocd/resource_environment.go?s=751:801#L33)
 ``` go
 func (env *Environment) SetVersion(version string)
 ```
@@ -1611,7 +1874,7 @@ SetVersion sets a version string for this pipeline
 
 
 
-## <a name="EnvironmentPatchRequest">type</a> [EnvironmentPatchRequest](/src/target/environment.go?s=1116:1371#L32)
+## <a name="EnvironmentPatchRequest">type</a> [EnvironmentPatchRequest](https://github.com/beamly/go-gocd/tree/master/gocd/environment.go?s=1116:1371#L32)
 ``` go
 type EnvironmentPatchRequest struct {
     Pipelines            *PatchStringAction          `json:"pipelines"`
@@ -1630,7 +1893,7 @@ EnvironmentPatchRequest describes the actions to perform on an environment
 
 
 
-## <a name="EnvironmentVariable">type</a> [EnvironmentVariable](/src/target/jobs.go?s=2551:2768#L64)
+## <a name="EnvironmentVariable">type</a> [EnvironmentVariable](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=2551:2768#L64)
 ``` go
 type EnvironmentVariable struct {
     Name           string `json:"name"`
@@ -1650,7 +1913,7 @@ EnvironmentVariable describes an environment variable key/pair.
 
 
 
-## <a name="EnvironmentVariablesAction">type</a> [EnvironmentVariablesAction](/src/target/environment.go?s=1469:1602#L39)
+## <a name="EnvironmentVariablesAction">type</a> [EnvironmentVariablesAction](https://github.com/beamly/go-gocd/tree/master/gocd/environment.go?s=1469:1602#L39)
 ``` go
 type EnvironmentVariablesAction struct {
     Add    []*EnvironmentVariable `json:"add"`
@@ -1668,7 +1931,7 @@ EnvironmentVariablesAction describes a collection of Environment Variables to ad
 
 
 
-## <a name="EnvironmentsResponse">type</a> [EnvironmentsResponse](/src/target/environment.go?s=243:378#L11)
+## <a name="EnvironmentsResponse">type</a> [EnvironmentsResponse](https://github.com/beamly/go-gocd/tree/master/gocd/environment.go?s=243:378#L11)
 ``` go
 type EnvironmentsResponse struct {
     Links    *HALLinks             `json:"_links"`
@@ -1686,7 +1949,7 @@ EnvironmentsResponse describes the response obejct for a plugin API call.
 
 
 
-### <a name="EnvironmentsResponse.GetLinks">func</a> (\*EnvironmentsResponse) [GetLinks](/src/target/resource_environment.go?s=277:329#L12)
+### <a name="EnvironmentsResponse.GetLinks">func</a> (\*EnvironmentsResponse) [GetLinks](https://github.com/beamly/go-gocd/tree/master/gocd/resource_environment.go?s=277:329#L12)
 ``` go
 func (er *EnvironmentsResponse) GetLinks() *HALLinks
 ```
@@ -1695,7 +1958,7 @@ GetLinks from the EnvironmentResponse
 
 
 
-### <a name="EnvironmentsResponse.RemoveLinks">func</a> (\*EnvironmentsResponse) [RemoveLinks](/src/target/resource_environment.go?s=98:143#L4)
+### <a name="EnvironmentsResponse.RemoveLinks">func</a> (\*EnvironmentsResponse) [RemoveLinks](https://github.com/beamly/go-gocd/tree/master/gocd/resource_environment.go?s=98:143#L4)
 ``` go
 func (er *EnvironmentsResponse) RemoveLinks()
 ```
@@ -1704,7 +1967,7 @@ RemoveLinks gets the EnvironmentsResponse ready to be submitted to the GoCD API.
 
 
 
-## <a name="EnvironmentsService">type</a> [EnvironmentsService](/src/target/environment.go?s=132:164#L8)
+## <a name="EnvironmentsService">type</a> [EnvironmentsService](https://github.com/beamly/go-gocd/tree/master/gocd/environment.go?s=132:164#L8)
 ``` go
 type EnvironmentsService service
 ```
@@ -1719,7 +1982,7 @@ EnvironmentsService exposes calls for interacting with Environment objects in th
 
 
 
-### <a name="EnvironmentsService.Create">func</a> (\*EnvironmentsService) [Create](/src/target/environment.go?s=2330:2448#L68)
+### <a name="EnvironmentsService.Create">func</a> (\*EnvironmentsService) [Create](https://github.com/beamly/go-gocd/tree/master/gocd/environment.go?s=2330:2448#L68)
 ``` go
 func (es *EnvironmentsService) Create(ctx context.Context, name string) (e *Environment, resp *APIResponse, err error)
 ```
@@ -1728,7 +1991,7 @@ Create an environment
 
 
 
-### <a name="EnvironmentsService.Delete">func</a> (\*EnvironmentsService) [Delete](/src/target/environment.go?s=2127:2228#L63)
+### <a name="EnvironmentsService.Delete">func</a> (\*EnvironmentsService) [Delete](https://github.com/beamly/go-gocd/tree/master/gocd/environment.go?s=2127:2228#L63)
 ``` go
 func (es *EnvironmentsService) Delete(ctx context.Context, name string) (string, *APIResponse, error)
 ```
@@ -1737,7 +2000,7 @@ Delete an environment
 
 
 
-### <a name="EnvironmentsService.Get">func</a> (\*EnvironmentsService) [Get](/src/target/environment.go?s=2686:2801#L82)
+### <a name="EnvironmentsService.Get">func</a> (\*EnvironmentsService) [Get](https://github.com/beamly/go-gocd/tree/master/gocd/environment.go?s=2686:2801#L82)
 ``` go
 func (es *EnvironmentsService) Get(ctx context.Context, name string) (e *Environment, resp *APIResponse, err error)
 ```
@@ -1746,7 +2009,7 @@ Get a single environment by name
 
 
 
-### <a name="EnvironmentsService.List">func</a> (\*EnvironmentsService) [List](/src/target/environment.go?s=1802:1914#L51)
+### <a name="EnvironmentsService.List">func</a> (\*EnvironmentsService) [List](https://github.com/beamly/go-gocd/tree/master/gocd/environment.go?s=1802:1914#L51)
 ``` go
 func (es *EnvironmentsService) List(ctx context.Context) (e *EnvironmentsResponse, resp *APIResponse, err error)
 ```
@@ -1755,7 +2018,7 @@ List all environments
 
 
 
-### <a name="EnvironmentsService.Patch">func</a> (\*EnvironmentsService) [Patch](/src/target/environment.go?s=3090:3239#L94)
+### <a name="EnvironmentsService.Patch">func</a> (\*EnvironmentsService) [Patch](https://github.com/beamly/go-gocd/tree/master/gocd/environment.go?s=3090:3239#L94)
 ``` go
 func (es *EnvironmentsService) Patch(ctx context.Context, name string, patch *EnvironmentPatchRequest) (e *Environment, resp *APIResponse, err error)
 ```
@@ -1764,7 +2027,7 @@ Patch an environments configuration by adding or removing pipelines, agents, env
 
 
 
-## <a name="GitRepositoryMaterial">type</a> [GitRepositoryMaterial](/src/target/configuration.go?s=3178:3312#L78)
+## <a name="GitRepositoryMaterial">type</a> [GitRepositoryMaterial](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=3178:3312#L78)
 ``` go
 type GitRepositoryMaterial struct {
     URL     string         `xml:"url,attr"`
@@ -1782,7 +2045,7 @@ GitRepositoryMaterial part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="HALContainer">type</a> [HALContainer](/src/target/resource.go?s=387:455#L17)
+## <a name="HALContainer">type</a> [HALContainer](https://github.com/beamly/go-gocd/tree/master/gocd/resource.go?s=387:455#L17)
 ``` go
 type HALContainer interface {
     RemoveLinks()
@@ -1800,7 +2063,7 @@ HALContainer represents objects with HAL _link and _embedded resources.
 
 
 
-## <a name="HALLink">type</a> [HALLink](/src/target/resource.go?s=632:683#L29)
+## <a name="HALLink">type</a> [HALLink](https://github.com/beamly/go-gocd/tree/master/gocd/resource.go?s=632:683#L29)
 ``` go
 type HALLink struct {
     Name string
@@ -1818,7 +2081,7 @@ HALLink describes a HAL link
 
 
 
-## <a name="HALLinks">type</a> [HALLinks](/src/target/links.go?s=206:248#L15)
+## <a name="HALLinks">type</a> [HALLinks](https://github.com/beamly/go-gocd/tree/master/gocd/links.go?s=206:248#L15)
 ``` go
 type HALLinks struct {
     // contains filtered or unexported fields
@@ -1835,7 +2098,7 @@ HALLinks describes a collection of HALLinks
 
 
 
-### <a name="HALLinks.Add">func</a> (\*HALLinks) [Add](/src/target/links.go?s=264:302#L20)
+### <a name="HALLinks.Add">func</a> (\*HALLinks) [Add](https://github.com/beamly/go-gocd/tree/master/gocd/links.go?s=264:302#L20)
 ``` go
 func (al *HALLinks) Add(link *HALLink)
 ```
@@ -1844,7 +2107,7 @@ Add a link
 
 
 
-### <a name="HALLinks.Get">func</a> (HALLinks) [Get](/src/target/links.go?s=368:419#L25)
+### <a name="HALLinks.Get">func</a> (HALLinks) [Get](https://github.com/beamly/go-gocd/tree/master/gocd/links.go?s=368:419#L25)
 ``` go
 func (al HALLinks) Get(name string) (link *HALLink)
 ```
@@ -1853,7 +2116,7 @@ Get a HALLink by name
 
 
 
-### <a name="HALLinks.GetOk">func</a> (HALLinks) [GetOk](/src/target/links.go?s=525:587#L31)
+### <a name="HALLinks.GetOk">func</a> (HALLinks) [GetOk](https://github.com/beamly/go-gocd/tree/master/gocd/links.go?s=525:587#L31)
 ``` go
 func (al HALLinks) GetOk(name string) (link *HALLink, ok bool)
 ```
@@ -1862,7 +2125,7 @@ GetOk a HALLink by name, and if it doesn't exist, return false
 
 
 
-### <a name="HALLinks.Keys">func</a> (HALLinks) [Keys](/src/target/links.go?s=778:819#L43)
+### <a name="HALLinks.Keys">func</a> (HALLinks) [Keys](https://github.com/beamly/go-gocd/tree/master/gocd/links.go?s=778:819#L43)
 ``` go
 func (al HALLinks) Keys() (keys []string)
 ```
@@ -1871,7 +2134,7 @@ Keys returns a string list of link names
 
 
 
-### <a name="HALLinks.MarshallJSON">func</a> (HALLinks) [MarshallJSON](/src/target/links.go?s=978:1027#L52)
+### <a name="HALLinks.MarshallJSON">func</a> (HALLinks) [MarshallJSON](https://github.com/beamly/go-gocd/tree/master/gocd/links.go?s=978:1027#L52)
 ``` go
 func (al HALLinks) MarshallJSON() ([]byte, error)
 ```
@@ -1880,7 +2143,7 @@ MarshallJSON allows the encoding of links into JSON
 
 
 
-### <a name="HALLinks.UnmarshalJSON">func</a> (\*HALLinks) [UnmarshalJSON](/src/target/links.go?s=1230:1285#L61)
+### <a name="HALLinks.UnmarshalJSON">func</a> (\*HALLinks) [UnmarshalJSON](https://github.com/beamly/go-gocd/tree/master/gocd/links.go?s=1230:1285#L61)
 ``` go
 func (al *HALLinks) UnmarshalJSON(j []byte) (err error)
 ```
@@ -1889,7 +2152,7 @@ UnmarshalJSON allows the decoding of links from JSON
 
 
 
-## <a name="Job">type</a> [Job](/src/target/jobs.go?s=354:2028#L18)
+## <a name="Job">type</a> [Job](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=354:2028#L18)
 ``` go
 type Job struct {
     AgentUUID            string                 `json:"agent_uuid,omitempty"`
@@ -1927,7 +2190,7 @@ Job describes a job which can be performed in GoCD
 
 
 
-### <a name="Job.JSONString">func</a> (\*Job) [JSONString](/src/target/resource_jobs.go?s=127:178#L10)
+### <a name="Job.JSONString">func</a> (\*Job) [JSONString](https://github.com/beamly/go-gocd/tree/master/gocd/resource_jobs.go?s=127:178#L10)
 ``` go
 func (j *Job) JSONString() (body string, err error)
 ```
@@ -1936,7 +2199,7 @@ JSONString returns a string of this stage as a JSON object.
 
 
 
-### <a name="Job.Validate">func</a> (\*Job) [Validate](/src/target/resource_jobs.go?s=377:413#L23)
+### <a name="Job.Validate">func</a> (\*Job) [Validate](https://github.com/beamly/go-gocd/tree/master/gocd/resource_jobs.go?s=377:413#L23)
 ``` go
 func (j *Job) Validate() (err error)
 ```
@@ -1945,7 +2208,7 @@ Validate a job structure has non-nil values on correct attributes
 
 
 
-## <a name="JobProperty">type</a> [JobProperty](/src/target/jobs.go?s=2365:2482#L57)
+## <a name="JobProperty">type</a> [JobProperty](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=2365:2482#L57)
 ``` go
 type JobProperty struct {
     Name   string `json:"name"`
@@ -1964,7 +2227,7 @@ JobProperty describes the property for a job
 
 
 
-## <a name="JobRunHistoryResponse">type</a> [JobRunHistoryResponse](/src/target/jobs.go?s=5357:5512#L129)
+## <a name="JobRunHistoryResponse">type</a> [JobRunHistoryResponse](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=5357:5512#L129)
 ``` go
 type JobRunHistoryResponse struct {
     Jobs       []*Job              `json:"jobs,omitempty"`
@@ -1982,7 +2245,7 @@ JobRunHistoryResponse describes the api response from
 
 
 
-## <a name="JobSchedule">type</a> [JobSchedule](/src/target/jobs.go?s=5689:6117#L140)
+## <a name="JobSchedule">type</a> [JobSchedule](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=5689:6117#L140)
 ``` go
 type JobSchedule struct {
     Name                 string               `xml:"name,attr"`
@@ -2004,7 +2267,7 @@ JobSchedule describes the event causes for a job
 
 
 
-## <a name="JobScheduleEnvVar">type</a> [JobScheduleEnvVar](/src/target/jobs.go?s=6195:6292#L150)
+## <a name="JobScheduleEnvVar">type</a> [JobScheduleEnvVar](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=6195:6292#L150)
 ``` go
 type JobScheduleEnvVar struct {
     Name  string `xml:"name,attr"`
@@ -2022,7 +2285,7 @@ JobScheduleEnvVar describes the environmnet variables for a job schedule
 
 
 
-## <a name="JobScheduleLink">type</a> [JobScheduleLink](/src/target/jobs.go?s=6356:6448#L156)
+## <a name="JobScheduleLink">type</a> [JobScheduleLink](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=6356:6448#L156)
 ``` go
 type JobScheduleLink struct {
     Rel  string `xml:"rel,attr"`
@@ -2040,7 +2303,7 @@ JobScheduleLink describes the HAL links for a job schedule
 
 
 
-## <a name="JobScheduleResponse">type</a> [JobScheduleResponse](/src/target/jobs.go?s=5567:5635#L135)
+## <a name="JobScheduleResponse">type</a> [JobScheduleResponse](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=5567:5635#L135)
 ``` go
 type JobScheduleResponse struct {
     Jobs []*JobSchedule `xml:"job"`
@@ -2057,7 +2320,7 @@ JobScheduleResponse contains a collection of jobs
 
 
 
-## <a name="JobStateTransition">type</a> [JobStateTransition](/src/target/jobs.go?s=5108:5298#L122)
+## <a name="JobStateTransition">type</a> [JobStateTransition](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=5108:5298#L122)
 ``` go
 type JobStateTransition struct {
     StateChangeTime int    `json:"state_change_time,omitempty"`
@@ -2076,7 +2339,7 @@ JobStateTransition describes a State Transition object in a GoCD api response
 
 
 
-## <a name="JobsService">type</a> [JobsService](/src/target/jobs.go?s=274:298#L15)
+## <a name="JobsService">type</a> [JobsService](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=274:298#L15)
 ``` go
 type JobsService service
 ```
@@ -2091,7 +2354,7 @@ JobsService describes actions which can be performed on jobs
 
 
 
-### <a name="JobsService.ListScheduled">func</a> (\*JobsService) [ListScheduled](/src/target/jobs.go?s=6619:6728#L165)
+### <a name="JobsService.ListScheduled">func</a> (\*JobsService) [ListScheduled](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=6619:6728#L165)
 ``` go
 func (js *JobsService) ListScheduled(ctx context.Context) (jobs []*JobSchedule, resp *APIResponse, err error)
 ```
@@ -2100,7 +2363,7 @@ ListScheduled lists Pipeline groups
 
 
 
-## <a name="MailHost">type</a> [MailHost](/src/target/configuration.go?s=6354:6557#L154)
+## <a name="MailHost">type</a> [MailHost](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=6354:6557#L154)
 ``` go
 type MailHost struct {
     Hostname string `xml:"hostname,attr"`
@@ -2121,7 +2384,7 @@ MailHost part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="Material">type</a> [Material](/src/target/pipeline.go?s=1869:2113#L49)
+## <a name="Material">type</a> [Material](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=1869:2113#L49)
 ``` go
 type Material struct {
     Type        string            `json:"type"`
@@ -2141,7 +2404,7 @@ Material describes an artifact dependency for a pipeline object.
 
 
 
-### <a name="Material.Equal">func</a> (Material) [Equal](/src/target/resource_pipeline_material.go?s=158:220#L10)
+### <a name="Material.Equal">func</a> (Material) [Equal](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material.go?s=158:220#L10)
 ``` go
 func (m Material) Equal(a *Material) (isEqual bool, err error)
 ```
@@ -2150,7 +2413,7 @@ Equal is true if the two materials are logically equivalent. Not neccesarily lit
 
 
 
-### <a name="Material.Ingest">func</a> (\*Material) [Ingest](/src/target/resource_pipeline_material.go?s=557:626#L29)
+### <a name="Material.Ingest">func</a> (\*Material) [Ingest](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material.go?s=557:626#L29)
 ``` go
 func (m *Material) Ingest(payload map[string]interface{}) (err error)
 ```
@@ -2159,7 +2422,7 @@ Ingest an abstract structure
 
 
 
-### <a name="Material.IngestAttributeGenerics">func</a> (\*Material) [IngestAttributeGenerics](/src/target/resource_pipeline_material.go?s=1360:1429#L65)
+### <a name="Material.IngestAttributeGenerics">func</a> (\*Material) [IngestAttributeGenerics](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material.go?s=1360:1429#L65)
 ``` go
 func (m *Material) IngestAttributeGenerics(i interface{}) (err error)
 ```
@@ -2168,7 +2431,7 @@ IngestAttributeGenerics to Material and perform some error checking
 
 
 
-### <a name="Material.IngestAttributes">func</a> (\*Material) [IngestAttributes](/src/target/resource_pipeline_material.go?s=1585:1670#L73)
+### <a name="Material.IngestAttributes">func</a> (\*Material) [IngestAttributes](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material.go?s=1585:1670#L73)
 ``` go
 func (m *Material) IngestAttributes(rawAttributes map[string]interface{}) (err error)
 ```
@@ -2177,7 +2440,7 @@ IngestAttributes to Material from an abstract structure
 
 
 
-### <a name="Material.IngestType">func</a> (\*Material) [IngestType](/src/target/resource_pipeline_material.go?s=1095:1156#L57)
+### <a name="Material.IngestType">func</a> (\*Material) [IngestType](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material.go?s=1095:1156#L57)
 ``` go
 func (m *Material) IngestType(payload map[string]interface{})
 ```
@@ -2186,7 +2449,7 @@ IngestType of Material if it is provided
 
 
 
-### <a name="Material.UnmarshalJSON">func</a> (\*Material) [UnmarshalJSON](/src/target/resource_pipeline_material.go?s=350:404#L19)
+### <a name="Material.UnmarshalJSON">func</a> (\*Material) [UnmarshalJSON](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material.go?s=350:404#L19)
 ``` go
 func (m *Material) UnmarshalJSON(b []byte) (err error)
 ```
@@ -2195,7 +2458,7 @@ UnmarshalJSON string into a Material struct
 
 
 
-## <a name="MaterialAttribute">type</a> [MaterialAttribute](/src/target/pipeline_material.go?s=106:282#L4)
+## <a name="MaterialAttribute">type</a> [MaterialAttribute](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline_material.go?s=106:282#L4)
 ``` go
 type MaterialAttribute interface {
     GenerateGeneric() map[string]interface{}
@@ -2215,7 +2478,7 @@ MaterialAttribute describes the behaviour of the GoCD material structures for a 
 
 
 
-## <a name="MaterialAttributesDependency">type</a> [MaterialAttributesDependency](/src/target/pipeline_material.go?s=3140:3348#L89)
+## <a name="MaterialAttributesDependency">type</a> [MaterialAttributesDependency](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline_material.go?s=3140:3348#L89)
 ``` go
 type MaterialAttributesDependency struct {
     Name       string `json:"name,omitempty"`
@@ -2235,7 +2498,7 @@ MaterialAttributesDependency describes a Pipeline dependency material
 
 
 
-### <a name="MaterialAttributesDependency.GenerateGeneric">func</a> (MaterialAttributesDependency) [GenerateGeneric](/src/target/resource_pipeline_material_dependency.go?s=418:503#L19)
+### <a name="MaterialAttributesDependency.GenerateGeneric">func</a> (MaterialAttributesDependency) [GenerateGeneric](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_dependency.go?s=418:503#L19)
 ``` go
 func (mad MaterialAttributesDependency) GenerateGeneric() (ma map[string]interface{})
 ```
@@ -2244,7 +2507,7 @@ GenerateGeneric form (map[string]interface) of the material filter
 
 
 
-### <a name="MaterialAttributesDependency.GetFilter">func</a> (MaterialAttributesDependency) [GetFilter](/src/target/resource_pipeline_material_dependency.go?s=928:995#L45)
+### <a name="MaterialAttributesDependency.GetFilter">func</a> (MaterialAttributesDependency) [GetFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_dependency.go?s=928:995#L45)
 ``` go
 func (mad MaterialAttributesDependency) GetFilter() *MaterialFilter
 ```
@@ -2253,7 +2516,7 @@ GetFilter from material attribute
 
 
 
-### <a name="MaterialAttributesDependency.HasFilter">func</a> (MaterialAttributesDependency) [HasFilter](/src/target/resource_pipeline_material_dependency.go?s=815:871#L40)
+### <a name="MaterialAttributesDependency.HasFilter">func</a> (MaterialAttributesDependency) [HasFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_dependency.go?s=815:871#L40)
 ``` go
 func (mad MaterialAttributesDependency) HasFilter() bool
 ```
@@ -2262,7 +2525,7 @@ HasFilter in this material attribute
 
 
 
-## <a name="MaterialAttributesGit">type</a> [MaterialAttributesGit](/src/target/pipeline_material.go?s=334:839#L12)
+## <a name="MaterialAttributesGit">type</a> [MaterialAttributesGit](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline_material.go?s=334:839#L12)
 ``` go
 type MaterialAttributesGit struct {
     Name   string `json:"name,omitempty"`
@@ -2289,7 +2552,7 @@ MaterialAttributesGit describes a git material
 
 
 
-### <a name="MaterialAttributesGit.GenerateGeneric">func</a> (MaterialAttributesGit) [GenerateGeneric](/src/target/resource_pipeline_material_git.go?s=559:637#L25)
+### <a name="MaterialAttributesGit.GenerateGeneric">func</a> (MaterialAttributesGit) [GenerateGeneric](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_git.go?s=559:637#L25)
 ``` go
 func (mag MaterialAttributesGit) GenerateGeneric() (ma map[string]interface{})
 ```
@@ -2298,7 +2561,7 @@ GenerateGeneric form (map[string]interface) of the material filter
 
 
 
-### <a name="MaterialAttributesGit.GetFilter">func</a> (MaterialAttributesGit) [GetFilter](/src/target/resource_pipeline_material_git.go?s=1198:1258#L48)
+### <a name="MaterialAttributesGit.GetFilter">func</a> (MaterialAttributesGit) [GetFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_git.go?s=1198:1258#L48)
 ``` go
 func (mag MaterialAttributesGit) GetFilter() *MaterialFilter
 ```
@@ -2307,7 +2570,7 @@ GetFilter from material attribute
 
 
 
-### <a name="MaterialAttributesGit.HasFilter">func</a> (MaterialAttributesGit) [HasFilter](/src/target/resource_pipeline_material_git.go?s=1093:1142#L43)
+### <a name="MaterialAttributesGit.HasFilter">func</a> (MaterialAttributesGit) [HasFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_git.go?s=1093:1142#L43)
 ``` go
 func (mag MaterialAttributesGit) HasFilter() bool
 ```
@@ -2316,7 +2579,7 @@ HasFilter in this material attribute
 
 
 
-## <a name="MaterialAttributesHg">type</a> [MaterialAttributesHg](/src/target/pipeline_material.go?s=1511:1832#L43)
+## <a name="MaterialAttributesHg">type</a> [MaterialAttributesHg](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline_material.go?s=1511:1832#L43)
 ``` go
 type MaterialAttributesHg struct {
     Name string `json:"name,omitempty"`
@@ -2339,7 +2602,7 @@ MaterialAttributesHg describes a Mercurial material type
 
 
 
-### <a name="MaterialAttributesHg.GenerateGeneric">func</a> (MaterialAttributesHg) [GenerateGeneric](/src/target/resource_pipeline_material_hg.go?s=443:520#L18)
+### <a name="MaterialAttributesHg.GenerateGeneric">func</a> (MaterialAttributesHg) [GenerateGeneric](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_hg.go?s=443:520#L18)
 ``` go
 func (mhg MaterialAttributesHg) GenerateGeneric() (ma map[string]interface{})
 ```
@@ -2348,7 +2611,7 @@ GenerateGeneric form (map[string]interface) of the material filter
 
 
 
-### <a name="MaterialAttributesHg.GetFilter">func</a> (MaterialAttributesHg) [GetFilter](/src/target/resource_pipeline_material_hg.go?s=713:772#L29)
+### <a name="MaterialAttributesHg.GetFilter">func</a> (MaterialAttributesHg) [GetFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_hg.go?s=713:772#L29)
 ``` go
 func (mhg MaterialAttributesHg) GetFilter() *MaterialFilter
 ```
@@ -2357,7 +2620,7 @@ GetFilter from material attribute
 
 
 
-### <a name="MaterialAttributesHg.HasFilter">func</a> (MaterialAttributesHg) [HasFilter](/src/target/resource_pipeline_material_hg.go?s=609:657#L24)
+### <a name="MaterialAttributesHg.HasFilter">func</a> (MaterialAttributesHg) [HasFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_hg.go?s=609:657#L24)
 ``` go
 func (mhg MaterialAttributesHg) HasFilter() bool
 ```
@@ -2366,7 +2629,7 @@ HasFilter in this material attribute
 
 
 
-## <a name="MaterialAttributesP4">type</a> [MaterialAttributesP4](/src/target/pipeline_material.go?s=1893:2443#L54)
+## <a name="MaterialAttributesP4">type</a> [MaterialAttributesP4](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline_material.go?s=1893:2443#L54)
 ``` go
 type MaterialAttributesP4 struct {
     Name       string `json:"name,omitempty"`
@@ -2395,7 +2658,7 @@ MaterialAttributesP4 describes a Perforce material type
 
 
 
-### <a name="MaterialAttributesP4.GenerateGeneric">func</a> (MaterialAttributesP4) [GenerateGeneric](/src/target/resource_pipeline_material_p4.go?s=491:568#L20)
+### <a name="MaterialAttributesP4.GenerateGeneric">func</a> (MaterialAttributesP4) [GenerateGeneric](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_p4.go?s=491:568#L20)
 ``` go
 func (mp4 MaterialAttributesP4) GenerateGeneric() (ma map[string]interface{})
 ```
@@ -2404,7 +2667,7 @@ GenerateGeneric form (map[string]interface) of the material filter
 
 
 
-### <a name="MaterialAttributesP4.GetFilter">func</a> (MaterialAttributesP4) [GetFilter](/src/target/resource_pipeline_material_p4.go?s=761:820#L31)
+### <a name="MaterialAttributesP4.GetFilter">func</a> (MaterialAttributesP4) [GetFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_p4.go?s=761:820#L31)
 ``` go
 func (mp4 MaterialAttributesP4) GetFilter() *MaterialFilter
 ```
@@ -2413,7 +2676,7 @@ GetFilter from material attribute
 
 
 
-### <a name="MaterialAttributesP4.HasFilter">func</a> (MaterialAttributesP4) [HasFilter](/src/target/resource_pipeline_material_p4.go?s=657:705#L26)
+### <a name="MaterialAttributesP4.HasFilter">func</a> (MaterialAttributesP4) [HasFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_p4.go?s=657:705#L26)
 ``` go
 func (mp4 MaterialAttributesP4) HasFilter() bool
 ```
@@ -2422,7 +2685,7 @@ HasFilter in this material attribute
 
 
 
-## <a name="MaterialAttributesPackage">type</a> [MaterialAttributesPackage](/src/target/pipeline_material.go?s=3409:3475#L97)
+## <a name="MaterialAttributesPackage">type</a> [MaterialAttributesPackage](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline_material.go?s=3409:3475#L97)
 ``` go
 type MaterialAttributesPackage struct {
     Ref string `json:"ref"`
@@ -2439,7 +2702,7 @@ MaterialAttributesPackage describes a package reference
 
 
 
-### <a name="MaterialAttributesPackage.GenerateGeneric">func</a> (MaterialAttributesPackage) [GenerateGeneric](/src/target/resource_pipeline_material_pkg.go?s=372:455#L16)
+### <a name="MaterialAttributesPackage.GenerateGeneric">func</a> (MaterialAttributesPackage) [GenerateGeneric](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_pkg.go?s=372:455#L16)
 ``` go
 func (mapk MaterialAttributesPackage) GenerateGeneric() (ma map[string]interface{})
 ```
@@ -2448,7 +2711,7 @@ GenerateGeneric form (map[string]interface) of the material filter
 
 
 
-### <a name="MaterialAttributesPackage.GetFilter">func</a> (MaterialAttributesPackage) [GetFilter](/src/target/resource_pipeline_material_pkg.go?s=655:720#L27)
+### <a name="MaterialAttributesPackage.GetFilter">func</a> (MaterialAttributesPackage) [GetFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_pkg.go?s=655:720#L27)
 ``` go
 func (mapk MaterialAttributesPackage) GetFilter() *MaterialFilter
 ```
@@ -2457,7 +2720,7 @@ GetFilter from material attribute
 
 
 
-### <a name="MaterialAttributesPackage.HasFilter">func</a> (MaterialAttributesPackage) [HasFilter](/src/target/resource_pipeline_material_pkg.go?s=544:598#L22)
+### <a name="MaterialAttributesPackage.HasFilter">func</a> (MaterialAttributesPackage) [HasFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_pkg.go?s=544:598#L22)
 ``` go
 func (mapk MaterialAttributesPackage) HasFilter() bool
 ```
@@ -2466,7 +2729,7 @@ HasFilter in this material attribute
 
 
 
-## <a name="MaterialAttributesPlugin">type</a> [MaterialAttributesPlugin](/src/target/pipeline_material.go?s=3533:3759#L102)
+## <a name="MaterialAttributesPlugin">type</a> [MaterialAttributesPlugin](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline_material.go?s=3533:3759#L102)
 ``` go
 type MaterialAttributesPlugin struct {
     Ref string `json:"ref"`
@@ -2487,7 +2750,7 @@ MaterialAttributesPlugin describes a plugin material
 
 
 
-### <a name="MaterialAttributesPlugin.GenerateGeneric">func</a> (MaterialAttributesPlugin) [GenerateGeneric](/src/target/resource_pipeline_material_plugin.go?s=416:498#L18)
+### <a name="MaterialAttributesPlugin.GenerateGeneric">func</a> (MaterialAttributesPlugin) [GenerateGeneric](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_plugin.go?s=416:498#L18)
 ``` go
 func (mapp MaterialAttributesPlugin) GenerateGeneric() (ma map[string]interface{})
 ```
@@ -2496,7 +2759,7 @@ GenerateGeneric form (map[string]interface) of the material filter
 
 
 
-### <a name="MaterialAttributesPlugin.GetFilter">func</a> (MaterialAttributesPlugin) [GetFilter](/src/target/resource_pipeline_material_plugin.go?s=696:760#L29)
+### <a name="MaterialAttributesPlugin.GetFilter">func</a> (MaterialAttributesPlugin) [GetFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_plugin.go?s=696:760#L29)
 ``` go
 func (mapp MaterialAttributesPlugin) GetFilter() *MaterialFilter
 ```
@@ -2505,7 +2768,7 @@ GetFilter from material attribute
 
 
 
-### <a name="MaterialAttributesPlugin.HasFilter">func</a> (MaterialAttributesPlugin) [HasFilter](/src/target/resource_pipeline_material_plugin.go?s=587:640#L24)
+### <a name="MaterialAttributesPlugin.HasFilter">func</a> (MaterialAttributesPlugin) [HasFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_plugin.go?s=587:640#L24)
 ``` go
 func (mapp MaterialAttributesPlugin) HasFilter() bool
 ```
@@ -2514,7 +2777,7 @@ HasFilter in this material attribute
 
 
 
-## <a name="MaterialAttributesSvn">type</a> [MaterialAttributesSvn](/src/target/pipeline_material.go?s=892:1449#L27)
+## <a name="MaterialAttributesSvn">type</a> [MaterialAttributesSvn](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline_material.go?s=892:1449#L27)
 ``` go
 type MaterialAttributesSvn struct {
     Name              string `json:"name,omitempty"`
@@ -2542,7 +2805,7 @@ MaterialAttributesSvn describes a material type
 
 
 
-### <a name="MaterialAttributesSvn.GenerateGeneric">func</a> (MaterialAttributesSvn) [GenerateGeneric](/src/target/resource_pipeline_material_svn.go?s=471:549#L18)
+### <a name="MaterialAttributesSvn.GenerateGeneric">func</a> (MaterialAttributesSvn) [GenerateGeneric](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_svn.go?s=471:549#L18)
 ``` go
 func (mas MaterialAttributesSvn) GenerateGeneric() (ma map[string]interface{})
 ```
@@ -2551,7 +2814,7 @@ GenerateGeneric form (map[string]interface) of the material filter
 
 
 
-### <a name="MaterialAttributesSvn.GetFilter">func</a> (MaterialAttributesSvn) [GetFilter](/src/target/resource_pipeline_material_svn.go?s=743:803#L29)
+### <a name="MaterialAttributesSvn.GetFilter">func</a> (MaterialAttributesSvn) [GetFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_svn.go?s=743:803#L29)
 ``` go
 func (mas MaterialAttributesSvn) GetFilter() *MaterialFilter
 ```
@@ -2560,7 +2823,7 @@ GetFilter from material attribute
 
 
 
-### <a name="MaterialAttributesSvn.HasFilter">func</a> (MaterialAttributesSvn) [HasFilter](/src/target/resource_pipeline_material_svn.go?s=638:687#L24)
+### <a name="MaterialAttributesSvn.HasFilter">func</a> (MaterialAttributesSvn) [HasFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_svn.go?s=638:687#L24)
 ``` go
 func (mas MaterialAttributesSvn) HasFilter() bool
 ```
@@ -2569,7 +2832,7 @@ HasFilter in this material attribute
 
 
 
-## <a name="MaterialAttributesTfs">type</a> [MaterialAttributesTfs](/src/target/pipeline_material.go?s=2514:3065#L71)
+## <a name="MaterialAttributesTfs">type</a> [MaterialAttributesTfs](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline_material.go?s=2514:3065#L71)
 ``` go
 type MaterialAttributesTfs struct {
     Name string `json:"name,omitempty"`
@@ -2599,7 +2862,7 @@ MaterialAttributesTfs describes a Team Foundation Server material
 
 
 
-### <a name="MaterialAttributesTfs.GenerateGeneric">func</a> (MaterialAttributesTfs) [GenerateGeneric](/src/target/resource_pipeline_material_tfs.go?s=659:738#L28)
+### <a name="MaterialAttributesTfs.GenerateGeneric">func</a> (MaterialAttributesTfs) [GenerateGeneric](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_tfs.go?s=659:738#L28)
 ``` go
 func (mtfs MaterialAttributesTfs) GenerateGeneric() (ma map[string]interface{})
 ```
@@ -2608,7 +2871,7 @@ GenerateGeneric form (map[string]interface) of the material filter
 
 
 
-### <a name="MaterialAttributesTfs.GetFilter">func</a> (MaterialAttributesTfs) [GetFilter](/src/target/resource_pipeline_material_tfs.go?s=933:994#L39)
+### <a name="MaterialAttributesTfs.GetFilter">func</a> (MaterialAttributesTfs) [GetFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_tfs.go?s=933:994#L39)
 ``` go
 func (mtfs MaterialAttributesTfs) GetFilter() *MaterialFilter
 ```
@@ -2617,7 +2880,7 @@ GetFilter from material attribute
 
 
 
-### <a name="MaterialAttributesTfs.HasFilter">func</a> (MaterialAttributesTfs) [HasFilter](/src/target/resource_pipeline_material_tfs.go?s=827:877#L34)
+### <a name="MaterialAttributesTfs.HasFilter">func</a> (MaterialAttributesTfs) [HasFilter](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material_tfs.go?s=827:877#L34)
 ``` go
 func (mtfs MaterialAttributesTfs) HasFilter() bool
 ```
@@ -2626,7 +2889,7 @@ HasFilter in this material attribute
 
 
 
-## <a name="MaterialFilter">type</a> [MaterialFilter](/src/target/pipeline.go?s=2165:2228#L57)
+## <a name="MaterialFilter">type</a> [MaterialFilter](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=2165:2228#L57)
 ``` go
 type MaterialFilter struct {
     Ignore []string `json:"ignore"`
@@ -2643,7 +2906,7 @@ MaterialFilter describes which globs to ignore
 
 
 
-### <a name="MaterialFilter.GenerateGeneric">func</a> (\*MaterialFilter) [GenerateGeneric](/src/target/resource_pipeline_material.go?s=2884:2954#L115)
+### <a name="MaterialFilter.GenerateGeneric">func</a> (\*MaterialFilter) [GenerateGeneric](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline_material.go?s=2884:2954#L115)
 ``` go
 func (mf *MaterialFilter) GenerateGeneric() (g map[string]interface{})
 ```
@@ -2652,7 +2915,7 @@ GenerateGeneric form (map[string]interface) of the material filter
 
 
 
-## <a name="MaterialRevision">type</a> [MaterialRevision](/src/target/pipeline.go?s=3189:3502#L85)
+## <a name="MaterialRevision">type</a> [MaterialRevision](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=3189:3502#L85)
 ``` go
 type MaterialRevision struct {
     Modifications []Modification `json:"modifications"`
@@ -2676,7 +2939,7 @@ MaterialRevision describes the uniquely identifiable version for the material wh
 
 
 
-## <a name="Modification">type</a> [Modification](/src/target/pipeline.go?s=3595:3861#L97)
+## <a name="Modification">type</a> [Modification](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=3595:3861#L97)
 ``` go
 type Modification struct {
     EmailAddress string `json:"email_address"`
@@ -2698,7 +2961,7 @@ Modification describes the commit/revision for the material which kicked off the
 
 
 
-## <a name="PaginationResponse">type</a> [PaginationResponse](/src/target/gocd.go?s=2341:2467#L99)
+## <a name="PaginationResponse">type</a> [PaginationResponse](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go?s=2379:2505#L100)
 ``` go
 type PaginationResponse struct {
     Offset   int `json:"offset"`
@@ -2717,7 +2980,7 @@ PaginationResponse is a struct used to handle paging through resposnes.
 
 
 
-## <a name="Parameter">type</a> [Parameter](/src/target/pipeline.go?s=1546:1628#L37)
+## <a name="Parameter">type</a> [Parameter](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=1546:1628#L37)
 ``` go
 type Parameter struct {
     Name  string `json:"name"`
@@ -2735,7 +2998,7 @@ Parameter represents a key/value
 
 
 
-## <a name="PasswordFilePath">type</a> [PasswordFilePath](/src/target/configuration.go?s=6963:7026#L171)
+## <a name="PasswordFilePath">type</a> [PasswordFilePath](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=6963:7026#L171)
 ``` go
 type PasswordFilePath struct {
     Path string `xml:"path,attr"`
@@ -2752,7 +3015,7 @@ PasswordFilePath describes the location to set of user/passwords on disk
 
 
 
-## <a name="PatchStringAction">type</a> [PatchStringAction](/src/target/environment.go?s=1679:1775#L45)
+## <a name="PatchStringAction">type</a> [PatchStringAction](https://github.com/beamly/go-gocd/tree/master/gocd/environment.go?s=1679:1775#L45)
 ``` go
 type PatchStringAction struct {
     Add    []string `json:"add"`
@@ -2770,7 +3033,7 @@ PatchStringAction describes a collection of resources to add or remove.
 
 
 
-## <a name="Pipeline">type</a> [Pipeline](/src/target/pipeline.go?s=378:1508#L18)
+## <a name="Pipeline">type</a> [Pipeline](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=378:1508#L18)
 ``` go
 type Pipeline struct {
     Group                 string                 `json:"group,omitempty"`
@@ -2799,7 +3062,7 @@ Pipeline describes a pipeline object
 
 
 
-### <a name="Pipeline.AddStage">func</a> (\*Pipeline) [AddStage](/src/target/resource_pipeline.go?s=750:791#L40)
+### <a name="Pipeline.AddStage">func</a> (\*Pipeline) [AddStage](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline.go?s=750:791#L40)
 ``` go
 func (p *Pipeline) AddStage(stage *Stage)
 ```
@@ -2808,7 +3071,7 @@ AddStage appends a stage to this pipeline
 
 
 
-### <a name="Pipeline.GetLinks">func</a> (\*Pipeline) [GetLinks](/src/target/resource_pipeline.go?s=447:486#L25)
+### <a name="Pipeline.GetLinks">func</a> (\*Pipeline) [GetLinks](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline.go?s=447:486#L25)
 ``` go
 func (p *Pipeline) GetLinks() *HALLinks
 ```
@@ -2817,7 +3080,7 @@ GetLinks from pipeline
 
 
 
-### <a name="Pipeline.GetName">func</a> (\*Pipeline) [GetName](/src/target/resource_pipeline.go?s=535:570#L30)
+### <a name="Pipeline.GetName">func</a> (\*Pipeline) [GetName](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline.go?s=535:570#L30)
 ``` go
 func (p *Pipeline) GetName() string
 ```
@@ -2826,7 +3089,7 @@ GetName of the pipeline
 
 
 
-### <a name="Pipeline.GetStage">func</a> (\*Pipeline) [GetStage](/src/target/resource_pipeline.go?s=146:206#L9)
+### <a name="Pipeline.GetStage">func</a> (\*Pipeline) [GetStage](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline.go?s=146:206#L9)
 ``` go
 func (p *Pipeline) GetStage(stageName string) (stage *Stage)
 ```
@@ -2835,7 +3098,7 @@ GetStage from the pipeline template
 
 
 
-### <a name="Pipeline.GetStages">func</a> (\*Pipeline) [GetStages](/src/target/resource_pipeline.go?s=45:84#L4)
+### <a name="Pipeline.GetStages">func</a> (\*Pipeline) [GetStages](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline.go?s=45:84#L4)
 ``` go
 func (p *Pipeline) GetStages() []*Stage
 ```
@@ -2844,7 +3107,7 @@ GetStages from the pipeline
 
 
 
-### <a name="Pipeline.GetVersion">func</a> (\*Pipeline) [GetVersion](/src/target/resource_pipeline.go?s=1252:1300#L61)
+### <a name="Pipeline.GetVersion">func</a> (\*Pipeline) [GetVersion](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline.go?s=1252:1300#L61)
 ``` go
 func (p *Pipeline) GetVersion() (version string)
 ```
@@ -2853,7 +3116,7 @@ GetVersion retrieves a version string for this pipeline
 
 
 
-### <a name="Pipeline.RemoveLinks">func</a> (\*Pipeline) [RemoveLinks](/src/target/resource_pipeline.go?s=368:400#L20)
+### <a name="Pipeline.RemoveLinks">func</a> (\*Pipeline) [RemoveLinks](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline.go?s=368:400#L20)
 ``` go
 func (p *Pipeline) RemoveLinks()
 ```
@@ -2862,7 +3125,7 @@ RemoveLinks from the pipeline object for json marshalling.
 
 
 
-### <a name="Pipeline.SetStage">func</a> (\*Pipeline) [SetStage](/src/target/resource_pipeline.go?s=883:927#L45)
+### <a name="Pipeline.SetStage">func</a> (\*Pipeline) [SetStage](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline.go?s=883:927#L45)
 ``` go
 func (p *Pipeline) SetStage(newStage *Stage)
 ```
@@ -2871,7 +3134,7 @@ SetStage replaces a stage if it already exists
 
 
 
-### <a name="Pipeline.SetStages">func</a> (\*Pipeline) [SetStages](/src/target/resource_pipeline.go?s=635:680#L35)
+### <a name="Pipeline.SetStages">func</a> (\*Pipeline) [SetStages](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline.go?s=635:680#L35)
 ``` go
 func (p *Pipeline) SetStages(stages []*Stage)
 ```
@@ -2880,7 +3143,7 @@ SetStages overwrites any existing stages
 
 
 
-### <a name="Pipeline.SetVersion">func</a> (\*Pipeline) [SetVersion](/src/target/resource_pipeline.go?s=1121:1166#L56)
+### <a name="Pipeline.SetVersion">func</a> (\*Pipeline) [SetVersion](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline.go?s=1121:1166#L56)
 ``` go
 func (p *Pipeline) SetVersion(version string)
 ```
@@ -2889,7 +3152,7 @@ SetVersion sets a version string for this pipeline
 
 
 
-## <a name="PipelineConfigOrigin">type</a> [PipelineConfigOrigin](/src/target/pipeline.go?s=1709:1799#L43)
+## <a name="PipelineConfigOrigin">type</a> [PipelineConfigOrigin](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=1709:1799#L43)
 ``` go
 type PipelineConfigOrigin struct {
     Type string `json:"type"`
@@ -2907,7 +3170,7 @@ PipelineConfigOrigin describes where a pipeline config is being loaded from
 
 
 
-## <a name="PipelineConfigRequest">type</a> [PipelineConfigRequest](/src/target/pipelineconfig.go?s=278:398#L12)
+## <a name="PipelineConfigRequest">type</a> [PipelineConfigRequest](https://github.com/beamly/go-gocd/tree/master/gocd/pipelineconfig.go?s=278:398#L12)
 ``` go
 type PipelineConfigRequest struct {
     Group    string    `json:"group,omitempty"`
@@ -2925,7 +3188,7 @@ PipelineConfigRequest describes a request object for creating or updating pipeli
 
 
 
-### <a name="PipelineConfigRequest.GetVersion">func</a> (\*PipelineConfigRequest) [GetVersion](/src/target/resource_pipeline.go?s=1357:1419#L66)
+### <a name="PipelineConfigRequest.GetVersion">func</a> (\*PipelineConfigRequest) [GetVersion](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline.go?s=1357:1419#L66)
 ``` go
 func (pr *PipelineConfigRequest) GetVersion() (version string)
 ```
@@ -2934,7 +3197,7 @@ GetVersion of pipeline config
 
 
 
-### <a name="PipelineConfigRequest.SetVersion">func</a> (\*PipelineConfigRequest) [SetVersion](/src/target/resource_pipeline.go?s=1491:1550#L71)
+### <a name="PipelineConfigRequest.SetVersion">func</a> (\*PipelineConfigRequest) [SetVersion](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipeline.go?s=1491:1550#L71)
 ``` go
 func (pr *PipelineConfigRequest) SetVersion(version string)
 ```
@@ -2943,7 +3206,7 @@ SetVersion of pipeline config
 
 
 
-## <a name="PipelineConfigsService">type</a> [PipelineConfigsService](/src/target/pipelineconfig.go?s=154:189#L9)
+## <a name="PipelineConfigsService">type</a> [PipelineConfigsService](https://github.com/beamly/go-gocd/tree/master/gocd/pipelineconfig.go?s=154:189#L9)
 ``` go
 type PipelineConfigsService service
 ```
@@ -2958,7 +3221,7 @@ PipelineConfigsService describes the HAL _link resource for the api response obj
 
 
 
-### <a name="PipelineConfigsService.Create">func</a> (\*PipelineConfigsService) [Create](/src/target/pipelineconfig.go?s=1199:1333#L46)
+### <a name="PipelineConfigsService.Create">func</a> (\*PipelineConfigsService) [Create](https://github.com/beamly/go-gocd/tree/master/gocd/pipelineconfig.go?s=1199:1333#L46)
 ``` go
 func (pcs *PipelineConfigsService) Create(ctx context.Context, group string, p *Pipeline) (pr *Pipeline, resp *APIResponse, err error)
 ```
@@ -2967,25 +3230,118 @@ Create a pipeline configuration
 
 
 
-### <a name="PipelineConfigsService.Delete">func</a> (\*PipelineConfigsService) [Delete](/src/target/pipelineconfig.go?s=1622:1727#L63)
+### <a name="PipelineConfigsService.Delete">func</a> (\*PipelineConfigsService) [Delete](https://github.com/beamly/go-gocd/tree/master/gocd/pipelineconfig.go?s=1622:1727#L63)
 ``` go
 func (pcs *PipelineConfigsService) Delete(ctx context.Context, name string) (string, *APIResponse, error)
 ```
 Delete a pipeline configuration
 
 
+##### Example PipelineConfigsService.Delete:
+``` go
+    // This example deletes the pipeline "my_pipeline_name"
+    cfg := gocd.Configuration{
+        Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+        Username: "ApiUser",
+        Password: "MySecretPassword",
+    }
+
+    c := cfg.Client()
+
+    _, _, err := c.PipelineConfigs.Delete(context.Background(), "my_pipeline_name")
+    if err != nil {
+        panic(err)
+    }
+```
 
 
-### <a name="PipelineConfigsService.Get">func</a> (\*PipelineConfigsService) [Get](/src/target/pipelineconfig.go?s=457:573#L18)
+
+### <a name="PipelineConfigsService.Get">func</a> (\*PipelineConfigsService) [Get](https://github.com/beamly/go-gocd/tree/master/gocd/pipelineconfig.go?s=457:573#L18)
 ``` go
 func (pcs *PipelineConfigsService) Get(ctx context.Context, name string) (p *Pipeline, resp *APIResponse, err error)
 ```
 Get a single PipelineTemplate object in the GoCD API.
 
 
+##### Example PipelineConfigsService.Get:
+``` go
+    // This example prints out the entire configuration of a pipeline
+    cfg := gocd.Configuration{
+        Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+        Username: "ApiUser",
+        Password: "MySecretPassword",
+    }
+
+    c := cfg.Client()
+
+    p, _, err := c.PipelineConfigs.Get(context.Background(), "my_pipeline_name")
+    if err != nil {
+        panic(err)
+    }
+
+    fmt.Printf("Pipeline configuration:\n")
+    fmt.Printf("  - Name: %s\n", p.Name)
+    fmt.Printf("  - Group: %s\n", p.Group)
+    fmt.Printf("  - Label: %s\n", p.Label)
+    fmt.Printf("  - Label template: %s\n", p.LabelTemplate)
+    pLocking := "disabled"
+    if p.EnablePipelineLocking {
+        pLocking = "enabled"
+    }
+    fmt.Printf("  - Pipeline locking: %s\n", pLocking)
+    fmt.Printf("  - Template: %s\n", p.Template)
+    if p.Origin != nil {
+        fmt.Printf("  - Origin (%s): %s", p.Origin.Type, p.Origin.File)
+    }
+    fmt.Printf("  - Parameters:\n")
+    for _, item := range p.Parameters {
+        fmt.Printf("    - %s: %s\n", item.Name, item.Value)
+    }
+    fmt.Printf("  - Environment variables:\n")
+    for _, item := range p.EnvironmentVariables {
+        fmt.Printf("    - %s: %s %s (%t)\n", item.Name, item.Value, item.EncryptedValue, item.Secure)
+    }
+    fmt.Printf("  - Materials:\n")
+    for _, item := range p.Materials {
+        fmt.Printf("    - Type: %s\n", item.Type)
+        fmt.Printf("      Fingerprint: %s\n", item.Fingerprint)
+        fmt.Printf("      Description: %s\n", item.Description)
+        fmt.Printf("      Attributes:\n")
+        m := item.Attributes.GenerateGeneric()
+        for k, v := range m {
+            fmt.Printf("      - %s: %#v\n", k, v)
+        }
+    }
+    fmt.Printf("  - Stages:\n")
+    for _, item := range p.Stages {
+        fmt.Printf("    - Name: %s\n", item.Name)
+        fmt.Printf("      FetchMaterials: %t\n", item.FetchMaterials)
+        fmt.Printf("      CleanWorkingDirectory: %t\n", item.CleanWorkingDirectory)
+        fmt.Printf("      NeverCleanupArtifacts: %t\n", item.NeverCleanupArtifacts)
+        if item.Approval != nil {
+            fmt.Printf("      Approval:\n        Type: %s\n", item.Approval.Type)
+            if item.Approval.Authorization != nil {
+                fmt.Printf("        Users: %q\n", item.Approval.Authorization.Users)
+                fmt.Printf("        Roles: %q\n", item.Approval.Authorization.Roles)
+            }
+        }
+        fmt.Printf("      EnvironmentVariables:\n")
+        for _, i := range item.EnvironmentVariables {
+            fmt.Printf("        - %s: %s %s (%t)\n", i.Name, i.Value, i.EncryptedValue, i.Secure)
+        }
+        fmt.Printf("      Resources: %#v\n", item.Resources)
+        fmt.Printf("      Jobs:\n")
+
+        for _, i := range item.Jobs {
+            fmt.Printf("        - %#v\n", i)
+        }
+    }
+    fmt.Printf("  - Version: %s\n", p.Version)
+```
 
 
-### <a name="PipelineConfigsService.Update">func</a> (\*PipelineConfigsService) [Update](/src/target/pipelineconfig.go?s=790:923#L30)
+
+### <a name="PipelineConfigsService.Update">func</a> (\*PipelineConfigsService) [Update](https://github.com/beamly/go-gocd/tree/master/gocd/pipelineconfig.go?s=790:923#L30)
 ``` go
 func (pcs *PipelineConfigsService) Update(ctx context.Context, name string, p *Pipeline) (pr *Pipeline, resp *APIResponse, err error)
 ```
@@ -2994,7 +3350,7 @@ Update a pipeline configuration
 
 
 
-## <a name="PipelineGroup">type</a> [PipelineGroup](/src/target/pipelinegroups.go?s=342:450#L12)
+## <a name="PipelineGroup">type</a> [PipelineGroup](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinegroups.go?s=342:450#L12)
 ``` go
 type PipelineGroup struct {
     Name      string      `json:"name"`
@@ -3012,7 +3368,7 @@ PipelineGroup describes a pipeline group API response.
 
 
 
-## <a name="PipelineGroups">type</a> [PipelineGroups](/src/target/pipelinegroups.go?s=246:282#L9)
+## <a name="PipelineGroups">type</a> [PipelineGroups](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinegroups.go?s=246:282#L9)
 ``` go
 type PipelineGroups []*PipelineGroup
 ```
@@ -3027,7 +3383,7 @@ PipelineGroups represents a collection of pipeline groups
 
 
 
-### <a name="PipelineGroups.GetGroupByPipeline">func</a> (\*PipelineGroups) [GetGroupByPipeline](/src/target/resource_pipelinegroups.go?s=443:522#L16)
+### <a name="PipelineGroups.GetGroupByPipeline">func</a> (\*PipelineGroups) [GetGroupByPipeline](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinegroups.go?s=443:522#L16)
 ``` go
 func (pg *PipelineGroups) GetGroupByPipeline(pipeline *Pipeline) *PipelineGroup
 ```
@@ -3036,7 +3392,7 @@ GetGroupByPipeline finds the pipeline group for the pipeline supplied
 
 
 
-### <a name="PipelineGroups.GetGroupByPipelineName">func</a> (\*PipelineGroups) [GetGroupByPipelineName](/src/target/resource_pipelinegroups.go?s=103:187#L4)
+### <a name="PipelineGroups.GetGroupByPipelineName">func</a> (\*PipelineGroups) [GetGroupByPipelineName](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinegroups.go?s=103:187#L4)
 ``` go
 func (pg *PipelineGroups) GetGroupByPipelineName(pipelineName string) *PipelineGroup
 ```
@@ -3045,7 +3401,7 @@ GetGroupByPipelineName finds the pipeline group for the name of the pipeline sup
 
 
 
-## <a name="PipelineGroupsService">type</a> [PipelineGroupsService](/src/target/pipelinegroups.go?s=149:183#L6)
+## <a name="PipelineGroupsService">type</a> [PipelineGroupsService](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinegroups.go?s=149:183#L6)
 ``` go
 type PipelineGroupsService service
 ```
@@ -3060,16 +3416,40 @@ PipelineGroupsService describes the HAL _link resource for the api response obje
 
 
 
-### <a name="PipelineGroupsService.List">func</a> (\*PipelineGroupsService) [List](/src/target/pipelinegroups.go?s=476:587#L18)
+### <a name="PipelineGroupsService.List">func</a> (\*PipelineGroupsService) [List](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinegroups.go?s=476:587#L18)
 ``` go
 func (pgs *PipelineGroupsService) List(ctx context.Context, name string) (*PipelineGroups, *APIResponse, error)
 ```
 List Pipeline groups
 
 
+##### Example PipelineGroupsService.List:
+``` go
+    // This example list the pipeline names that belong to the group "foo"
+    cfg := gocd.Configuration{
+        Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+        Username: "ApiUser",
+        Password: "MySecretPassword",
+    }
+
+    c := cfg.Client()
+
+    groupName := "foo" // If you set your group name to an empty string you will get all the groups
+    g, _, err := c.PipelineGroups.List(context.Background(), groupName)
+    if err != nil {
+        panic(err)
+    }
+    for _, grp := range *g {
+        fmt.Printf("Pipelines in the %s group:\n", grp.Name)
+        for _, elt := range grp.Pipelines {
+            fmt.Printf("  - %s\n", elt.Name)
+        }
+    }
+```
 
 
-## <a name="PipelineHistory">type</a> [PipelineHistory](/src/target/pipeline.go?s=2294:2375#L62)
+
+## <a name="PipelineHistory">type</a> [PipelineHistory](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=2294:2375#L62)
 ``` go
 type PipelineHistory struct {
     Pipelines []*PipelineInstance `json:"pipelines"`
@@ -3086,7 +3466,7 @@ PipelineHistory describes the history of runs for a pipeline
 
 
 
-## <a name="PipelineInstance">type</a> [PipelineInstance](/src/target/pipeline.go?s=2429:2719#L67)
+## <a name="PipelineInstance">type</a> [PipelineInstance](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=2429:2719#L67)
 ``` go
 type PipelineInstance struct {
     BuildCause   BuildCause `json:"build_cause"`
@@ -3108,7 +3488,7 @@ PipelineInstance describes a single pipeline run
 
 
 
-## <a name="PipelineMaterial">type</a> [PipelineMaterial](/src/target/configuration.go?s=2926:3096#L71)
+## <a name="PipelineMaterial">type</a> [PipelineMaterial](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=2926:3096#L71)
 ``` go
 type PipelineMaterial struct {
     Name         string `xml:"pipelineName,attr"`
@@ -3127,7 +3507,7 @@ PipelineMaterial part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="PipelineRequest">type</a> [PipelineRequest](/src/target/pipeline.go?s=232:336#L12)
+## <a name="PipelineRequest">type</a> [PipelineRequest](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=232:336#L12)
 ``` go
 type PipelineRequest struct {
     Group    string    `json:"group"`
@@ -3145,7 +3525,7 @@ PipelineRequest describes a pipeline request object
 
 
 
-## <a name="PipelineStatus">type</a> [PipelineStatus](/src/target/pipeline.go?s=3935:4072#L107)
+## <a name="PipelineStatus">type</a> [PipelineStatus](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=3935:4072#L107)
 ``` go
 type PipelineStatus struct {
     Locked      bool `json:"locked"`
@@ -3164,7 +3544,7 @@ PipelineStatus describes whether a pipeline can be run or scheduled.
 
 
 
-## <a name="PipelineTemplate">type</a> [PipelineTemplate](/src/target/pipelinetemplate.go?s=1135:1468#L41)
+## <a name="PipelineTemplate">type</a> [PipelineTemplate](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinetemplate.go?s=1135:1468#L41)
 ``` go
 type PipelineTemplate struct {
     Links    *HALLinks                 `json:"_links,omitempty"`
@@ -3185,7 +3565,7 @@ PipelineTemplate describes a response from the API for a pipeline template objec
 
 
 
-### <a name="PipelineTemplate.AddStage">func</a> (\*PipelineTemplate) [AddStage](/src/target/resource_pipelinetemplate.go?s=601:651#L29)
+### <a name="PipelineTemplate.AddStage">func</a> (\*PipelineTemplate) [AddStage](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinetemplate.go?s=601:651#L29)
 ``` go
 func (pt *PipelineTemplate) AddStage(stage *Stage)
 ```
@@ -3194,7 +3574,7 @@ AddStage appends a stage to this pipeline
 
 
 
-### <a name="PipelineTemplate.GetName">func</a> (PipelineTemplate) [GetName](/src/target/resource_pipelinetemplate.go?s=367:410#L19)
+### <a name="PipelineTemplate.GetName">func</a> (PipelineTemplate) [GetName](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinetemplate.go?s=367:410#L19)
 ``` go
 func (pt PipelineTemplate) GetName() string
 ```
@@ -3203,7 +3583,7 @@ GetName of the pipeline template
 
 
 
-### <a name="PipelineTemplate.GetStage">func</a> (PipelineTemplate) [GetStage](/src/target/resource_pipelinetemplate.go?s=164:224#L9)
+### <a name="PipelineTemplate.GetStage">func</a> (PipelineTemplate) [GetStage](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinetemplate.go?s=164:224#L9)
 ``` go
 func (pt PipelineTemplate) GetStage(stageName string) *Stage
 ```
@@ -3212,7 +3592,7 @@ GetStage from the pipeline template
 
 
 
-### <a name="PipelineTemplate.GetStages">func</a> (PipelineTemplate) [GetStages](/src/target/resource_pipelinetemplate.go?s=54:101#L4)
+### <a name="PipelineTemplate.GetStages">func</a> (PipelineTemplate) [GetStages](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinetemplate.go?s=54:101#L4)
 ``` go
 func (pt PipelineTemplate) GetStages() []*Stage
 ```
@@ -3221,7 +3601,7 @@ GetStages from the pipeline template
 
 
 
-### <a name="PipelineTemplate.GetVersion">func</a> (PipelineTemplate) [GetVersion](/src/target/resource_pipelinetemplate.go?s=1448:1504#L60)
+### <a name="PipelineTemplate.GetVersion">func</a> (PipelineTemplate) [GetVersion](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinetemplate.go?s=1448:1504#L60)
 ``` go
 func (pt PipelineTemplate) GetVersion() (version string)
 ```
@@ -3230,7 +3610,7 @@ GetVersion retrieves a version string for this pipeline
 
 
 
-### <a name="PipelineTemplate.Pipelines">func</a> (PipelineTemplate) [Pipelines](/src/target/resource_pipelinetemplate.go?s=921:971#L39)
+### <a name="PipelineTemplate.Pipelines">func</a> (PipelineTemplate) [Pipelines](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinetemplate.go?s=921:971#L39)
 ``` go
 func (pt PipelineTemplate) Pipelines() []*Pipeline
 ```
@@ -3239,7 +3619,7 @@ Pipelines returns a list of Pipelines attached to this PipelineTemplate object.
 
 
 
-### <a name="PipelineTemplate.RemoveLinks">func</a> (\*PipelineTemplate) [RemoveLinks](/src/target/resource_pipelinetemplate.go?s=775:816#L34)
+### <a name="PipelineTemplate.RemoveLinks">func</a> (\*PipelineTemplate) [RemoveLinks](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinetemplate.go?s=775:816#L34)
 ``` go
 func (pt *PipelineTemplate) RemoveLinks()
 ```
@@ -3248,7 +3628,7 @@ RemoveLinks gets the PipelineTemplate ready to be submitted to the GoCD API.
 
 
 
-### <a name="PipelineTemplate.SetStage">func</a> (\*PipelineTemplate) [SetStage](/src/target/resource_pipelinetemplate.go?s=1057:1110#L44)
+### <a name="PipelineTemplate.SetStage">func</a> (\*PipelineTemplate) [SetStage](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinetemplate.go?s=1057:1110#L44)
 ``` go
 func (pt *PipelineTemplate) SetStage(newStage *Stage)
 ```
@@ -3257,7 +3637,7 @@ SetStage replaces a stage if it already exists
 
 
 
-### <a name="PipelineTemplate.SetStages">func</a> (\*PipelineTemplate) [SetStages](/src/target/resource_pipelinetemplate.go?s=476:530#L24)
+### <a name="PipelineTemplate.SetStages">func</a> (\*PipelineTemplate) [SetStages](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinetemplate.go?s=476:530#L24)
 ``` go
 func (pt *PipelineTemplate) SetStages(stages []*Stage)
 ```
@@ -3266,7 +3646,7 @@ SetStages overwrites any existing stages
 
 
 
-### <a name="PipelineTemplate.SetVersion">func</a> (\*PipelineTemplate) [SetVersion](/src/target/resource_pipelinetemplate.go?s=1307:1361#L55)
+### <a name="PipelineTemplate.SetVersion">func</a> (\*PipelineTemplate) [SetVersion](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinetemplate.go?s=1307:1361#L55)
 ``` go
 func (pt *PipelineTemplate) SetVersion(version string)
 ```
@@ -3275,7 +3655,7 @@ SetVersion sets a version string for this pipeline
 
 
 
-## <a name="PipelineTemplateRequest">type</a> [PipelineTemplateRequest](/src/target/pipelinetemplate.go?s=266:406#L12)
+## <a name="PipelineTemplateRequest">type</a> [PipelineTemplateRequest](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinetemplate.go?s=266:406#L12)
 ``` go
 type PipelineTemplateRequest struct {
     Name    string   `json:"name"`
@@ -3294,7 +3674,7 @@ PipelineTemplateRequest describes a PipelineTemplate
 
 
 
-### <a name="PipelineTemplateRequest.GetVersion">func</a> (PipelineTemplateRequest) [GetVersion](/src/target/resource_pipelinetemplate.go?s=1731:1794#L70)
+### <a name="PipelineTemplateRequest.GetVersion">func</a> (PipelineTemplateRequest) [GetVersion](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinetemplate.go?s=1731:1794#L70)
 ``` go
 func (pt PipelineTemplateRequest) GetVersion() (version string)
 ```
@@ -3303,7 +3683,7 @@ GetVersion retrieves a version string for this pipeline
 
 
 
-### <a name="PipelineTemplateRequest.SetVersion">func</a> (\*PipelineTemplateRequest) [SetVersion](/src/target/resource_pipelinetemplate.go?s=1583:1644#L65)
+### <a name="PipelineTemplateRequest.SetVersion">func</a> (\*PipelineTemplateRequest) [SetVersion](https://github.com/beamly/go-gocd/tree/master/gocd/resource_pipelinetemplate.go?s=1583:1644#L65)
 ``` go
 func (pt *PipelineTemplateRequest) SetVersion(version string)
 ```
@@ -3312,7 +3692,7 @@ SetVersion sets a version string for this pipeline
 
 
 
-## <a name="PipelineTemplateResponse">type</a> [PipelineTemplateResponse](/src/target/pipelinetemplate.go?s=494:674#L19)
+## <a name="PipelineTemplateResponse">type</a> [PipelineTemplateResponse](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinetemplate.go?s=494:674#L19)
 ``` go
 type PipelineTemplateResponse struct {
     Name     string `json:"name"`
@@ -3334,7 +3714,7 @@ PipelineTemplateResponse describes an api response for a single pipeline templat
 
 
 
-## <a name="PipelineTemplatesResponse">type</a> [PipelineTemplatesResponse](/src/target/pipelinetemplate.go?s=763:953#L29)
+## <a name="PipelineTemplatesResponse">type</a> [PipelineTemplatesResponse](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinetemplate.go?s=763:953#L29)
 ``` go
 type PipelineTemplatesResponse struct {
     Links    *HALLinks `json:"_links,omitempty"`
@@ -3354,7 +3734,7 @@ PipelineTemplatesResponse describes an api response for multiple pipeline templa
 
 
 
-## <a name="PipelineTemplatesService">type</a> [PipelineTemplatesService](/src/target/pipelinetemplate.go?s=171:208#L9)
+## <a name="PipelineTemplatesService">type</a> [PipelineTemplatesService](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinetemplate.go?s=171:208#L9)
 ``` go
 type PipelineTemplatesService service
 ```
@@ -3369,7 +3749,7 @@ PipelineTemplatesService describes the HAL _link resource for the api response o
 
 
 
-### <a name="PipelineTemplatesService.Create">func</a> (\*PipelineTemplatesService) [Create](/src/target/pipelinetemplate.go?s=2299:2443#L75)
+### <a name="PipelineTemplatesService.Create">func</a> (\*PipelineTemplatesService) [Create](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinetemplate.go?s=2299:2443#L75)
 ``` go
 func (pts *PipelineTemplatesService) Create(ctx context.Context, name string, st []*Stage) (ptr *PipelineTemplate, resp *APIResponse, err error)
 ```
@@ -3378,7 +3758,7 @@ Create a new PipelineTemplate object in the GoCD API.
 
 
 
-### <a name="PipelineTemplatesService.Delete">func</a> (\*PipelineTemplatesService) [Delete](/src/target/pipelinetemplate.go?s=3293:3400#L113)
+### <a name="PipelineTemplatesService.Delete">func</a> (\*PipelineTemplatesService) [Delete](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinetemplate.go?s=3293:3400#L113)
 ``` go
 func (pts *PipelineTemplatesService) Delete(ctx context.Context, name string) (string, *APIResponse, error)
 ```
@@ -3387,7 +3767,7 @@ Delete a PipelineTemplate from the GoCD API.
 
 
 
-### <a name="PipelineTemplatesService.Get">func</a> (\*PipelineTemplatesService) [Get](/src/target/pipelinetemplate.go?s=1527:1654#L50)
+### <a name="PipelineTemplatesService.Get">func</a> (\*PipelineTemplatesService) [Get](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinetemplate.go?s=1527:1654#L50)
 ``` go
 func (pts *PipelineTemplatesService) Get(ctx context.Context, name string) (pt *PipelineTemplate, resp *APIResponse, err error)
 ```
@@ -3396,7 +3776,7 @@ Get a single PipelineTemplate object in the GoCD API.
 
 
 
-### <a name="PipelineTemplatesService.List">func</a> (\*PipelineTemplatesService) [List](/src/target/pipelinetemplate.go?s=1900:2017#L62)
+### <a name="PipelineTemplatesService.List">func</a> (\*PipelineTemplatesService) [List](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinetemplate.go?s=1900:2017#L62)
 ``` go
 func (pts *PipelineTemplatesService) List(ctx context.Context) (pt []*PipelineTemplate, resp *APIResponse, err error)
 ```
@@ -3405,7 +3785,7 @@ List all PipelineTemplate objects in the GoCD API.
 
 
 
-### <a name="PipelineTemplatesService.Update">func</a> (\*PipelineTemplatesService) [Update](/src/target/pipelinetemplate.go?s=2772:2931#L95)
+### <a name="PipelineTemplatesService.Update">func</a> (\*PipelineTemplatesService) [Update](https://github.com/beamly/go-gocd/tree/master/gocd/pipelinetemplate.go?s=2772:2931#L95)
 ``` go
 func (pts *PipelineTemplatesService) Update(ctx context.Context, name string, template *PipelineTemplate) (ptr *PipelineTemplate, resp *APIResponse, err error)
 ```
@@ -3414,7 +3794,7 @@ Update an PipelineTemplate object in the GoCD API.
 
 
 
-## <a name="PipelinesService">type</a> [PipelinesService](/src/target/pipeline.go?s=146:175#L9)
+## <a name="PipelinesService">type</a> [PipelinesService](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=146:175#L9)
 ``` go
 type PipelinesService service
 ```
@@ -3429,7 +3809,7 @@ PipelinesService describes the HAL _link resource for the api response object fo
 
 
 
-### <a name="PipelinesService.GetHistory">func</a> (\*PipelinesService) [GetHistory](/src/target/pipeline.go?s=5576:5713#L152)
+### <a name="PipelinesService.GetHistory">func</a> (\*PipelinesService) [GetHistory](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=5576:5713#L152)
 ``` go
 func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset int) (pt *PipelineHistory, resp *APIResponse, err error)
 ```
@@ -3438,7 +3818,7 @@ GetHistory returns a list of pipeline instances describing the pipeline history.
 
 
 
-### <a name="PipelinesService.GetInstance">func</a> (\*PipelinesService) [GetInstance](/src/target/pipeline.go?s=5140:5279#L140)
+### <a name="PipelinesService.GetInstance">func</a> (\*PipelinesService) [GetInstance](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=5140:5279#L140)
 ``` go
 func (pgs *PipelinesService) GetInstance(ctx context.Context, name string, offset int) (pt *PipelineInstance, resp *APIResponse, err error)
 ```
@@ -3447,7 +3827,7 @@ GetInstance of a pipeline run.
 
 
 
-### <a name="PipelinesService.GetStatus">func</a> (\*PipelinesService) [GetStatus](/src/target/pipeline.go?s=4157:4292#L114)
+### <a name="PipelinesService.GetStatus">func</a> (\*PipelinesService) [GetStatus](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=4157:4292#L114)
 ``` go
 func (pgs *PipelinesService) GetStatus(ctx context.Context, name string, offset int) (ps *PipelineStatus, resp *APIResponse, err error)
 ```
@@ -3456,16 +3836,33 @@ GetStatus returns a list of pipeline instanves describing the pipeline history.
 
 
 
-### <a name="PipelinesService.Pause">func</a> (\*PipelinesService) [Pause](/src/target/pipeline.go?s=4528:4624#L125)
+### <a name="PipelinesService.Pause">func</a> (\*PipelinesService) [Pause](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=4528:4624#L125)
 ``` go
 func (pgs *PipelinesService) Pause(ctx context.Context, name string) (bool, *APIResponse, error)
 ```
 Pause allows a pipeline to handle new build events
 
 
+##### Example PipelinesService.Pause:
+``` go
+    // This example pauses the pipeline "my_pipeline_name"
+    cfg := gocd.Configuration{
+        Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+        Username: "ApiUser",
+        Password: "MySecretPassword",
+    }
+
+    c := cfg.Client()
+
+    _, _, err := c.Pipelines.Pause(context.Background(), "my_pipeline_name")
+    if err != nil {
+        panic(err)
+    }
+```
 
 
-### <a name="PipelinesService.ReleaseLock">func</a> (\*PipelinesService) [ReleaseLock](/src/target/pipeline.go?s=4945:5047#L135)
+
+### <a name="PipelinesService.ReleaseLock">func</a> (\*PipelinesService) [ReleaseLock](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=4945:5047#L135)
 ``` go
 func (pgs *PipelinesService) ReleaseLock(ctx context.Context, name string) (bool, *APIResponse, error)
 ```
@@ -3474,16 +3871,33 @@ ReleaseLock frees a pipeline to handle new build events
 
 
 
-### <a name="PipelinesService.Unpause">func</a> (\*PipelinesService) [Unpause](/src/target/pipeline.go?s=4733:4831#L130)
+### <a name="PipelinesService.Unpause">func</a> (\*PipelinesService) [Unpause](https://github.com/beamly/go-gocd/tree/master/gocd/pipeline.go?s=4733:4831#L130)
 ``` go
 func (pgs *PipelinesService) Unpause(ctx context.Context, name string) (bool, *APIResponse, error)
 ```
 Unpause allows a pipeline to handle new build events
 
 
+##### Example PipelinesService.Unpause:
+``` go
+    // This example unpauses the pipeline "my_pipeline_name"
+    cfg := gocd.Configuration{
+        Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+        Username: "ApiUser",
+        Password: "MySecretPassword",
+    }
+
+    c := cfg.Client()
+
+    _, _, err := c.Pipelines.Unpause(context.Background(), "my_pipeline_name")
+    if err != nil {
+        panic(err)
+    }
+```
 
 
-## <a name="PluggableInstanceSettings">type</a> [PluggableInstanceSettings](/src/target/plugin.go?s=1017:1172#L31)
+
+## <a name="PluggableInstanceSettings">type</a> [PluggableInstanceSettings](https://github.com/beamly/go-gocd/tree/master/gocd/plugin.go?s=1017:1172#L31)
 ``` go
 type PluggableInstanceSettings struct {
     Configurations []PluginConfiguration `json:"configurations"`
@@ -3501,7 +3915,7 @@ PluggableInstanceSettings describes plugin configuration
 
 
 
-## <a name="Plugin">type</a> [Plugin](/src/target/plugin.go?s=430:955#L20)
+## <a name="Plugin">type</a> [Plugin](https://github.com/beamly/go-gocd/tree/master/gocd/plugin.go?s=430:955#L20)
 ``` go
 type Plugin struct {
     Links                     *HALLinks                 `json:"_links"`
@@ -3524,7 +3938,7 @@ Plugin describes a single plugin resource.
 
 
 
-## <a name="PluginConfiguration">type</a> [PluginConfiguration](/src/target/jobs.go?s=2830:2972#L72)
+## <a name="PluginConfiguration">type</a> [PluginConfiguration](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=2830:2972#L72)
 ``` go
 type PluginConfiguration struct {
     Key      string                      `json:"key"`
@@ -3542,7 +3956,7 @@ PluginConfiguration describes how to reference a plugin.
 
 
 
-## <a name="PluginConfigurationKVPair">type</a> [PluginConfigurationKVPair](/src/target/jobs.go?s=3323:3420#L85)
+## <a name="PluginConfigurationKVPair">type</a> [PluginConfigurationKVPair](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=3323:3420#L85)
 ``` go
 type PluginConfigurationKVPair struct {
     Key   string `json:"key"`
@@ -3560,7 +3974,7 @@ PluginConfigurationKVPair describes a key/value pair of plugin configurations.
 
 
 
-## <a name="PluginConfigurationMetadata">type</a> [PluginConfigurationMetadata](/src/target/jobs.go?s=3073:3239#L78)
+## <a name="PluginConfigurationMetadata">type</a> [PluginConfigurationMetadata](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=3073:3239#L78)
 ``` go
 type PluginConfigurationMetadata struct {
     Secure         bool `json:"secure"`
@@ -3579,7 +3993,7 @@ PluginConfigurationMetadata describes the schema for a single configuration opti
 
 
 
-## <a name="PluginView">type</a> [PluginView](/src/target/plugin.go?s=1229:1290#L37)
+## <a name="PluginView">type</a> [PluginView](https://github.com/beamly/go-gocd/tree/master/gocd/plugin.go?s=1229:1290#L37)
 ``` go
 type PluginView struct {
     Template string `json:"template"`
@@ -3596,7 +4010,7 @@ PluginView describes any view attached to a plugin.
 
 
 
-## <a name="PluginsResponse">type</a> [PluginsResponse](/src/target/plugin.go?s=230:382#L12)
+## <a name="PluginsResponse">type</a> [PluginsResponse](https://github.com/beamly/go-gocd/tree/master/gocd/plugin.go?s=230:382#L12)
 ``` go
 type PluginsResponse struct {
     Links    *HALLinks `json:"_links"`
@@ -3616,7 +4030,7 @@ PluginsResponse describes the response obejct for a plugin API call.
 
 
 
-## <a name="PluginsService">type</a> [PluginsService](/src/target/plugin.go?s=129:156#L9)
+## <a name="PluginsService">type</a> [PluginsService](https://github.com/beamly/go-gocd/tree/master/gocd/plugin.go?s=129:156#L9)
 ``` go
 type PluginsService service
 ```
@@ -3631,7 +4045,7 @@ PluginsService exposes calls for interacting with Plugin objects in the GoCD API
 
 
 
-### <a name="PluginsService.Get">func</a> (\*PluginsService) [Get](/src/target/plugin.go?s=1668:1773#L54)
+### <a name="PluginsService.Get">func</a> (\*PluginsService) [Get](https://github.com/beamly/go-gocd/tree/master/gocd/plugin.go?s=1668:1773#L54)
 ``` go
 func (ps *PluginsService) Get(ctx context.Context, name string) (p *Plugin, resp *APIResponse, err error)
 ```
@@ -3640,7 +4054,7 @@ Get retrieves information about a specific plugin.
 
 
 
-### <a name="PluginsService.List">func</a> (\*PluginsService) [List](/src/target/plugin.go?s=1322:1413#L42)
+### <a name="PluginsService.List">func</a> (\*PluginsService) [List](https://github.com/beamly/go-gocd/tree/master/gocd/plugin.go?s=1322:1413#L42)
 ``` go
 func (ps *PluginsService) List(ctx context.Context) (*PluginsResponse, *APIResponse, error)
 ```
@@ -3649,7 +4063,7 @@ List retrieves all plugins
 
 
 
-## <a name="Properties">type</a> [Properties](/src/target/resource_properties.go?s=289:433#L21)
+## <a name="Properties">type</a> [Properties](https://github.com/beamly/go-gocd/tree/master/gocd/resource_properties.go?s=289:433#L21)
 ``` go
 type Properties struct {
     UnmarshallWithHeader bool
@@ -3666,7 +4080,7 @@ Properties describes a properties resource in the GoCD API.
 
 
 
-### <a name="NewPropertiesFrame">func</a> [NewPropertiesFrame](/src/target/resource_properties.go?s=513:566#L29)
+### <a name="NewPropertiesFrame">func</a> [NewPropertiesFrame](https://github.com/beamly/go-gocd/tree/master/gocd/resource_properties.go?s=513:566#L29)
 ``` go
 func NewPropertiesFrame(frame [][]string) *Properties
 ```
@@ -3676,7 +4090,7 @@ NewPropertiesFrame generate a new data frame for properties on a gocd job.
 
 
 
-### <a name="Properties.AddRow">func</a> (\*Properties) [AddRow](/src/target/resource_properties.go?s=1003:1043#L53)
+### <a name="Properties.AddRow">func</a> (\*Properties) [AddRow](https://github.com/beamly/go-gocd/tree/master/gocd/resource_properties.go?s=1003:1043#L53)
 ``` go
 func (pr *Properties) AddRow(r []string)
 ```
@@ -3685,7 +4099,7 @@ AddRow to an existing properties data frame
 
 
 
-### <a name="Properties.Get">func</a> (Properties) [Get](/src/target/resource_properties.go?s=761:816#L42)
+### <a name="Properties.Get">func</a> (Properties) [Get](https://github.com/beamly/go-gocd/tree/master/gocd/resource_properties.go?s=761:816#L42)
 ``` go
 func (pr Properties) Get(row int, column string) string
 ```
@@ -3694,7 +4108,7 @@ Get a single parameter value for a given run of the job.
 
 
 
-### <a name="Properties.MarshalJSON">func</a> (\*Properties) [MarshalJSON](/src/target/resource_properties.go?s=2440:2491#L116)
+### <a name="Properties.MarshalJSON">func</a> (\*Properties) [MarshalJSON](https://github.com/beamly/go-gocd/tree/master/gocd/resource_properties.go?s=2440:2491#L116)
 ``` go
 func (pr *Properties) MarshalJSON() ([]byte, error)
 ```
@@ -3703,7 +4117,7 @@ MarshalJSON converts the properties structure to a list of maps
 
 
 
-### <a name="Properties.MarshallCSV">func</a> (Properties) [MarshallCSV](/src/target/resource_properties.go?s=1331:1381#L66)
+### <a name="Properties.MarshallCSV">func</a> (Properties) [MarshallCSV](https://github.com/beamly/go-gocd/tree/master/gocd/resource_properties.go?s=1331:1381#L66)
 ``` go
 func (pr Properties) MarshallCSV() (string, error)
 ```
@@ -3712,7 +4126,7 @@ MarshallCSV returns the data frame as a string
 
 
 
-### <a name="Properties.SetRow">func</a> (\*Properties) [SetRow](/src/target/resource_properties.go?s=1118:1167#L58)
+### <a name="Properties.SetRow">func</a> (\*Properties) [SetRow](https://github.com/beamly/go-gocd/tree/master/gocd/resource_properties.go?s=1118:1167#L58)
 ``` go
 func (pr *Properties) SetRow(row int, r []string)
 ```
@@ -3721,7 +4135,7 @@ SetRow in an existing data frame
 
 
 
-### <a name="Properties.UnmarshallCSV">func</a> (\*Properties) [UnmarshallCSV](/src/target/resource_properties.go?s=1716:1769#L83)
+### <a name="Properties.UnmarshallCSV">func</a> (\*Properties) [UnmarshallCSV](https://github.com/beamly/go-gocd/tree/master/gocd/resource_properties.go?s=1716:1769#L83)
 ``` go
 func (pr *Properties) UnmarshallCSV(raw string) error
 ```
@@ -3730,7 +4144,7 @@ UnmarshallCSV returns the data frame from a string
 
 
 
-### <a name="Properties.Write">func</a> (\*Properties) [Write](/src/target/resource_properties.go?s=2153:2209#L104)
+### <a name="Properties.Write">func</a> (\*Properties) [Write](https://github.com/beamly/go-gocd/tree/master/gocd/resource_properties.go?s=2153:2209#L104)
 ``` go
 func (pr *Properties) Write(p []byte) (n int, err error)
 ```
@@ -3739,7 +4153,7 @@ Write the data frame to a byte stream as a csv.
 
 
 
-## <a name="PropertiesService">type</a> [PropertiesService](/src/target/properties.go?s=125:155#L10)
+## <a name="PropertiesService">type</a> [PropertiesService](https://github.com/beamly/go-gocd/tree/master/gocd/properties.go?s=125:155#L10)
 ``` go
 type PropertiesService service
 ```
@@ -3754,7 +4168,7 @@ PropertiesService describes Actions which can be performed on agents
 
 
 
-### <a name="PropertiesService.Create">func</a> (\*PropertiesService) [Create](/src/target/properties.go?s=1566:1723#L52)
+### <a name="PropertiesService.Create">func</a> (\*PropertiesService) [Create](https://github.com/beamly/go-gocd/tree/master/gocd/properties.go?s=1566:1723#L52)
 ``` go
 func (ps *PropertiesService) Create(ctx context.Context, name string, value string, pr *PropertyRequest) (responseIsValid bool, resp *APIResponse, err error)
 ```
@@ -3763,7 +4177,7 @@ Create a specific property for the given job/pipeline/stage run.
 
 
 
-### <a name="PropertiesService.Get">func</a> (\*PropertiesService) [Get](/src/target/properties.go?s=1115:1237#L42)
+### <a name="PropertiesService.Get">func</a> (\*PropertiesService) [Get](https://github.com/beamly/go-gocd/tree/master/gocd/properties.go?s=1115:1237#L42)
 ``` go
 func (ps *PropertiesService) Get(ctx context.Context, name string, pr *PropertyRequest) (*Properties, *APIResponse, error)
 ```
@@ -3772,7 +4186,7 @@ Get a specific property for the given job/pipeline/stage run.
 
 
 
-### <a name="PropertiesService.List">func</a> (\*PropertiesService) [List](/src/target/properties.go?s=681:791#L31)
+### <a name="PropertiesService.List">func</a> (\*PropertiesService) [List](https://github.com/beamly/go-gocd/tree/master/gocd/properties.go?s=681:791#L31)
 ``` go
 func (ps *PropertiesService) List(ctx context.Context, pr *PropertyRequest) (*Properties, *APIResponse, error)
 ```
@@ -3781,7 +4195,7 @@ List the properties for the given job/pipeline/stage run.
 
 
 
-### <a name="PropertiesService.ListHistorical">func</a> (\*PropertiesService) [ListHistorical](/src/target/properties.go?s=2448:2568#L76)
+### <a name="PropertiesService.ListHistorical">func</a> (\*PropertiesService) [ListHistorical](https://github.com/beamly/go-gocd/tree/master/gocd/properties.go?s=2448:2568#L76)
 ``` go
 func (ps *PropertiesService) ListHistorical(ctx context.Context, pr *PropertyRequest) (*Properties, *APIResponse, error)
 ```
@@ -3790,7 +4204,7 @@ ListHistorical properties for a given pipeline, stage, job.
 
 
 
-## <a name="PropertyCreateResponse">type</a> [PropertyCreateResponse](/src/target/properties.go?s=552:618#L25)
+## <a name="PropertyCreateResponse">type</a> [PropertyCreateResponse](https://github.com/beamly/go-gocd/tree/master/gocd/properties.go?s=552:618#L25)
 ``` go
 type PropertyCreateResponse struct {
     Name  string
@@ -3808,7 +4222,7 @@ PropertyCreateResponse handles the parsing of the response when creating a prope
 
 
 
-## <a name="PropertyRequest">type</a> [PropertyRequest](/src/target/properties.go?s=251:463#L13)
+## <a name="PropertyRequest">type</a> [PropertyRequest](https://github.com/beamly/go-gocd/tree/master/gocd/properties.go?s=251:463#L13)
 ``` go
 type PropertyRequest struct {
     Pipeline        string
@@ -3832,7 +4246,7 @@ PropertyRequest describes the parameters to be submitted when calling/creating p
 
 
 
-## <a name="Stage">type</a> [Stage](/src/target/stages.go?s=166:781#L7)
+## <a name="Stage">type</a> [Stage](https://github.com/beamly/go-gocd/tree/master/gocd/stages.go?s=166:781#L7)
 ``` go
 type Stage struct {
     Name                  string                 `json:"name"`
@@ -3856,7 +4270,7 @@ Stage represents a GoCD Stage object.
 
 
 
-### <a name="Stage.Clean">func</a> (\*Stage) [Clean](/src/target/resource_stages.go?s=740:763#L39)
+### <a name="Stage.Clean">func</a> (\*Stage) [Clean](https://github.com/beamly/go-gocd/tree/master/gocd/resource_stages.go?s=740:763#L39)
 ``` go
 func (s *Stage) Clean()
 ```
@@ -3865,7 +4279,7 @@ Clean the approvel step.
 
 
 
-### <a name="Stage.JSONString">func</a> (\*Stage) [JSONString](/src/target/resource_stages.go?s=116:160#L9)
+### <a name="Stage.JSONString">func</a> (\*Stage) [JSONString](https://github.com/beamly/go-gocd/tree/master/gocd/resource_stages.go?s=116:160#L9)
 ``` go
 func (s *Stage) JSONString() (string, error)
 ```
@@ -3874,7 +4288,7 @@ JSONString returns a string of this stage as a JSON object.
 
 
 
-### <a name="Stage.Validate">func</a> (\*Stage) [Validate](/src/target/resource_stages.go?s=409:441#L20)
+### <a name="Stage.Validate">func</a> (\*Stage) [Validate](https://github.com/beamly/go-gocd/tree/master/gocd/resource_stages.go?s=409:441#L20)
 ``` go
 func (s *Stage) Validate() error
 ```
@@ -3883,7 +4297,7 @@ Validate ensures the attributes attached to this structure are ready for submiss
 
 
 
-## <a name="StageContainer">type</a> [StageContainer](/src/target/resource.go?s=125:310#L6)
+## <a name="StageContainer">type</a> [StageContainer](https://github.com/beamly/go-gocd/tree/master/gocd/resource.go?s=125:310#L6)
 ``` go
 type StageContainer interface {
     GetName() string
@@ -3906,7 +4320,7 @@ StageContainer describes structs which contain stages, eg Pipelines and Pipeline
 
 
 
-## <a name="StagesService">type</a> [StagesService](/src/target/stages.go?s=97:123#L4)
+## <a name="StagesService">type</a> [StagesService](https://github.com/beamly/go-gocd/tree/master/gocd/stages.go?s=97:123#L4)
 ``` go
 type StagesService service
 ```
@@ -3921,7 +4335,7 @@ StagesService exposes calls for interacting with Stage objects in the GoCD API.
 
 
 
-## <a name="StringResponse">type</a> [StringResponse](/src/target/gocd.go?s=985:1048#L50)
+## <a name="StringResponse">type</a> [StringResponse](https://github.com/beamly/go-gocd/tree/master/gocd/gocd.go?s=985:1048#L50)
 ``` go
 type StringResponse struct {
     Message string `json:"message"`
@@ -3938,7 +4352,7 @@ StringResponse handles the unmarshaling of the single string response from DELET
 
 
 
-## <a name="Tab">type</a> [Tab](/src/target/jobs.go?s=2242:2315#L51)
+## <a name="Tab">type</a> [Tab](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=2242:2315#L51)
 ``` go
 type Tab struct {
     Name string `json:"name"`
@@ -3956,7 +4370,7 @@ Tab description in a gocd job
 
 
 
-## <a name="Task">type</a> [Task](/src/target/jobs.go?s=3471:3579#L91)
+## <a name="Task">type</a> [Task](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=3471:3579#L91)
 ``` go
 type Task struct {
     Type       string         `json:"type"`
@@ -3974,7 +4388,7 @@ Task Describes a Task object in the GoCD api.
 
 
 
-### <a name="Task.Validate">func</a> (\*Task) [Validate](/src/target/resource_task.go?s=76:107#L6)
+### <a name="Task.Validate">func</a> (\*Task) [Validate](https://github.com/beamly/go-gocd/tree/master/gocd/resource_task.go?s=76:107#L6)
 ``` go
 func (t *Task) Validate() error
 ```
@@ -3983,7 +4397,7 @@ Validate each of the possible task types.
 
 
 
-## <a name="TaskAttributes">type</a> [TaskAttributes](/src/target/jobs.go?s=3640:4851#L97)
+## <a name="TaskAttributes">type</a> [TaskAttributes](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=3640:4851#L97)
 ``` go
 type TaskAttributes struct {
     RunIf               []string                    `json:"run_if,omitempty"`
@@ -4014,7 +4428,7 @@ TaskAttributes describes all the properties for a Task.
 
 
 
-### <a name="TaskAttributes.ValidateAnt">func</a> (\*TaskAttributes) [ValidateAnt](/src/target/jobs_validation.go?s=623:667#L24)
+### <a name="TaskAttributes.ValidateAnt">func</a> (\*TaskAttributes) [ValidateAnt](https://github.com/beamly/go-gocd/tree/master/gocd/jobs_validation.go?s=623:667#L24)
 ``` go
 func (t *TaskAttributes) ValidateAnt() error
 ```
@@ -4023,7 +4437,7 @@ ValidateAnt checks that the specified values for the Task struct are correct for
 
 
 
-### <a name="TaskAttributes.ValidateExec">func</a> (\*TaskAttributes) [ValidateExec](/src/target/jobs_validation.go?s=132:177#L6)
+### <a name="TaskAttributes.ValidateExec">func</a> (\*TaskAttributes) [ValidateExec](https://github.com/beamly/go-gocd/tree/master/gocd/jobs_validation.go?s=132:177#L6)
 ``` go
 func (t *TaskAttributes) ValidateExec() error
 ```
@@ -4032,7 +4446,7 @@ ValidateExec checks that the specified values for the Task struct are correct fo
 
 
 
-## <a name="TaskPluginConfiguration">type</a> [TaskPluginConfiguration](/src/target/jobs.go?s=4925:5025#L116)
+## <a name="TaskPluginConfiguration">type</a> [TaskPluginConfiguration](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=4925:5025#L116)
 ``` go
 type TaskPluginConfiguration struct {
     ID      string `json:"id"`
@@ -4050,7 +4464,7 @@ TaskPluginConfiguration is for specifying options for pluggable task
 
 
 
-## <a name="TimeoutField">type</a> [TimeoutField](/src/target/jobs.go?s=6557:6578#L162)
+## <a name="TimeoutField">type</a> [TimeoutField](https://github.com/beamly/go-gocd/tree/master/gocd/jobs.go?s=6557:6578#L162)
 ``` go
 type TimeoutField int
 ```
@@ -4065,7 +4479,7 @@ TimeoutField helps manage the marshalling of the timoeut field which can be both
 
 
 
-### <a name="TimeoutField.MarshalJSON">func</a> (TimeoutField) [MarshalJSON](/src/target/resource_jobs.go?s=885:943#L48)
+### <a name="TimeoutField.MarshalJSON">func</a> (TimeoutField) [MarshalJSON](https://github.com/beamly/go-gocd/tree/master/gocd/resource_jobs.go?s=885:943#L48)
 ``` go
 func (tf TimeoutField) MarshalJSON() (b []byte, err error)
 ```
@@ -4074,7 +4488,7 @@ MarshallJSON of TimeoutField into a string
 
 
 
-### <a name="TimeoutField.UnmarshalJSON">func</a> (\*TimeoutField) [UnmarshalJSON](/src/target/resource_jobs.go?s=556:615#L31)
+### <a name="TimeoutField.UnmarshalJSON">func</a> (\*TimeoutField) [UnmarshalJSON](https://github.com/beamly/go-gocd/tree/master/gocd/resource_jobs.go?s=556:615#L31)
 ``` go
 func (tf *TimeoutField) UnmarshalJSON(b []byte) (err error)
 ```
@@ -4083,7 +4497,7 @@ UnmarshalJSON and handle "never", "null", and integers.
 
 
 
-## <a name="Version">type</a> [Version](/src/target/configuration.go?s=8090:8365#L207)
+## <a name="Version">type</a> [Version](https://github.com/beamly/go-gocd/tree/master/gocd/configuration.go?s=8090:8365#L207)
 ``` go
 type Version struct {
     Links       *HALLinks `json:"_links"`
@@ -4105,7 +4519,7 @@ Version part of cruise-control.xml. @TODO better documentation
 
 
 
-## <a name="Versioned">type</a> [Versioned](/src/target/resource.go?s=521:598#L23)
+## <a name="Versioned">type</a> [Versioned](https://github.com/beamly/go-gocd/tree/master/gocd/resource.go?s=521:598#L23)
 ``` go
 type Versioned interface {
     GetVersion() string
