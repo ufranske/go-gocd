@@ -73,6 +73,103 @@ func ExampleConfigRepoService_Get() {
 	fmt.Printf("\tNumber of configuration parameters: %d\n\n", len(r.Configuration))
 }
 
+func ExampleConfigRepoService_Create() {
+	// This example creates a config repo that uses a git material and a json config plugin
+	cfg := gocd.Configuration{
+		Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+		Username: "ApiUser",
+		Password: "MySecretPassword",
+	}
+
+	c := cfg.Client()
+
+	name := "my_pipeline_name"
+	repoURL := "git@github.com:example/myrepo.git"
+	repo := gocd.ConfigRepo{ID: name, PluginID: "json.config.plugin", Material: gocd.Material{Type: "git", Attributes: &gocd.MaterialAttributesGit{Name: name, URL: repoURL, Branch: "master", AutoUpdate: true}}}
+
+	r, _, err := c.ConfigRepos.Create(context.Background(), &repo)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("Pipeline created:\n\tName: %s\n\tMaterial type: %s\n", r.ID, r.Material.Type)
+	if r.Material.Type == "git" {
+		fmt.Printf("\tMaterial url: %s\n", r.Material.Attributes.(*gocd.MaterialAttributesGit).URL)
+	}
+	fmt.Printf("\tNumber of configuration parameters: %d\n\n", len(r.Configuration))
+}
+
+func ExamplePipelinesService_Pause() {
+	// This example pauses the pipeline "my_pipeline_name"
+	cfg := gocd.Configuration{
+		Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+		Username: "ApiUser",
+		Password: "MySecretPassword",
+	}
+
+	c := cfg.Client()
+
+	_, _, err := c.Pipelines.Pause(context.Background(), "my_pipeline_name")
+	if err != nil {
+		panic(err)
+	}
+}
+
+func ExamplePipelinesService_Unpause() {
+	// This example unpauses the pipeline "my_pipeline_name"
+	cfg := gocd.Configuration{
+		Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+		Username: "ApiUser",
+		Password: "MySecretPassword",
+	}
+
+	c := cfg.Client()
+
+	_, _, err := c.Pipelines.Unpause(context.Background(), "my_pipeline_name")
+	if err != nil {
+		panic(err)
+	}
+}
+
+func ExamplePipelineGroupsService_List() {
+	// This example list the pipeline names that belong to the group "foo"
+	cfg := gocd.Configuration{
+		Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+		Username: "ApiUser",
+		Password: "MySecretPassword",
+	}
+
+	c := cfg.Client()
+
+	groupName := "foo" // If you set your group name to an empty string you will get all the groups
+	g, _, err := c.PipelineGroups.List(context.Background(), groupName)
+	if err != nil {
+		panic(err)
+	}
+	for _, grp := range *g {
+		fmt.Printf("Pipelines in the %s group:\n", grp.Name)
+		for _, elt := range grp.Pipelines {
+			fmt.Printf("  - %s\n", elt.Name)
+		}
+	}
+}
+
+func ExamplePipelineConfigsService_Delete() {
+	// This example deletes the pipeline "my_pipeline_name"
+	cfg := gocd.Configuration{
+		Server:   "https://my_gocd/go/", // don't forget the "/go/" at the end of the url to avoid issues!
+		Username: "ApiUser",
+		Password: "MySecretPassword",
+	}
+
+	c := cfg.Client()
+
+	_, _, err := c.PipelineConfigs.Delete(context.Background(), "my_pipeline_name")
+	if err != nil {
+		panic(err)
+	}
+}
+
 func ExamplePipelineConfigsService_Get() {
 	// This example prints out the entire configuration of a pipeline
 	cfg := gocd.Configuration{
