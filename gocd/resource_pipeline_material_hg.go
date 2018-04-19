@@ -16,7 +16,17 @@ func (mhg MaterialAttributesHg) equal(mhg2i MaterialAttribute) (bool, error) {
 
 // GenerateGeneric form (map[string]interface) of the material filter
 func (mhg MaterialAttributesHg) GenerateGeneric() (ma map[string]interface{}) {
-	ma = make(map[string]interface{})
+	ma = map[string]interface{}{
+		"auto_update":   mhg.AutoUpdate,
+		"destination":   mhg.Destination,
+		"invert_filter": mhg.InvertFilter,
+		"name":          mhg.Name,
+		"url":           mhg.URL,
+	}
+
+	if f := mhg.Filter.GenerateGeneric(); f != nil {
+		ma["filter"] = f
+	}
 	return
 }
 
