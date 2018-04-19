@@ -14,7 +14,9 @@ func TestEnvironment(t *testing.T) {
 	defer teardown()
 
 	t.Run("List", testEnvironmentList)
+	t.Run("Delete", testEnvironmentDelete)
 	t.Run("Get", testEnvironmentGet)
+	t.Run("Patch", testEnvironmentPatch)
 }
 
 func testEnvironmentList(t *testing.T) {
@@ -84,6 +86,24 @@ func testEnvironmentList(t *testing.T) {
 	assert.Equal(t, "LSd1TI0eLa+DjytHjj0qjA==", ev2.EncryptedValue)
 }
 
+func testEnvironmentDelete(t *testing.T) {
+	mux.HandleFunc("/api/admin/environments/my_environment_1", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "DELETE", "Unexpected HTTP method")
+		assert.Contains(t, r.Header["Accept"], "application/vnd.go.cd.v2+json")
+
+		fmt.Fprint(w, `{
+  "message": "Environment 'my_environment_1' was deleted successfully."
+}`)
+	})
+
+	message, resp, err := client.Environments.Delete(context.Background(), "my_environment_1")
+	if err != nil {
+		assert.Error(t, err)
+	}
+	assert.NotNil(t, resp)
+	assert.Equal(t, "Environment 'my_environment_1' was deleted successfully.", message)
+}
+
 func testEnvironmentGet(t *testing.T) {
 	mux.HandleFunc("/api/admin/environments/my_environment", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
@@ -138,5 +158,72 @@ func testEnvironmentGet(t *testing.T) {
 		},
 		env.EnvironmentVariables[1],
 	)
+
+}
+
+func testEnvironmentPatch(t *testing.T) {
+	mux.HandleFunc("/api/admin/environments/my_environment_2", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "PATCH", "Unexpected HTTP method")
+		assert.Contains(t, r.Header["Accept"], "application/vnd.go.cd.v2+json")
+
+		j, _ := ioutil.ReadFile("test/resources/environment.2.json")
+		fmt.Fprint(w, string(j))
+
+	})
+
+	patch := EnvironmentPatchRequest{
+		Pipelines: &PatchStringAction{
+			Add:    []string{"up42"},
+			Remove: []string{"sample"},
+		},
+		Agents: &PatchStringAction{
+			Add:    []string{"12345678-e2f6-4c78-123456789012"},
+			Remove: []string{"87654321-e2f6-4c78-123456789012"},
+		},
+		EnvironmentVariables: &EnvironmentVariablesAction{
+			Add: []*EnvironmentVariable{
+				{
+					Name:  "GO_SERVER_URL",
+					Value: "https://ci.example.com/go",
+				},
+			},
+			Remove: []*EnvironmentVariable{
+				{
+					Name: "URL",
+				},
+			},
+		},
+	}
+	env, _, err := client.Environments.Patch(context.Background(), "my_environment_2", &patch)
+	if err != nil {
+		t.Error(err)
+	}
+
+	assert.Equal(t, "https://ci.example.com/go/api/admin/environments/new_environment", env.Links.Get("self").URL.String())
+	assert.Equal(t, "https://api.gocd.org/#environment-config", env.Links.Get("doc").URL.String())
+
+	assert.Equal(t, "new_environment", env.Name)
+
+	assert.Len(t, env.Pipelines, 1)
+	p := env.Pipelines[0]
+	assert.Equal(t, "https://ci.example.com/go/api/admin/pipelines/pipeline1", p.Links.Get("self").URL.String())
+	assert.Equal(t, "https://api.gocd.org/#pipeline-config", p.Links.Get("doc").URL.String())
+	assert.Equal(t, "https://ci.example.com/go/api/admin/pipelines/:pipeline_name", p.Links.Get("find").URL.String())
+	assert.Equal(t, "up42", p.Name)
+
+	assert.Len(t, env.Agents, 1)
+	a := env.Agents[0]
+	assert.Equal(t, "https://ci.example.com/go/api/agents/adb9540a-b954-4571-9d9b-2f330739d4da", a.Links.Get("self").URL.String())
+	assert.Equal(t, "https://api.gocd.org/#agents", a.Links.Get("doc").URL.String())
+	assert.Equal(t, "https://ci.example.com/go/api/agents/:uuid", a.Links.Get("find").URL.String())
+	assert.Equal(t, "12345678-e2f6-4c78-123456789012", a.UUID)
+
+	assert.Equal(t, []*EnvironmentVariable{
+		{
+			Secure: false,
+			Name:   "GO_SERVER_URL",
+			Value:  "https://ci.example.com/go",
+		},
+	}, env.EnvironmentVariables)
 
 }
