@@ -7,12 +7,99 @@ import (
 )
 
 func testResourceMaterial(t *testing.T) {
+	t.Run("Generic", testMaterialAttributeGeneric)
 	t.Run("Equality", testMaterialEquality)
 	t.Run("AttributeEquality", testMaterialAttributeEquality)
 	t.Run("AttributeInequality", testMaterialAttributeInequality)
 	t.Run("HasFilter", testMaterialAttributeFilterable)
 	t.Run("Unmarshall", testMaterialUnmarshall)
 	t.Run("UnmarshallAttributes", testMaterialUnmarshallAttributes)
+}
+
+func testMaterialAttributeGeneric(t *testing.T) {
+	for i, test := range []struct {
+		a MaterialAttribute
+		m map[string]interface{}
+	}{
+		{
+			a: MaterialAttributesGit{
+				Name:            "mock-name",
+				URL:             "mock-url",
+				AutoUpdate:      true,
+				Branch:          "mock-branch",
+				SubmoduleFolder: "mock-folder",
+				Destination:     "mock-destination",
+				ShallowClone:    true,
+				InvertFilter:    true,
+			},
+			m: map[string]interface{}{
+				"name":             "mock-name",
+				"url":              "mock-url",
+				"auto_update":      true,
+				"branch":           "mock-branch",
+				"submodule_folder": "mock-folder",
+				"destination":      "mock-destination",
+				"shallow_clone":    true,
+				"invert_filter":    true,
+			},
+		},
+		{
+			a: MaterialAttributesSvn{
+				Name:              "mock-name",
+				URL:               "mock-url",
+				AutoUpdate:        true,
+				Username:          "mock-username",
+				Password:          "mock-password",
+				EncryptedPassword: "mock-encrypted-password",
+				CheckExternals:    true,
+				Destination:       "mock-destination",
+				Filter: &MaterialFilter{
+					Ignore: []string{"mock-ignore"},
+				},
+				InvertFilter: true,
+			},
+			m: map[string]interface{}{
+				"name":               "mock-name",
+				"url":                "mock-url",
+				"auto_update":        true,
+				"username":           "mock-username",
+				"password":           "mock-password",
+				"encrypted_password": "mock-encrypted-password",
+				"check_externals":    true,
+				"destination":        "mock-destination",
+				"filter": map[string]interface{}{
+					"ignore": []interface{}{"mock-ignore"},
+				},
+				"invert_filter": true,
+			},
+		},
+		{
+			a: MaterialAttributesHg{
+				Name:        "mock-name",
+				URL:         "mock-url",
+				Destination: "mock-destination",
+				Filter: &MaterialFilter{
+					Ignore: []string{"mock-ignore"},
+				},
+				InvertFilter: true,
+				AutoUpdate:   true,
+			},
+			m: map[string]interface{}{
+				"name":        "mock-name",
+				"url":         "mock-url",
+				"auto_update": true,
+				"destination": "mock-destination",
+				"filter": map[string]interface{}{
+					"ignore": []interface{}{"mock-ignore"},
+				},
+				"invert_filter": true,
+			},
+		},
+	} {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			assert.Equal(t, test.m, test.a.GenerateGeneric())
+		})
+	}
 }
 
 func testMaterialAttributeFilterable(t *testing.T) {

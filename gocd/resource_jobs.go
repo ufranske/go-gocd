@@ -44,7 +44,7 @@ func (tf *TimeoutField) UnmarshalJSON(b []byte) (err error) {
 	return
 }
 
-// MarshallJSON of TimeoutField into a string
+// MarshalJSON of TimeoutField into a string
 func (tf TimeoutField) MarshalJSON() (b []byte, err error) {
 	return []byte(strconv.Itoa(int(tf))), nil
 }
