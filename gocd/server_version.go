@@ -2,8 +2,8 @@ package gocd
 
 import (
 	"context"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 type ServerVersionService service
