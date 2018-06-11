@@ -36,6 +36,11 @@ func testServerVersion(t *testing.T) {
 		GitSha:      "a7a5717cbd60c30006314fb8dd529796c93adaf0",
 		FullVersion: "16.6.0 (3348-a7a5717cbd60c30006314fb8dd529796c93adaf0)",
 		CommitURL:   "https://github.com/gocd/gocd/commits/a7a5717cbd60c30006314fb8dd529796c93adaf0",
+		VersionParts: &ServerVersionParts{
+			Major: 16,
+			Minor: 6,
+			Patch: 0,
+		},
 	}, v)
 
 }
