@@ -10,13 +10,14 @@ import (
 )
 
 func TestServerVersion(t *testing.T) {
-	setup()
-	defer teardown()
-
 	t.Run("ServerVersion", testServerVersion)
+	t.Run("BadServerVersion", testBadServerVersion)
 }
 
 func testServerVersion(t *testing.T) {
+	setup()
+	defer teardown()
+
 	mux.HandleFunc("/api/version", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
 		assert.Equal(t, apiV1, r.Header.Get("Accept"))
@@ -43,4 +44,38 @@ func testServerVersion(t *testing.T) {
 		},
 	}, v)
 
+}
+
+func testBadServerVersion(t *testing.T) {
+	for _, test := range []struct {
+		name      string
+		id        int
+		errString string
+	}{
+		{name: "Major", id: 2, errString: "strconv.Atoi: parsing \"a\": invalid syntax"},
+		{name: "Minor", id: 3, errString: "strconv.Atoi: parsing \"b\": invalid syntax"},
+		{name: "Patch", id: 4, errString: "strconv.Atoi: parsing \"c\": invalid syntax"},
+	} {
+		t.Run(test.name, func(t *testing.T) { testBadServerVersionMajor(t, test.id, test.errString) })
+	}
+}
+
+func testBadServerVersionMajor(t *testing.T, i int, errString string) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/version", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
+		assert.Equal(t, apiV1, r.Header.Get("Accept"))
+
+		j, _ := ioutil.ReadFile(
+			fmt.Sprintf("test/resources/server-version.v1.%d.json", i),
+		)
+
+		fmt.Fprint(w, string(j))
+	})
+
+	_, _, err := client.ServerVersion.Get(context.Background())
+
+	assert.EqualError(t, err, errString)
 }
