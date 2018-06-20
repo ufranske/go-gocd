@@ -65,12 +65,15 @@ type PipelineHistory struct {
 
 // PipelineInstance describes a single pipeline run
 type PipelineInstance struct {
-	BuildCause   BuildCause `json:"build_cause"`
-	CanRun       bool       `json:"can_run"`
-	Name         string     `json:"name"`
-	NaturalOrder int        `json:"natural_order"`
-	Comment      string     `json:"comment"`
-	Stages       []*Stage   `json:"stages"`
+	BuildCause          BuildCause `json:"build_cause"`
+	Label               string     `json:"label"`
+	Counter             int        `json:"counter"`
+	PreparingToSchedule bool       `json:"preparing_to_schedule"`
+	CanRun              bool       `json:"can_run"`
+	Name                string     `json:"name"`
+	NaturalOrder        int        `json:"natural_order"`
+	Comment             string     `json:"comment"`
+	Stages              []*Stage   `json:"stages"`
 }
 
 // BuildCause describes the triggers which caused the build to start.
