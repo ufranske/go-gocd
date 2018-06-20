@@ -18,7 +18,7 @@ func (s *StageInstance) JSONString() (string, error) {
 // Validate ensures the attributes attached to this structure are ready for submission to the GoCD API.
 func (s *StageInstance) Validate() error {
 	if s.Name == "" {
-		return errors.New("`gocd.Stage.Name` is empty")
+		return errors.New("`gocd.StageInstance.Name` is empty")
 	}
 
 	if len(s.Jobs) == 0 {

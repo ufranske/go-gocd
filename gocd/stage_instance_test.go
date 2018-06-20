@@ -18,7 +18,7 @@ func testStageInstanceJSONStringFail(t *testing.T) {
 		ID:         13,
 	}
 	_, err := s.JSONString()
-	assert.EqualError(t, err, "`gocd.Stage.Name` is empty")
+	assert.EqualError(t, err, "`gocd.StageInstance.Name` is empty")
 }
 
 func testStageInstanceJSONString(t *testing.T) {
@@ -69,22 +69,11 @@ func testStageInstanceJSONString(t *testing.T) {
 }`, j)
 }
 
-/*
-expected: "{\n  \"name\": \"stage1\",\n  \"id\": 13,\n  \"jobs\": [\n    {\n      \"name\": \"job1\",\n      \"scheduled_date\": 1436172201081,\n      \"result\": \"Failed\",\n      \"state\": \"Completed\",\n      \"id\": 13\n    }\n  ],\n  \"can_run\": true,\n  \"scheduled\": true,\n  \"approval_type\": \"success\",\n  \"approved_by\": \"admin\",\n  \"counter\": 1,\n  \"operate_permission\": true,\n  \"result\": \"Failed\"\n}"
-  actual: "{\n  \"name\": \"stage1\",\n  \"id\": 13,\n  \"jobs\": [\n    {\n      \"name\": \"job1\",\n      \"scheduled_date\": 1436172201081,\n      \"result\": \"Failed\",\n      \"state\": \"Completed\",\n      \"id\": 13\n    }\n  ],\n  \"can_run\": true,\n  \"scheduled\": true,\n  \"approval_type\": \"success\",\n  \"approval_by\": \"admin\",\n  \"counter\": 1,\n  \"operate_permission\": true,\n  \"result\": \"Failed\"\n}"
-
-*/
-// "{\n  \"name\": \"stage1\",\n  \"id\": 13,\n  \"jobs\": [\n    {\n      \"name\": \"job1\",\n      \"scheduled_date\": 1436172201081,\n      \"result\": \"Failed\",\n      \"state\": \"Completed\",\n      \"id\": 13\n    }\n  ],\n  \"can_run\": true,\n  \"approval_type\": \"success\",\n  \"approved_by\": \"admin\",\n  \"counter\": \"1\",\n  \"operate_permission\": true,\n  \"scheduled\": true\n  \"result\": \"Failed\",\n}"
-// "{\n  \"name\": \"stage1\",\n  \"id\": 13,\n  \"jobs\": [\n    {\n      \"name\": \"job1\",\n      \"scheduled_date\": 1436172201081,\n      \"result\": \"Failed\",\n      \"state\": \"Completed\",\n      \"id\": 13\n    }\n  ],\n  \"can_run\": true,\n  \"scheduled\": true,\n  \"approval_type\": \"success\",\n  \"approval_by\": \"admin\",\n  \"counter\": 1,\n  \"operate_permission\": true,\n  \"result\": \"Failed\"\n}"
-
-// {\n  \"name\": \"stage1\",\n  \"id\": 13,\n  \"jobs\": [\n    {\n      \"name\": \"job1\",\n      \"scheduled_date\": 1436172201081,\n      \"result\": \"Failed\",\n      \"state\": \"Completed\",\n      \"id\": 13\n    }\n  ],\n  \"can_run\": true,\n  \"approval_type\": \"success\",\n  \"approved_by\": \"admin\",\n  \"counter\": \"1\",\n  \"operate_permission\": true,\n  \"scheduled\": true,\n  \"result\": \"Failed\"\n}
-// {\n  \"name\": \"stage1\",\n  \"id\": 13,\n  \"jobs\": [\n    {\n      \"name\": \"job1\",\n      \"scheduled_date\": 1436172201081,\n      \"result\": \"Failed\",\n      \"state\": \"Completed\",\n      \"id\": 13\n    }\n  ],\n  \"can_run\": true,\n  \"scheduled\": true,\n  \"approval_type\": \"success\",\n  \"approval_by\": \"admin\",\n  \"counter\": 1,\n  \"operate_permission\": true,\n  \"result\": \"Failed\"\n}"
-
 func testStageInstanceValidate(t *testing.T) {
-	s := Stage{}
+	s := StageInstance{}
 
 	err := s.Validate()
-	assert.EqualError(t, err, "`gocd.Stage.Name` is empty")
+	assert.EqualError(t, err, "`gocd.StageInstance.Name` is empty")
 
 	s.Name = "test-stage"
 	err = s.Validate()
