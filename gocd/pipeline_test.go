@@ -208,9 +208,9 @@ func testPipelineServiceGetHistory(t *testing.T) {
 	assert.Equal(t, h2.Name, "pipeline1")
 	assert.Equal(t, h2.NaturalOrder, 10)
 	assert.Equal(t, h2.Comment, "")
-	assert.Equal(t, h1.Label, "10")
-	assert.Equal(t, h1.Counter, 10)
-	assert.Equal(t, h1.PreparingToSchedule, false)
+	assert.Equal(t, h2.Label, "10")
+	assert.Equal(t, h2.Counter, 10)
+	assert.Equal(t, h2.PreparingToSchedule, false)
 	assert.Len(t, h2.Stages, 1)
 
 	h2s := h2.Stages[0]
