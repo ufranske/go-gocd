@@ -71,7 +71,7 @@ type PipelineInstance struct {
 	PreparingToSchedule bool       `json:"preparing_to_schedule"`
 	CanRun              bool       `json:"can_run"`
 	Name                string     `json:"name"`
-	NaturalOrder        int        `json:"natural_order"`
+	NaturalOrder        float32    `json:"natural_order"`
 	Comment             string     `json:"comment"`
 	Stages              []*Stage   `json:"stages"`
 }

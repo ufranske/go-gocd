@@ -188,7 +188,7 @@ func testPipelineServiceGetHistory(t *testing.T) {
 	h1 := ph.Pipelines[0]
 	assert.True(t, h1.CanRun)
 	assert.Equal(t, h1.Name, "pipeline1")
-	assert.Equal(t, h1.NaturalOrder, 11)
+	assert.Equal(t, h1.NaturalOrder, float32(11))
 	assert.Equal(t, h1.Comment, "")
 	assert.Equal(t, h1.Label, "11")
 	assert.Equal(t, h1.Counter, 11)
@@ -201,7 +201,7 @@ func testPipelineServiceGetHistory(t *testing.T) {
 	h2 := ph.Pipelines[1]
 	assert.True(t, h2.CanRun)
 	assert.Equal(t, h2.Name, "pipeline1")
-	assert.Equal(t, h2.NaturalOrder, 10)
+	assert.Equal(t, h2.NaturalOrder, float32(10))
 	assert.Equal(t, h2.Comment, "")
 	assert.Equal(t, h2.Label, "10")
 	assert.Equal(t, h2.Counter, 10)
