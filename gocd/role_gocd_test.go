@@ -83,7 +83,7 @@ func testListGoCDRoles(t *testing.T) {
 			Name: "blackbird",
 			Type: "plugin",
 			Attributes: &RoleAttributesGoCD{
-				AutoConfigId: String("ldap"),
+				AuthConfigId: String("ldap"),
 				Properties: []*RoleAttributeProperties{
 					{
 						Key:   "UserGroupMembershipAttribute",
