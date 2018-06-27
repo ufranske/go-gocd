@@ -3,10 +3,11 @@ package gocd
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPipelineService(t *testing.T) {
@@ -168,12 +169,6 @@ func testPipelineServiceGet(t *testing.T) {
 
 	s := p.Stages[0]
 	assert.Equal(t, "stage1", s.Name)
-	assert.Equal(t, false, s.FetchMaterials)
-	assert.Equal(t, false, s.CleanWorkingDirectory)
-	assert.Equal(t, false, s.NeverCleanupArtifacts)
-
-	assert.Len(t, s.EnvironmentVariables, 0)
-	assert.Nil(t, s.Approval)
 }
 
 func testPipelineServiceGetHistory(t *testing.T) {
@@ -193,8 +188,11 @@ func testPipelineServiceGetHistory(t *testing.T) {
 	h1 := ph.Pipelines[0]
 	assert.True(t, h1.CanRun)
 	assert.Equal(t, h1.Name, "pipeline1")
-	assert.Equal(t, h1.NaturalOrder, 11)
+	assert.Equal(t, h1.NaturalOrder, float32(11))
 	assert.Equal(t, h1.Comment, "")
+	assert.Equal(t, h1.Label, "11")
+	assert.Equal(t, h1.Counter, 11)
+	assert.Equal(t, h1.PreparingToSchedule, false)
 	assert.Len(t, h1.Stages, 1)
 
 	h1s := h1.Stages[0]
@@ -203,8 +201,11 @@ func testPipelineServiceGetHistory(t *testing.T) {
 	h2 := ph.Pipelines[1]
 	assert.True(t, h2.CanRun)
 	assert.Equal(t, h2.Name, "pipeline1")
-	assert.Equal(t, h2.NaturalOrder, 10)
+	assert.Equal(t, h2.NaturalOrder, float32(10))
 	assert.Equal(t, h2.Comment, "")
+	assert.Equal(t, h2.Label, "10")
+	assert.Equal(t, h2.Counter, 10)
+	assert.Equal(t, h2.PreparingToSchedule, false)
 	assert.Len(t, h2.Stages, 1)
 
 	h2s := h2.Stages[0]
