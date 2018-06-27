@@ -353,3 +353,8 @@ func createErrorResponseMessage(body string) (resp string) {
 	return
 
 }
+
+// String returns a pointer to the string value passed in. Allows `omitempty` to function in json building
+func String(v string) *string {
+	return &v
+}
