@@ -14,7 +14,7 @@ type PipelineConfigRequest struct {
 	Pipeline *Pipeline `json:"pipeline"`
 }
 
-// Get a single PipelineTemplate object in the GoCD API.
+// Get a single Pipeline object in the GoCD API.
 func (pcs *PipelineConfigsService) Get(ctx context.Context, name string) (p *Pipeline, resp *APIResponse, err error) {
 	p = &Pipeline{}
 	_, resp, err = pcs.client.getAction(ctx, &APIClientRequest{
