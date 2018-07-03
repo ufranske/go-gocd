@@ -119,7 +119,7 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responseB
 		c.Log.WithFields(logrus.Fields{
 			"Protocol": resp.HTTP.Proto,
 			"Status":   resp.HTTP.Status,
-			"Body":     b,
+			"Body":     string(b),
 		}).Debug("Response")
 	}
 

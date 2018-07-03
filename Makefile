@@ -15,11 +15,12 @@ lint:
 	diff -u <(echo -n) <(gofmt -d -s main.go $(GO_TARGETS))
 	golint -set_exit_status . $(glide novendor)
 
-test: lint
+vet:
 	go tool vet $(GO_TARGETS)
 	go tool vet main.go
+
+test: vet lint
 	bash scripts/go-test.sh
-	cat coverage.out
 
 before_install:
 	@go get github.com/golang/lint/golint
@@ -46,6 +47,5 @@ testacc: provision-test-gocd
 provision-test-gocd:
 	cp godata/default.gocd.config.xml godata/server/config/cruise-config.xml
 	docker rm -f gocd-server-test || true
-	docker stop gocd-server-test || true
 	docker build -t gocd-server --build-arg UID=$(shell id -u) --build-arg GOCD_VERSION=${GOCD_VERSION} .
 	docker run -p 8153:8153 -p 8154:8154 -d --name gocd-server-test gocd-server
