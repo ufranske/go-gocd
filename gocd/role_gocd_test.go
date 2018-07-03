@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"regexp"
 )
 
 func TestRole(t *testing.T) {
@@ -58,6 +59,10 @@ func testRoleGoCD(t *testing.T) {
 		for _, role := range roles {
 			role_response, _, err := intClient.Roles.Create(ctx, role)
 			assert.NoError(t, err)
+
+			assert.Regexp(t, regexp.MustCompile("^[a-f0-9]{32}--gzip$"), role_response.Version)
+			role.Version = role_response.Version
+
 			assert.Equal(t, role, role_response)
 		}
 
@@ -66,6 +71,9 @@ func testRoleGoCD(t *testing.T) {
 		assert.NoError(t, err)
 
 		for i, role_response := range roles_response {
+			assert.Regexp(t, regexp.MustCompile("^[a-f0-9]{32}--gzip$"), roles[i].Version)
+			role_response.Version = roles[i].Version
+
 			assert.Equal(t, roles[i], role_response)
 		}
 
