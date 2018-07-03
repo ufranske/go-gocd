@@ -21,7 +21,7 @@ before_install:
 
 script:
   - go generate -x $(glide novendor) && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
-  - make test
+  - make testacc
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

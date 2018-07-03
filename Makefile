@@ -3,6 +3,7 @@ SHELL:=/bin/bash
 TEST?=$$(go list ./... |grep -v 'vendor')
 
 GO_TARGETS= ./cli ./gocd ./gocd-*generator
+GOCD_VERSION= v17.10.0
 
 format:
 	gofmt -w -s .
@@ -44,5 +45,7 @@ testacc: provision-test-gocd
 
 provision-test-gocd:
 	cp godata/default.gocd.config.xml godata/server/config/cruise-config.xml
-	docker-compose build --build-arg UID=$(shell id -u) --build-arg GOCD_VERSION=${GOCD_VERSION} gocd-server
-	docker-compose up -d
+	docker rmi -f gocd-server
+	docker stop gocd-server-test || true
+	docker build -t gocd-server --build-arg UID=$(shell id -u) --build-arg GOCD_VERSION=${GOCD_VERSION} .
+	docker run -p 8153:8153 -p 8154:8154 -d --name gocd-server-test gocd-server
