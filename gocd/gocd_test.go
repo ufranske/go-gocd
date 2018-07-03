@@ -11,6 +11,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"testing"
+	"os"
 )
 
 const (
@@ -62,6 +63,10 @@ func setup() {
 // teardown closes the test HTTP server.
 func teardown() {
 	server.Close()
+}
+
+func runIntegrationTest() bool {
+	return os.Getenv("GOCD_ACC") != "1"
 }
 
 func TestClient(t *testing.T) {

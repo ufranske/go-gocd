@@ -20,81 +20,59 @@ func testRoleGoCD(t *testing.T) {
 
 func testCreateGoCDRole(t *testing.T) {
 
-	setup()
-	defer teardown()
+	if runIntegrationTest() {
 
-	mux.HandleFunc("/api/admin/security/roles", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Unexpected HTTP method")
-		assert.Equal(t, apiV1, r.Header.Get("Accept"))
+		role, _, err := client.Roles.Create(context.Background(),
+			&Role{
+				Name: "my-mock-gocd-role",
+				Type: "gocd",
+				Attributes: &RoleAttributesGoCD{
+					Users: []string{"user-one", "user-two"},
+				},
+			},
+		)
 
-		j, _ := ioutil.ReadFile("test/resources/role.1.json")
+		assert.NoError(t, err)
 
-		fmt.Fprint(w, string(j))
-	})
-
-	r, _, err := client.Roles.Create(context.Background(),
-		&Role{
+		assert.Equal(t, &Role{
 			Name: "my-mock-gocd-role",
 			Type: "gocd",
 			Attributes: &RoleAttributesGoCD{
 				Users: []string{"user-one", "user-two"},
 			},
-		},
-	)
+		}, role)
 
-	assert.NoError(t, err)
+		roles, _, err := client.Roles.List(context.Background())
 
-	assert.Equal(t, &Role{
-		Name: "my-mock-gocd-role",
-		Type: "gocd",
-		Attributes: &RoleAttributesGoCD{
-			Users: []string{"user-one", "user-two"},
-		},
-	}, r)
+		assert.NoError(t, err)
 
-}
-
-func testListGoCDRoles(t *testing.T) {
-	setup()
-	defer teardown()
-
-	mux.HandleFunc("/api/admin/security/roles", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Unexpected HTTP method")
-		assert.Equal(t, apiV1, r.Header.Get("Accept"))
-
-		j, _ := ioutil.ReadFile("test/resources/roles.0.json")
-
-		fmt.Fprint(w, string(j))
-	})
-
-	r, _, err := client.Roles.List(context.Background())
-
-	assert.NoError(t, err)
-
-	assert.Equal(t, []*Role{
-		{
-			Name: "spacetiger",
-			Type: "gocd",
-			Attributes: &RoleAttributesGoCD{
-				Users: []string{"alice", "bob", "robin"},
+		assert.Equal(t, []*Role{
+			{
+				Name: "spacetiger",
+				Type: "gocd",
+				Attributes: &RoleAttributesGoCD{
+					Users: []string{"alice", "bob", "robin"},
+				},
 			},
-		},
-		{
-			Name: "blackbird",
-			Type: "plugin",
-			Attributes: &RoleAttributesGoCD{
-				AuthConfigId: String("ldap"),
-				Properties: []*RoleAttributeProperties{
-					{
-						Key:   "UserGroupMembershipAttribute",
-						Value: "memberOf",
-					},
-					{
-						Key:   "GroupIdentifiers",
-						Value: "ou=admins,ou=groups,ou=system,dc=example,dc=com",
+			{
+				Name: "blackbird",
+				Type: "plugin",
+				Attributes: &RoleAttributesGoCD{
+					AuthConfigId: String("ldap"),
+					Properties: []*RoleAttributeProperties{
+						{
+							Key:   "UserGroupMembershipAttribute",
+							Value: "memberOf",
+						},
+						{
+							Key:   "GroupIdentifiers",
+							Value: "ou=admins,ou=groups,ou=system,dc=example,dc=com",
+						},
 					},
 				},
 			},
-		},
-	}, r)
-}
+		}, roles)
+	} else {
+		t.Skip("'GOCD_ACC=1' must be set to run integration tests")
+	}
+})
