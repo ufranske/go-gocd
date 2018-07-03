@@ -15,9 +15,11 @@ lint:
 	diff -u <(echo -n) <(gofmt -d -s main.go $(GO_TARGETS))
 	golint -set_exit_status . $(glide novendor)
 
-test: lint
+vet:
 	go tool vet $(GO_TARGETS)
 	go tool vet main.go
+
+test: vet lint
 	bash scripts/go-test.sh
 
 before_install:
