@@ -19,7 +19,6 @@ test: lint
 	go tool vet $(GO_TARGETS)
 	go tool vet main.go
 	bash scripts/go-test.sh
-	cat coverage.out
 
 before_install:
 	@go get github.com/golang/lint/golint
