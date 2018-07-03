@@ -2,6 +2,7 @@ package gocd
 
 import (
 	"context"
+	"fmt"
 )
 
 // RoleService describes Actions which can be performed on roles
@@ -59,4 +60,19 @@ func (rs *RoleService) List(ctx context.Context) (r []*Role, resp *APIResponse, 
 	})
 
 	return wrapper.Embedded.Roles, resp, err
+}
+
+// Delete a role by name
+func (rs *RoleService) Delete(ctx context.Context, roleName string) (result bool, resp *APIResponse, err error) {
+	var msg string
+	msg, resp, err = rs.client.deleteAction(
+		ctx,
+		fmt.Sprintf("admin/security/roles/%s", roleName),
+		apiV1,
+	)
+
+	expected := fmt.Sprintf("The role '%s' was deleted successfully.", roleName)
+	result = (expected == msg)
+
+	return
 }
