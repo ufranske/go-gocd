@@ -45,7 +45,7 @@ testacc: provision-test-gocd
 
 provision-test-gocd:
 	cp godata/default.gocd.config.xml godata/server/config/cruise-config.xml
-	docker rmi -f gocd-server
+	docker rm -f gocd-server-test
 	docker stop gocd-server-test || true
 	docker build -t gocd-server --build-arg UID=$(shell id -u) --build-arg GOCD_VERSION=${GOCD_VERSION} .
 	docker run -p 8153:8153 -p 8154:8154 -d --name gocd-server-test gocd-server
