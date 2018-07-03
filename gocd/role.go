@@ -13,6 +13,7 @@ type Role struct {
 	Name       string              `json:"name"`
 	Type       string              `json:"type"`
 	Attributes *RoleAttributesGoCD `json:"attributes"`
+	Version string `json:"version"`
 }
 
 // RoleAttributesGoCD are attributes describing a role, in this cae, which users are present in the role.
