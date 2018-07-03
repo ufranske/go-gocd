@@ -33,8 +33,8 @@ var (
 	mux *http.ServeMux
 
 	// client is the GitHub client being tested.
-	client     *Client
-	int_client *Client
+	client    *Client
+	intClient *Client
 
 	// server is a test HTTP server used to provide mock API responses.
 	server *httptest.Server
@@ -60,8 +60,8 @@ func setup() {
 		Password: "mockPassword",
 	}, nil)
 }
-func int_setup() {
-	int_client = NewClient(&Configuration{
+func intSetup() {
+	intClient = NewClient(&Configuration{
 		Server: "http://127.0.0.1:8153/go/",
 	}, nil)
 }

@@ -12,7 +12,7 @@ func TestRole(t *testing.T) {
 
 func testRoleGoCD(t *testing.T) {
 
-	int_setup()
+	intSetup()
 
 	if runIntegrationTest() {
 
@@ -56,13 +56,13 @@ func testRoleGoCD(t *testing.T) {
 
 		// Test role creation
 		for _, role := range roles {
-			role_response, _, err := int_client.Roles.Create(ctx, role)
+			role_response, _, err := intClient.Roles.Create(ctx, role)
 			assert.NoError(t, err)
 			assert.Equal(t, role, role_response)
 		}
 
 		// Test role listing
-		roles_response, _, err := int_client.Roles.List(ctx)
+		roles_response, _, err := intClient.Roles.List(ctx)
 		assert.NoError(t, err)
 
 		for i, role_response := range roles_response {
@@ -71,11 +71,11 @@ func testRoleGoCD(t *testing.T) {
 
 		// Test role delete
 		for _, role := range roles {
-			result, _, err := int_client.Roles.Delete(ctx, role.Name)
+			result, _, err := intClient.Roles.Delete(ctx, role.Name)
 			assert.True(t, result)
 			assert.NoError(t, err)
 		}
-		roles_response, _, err = int_client.Roles.List(ctx)
+		roles_response, _, err = intClient.Roles.List(ctx)
 		assert.NoError(t, err)
 		assert.Empty(t, roles_response)
 
