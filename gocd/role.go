@@ -13,6 +13,7 @@ type Role struct {
 	Name       string              `json:"name"`
 	Type       string              `json:"type"`
 	Attributes *RoleAttributesGoCD `json:"attributes"`
+	Version    string              `json:"version"`
 }
 
 // RoleAttributesGoCD are attributes describing a role, in this cae, which users are present in the role.
@@ -22,13 +23,13 @@ type RoleAttributesGoCD struct {
 	Properties   []*RoleAttributeProperties `json:"properties,omitempty"`
 }
 
-// RoleAttributeProperties
+// RoleAttributeProperties describes properties attached to a role
 type RoleAttributeProperties struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
 }
 
-// RoleListWrapper
+// RoleListWrapper describes a container for the result of a role list operation
 type RoleListWrapper struct {
 	Embedded struct {
 		Roles []*Role `json:"roles"`
@@ -62,6 +63,18 @@ func (rs *RoleService) List(ctx context.Context) (r []*Role, resp *APIResponse, 
 	return wrapper.Embedded.Roles, resp, err
 }
 
+// Get a single role by name
+func (rs *RoleService) Get(ctx context.Context, roleName string) (r *Role, resp *APIResponse, err error) {
+	r = &Role{}
+	_, resp, err = rs.client.getAction(ctx, &APIClientRequest{
+		APIVersion:   apiV1,
+		Path:         fmt.Sprintf("admin/security/roles/%s", roleName),
+		ResponseBody: r,
+	})
+
+	return
+}
+
 // Delete a role by name
 func (rs *RoleService) Delete(ctx context.Context, roleName string) (result bool, resp *APIResponse, err error) {
 	var msg string
@@ -73,6 +86,21 @@ func (rs *RoleService) Delete(ctx context.Context, roleName string) (result bool
 
 	expected := fmt.Sprintf("The role '%s' was deleted successfully.", roleName)
 	result = (expected == msg)
+
+	return
+}
+
+// Update a role by name
+func (rs *RoleService) Update(ctx context.Context, roleName string, role *Role) (
+	r *Role, resp *APIResponse, err error) {
+
+	r = &Role{}
+	_, resp, err = rs.client.putAction(ctx, &APIClientRequest{
+		APIVersion:   apiV1,
+		Path:         fmt.Sprintf("admin/security/roles/%s", roleName),
+		ResponseBody: r,
+		RequestBody:  role,
+	})
 
 	return
 }

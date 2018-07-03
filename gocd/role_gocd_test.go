@@ -3,6 +3,7 @@ package gocd
 import (
 	"context"
 	"github.com/stretchr/testify/assert"
+	"regexp"
 	"testing"
 )
 
@@ -56,18 +57,35 @@ func testRoleGoCD(t *testing.T) {
 
 		// Test role creation
 		for _, role := range roles {
-			role_response, _, err := intClient.Roles.Create(ctx, role)
+			roleResponse, _, err := intClient.Roles.Create(ctx, role)
 			assert.NoError(t, err)
-			assert.Equal(t, role, role_response)
+
+			assert.Regexp(t, regexp.MustCompile("^[a-f0-9]{32}--gzip$"), roleResponse.Version)
+			role.Version = roleResponse.Version
+
+			assert.Equal(t, role, roleResponse)
 		}
 
 		// Test role listing
-		roles_response, _, err := intClient.Roles.List(ctx)
+		rolesResponses, _, err := intClient.Roles.List(ctx)
 		assert.NoError(t, err)
 
-		for i, role_response := range roles_response {
-			assert.Equal(t, roles[i], role_response)
+		for i, roleResponse := range rolesResponses {
+			assert.Regexp(t, regexp.MustCompile("^[a-f0-9]{32}--gzip$"), roles[i].Version)
+			roleResponse.Version = roles[i].Version
+
+			assert.Equal(t, roles[i], roleResponse)
 		}
+
+		// Test role update
+		roles[0].Attributes.Users = []string{"new-admin"}
+		roleUpdateResponse, _, err := intClient.Roles.Update(ctx, roles[0].Name, roles[0])
+		assert.NoError(t, err)
+		updatedRole, _, err := intClient.Roles.Get(ctx, roleUpdateResponse.Name)
+		assert.NoError(t, err)
+		assert.Regexp(t, regexp.MustCompile("^[a-f0-9]{32}--gzip$"), updatedRole.Version)
+		roles[0].Version = updatedRole.Version
+		assert.Equal(t, updatedRole, roles[0])
 
 		// Test role delete
 		for _, role := range roles {
@@ -75,9 +93,9 @@ func testRoleGoCD(t *testing.T) {
 			assert.True(t, result)
 			assert.NoError(t, err)
 		}
-		roles_response, _, err = intClient.Roles.List(ctx)
+		roleResponse, _, err := intClient.Roles.List(ctx)
 		assert.NoError(t, err)
-		assert.Empty(t, roles_response)
+		assert.Empty(t, roleResponse)
 
 	} else {
 		skipIntegrationtest(t)
