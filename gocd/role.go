@@ -29,7 +29,7 @@ type RoleAttributeProperties struct {
 	Value string `json:"value"`
 }
 
-// RoleListWrapper describes a container for the result of a
+// RoleListWrapper describes a container for the result of a role list operation
 type RoleListWrapper struct {
 	Embedded struct {
 		Roles []*Role `json:"roles"`
