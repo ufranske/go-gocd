@@ -23,13 +23,13 @@ type RoleAttributesGoCD struct {
 	Properties   []*RoleAttributeProperties `json:"properties,omitempty"`
 }
 
-// RoleAttributeProperties
+// RoleAttributeProperties describes properties attached to a role
 type RoleAttributeProperties struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
 }
 
-// RoleListWrapper
+// RoleListWrapper describes a container for the result of a
 type RoleListWrapper struct {
 	Embedded struct {
 		Roles []*Role `json:"roles"`
