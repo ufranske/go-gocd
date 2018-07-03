@@ -10,8 +10,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
-	"testing"
 	"os"
+	"testing"
 )
 
 const (
@@ -33,7 +33,8 @@ var (
 	mux *http.ServeMux
 
 	// client is the GitHub client being tested.
-	client *Client
+	client     *Client
+	int_client *Client
 
 	// server is a test HTTP server used to provide mock API responses.
 	server *httptest.Server
@@ -59,6 +60,11 @@ func setup() {
 		Password: "mockPassword",
 	}, nil)
 }
+func int_setup() {
+	int_client = NewClient(&Configuration{
+		Server: "http://127.0.0.1:8153/go/",
+	}, nil)
+}
 
 // teardown closes the test HTTP server.
 func teardown() {
@@ -66,7 +72,11 @@ func teardown() {
 }
 
 func runIntegrationTest() bool {
-	return os.Getenv("GOCD_ACC") != "1"
+	return os.Getenv("GOCD_ACC") == "1"
+}
+
+func skipIntegrationtest(t *testing.T) {
+	t.Skip("'GOCD_ACC=1' must be set to run integration tests")
 }
 
 func TestClient(t *testing.T) {

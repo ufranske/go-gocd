@@ -2,10 +2,7 @@ package gocd
 
 import (
 	"context"
-	"fmt"
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
-	"net/http"
 	"testing"
 )
 
@@ -14,39 +11,14 @@ func TestRole(t *testing.T) {
 }
 
 func testRoleGoCD(t *testing.T) {
-	t.Run("Create", testCreateGoCDRole)
-	t.Run("List", testListGoCDRoles)
-}
 
-func testCreateGoCDRole(t *testing.T) {
+	int_setup()
 
 	if runIntegrationTest() {
 
-		role, _, err := client.Roles.Create(context.Background(),
-			&Role{
-				Name: "my-mock-gocd-role",
-				Type: "gocd",
-				Attributes: &RoleAttributesGoCD{
-					Users: []string{"user-one", "user-two"},
-				},
-			},
-		)
+		ctx := context.Background()
 
-		assert.NoError(t, err)
-
-		assert.Equal(t, &Role{
-			Name: "my-mock-gocd-role",
-			Type: "gocd",
-			Attributes: &RoleAttributesGoCD{
-				Users: []string{"user-one", "user-two"},
-			},
-		}, role)
-
-		roles, _, err := client.Roles.List(context.Background())
-
-		assert.NoError(t, err)
-
-		assert.Equal(t, []*Role{
+		roles := []*Role{
 			{
 				Name: "spacetiger",
 				Type: "gocd",
@@ -55,24 +27,57 @@ func testCreateGoCDRole(t *testing.T) {
 				},
 			},
 			{
-				Name: "blackbird",
-				Type: "plugin",
+				Name: "my-mock-gocd-role",
+				Type: "gocd",
 				Attributes: &RoleAttributesGoCD{
-					AuthConfigId: String("ldap"),
-					Properties: []*RoleAttributeProperties{
-						{
-							Key:   "UserGroupMembershipAttribute",
-							Value: "memberOf",
-						},
-						{
-							Key:   "GroupIdentifiers",
-							Value: "ou=admins,ou=groups,ou=system,dc=example,dc=com",
-						},
-					},
+					Users: []string{"user-one", "user-two"},
 				},
 			},
-		}, roles)
+			//{
+			//	Name: "blackbird",
+			//	Type: "plugin",
+			//	Attributes: &RoleAttributesGoCD{
+			//		AuthConfigId: String("ldap"),
+			//		Properties: []*RoleAttributeProperties{
+			//			{
+			//				Key:   "UserGroupMembershipAttribute",
+			//				Value: "memberOf",
+			//			},
+			//			{
+			//				Key:   "GroupIdentifiers",
+			//				Value: "ou=admins,ou=groups,ou=system,dc=example,dc=com",
+			//			},
+			//		},
+			//	},
+			//},
+		}
+
+		// Test role creation
+		for _, role := range roles {
+			role_response, _, err := int_client.Roles.Create(ctx, role)
+			assert.NoError(t, err)
+			assert.Equal(t, role, role_response)
+		}
+
+		// Test role listing
+		roles_response, _, err := int_client.Roles.List(ctx)
+		assert.NoError(t, err)
+
+		for i, role_response := range roles_response {
+			assert.Equal(t, roles[i], role_response)
+		}
+
+		// Test role delete
+		for _, role := range roles {
+			result, _, err := int_client.Roles.Delete(ctx, role.Name)
+			assert.True(t, result)
+			assert.NoError(t, err)
+		}
+		roles_response, _, err = int_client.Roles.List(ctx)
+		assert.NoError(t, err)
+		assert.Empty(t, roles_response)
+
 	} else {
-		t.Skip("'GOCD_ACC=1' must be set to run integration tests")
+		skipIntegrationtest(t)
 	}
-})
+}
