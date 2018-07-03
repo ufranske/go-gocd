@@ -4,6 +4,9 @@ go:
   - 1.9.x
   - 1.10.x
 
+services:
+  - docker
+
 env:
  - GOCD_VERSION=v17.10.0 CODECLIMATE_API_HOST=https://codebeat.co/webhooks/code_coverage
  - GOCD_VERSION=v18.6.0 CODECLIMATE_API_HOST=https://codebeat.co/webhooks/code_coverage
