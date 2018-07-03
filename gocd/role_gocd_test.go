@@ -33,6 +33,8 @@ func testRoleGoCD(t *testing.T) {
 					Users: []string{"user-one", "user-two"},
 				},
 			},
+			// Currently there's no fixtures to test the plugin roles,
+			// so until there is a way, we can not test plugin role types.
 			//{
 			//	Name: "blackbird",
 			//	Type: "plugin",
