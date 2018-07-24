@@ -27,6 +27,7 @@ func testServerVersion(t *testing.T) {
 		fmt.Fprint(w, string(j))
 	})
 
+	cachedServerVersion = nil
 	v, _, err := client.ServerVersion.Get(context.Background())
 
 	assert.NoError(t, err)
@@ -44,6 +45,9 @@ func testServerVersion(t *testing.T) {
 		},
 	}, v)
 
+	// Verify that the server version is cached
+	assert.Equal(t, cachedServerVersion, v)
+
 }
 
 func testBadServerVersion(t *testing.T) {
@@ -56,6 +60,7 @@ func testBadServerVersion(t *testing.T) {
 		{name: "Minor", id: 3, errString: "strconv.Atoi: parsing \"b\": invalid syntax"},
 		{name: "Patch", id: 4, errString: "strconv.Atoi: parsing \"c\": invalid syntax"},
 	} {
+		cachedServerVersion = nil
 		t.Run(test.name, func(t *testing.T) { testBadServerVersionMajor(t, test.id, test.errString) })
 	}
 }
@@ -75,7 +80,43 @@ func testBadServerVersionMajor(t *testing.T, i int, errString string) {
 		fmt.Fprint(w, string(j))
 	})
 
+	cachedServerVersion = nil
 	_, _, err := client.ServerVersion.Get(context.Background())
 
 	assert.EqualError(t, err, errString)
+}
+
+func testServerVersionCaching(t *testing.T) {
+	setup()
+	defer teardown()
+	// Note that this test should not do an API call
+
+	cachedServerVersion = &ServerVersion{
+		Version:     "18.7.0",
+		BuildNumber: "7121",
+		GitSha:      "75d1247f58ab8bcde3c5b43392a87347979f82c5",
+		FullVersion: "18.7.0 (7121-75d1247f58ab8bcde3c5b43392a87347979f82c5)",
+		CommitURL:   "https://github.com/gocd/gocd/commits/75d1247f58ab8bcde3c5b43392a87347979f82c5",
+		VersionParts: &ServerVersionParts{
+			Major: 18,
+			Minor: 7,
+			Patch: 0,
+		},
+	}
+	v, _, err := client.ServerVersion.Get(context.Background())
+
+	assert.NoError(t, err)
+
+	assert.Equal(t, &ServerVersion{
+		Version:     "18.7.0",
+		BuildNumber: "7121",
+		GitSha:      "75d1247f58ab8bcde3c5b43392a87347979f82c5",
+		FullVersion: "18.7.0 (7121-75d1247f58ab8bcde3c5b43392a87347979f82c5)",
+		CommitURL:   "https://github.com/gocd/gocd/commits/75d1247f58ab8bcde3c5b43392a87347979f82c5",
+		VersionParts: &ServerVersionParts{
+			Major: 18,
+			Minor: 7,
+			Patch: 0,
+		},
+	}, v)
 }
