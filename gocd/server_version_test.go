@@ -103,9 +103,10 @@ func testServerVersionCaching(t *testing.T) {
 			Patch: 0,
 		},
 	}
-	v, _, err := client.ServerVersion.Get(context.Background())
+	v, b, err := client.ServerVersion.Get(context.Background())
 
 	assert.NoError(t, err)
+	assert.Nil(t, b)
 
 	assert.Equal(t, &ServerVersion{
 		Version:     "18.7.0",
