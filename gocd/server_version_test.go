@@ -12,6 +12,7 @@ import (
 func TestServerVersion(t *testing.T) {
 	t.Run("ServerVersion", testServerVersion)
 	t.Run("BadServerVersion", testBadServerVersion)
+	t.Run("ServerVersionCaching", testServerVersionCaching)
 }
 
 func testServerVersion(t *testing.T) {
@@ -80,7 +81,6 @@ func testBadServerVersionMajor(t *testing.T, i int, errString string) {
 		fmt.Fprint(w, string(j))
 	})
 
-	cachedServerVersion = nil
 	_, _, err := client.ServerVersion.Get(context.Background())
 
 	assert.EqualError(t, err, errString)
