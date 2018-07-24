@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+var cachedServerVersion *ServerVersion
+
 type ServerVersionService service
 
 type ServerVersionParts struct {
@@ -25,6 +27,10 @@ type ServerVersion struct {
 
 // Get retrieves information about a specific plugin.
 func (svs *ServerVersionService) Get(ctx context.Context) (v *ServerVersion, resp *APIResponse, err error) {
+	if cachedServerVersion != nil {
+		return cachedServerVersion, nil, nil
+	}
+
 	v = &ServerVersion{}
 	_, resp, err = svs.client.getAction(ctx, &APIClientRequest{
 		Path:         "version",
@@ -54,6 +60,8 @@ func (svs *ServerVersionService) Get(ctx context.Context) (v *ServerVersion, res
 			Patch: patch,
 		}
 	}
+
+	cachedServerVersion = v
 
 	return
 }
