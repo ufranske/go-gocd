@@ -6,6 +6,7 @@ import:
 - package: gopkg.in/yaml.v2
 - package: github.com/sirupsen/logrus
   version: master
+- package: github.com/hashicorp/go-version
 testImport:
 - package: github.com/goreleaser/goreleaser
   version: ^0.30.0
