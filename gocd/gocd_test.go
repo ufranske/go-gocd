@@ -60,6 +60,7 @@ func setup() {
 		Password: "mockPassword",
 	}, nil)
 }
+
 func intSetup() {
 	intClient = NewClient(&Configuration{
 		Server: "http://127.0.0.1:8153/go/",
@@ -249,4 +250,10 @@ func testClientDo(t *testing.T) {
 
 	want := &foo{"a"}
 	assert.Equal(t, want, body)
+}
+
+func init() {
+	if runIntegrationTest() {
+		intSetup()
+	}
 }
