@@ -72,12 +72,21 @@ func (c *Client) deleteAction(ctx context.Context, path string, apiversion strin
 
 func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responseBody interface{}, resp *APIResponse, err error) {
 
+	var req *APIRequest
+	var requestBodyProvided, hasEmptyResponseType, hasJSONResponseType bool
+
+	requestBodyProvided = r.RequestBody != nil
+	hasEmptyResponseType = r.ResponseType == ""
+	if !hasEmptyResponseType {
+		hasJSONResponseType = r.ResponseType == responseTypeJSON
+	}
+
 	c.Log.WithFields(logrus.Fields{
 		"Method": r.Method,
 		"Path":   r.Path,
 	}).Debug("Requesting Endpoint")
 
-	if r.ResponseType == "" {
+	if hasEmptyResponseType {
 		r.ResponseType = responseTypeJSON
 	}
 
@@ -89,12 +98,11 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responseB
 	})
 
 	// Build the request
-	var req *APIRequest
 	if req, err = c.NewRequest(r.Method, r.Path, r.RequestBody, r.APIVersion); err != nil {
 		return false, nil, err
 	}
-	if r.RequestBody != nil {
-		c.Log.WithField("RequestBody", r.RequestBody).Debug("Sending Request Body")
+	if requestBodyProvided {
+		c.Log.WithField("RequestBody", req.Body).Debug("Sending Request Body")
 	}
 
 	if len(r.Headers) > 0 {
@@ -113,7 +121,7 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responseB
 		parseVersions(resp.HTTP, ver)
 	})
 
-	if r.ResponseType == responseTypeJSON {
+	if hasJSONResponseType {
 		b, _ := json.Marshal(r.ResponseBody)
 		c.Log.WithFields(headerLogFields(resp.HTTP.Header)).Debug("Response Headers")
 		c.Log.WithFields(logrus.Fields{

@@ -2,128 +2,55 @@ package gocd
 
 import (
 	"context"
-	"fmt"
 	"github.com/stretchr/testify/assert"
-	"net/http"
 	"testing"
 )
 
-func testPipelineServicePause(t *testing.T) {
-	for n, test := range []struct {
-		v             *ServerVersion
-		confirmHeader string
-		acceptHeader  string
-	}{
-		{
-			v:             &ServerVersion{Version: "14.3.0"},
-			confirmHeader: "Confirm",
-			acceptHeader:  apiV0,
-		},
-		{
-			v:             &ServerVersion{Version: "18.3.0"},
-			confirmHeader: "X-GoCD-Confirm",
-			acceptHeader:  apiV1,
-		},
-	} {
-		err := test.v.parseVersion()
-		assert.NoError(t, err)
+func testPipelineServiceUnPause(t *testing.T) {
+	if runIntegrationTest(t) {
 
-		cachedServerVersion = test.v
-		// defaultHTTPMux doesn't support multiple registrations so change the url a bit
-		mux.HandleFunc(fmt.Sprintf("/api/pipelines/test-pipeline%d/pause", n), func(w http.ResponseWriter, r *http.Request) {
-			assert.Equal(t, r.Method, "POST", "Unexpected HTTP method")
-			assert.Equal(t, "true", r.Header.Get(test.confirmHeader))
-			if test.acceptHeader == "" {
-				assert.Equal(t, len(r.Header["Accept"]), 0)
-			} else {
-				assert.Contains(t, r.Header["Accept"], test.acceptHeader)
-			}
-			fmt.Fprint(w, "")
-		})
-		pp, _, err := client.Pipelines.Pause(context.Background(), fmt.Sprintf("test-pipeline%d", n))
-		if err != nil {
-			assert.Nil(t, err)
+		ctx := context.Background()
+		pipelineName := "test-pipeline-un-pause"
+
+		stages := buildMockPipelineStages()
+		mockPipeline := &Pipeline{
+			Name:                 pipelineName,
+			Group:                mockTestingGroup,
+			LabelTemplate:        "${COUNT}",
+			Parameters:           make([]*Parameter, 0),
+			EnvironmentVariables: make([]*EnvironmentVariable, 0),
+			Materials: []Material{{
+				Type: "git",
+				Attributes: &MaterialAttributesGit{
+					URL:         "git@github.com:sample_repo/example.git",
+					Destination: "dest",
+					Branch:      "master",
+					AutoUpdate:  true,
+				},
+			}},
+			Stages: stages,
 		}
-		assert.True(t, pp)
-	}
-}
 
-func testPipelineServiceUnpause(t *testing.T) {
-	for n, test := range []struct {
-		v             *ServerVersion
-		confirmHeader string
-		acceptHeader  string
-	}{
-		{
-			v:             &ServerVersion{Version: "14.3.0"},
-			confirmHeader: "Confirm",
-			acceptHeader:  apiV0,
-		},
-		{
-			v:             &ServerVersion{Version: "18.3.0"},
-			confirmHeader: "X-GoCD-Confirm",
-			acceptHeader:  apiV1,
-		},
-	} {
-		err := test.v.parseVersion()
+		pausePipeline, _, err := intClient.PipelineConfigs.Create(ctx, mockTestingGroup, mockPipeline)
 		assert.NoError(t, err)
+		pausePipeline.Links = nil
+		pausePipeline.Version = ""
+		assert.Equal(t, mockPipeline, pausePipeline)
 
-		cachedServerVersion = test.v
-		// defaultHTTPMux doesn't support multiple registrations so change the url a bit
-		mux.HandleFunc(fmt.Sprintf("/api/pipelines/test-pipeline%d/unpause", n), func(w http.ResponseWriter, r *http.Request) {
-			assert.Equal(t, r.Method, "POST", "Unexpected HTTP method")
-			assert.Equal(t, "true", r.Header.Get(test.confirmHeader))
-			if test.acceptHeader == "" {
-				assert.Equal(t, len(r.Header["Accept"]), 0)
-			} else {
-				assert.Contains(t, r.Header["Accept"], test.acceptHeader)
-			}
-			fmt.Fprint(w, "")
-		})
-		pp, _, err := client.Pipelines.Unpause(context.Background(), fmt.Sprintf("test-pipeline%d", n))
-		if err != nil {
-			assert.Nil(t, err)
-		}
-		assert.True(t, pp)
-	}
-}
-
-func testPipelineServiceReleaseLock(t *testing.T) {
-	for n, test := range []struct {
-		v             *ServerVersion
-		confirmHeader string
-		acceptHeader  string
-	}{
-		{
-			v:             &ServerVersion{Version: "14.3.0"},
-			confirmHeader: "Confirm",
-			acceptHeader:  apiV0,
-		},
-		{
-			v:             &ServerVersion{Version: "18.3.0"},
-			confirmHeader: "X-GoCD-Confirm",
-			acceptHeader:  apiV1,
-		},
-	} {
-		err := test.v.parseVersion()
+		pp, _, err := intClient.Pipelines.Unpause(ctx, pipelineName)
 		assert.NoError(t, err)
-
-		cachedServerVersion = test.v
-		// defaultHTTPMux doesn't support multiple registrations so change the url a bit
-		mux.HandleFunc(fmt.Sprintf("/api/pipelines/test-pipeline%d/releaseLock", n), func(w http.ResponseWriter, r *http.Request) {
-			assert.Equal(t, r.Method, "POST", "Unexpected HTTP method")
-			assert.Equal(t, "true", r.Header.Get(test.confirmHeader))
-			if test.acceptHeader == "" {
-				assert.Equal(t, len(r.Header["Accept"]), 0)
-			} else {
-				assert.Contains(t, r.Header["Accept"], test.acceptHeader)
-			}
-			fmt.Fprint(w, "")
-		})
-		pp, _, err := client.Pipelines.ReleaseLock(context.Background(), fmt.Sprintf("test-pipeline%d", n))
-		if err != nil {
-			assert.Nil(t, err)
-		}
 		assert.True(t, pp)
+
+		pp, _, err = intClient.Pipelines.Pause(ctx, pipelineName)
+		assert.NoError(t, err)
+		assert.True(t, pp)
+
+		pp, _, err = intClient.Pipelines.ReleaseLock(context.Background(), pipelineName)
+		assert.EqualError(t, err, "Received HTTP Status '406 Not Acceptable'")
+		assert.False(t, pp)
+
+		deleteResponse, _, err := intClient.PipelineConfigs.Delete(ctx, pipelineName)
+		assert.Equal(t, "The pipeline 'test-pipeline-un-pause' was deleted successfully.", deleteResponse)
 	}
+
 }
