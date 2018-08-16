@@ -2,6 +2,7 @@ package gocd
 
 import (
 	"context"
+	"fmt"
 	"github.com/hashicorp/go-version"
 	"github.com/stretchr/testify/assert"
 	"testing"
