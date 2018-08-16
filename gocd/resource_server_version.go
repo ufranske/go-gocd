@@ -30,6 +30,11 @@ func init() {
 			"/api/pipelines/:pipeline_name/releaseLock": newVersionCollection(
 				newServerAPI("14.3.0", apiV0),
 				newServerAPI("18.2.0", apiV1)),
+			"/api/admin/plugin_info": newVersionCollection(
+				newServerAPI("16.7.0", apiV1),
+				newServerAPI("16.12.0", apiV2),
+				newServerAPI("17.9.0", apiV3),
+				newServerAPI("18.3.0", apiV4)),
 		},
 	}
 }
@@ -114,11 +119,9 @@ func (c *serverAPIVersionMappingCollection) GetAPIVersion(versionParts *version.
 	lastMapping := c.mappings[0]
 	// If the minimum version specified is too high or absent, no use to go further
 	if lastMapping == nil || lastMapping.Server.GreaterThan(versionParts) {
-		fmt.Printf("lastMapping.Server: %v -- versionParts: %v\n", lastMapping.Server, versionParts)
 		return "", fmt.Errorf("could not find api version for server version '%s'", versionParts.String())
 	}
 	for _, mapping := range c.mappings {
-		fmt.Printf("lastMapping.Server: %v -- versionParts: %v\n", lastMapping.Server, versionParts)
 		if mapping.Server.GreaterThan(versionParts) {
 			break
 		}
