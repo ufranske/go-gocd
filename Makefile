@@ -31,12 +31,12 @@ before_install:
 build: deploy_on_develop
 
 deploy_on_tag:
-        git clean -df
+	git clean -df
 	go get
 	goreleaser --debug
 
 deploy_on_develop:
-        git clean -df
+	git clean -df
 	go get
 	goreleaser --debug --rm-dist --snapshot
 
