@@ -70,8 +70,8 @@ func testServerVersionGetAPIVersion(t *testing.T) {
 		},
 		{
 			endpoint: "/api/admin/pipelines/:pipeline_name",
-			want:     apiV6,
-			v:        &ServerVersion{Version: "18.7.0"},
+			want:     apiV5,
+			v:        &ServerVersion{Version: "18.6.0"},
 		},
 		{
 			endpoint: "/api/admin/pipelines/:pipeline_name",
