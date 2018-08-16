@@ -30,7 +30,7 @@ archive:
     - README.md
     - CHANGELOG.md
 
-fpm:
+nfpm:
   homepage: https://github.com/beamly/go-gocd
   maintainer: Drew J. Sonne <drew.sonne@beamly.com>
   license: Apache2
