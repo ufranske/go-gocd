@@ -12,6 +12,11 @@ type ServerVersionRange struct {
 	max *ServerVersion
 }
 
+func MustServerVersionRange(min *ServerVersion, max *ServerVersion) (svr *ServerVersionRange) {
+	svr, _ = NewServerVersionRange(min, max)
+	return
+}
+
 func NewServerVersionRange(min *ServerVersion, max *ServerVersion) (*ServerVersionRange, error) {
 	min.parseVersion()
 	max.parseVersion()

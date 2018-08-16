@@ -18,9 +18,14 @@ func TestPipelineConfig(t *testing.T) {
 		pipelineUpdateWant *Pipeline
 		delete             string
 		deleteWant         string
+		serverVersions     *ServerVersionRange
 	}{
 		{
-			name: "basic",
+			name: "v5",
+			serverVersions: newServerVersionRangeFromString(
+				SERVER_VERSION_14_3_0,
+				SERVER_VERSION_18_6_0,
+			),
 			pipelineCreate: &Pipeline{
 				Name:      "new_pipeline",
 				Materials: buildMockMaterials(),
@@ -57,45 +62,93 @@ func TestPipelineConfig(t *testing.T) {
 			delete:     "new_pipeline",
 			deleteWant: "The pipeline 'new_pipeline' was deleted successfully.",
 		},
+		{
+			name: "v6",
+			serverVersions: newServerVersionRangeFromString(
+				SERVER_VERSION_18_6_0,
+				SERVER_VERSION_MAX,
+			),
+			pipelineCreate: &Pipeline{
+				Name:         "new_pipeline",
+				LockBehavior: "lockOnFailure",
+				Materials:    buildMockMaterials(),
+				Stages:       buildMockPipelineStages(),
+			},
+			pipelineCreateWant: &Pipeline{
+				Group:                "test-group",
+				Name:                 "new_pipeline",
+				LabelTemplate:        "${COUNT}",
+				LockBehavior:         "lockOnFailure",
+				Parameters:           make([]*Parameter, 0),
+				EnvironmentVariables: make([]*EnvironmentVariable, 0),
+				Materials:            buildMockMaterials(),
+				Stages:               buildMockPipelineStages(),
+			},
+			pipelineGet: "new_pipeline",
+			pipelineGetWant: &Pipeline{
+				Group:                "test-group",
+				Name:                 "new_pipeline",
+				LabelTemplate:        "${COUNT}",
+				LockBehavior:         "lockOnFailure",
+				Parameters:           make([]*Parameter, 0),
+				EnvironmentVariables: make([]*EnvironmentVariable, 0),
+				Materials:            buildMockMaterials(),
+				Stages:               buildMockPipelineStages(),
+			},
+			pipelineUpdateWant: &Pipeline{
+				Group:                "test-group",
+				Name:                 "new_pipeline",
+				LabelTemplate:        "Update ${COUNT}",
+				LockBehavior:         "lockOnFailure",
+				Parameters:           make([]*Parameter, 0),
+				EnvironmentVariables: make([]*EnvironmentVariable, 0),
+				Materials:            buildMockMaterials(),
+				Stages:               buildMockPipelineStages(),
+			},
+			delete:     "new_pipeline",
+			deleteWant: "The pipeline 'new_pipeline' was deleted successfully.",
+		},
 	} {
 		t.Run("basic", func(t *testing.T) {
 			if runIntegrationTest(t) {
+				if runOnlyForServerVersionRange(t, tt.serverVersions) {
 
-				var getPipeline *Pipeline
-				ctx := context.Background()
-				t.Run("create", func(t *testing.T) {
-					createPipeline, _, err := intClient.PipelineConfigs.Create(ctx, "test-group", tt.pipelineCreate)
-					assert.NoError(t, err)
-					assert.Regexp(t, regexp.MustCompile("^[a-f0-9]{32}--gzip$"), createPipeline.Version)
+					var getPipeline *Pipeline
+					ctx := context.Background()
+					t.Run("create", func(t *testing.T) {
+						createPipeline, _, err := intClient.PipelineConfigs.Create(ctx, "test-group", tt.pipelineCreate)
+						assert.NoError(t, err)
+						assert.Regexp(t, regexp.MustCompile("^[a-f0-9]{32}--gzip$"), createPipeline.Version)
 
-					createPipeline.RemoveLinks()
-					assert.Equal(t, tt.pipelineCreateWant, createPipeline)
-				})
+						createPipeline.RemoveLinks()
+						assert.Equal(t, tt.pipelineCreateWant, createPipeline)
+					})
 
-				t.Run("get", func(t *testing.T) {
-					getPipeline, _, err := intClient.PipelineConfigs.Get(ctx, tt.pipelineGet)
-					assert.NoError(t, err)
+					t.Run("get", func(t *testing.T) {
+						getPipeline, _, err := intClient.PipelineConfigs.Get(ctx, tt.pipelineGet)
+						assert.NoError(t, err)
 
-					getPipeline.RemoveLinks()
-					assert.Equal(t, tt.pipelineGetWant, getPipeline)
-				})
+						getPipeline.RemoveLinks()
+						assert.Equal(t, tt.pipelineGetWant, getPipeline)
+					})
 
-				t.Run("update", func(t *testing.T) {
-					updatePipeline, _, err := intClient.PipelineConfigs.Update(context.Background(),
-						tt.pipelineUpdate.Name, tt.pipelineUpdate)
-					assert.NoError(t, err)
-					assert.NotEqual(t, getPipeline.Version, updatePipeline.Version)
-					updatePipeline.Version = getPipeline.Version
+					t.Run("update", func(t *testing.T) {
+						updatePipeline, _, err := intClient.PipelineConfigs.Update(context.Background(),
+							tt.pipelineUpdate.Name, tt.pipelineUpdate)
+						assert.NoError(t, err)
+						assert.NotEqual(t, getPipeline.Version, updatePipeline.Version)
+						updatePipeline.Version = getPipeline.Version
 
-					updatePipeline.RemoveLinks()
-					assert.Equal(t, tt.pipelineUpdateWant, updatePipeline)
-				})
+						updatePipeline.RemoveLinks()
+						assert.Equal(t, tt.pipelineUpdateWant, updatePipeline)
+					})
 
-				t.Run("delete", func(t *testing.T) {
-					message, _, err := intClient.PipelineConfigs.Delete(ctx, tt.delete)
-					assert.NoError(t, err)
-					assert.Equal(t, tt.deleteWant, message)
-				})
+					t.Run("delete", func(t *testing.T) {
+						message, _, err := intClient.PipelineConfigs.Delete(ctx, tt.delete)
+						assert.NoError(t, err)
+						assert.Equal(t, tt.deleteWant, message)
+					})
+				}
 			}
 		})
 	}

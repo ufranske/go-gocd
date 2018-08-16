@@ -10,12 +10,15 @@ var serverVersionLookup *serverVersionCollection
 type ServerVersionString string
 
 const (
+	SERVER_VERSION_MIN     = ServerVersionString("")
 	SERVER_VERSION_14_3_0  = ServerVersionString("14.3.0")
 	SERVER_VERSION_16_6_0  = ServerVersionString("16.6.0")
 	SERVER_VERSION_17_4_0  = ServerVersionString("17.4.0")
 	SERVER_VERSION_17_12_0 = ServerVersionString("17.12.0")
 	SERVER_VERSION_18_2_0  = ServerVersionString("18.2.0")
+	SERVER_VERSION_18_6_0  = ServerVersionString("18.6.0")
 	SERVER_VERSION_18_7_0  = ServerVersionString("18.7.0")
+	SERVER_VERSION_MAX     = ServerVersionString("")
 )
 
 func init() {
