@@ -22,16 +22,9 @@ func TestPipelineConfig(t *testing.T) {
 		{
 			name: "basic",
 			pipelineCreate: &Pipeline{
-				Name: "new_pipeline",
-				Materials: []Material{{
-					Type: "git",
-					Attributes: MaterialAttributesGit{
-						URL:         "git@github.com:sample_repo/example.git",
-						Destination: "dest",
-						Branch:      "master",
-					},
-				}},
-				Stages: buildMockPipelineStages(),
+				Name:      "new_pipeline",
+				Materials: buildMockMaterials(),
+				Stages:    buildMockPipelineStages(),
 			},
 			pipelineCreateWant: &Pipeline{
 				Group:                "test-group",
@@ -39,57 +32,18 @@ func TestPipelineConfig(t *testing.T) {
 				LabelTemplate:        "${COUNT}",
 				Parameters:           make([]*Parameter, 0),
 				EnvironmentVariables: make([]*EnvironmentVariable, 0),
-				Materials: []Material{{
-					Type: "git",
-					Attributes: &MaterialAttributesGit{
-						URL:         "git@github.com:sample_repo/example.git",
-						Destination: "dest",
-						Branch:      "master",
-						AutoUpdate:  true,
-					},
-				}},
-				Stages: buildMockPipelineStages(),
+				Materials:            buildMockMaterials(),
+				Stages:               buildMockPipelineStages(),
 			},
 			pipelineGet: "new_pipeline",
 			pipelineGetWant: &Pipeline{
+				Group:                "test-group",
 				Name:                 "new_pipeline",
 				LabelTemplate:        "${COUNT}",
 				Parameters:           make([]*Parameter, 0),
 				EnvironmentVariables: make([]*EnvironmentVariable, 0),
-				Materials: []Material{{
-					Type: "git",
-					Attributes: &MaterialAttributesGit{
-						URL:         "git@github.com:sample_repo/example.git",
-						Destination: "dest",
-						Branch:      "master",
-						AutoUpdate:  true,
-					},
-				}},
-				Stages: []*Stage{{
-					Name: "defaultStage",
-					Approval: &Approval{
-						Type: "success",
-						Authorization: &Authorization{
-							Users: []string{},
-							Roles: []string{},
-						},
-					},
-					Jobs: []*Job{{
-						Name:                 "defaultJob",
-						EnvironmentVariables: []*EnvironmentVariable{},
-						Resources:            []string{},
-						Tasks: []*Task{{
-							Type: "exec",
-							Attributes: TaskAttributes{
-								RunIf:   []string{"passed"},
-								Command: "ls",
-							},
-						}},
-						Tabs:      []*Tab{},
-						Artifacts: []*Artifact{},
-					}},
-					EnvironmentVariables: []*EnvironmentVariable{},
-				}},
+				Materials:            buildMockMaterials(),
+				Stages:               buildMockPipelineStages(),
 			},
 			pipelineUpdateWant: &Pipeline{
 				Group:                "test-group",
@@ -97,16 +51,8 @@ func TestPipelineConfig(t *testing.T) {
 				LabelTemplate:        "Update ${COUNT}",
 				Parameters:           make([]*Parameter, 0),
 				EnvironmentVariables: make([]*EnvironmentVariable, 0),
-				Materials: []Material{{
-					Type: "git",
-					Attributes: &MaterialAttributesGit{
-						URL:         "git@github.com:sample_repo/example.git",
-						Destination: "dest",
-						Branch:      "master",
-						AutoUpdate:  true,
-					},
-				}},
-				Stages: buildMockPipelineStages(),
+				Materials:            buildMockMaterials(),
+				Stages:               buildMockPipelineStages(),
 			},
 			delete:     "new_pipeline",
 			deleteWant: "The pipeline 'new_pipeline' was deleted successfully.",
@@ -115,9 +61,8 @@ func TestPipelineConfig(t *testing.T) {
 		t.Run("basic", func(t *testing.T) {
 			if runIntegrationTest(t) {
 
-				ctx := context.Background()
-
 				var getPipeline *Pipeline
+				ctx := context.Background()
 				t.Run("create", func(t *testing.T) {
 					createPipeline, _, err := intClient.PipelineConfigs.Create(ctx, "test-group", tt.pipelineCreate)
 					assert.NoError(t, err)
@@ -136,8 +81,8 @@ func TestPipelineConfig(t *testing.T) {
 				})
 
 				t.Run("update", func(t *testing.T) {
-
-					updatePipeline, _, err := intClient.PipelineConfigs.Update(context.Background(), p.Name, p)
+					updatePipeline, _, err := intClient.PipelineConfigs.Update(context.Background(),
+						tt.pipelineUpdate.Name, tt.pipelineUpdate)
 					assert.NoError(t, err)
 					assert.NotEqual(t, getPipeline.Version, updatePipeline.Version)
 					updatePipeline.Version = getPipeline.Version
@@ -181,5 +126,17 @@ func buildMockPipelineStages() []*Stage {
 			},
 		},
 		EnvironmentVariables: make([]*EnvironmentVariable, 0),
+	}}
+}
+
+func buildMockMaterials() []Material {
+	return []Material{{
+		Type: "git",
+		Attributes: MaterialAttributesGit{
+			URL:         "git@github.com:sample_repo/example.git",
+			Destination: "dest",
+			Branch:      "master",
+			AutoUpdate:  true,
+		},
 	}}
 }
