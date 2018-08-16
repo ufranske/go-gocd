@@ -85,7 +85,7 @@ func TestApiVersion_Equal(t *testing.T) {
 			name: "not-equal",
 			av:   ApiVersion1,
 			args: args{
-				version: ApiVersion1,
+				version: ApiVersion0,
 			},
 			want: false,
 		},

@@ -1,6 +1,9 @@
 package gocd
 
-import "regexp"
+import (
+	"regexp"
+	"strconv"
+)
 
 const (
 	apiV0 = ""
@@ -36,12 +39,18 @@ var (
 	apiVersionRegex = regexp.MustCompile("application/vnd.go.cd.v(\\d+)\\+json")
 )
 
-func (av ApiVersion) Int() int {
-	return 0
+func (av ApiVersion) Int() (i int) {
+	if string(av) == "" {
+		return 0
+	}
+	matches := apiVersionRegex.FindStringSubmatch(av.String())
+	// We match for integers, so this shouldn't fail
+	i, _ = strconv.Atoi(matches[1])
+	return
 }
 
 func (av ApiVersion) LessThan(version ApiVersion) bool {
-	return true
+	return av.Int() < version.Int()
 }
 
 func (av ApiVersion) Equal(version ApiVersion) bool {
@@ -60,5 +69,8 @@ func NewApiVersionRange(min ApiVersion, max ApiVersion) *ApiVersionRange {
 }
 
 func (avr *ApiVersionRange) Contains(version ApiVersion) bool {
-	return true
+	upperBound := version.LessThan(avr.max)
+	lowerBound := avr.min.LessThan(version)
+	equal := avr.max.Equal(version)
+	return upperBound && lowerBound || equal
 }
