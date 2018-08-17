@@ -52,6 +52,9 @@ const (
 	gocdLogLevel = "GOCD_LOG"
 )
 
+// ErrResourceNotFound is returned when a 404 status is found
+type ErrResourceNotFound error
+
 // StringResponse handles the unmarshaling of the single string response from DELETE requests.
 type StringResponse struct {
 	Message string `json:"message"`
@@ -339,6 +342,10 @@ func CheckResponse(response *APIResponse) (err error) {
 		}
 
 		err = errors.New(strings.Join(errorParts, ": "))
+		switch response.HTTP.StatusCode {
+		case 404:
+			err = ErrResourceNotFound(err)
+		}
 	}
 	return
 }
