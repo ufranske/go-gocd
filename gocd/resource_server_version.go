@@ -74,7 +74,6 @@ func (sv *ServerVersion) String() string {
 	return sv.Version
 }
 
-
 func (sv *ServerVersion) parseVersion() (err error) {
 	sv.VersionParts, err = version.NewVersion(sv.Version)
 	return
