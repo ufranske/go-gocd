@@ -7,6 +7,7 @@ import (
 )
 
 var serverVersionLookup *serverVersionCollection
+
 type ServerVersionString string
 
 const (
