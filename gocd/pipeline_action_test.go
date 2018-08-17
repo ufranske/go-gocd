@@ -2,7 +2,6 @@ package gocd
 
 import (
 	"context"
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

@@ -8,17 +8,17 @@ import (
 func TestApiVersion_Int(t *testing.T) {
 	for _, tt := range []struct {
 		name string
-		av   ApiVersion
+		av   APIVersion
 		want int
 	}{
 		{
 			name: "v1",
-			av:   ApiVersion0,
+			av:   APIVersion0,
 			want: 0,
 		},
 		{
 			name: "v5",
-			av:   ApiVersion5,
+			av:   APIVersion5,
 			want: 5,
 		},
 	} {
@@ -29,29 +29,29 @@ func TestApiVersion_Int(t *testing.T) {
 	}
 }
 
-func TestApiVersion_LessThan(t *testing.T) {
+func TestAPIVersion_LessThan(t *testing.T) {
 	type args struct {
-		version ApiVersion
+		version APIVersion
 	}
 	for _, tt := range []struct {
 		name string
-		av   ApiVersion
+		av   APIVersion
 		args args
 		want bool
 	}{
 		{
 			name: "success",
-			av:   ApiVersion0,
+			av:   APIVersion0,
 			args: args{
-				version: ApiVersion1,
+				version: APIVersion1,
 			},
 			want: true,
 		},
 		{
 			name: "fail",
-			av:   ApiVersion1,
+			av:   APIVersion1,
 			args: args{
-				version: ApiVersion0,
+				version: APIVersion0,
 			},
 			want: false,
 		},
@@ -63,29 +63,29 @@ func TestApiVersion_LessThan(t *testing.T) {
 	}
 }
 
-func TestApiVersion_Equal(t *testing.T) {
+func TestAPIVersion_Equal(t *testing.T) {
 	type args struct {
-		version ApiVersion
+		version APIVersion
 	}
 	for _, tt := range []struct {
 		name string
-		av   ApiVersion
+		av   APIVersion
 		args args
 		want bool
 	}{
 		{
 			name: "equal",
-			av:   ApiVersion1,
+			av:   APIVersion1,
 			args: args{
-				version: ApiVersion1,
+				version: APIVersion1,
 			},
 			want: true,
 		},
 		{
 			name: "not-equal",
-			av:   ApiVersion1,
+			av:   APIVersion1,
 			args: args{
-				version: ApiVersion0,
+				version: APIVersion0,
 			},
 			want: false,
 		},
@@ -97,20 +97,20 @@ func TestApiVersion_Equal(t *testing.T) {
 	}
 }
 
-func TestApiVersion_String(t *testing.T) {
+func TestAPIVersion_String(t *testing.T) {
 	for _, tt := range []struct {
 		name string
-		av   ApiVersion
+		av   APIVersion
 		want string
 	}{
 		{
 			name: "v1",
-			av:   ApiVersion1,
+			av:   APIVersion1,
 			want: "application/vnd.go.cd.v1+json",
 		},
 		{
 			name: "v4",
-			av:   ApiVersion4,
+			av:   APIVersion4,
 			want: "application/vnd.go.cd.v4+json",
 		},
 	} {
@@ -121,42 +121,42 @@ func TestApiVersion_String(t *testing.T) {
 	}
 }
 
-func TestNewApiVersionRange(t *testing.T) {
+func TestNewAPIVersionRange(t *testing.T) {
 	type args struct {
-		min ApiVersion
-		max ApiVersion
+		min APIVersion
+		max APIVersion
 	}
 	for _, tt := range []struct {
 		name string
 		args args
-		want *ApiVersionRange
+		want *APIVersionRange
 	}{
 		{
 			name: "basic",
 			args: args{
-				min: ApiVersion0,
-				max: ApiVersion1,
+				min: APIVersion0,
+				max: APIVersion1,
 			},
-			want: &ApiVersionRange{
-				min: ApiVersion0,
-				max: ApiVersion1,
+			want: &APIVersionRange{
+				min: APIVersion0,
+				max: APIVersion1,
 			},
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			got := NewApiVersionRange(tt.args.min, tt.args.max)
+			got := NewAPIVersionRange(tt.args.min, tt.args.max)
 			assert.Equal(t, tt.want, got)
 		})
 	}
 }
 
-func TestApiVersionRange_Contains(t *testing.T) {
+func TestAPIVersionRange_Contains(t *testing.T) {
 	type fields struct {
-		min ApiVersion
-		max ApiVersion
+		min APIVersion
+		max APIVersion
 	}
 	type args struct {
-		version ApiVersion
+		version APIVersion
 	}
 	for _, tt := range []struct {
 		name   string
@@ -167,28 +167,28 @@ func TestApiVersionRange_Contains(t *testing.T) {
 		{
 			name: "success",
 			fields: fields{
-				min: ApiVersion0,
-				max: ApiVersion3,
+				min: APIVersion0,
+				max: APIVersion3,
 			},
 			args: args{
-				version: ApiVersion2,
+				version: APIVersion2,
 			},
 			want: true,
 		},
 		{
 			name: "fail",
 			fields: fields{
-				min: ApiVersion0,
-				max: ApiVersion3,
+				min: APIVersion0,
+				max: APIVersion3,
 			},
 			args: args{
-				version: ApiVersion5,
+				version: APIVersion5,
 			},
 			want: false,
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			avr := &ApiVersionRange{
+			avr := &APIVersionRange{
 				min: tt.fields.min,
 				max: tt.fields.max,
 			}

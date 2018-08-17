@@ -46,7 +46,7 @@ func TestNewServerVersionRange(t *testing.T) {
 			},
 			want:        nil,
 			wantErr:     true,
-			wantErrType: BadServerVersionRange,
+			wantErrType: ErrBadServerVersionRange,
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
