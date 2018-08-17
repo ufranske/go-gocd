@@ -8,18 +8,28 @@ import (
 
 var serverVersionLookup *serverVersionCollection
 
+// ServerVersionString desccribes the semver for a GoCD release
 type ServerVersionString string
 
 const (
-	SERVER_VERSION_MIN     = ServerVersionString("")
-	SERVER_VERSION_14_3_0  = ServerVersionString("14.3.0")
-	SERVER_VERSION_16_6_0  = ServerVersionString("16.6.0")
-	SERVER_VERSION_17_4_0  = ServerVersionString("17.4.0")
+	// SERVER_VERSION_MIN describes the lower bound of all gocd server versions
+	SERVER_VERSION_MIN = ServerVersionString("")
+	// SERVER_VERSION_14_3_0 describes version 14.3.0 of GoCD
+	SERVER_VERSION_14_3_0 = ServerVersionString("14.3.0")
+	// Describes version 14.3.0 of GoCD
+	SERVER_VERSION_16_6_0 = ServerVersionString("16.6.0")
+	// Describes version 14.3.0 of GoCD
+	SERVER_VERSION_17_4_0 = ServerVersionString("17.4.0")
+	// Describes version 14.3.0 of GoCD
 	SERVER_VERSION_17_12_0 = ServerVersionString("17.12.0")
-	SERVER_VERSION_18_2_0  = ServerVersionString("18.2.0")
-	SERVER_VERSION_18_6_0  = ServerVersionString("18.6.0")
-	SERVER_VERSION_18_7_0  = ServerVersionString("18.7.0")
-	SERVER_VERSION_MAX     = ServerVersionString("")
+	// Describes version 14.3.0 of GoCD
+	SERVER_VERSION_18_2_0 = ServerVersionString("18.2.0")
+	// Describes version 14.3.0 of GoCD
+	SERVER_VERSION_18_6_0 = ServerVersionString("18.6.0")
+	// Describes version 14.3.0 of GoCD
+	SERVER_VERSION_18_7_0 = ServerVersionString("18.7.0")
+	// Describes the upper bound of all gocd server versions
+	SERVER_VERSION_MAX = ServerVersionString("")
 )
 
 func init() {
@@ -63,6 +73,7 @@ func (sv *ServerVersion) GetAPIVersion(endpoint string) (apiVersion string, err 
 	return "", fmt.Errorf("could not find API version tag for '%s'", endpoint)
 }
 
+// String representation of the Server version
 func (sv *ServerVersion) String() string {
 	return sv.Version
 }

@@ -21,25 +21,35 @@ const (
 	apiV6 = "application/vnd.go.cd.v6+json"
 )
 
-type ApiVersion string
+// APIVersion describe the Accept header type of an API version
+type APIVersion string
 
-type ApiVersionRange struct {
-	min ApiVersion
-	max ApiVersion
+// APIVersionRange describe the domain of API versions and allows them to be compared
+type APIVersionRange struct {
+	min APIVersion
+	max APIVersion
 }
 
 var (
-	ApiVersion0     = ApiVersion(apiV0)
-	ApiVersion1     = ApiVersion(apiV1)
-	ApiVersion2     = ApiVersion(apiV2)
-	ApiVersion3     = ApiVersion(apiV3)
-	ApiVersion4     = ApiVersion(apiV4)
-	ApiVersion5     = ApiVersion(apiV5)
-	ApiVersion6     = ApiVersion(apiV6)
+	// APIVersion0 represents no Api Version
+	APIVersion0 = APIVersion(apiV0)
+	// APIVersion1 represents Api version 1
+	APIVersion1 = APIVersion(apiV1)
+	// APIVersion2 represents Api version 2
+	APIVersion2 = APIVersion(apiV2)
+	// APIVersion3 represents Api version 3
+	APIVersion3 = APIVersion(apiV3)
+	// APIVersion4 represents Api version 4
+	APIVersion4 = APIVersion(apiV4)
+	// APIVersion5 represents Api version 5
+	APIVersion5 = APIVersion(apiV5)
+	// APIVersion6 represents Api version 6
+	APIVersion6     = APIVersion(apiV6)
 	apiVersionRegex = regexp.MustCompile("application/vnd.go.cd.v(\\d+)\\+json")
 )
 
-func (av ApiVersion) Int() (i int) {
+// Int value for the api version
+func (av APIVersion) Int() (i int) {
 	if string(av) == "" {
 		return 0
 	}
@@ -49,26 +59,31 @@ func (av ApiVersion) Int() (i int) {
 	return
 }
 
-func (av ApiVersion) LessThan(version ApiVersion) bool {
+// LessThan compares two api versions
+func (av APIVersion) LessThan(version APIVersion) bool {
 	return av.Int() < version.Int()
 }
 
-func (av ApiVersion) Equal(version ApiVersion) bool {
+// Equal compares the quality of two api versions
+func (av APIVersion) Equal(version APIVersion) bool {
 	return string(av) == string(version)
 }
 
-func (av ApiVersion) String() string {
+// String representation of the Api version
+func (av APIVersion) String() string {
 	return string(av)
 }
 
-func NewApiVersionRange(min ApiVersion, max ApiVersion) *ApiVersionRange {
-	return &ApiVersionRange{
+// NewAPIVersionRange creates an API range
+func NewAPIVersionRange(min APIVersion, max APIVersion) *APIVersionRange {
+	return &APIVersionRange{
 		min: min,
 		max: max,
 	}
 }
 
-func (avr *ApiVersionRange) Contains(version ApiVersion) bool {
+// Contains checks if an api version falls within the bounds of the range
+func (avr *APIVersionRange) Contains(version APIVersion) bool {
 	upperBound := version.LessThan(avr.max)
 	lowerBound := avr.min.LessThan(version)
 	equal := avr.max.Equal(version)
