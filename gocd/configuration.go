@@ -201,6 +201,7 @@ type ConfigElasticProfile struct {
 type ConfigProperty struct {
 	Key   string `xml:"key"`
 	Value string `xml:"value"`
+	EncryptedValue string `json:"encrypted_value,omitempty"`
 }
 
 // Version part of cruise-control.xml. @TODO better documentation
