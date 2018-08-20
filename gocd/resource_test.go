@@ -21,7 +21,8 @@ func testResourceVersioned(t *testing.T) {
 		"PipelineTemplate":        &PipelineTemplate{Version: "mock-version1"},
 		"PipelineConfigRequest":   &PipelineConfigRequest{Pipeline: &Pipeline{Version: "mock-version1"}},
 		"PipelineTemplateRequest": &PipelineTemplateRequest{Version: "mock-version1"},
-		"Role": &Role{Version: "mock-version1"},
+		"Role":                &Role{Version: "mock-version1"},
+		"ElasticAgentProfile": &ElasticAgentProfile{Version: "mock-version1"},
 	}
 	for key, ver := range vers {
 		t.Run(key, func(t *testing.T) {
@@ -43,9 +44,10 @@ func testResourceHALContainers(t *testing.T) {
 	l := &HALLinks{links: []*HALLink{}}
 
 	hals := map[string]HALContainer{
-		"Agent":    &Agent{Links: l},
-		"Pipeline": &Pipeline{Links: l},
-		"Role":     &Role{Links: l},
+		"Agent":               &Agent{Links: l},
+		"Pipeline":            &Pipeline{Links: l},
+		"Role":                &Role{Links: l},
+		"ElasticAgentProfile": &ElasticAgentProfile{Links: l},
 		"EnvironmentResponse": &EnvironmentsResponse{
 			Links: l,
 			Embedded: &EmbeddedEnvironments{
