@@ -114,6 +114,13 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responseB
 	c.Log.WithFields(headerLogFields(req.HTTP.Header)).Debug("Request Header")
 
 	if resp, err = c.Do(ctx, req, r.ResponseBody, r.ResponseType); err != nil {
+		c.Log.WithFields(logrus.Fields{
+			"Protocol": resp.HTTP.Proto,
+			"Status":   resp.HTTP.Status,
+			"Method":   r.Method,
+			"Path":     r.Path,
+		}).Debug("Response")
+		c.Log.WithFields(headerLogFields(resp.HTTP.Header)).Debug("Response Headers")
 		return r.ResponseBody, resp, err
 	}
 
@@ -122,7 +129,7 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responseB
 	})
 
 	c.Log.WithFields(headerLogFields(resp.HTTP.Header)).Debug("Response Headers")
-	fields := logrus.Fields{
+	responseFields := logrus.Fields{
 		"Protocol": resp.HTTP.Proto,
 		"Status":   resp.HTTP.Status,
 		"Method":   r.Method,
@@ -130,9 +137,9 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responseB
 	}
 	if hasJSONResponseType {
 		b, _ := json.Marshal(r.ResponseBody)
-		fields["Body"] = string(b)
+		responseFields["Body"] = string(b)
 	}
-	c.Log.WithFields(fields).Debug("Response")
+	c.Log.WithFields(responseFields).Debug("Response")
 
 	return r.ResponseBody, resp, err
 }
