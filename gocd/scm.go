@@ -37,7 +37,7 @@ type SCMConfiguration struct {
 func (scms *SCMsService) Create(ctx context.Context, newSCM *SCM) (scm *SCM, resp *APIResponse, err error) {
 	var ver string
 	scm = &SCM{}
-	if ver, err = scms.client.getAPIVersion(ctx, "/api/admin/scms/"); err == nil {
+	if ver, err = scms.client.getAPIVersion(ctx, "/admin/scms/"); err == nil {
 		_, resp, err = scms.client.postAction(ctx, &APIClientRequest{
 			Path:         "admin/scms",
 			APIVersion:   ver,
@@ -52,7 +52,7 @@ func (scms *SCMsService) Create(ctx context.Context, newSCM *SCM) (scm *SCM, res
 func (scms *SCMsService) Get(ctx context.Context, name string) (scm *SCM, resp *APIResponse, err error) {
 	var ver string
 	scm = &SCM{}
-	if ver, err = scms.client.getAPIVersion(ctx, "/api/admin/scms/:material_name"); err == nil {
+	if ver, err = scms.client.getAPIVersion(ctx, "/admin/scms/:material_name"); err == nil {
 		_, resp, err = scms.client.getAction(ctx, &APIClientRequest{
 			Path:         fmt.Sprintf("admin/scms/%s", name),
 			APIVersion:   ver,
@@ -66,7 +66,7 @@ func (scms *SCMsService) Get(ctx context.Context, name string) (scm *SCM, resp *
 func (scms *SCMsService) Update(ctx context.Context, name string, newSCM *SCM) (scm *SCM, resp *APIResponse, err error) {
 	var ver string
 	scm = &SCM{}
-	if ver, err = scms.client.getAPIVersion(ctx, "/api/admin/scms/:material_name"); err == nil {
+	if ver, err = scms.client.getAPIVersion(ctx, "/admin/scms/:material_name"); err == nil {
 		_, resp, err = scms.client.putAction(ctx, &APIClientRequest{
 			Path:         fmt.Sprintf("admin/scms/%s", name),
 			APIVersion:   ver,
@@ -81,7 +81,7 @@ func (scms *SCMsService) Update(ctx context.Context, name string, newSCM *SCM) (
 func (scms *SCMsService) List(ctx context.Context) (scmSlice []*SCM, resp *APIResponse, err error) {
 	var ver string
 	scmSlice = make([]*SCM, 0)
-	if ver, err = scms.client.getAPIVersion(ctx, "/api/admin/scms/"); err == nil {
+	if ver, err = scms.client.getAPIVersion(ctx, "/admin/scms/"); err == nil {
 		_, resp, err = scms.client.getAction(ctx, &APIClientRequest{
 			Path:         "admin/scms",
 			APIVersion:   ver,
