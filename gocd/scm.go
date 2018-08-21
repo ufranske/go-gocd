@@ -8,6 +8,7 @@ import (
 // SCMsService exposes calls for interacting with SCM objects in the GoCD API.
 type SCMsService service
 
+// SCM describes a material for a Plugin Version Control system.
 type SCM struct {
 	ID             string              `json:"id"`
 	Name           string              `json:"name"`
@@ -19,17 +20,20 @@ type SCM struct {
 	Links   *HALLinks `json:"links"`
 }
 
+// SCMMetadata describing the plugin this SCM is describing
 type SCMMetadata struct {
 	ID      string `json:"id"`
 	Version string `json:"version"`
 }
 
+// SCMConfiguration describing an attribute in an SCM
 type SCMConfiguration struct {
 	Key            string `json:"key"`
 	Value          string `json:"value"`
 	EncryptedValue string `json:"encrypted_value"`
 }
 
+// Create a new SCM
 func (scms *SCMsService) Create(ctx context.Context, newSCM *SCM) (scm *SCM, resp *APIResponse, err error) {
 	var ver string
 	scm = &SCM{}
@@ -44,6 +48,7 @@ func (scms *SCMsService) Create(ctx context.Context, newSCM *SCM) (scm *SCM, res
 	return
 }
 
+// Get an SCM by name
 func (scms *SCMsService) Get(ctx context.Context, name string) (scm *SCM, resp *APIResponse, err error) {
 	var ver string
 	scm = &SCM{}
@@ -57,6 +62,7 @@ func (scms *SCMsService) Get(ctx context.Context, name string) (scm *SCM, resp *
 	return
 }
 
+// Update an SCM by name
 func (scms *SCMsService) Update(ctx context.Context, name string, newSCM *SCM) (scm *SCM, resp *APIResponse, err error) {
 	var ver string
 	scm = &SCM{}
@@ -71,6 +77,7 @@ func (scms *SCMsService) Update(ctx context.Context, name string, newSCM *SCM) (
 	return
 }
 
+// List all SCMs
 func (scms *SCMsService) List(ctx context.Context) (scmSlice []*SCM, resp *APIResponse, err error) {
 	var ver string
 	scmSlice = make([]*SCM, 0)
