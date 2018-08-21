@@ -114,26 +114,30 @@ func TestSCM(t *testing.T) {
 
 				t.Run("create", func(t *testing.T) {
 					scmCreateGot, _, err := intClient.SCM.Create(ctx, test.scmCreate)
-					assert.NoError(t, err)
-					assert.Equal(t, test.scmCreateWant, scmCreateGot)
+					if assert.NoError(t, err) {
+						assert.Equal(t, test.scmCreateWant, scmCreateGot)
+					}
 				})
 
 				t.Run("get", func(t *testing.T) {
 					scmGetGot, _, err := intClient.SCM.Get(ctx, test.scmGet)
-					assert.NoError(t, err)
-					assert.Equal(t, test.scmGetWant, scmGetGot)
+					if assert.NoError(t, err) {
+						assert.Equal(t, test.scmGetWant, scmGetGot)
+					}
 				})
 
 				t.Run("update", func(t *testing.T) {
 					scmUpdateGot, _, err := intClient.SCM.Update(ctx, test.scmUpdate.Name, test.scmUpdate)
-					assert.NoError(t, err)
-					assert.Equal(t, test.scmUpdateWant, scmUpdateGot)
+					if assert.NoError(t, err) {
+						assert.Equal(t, test.scmUpdateWant, scmUpdateGot)
+					}
 				})
 
 				t.Run("list", func(t *testing.T) {
 					scmListGot, _, err := intClient.SCM.List(ctx)
-					assert.NoError(t, err)
-					assert.Equal(t, test.scmListWant, scmListGot)
+					if assert.NoError(t, err) {
+						assert.Equal(t, test.scmListWant, scmListGot)
+					}
 				})
 			}
 		})
