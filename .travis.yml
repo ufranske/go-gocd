@@ -34,7 +34,7 @@ after_success:
   - codeclimate-test-reporter < coverage.out
 
 after_failure:
-  docker logs gocd-server-test --tail 100
+  docker logs gocd-server-test --tail all
 
 deploy:
   - provider: script
