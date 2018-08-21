@@ -34,9 +34,9 @@ func TestSCM(t *testing.T) {
 				},
 			},
 			scmCreateWant: &SCM{
-				ID:             "mock-id",
-				Name:           "mock-name",
-				AutoUpdate:     true,
+				ID:         "mock-id",
+				Name:       "mock-name",
+				AutoUpdate: true,
 				PluginMetadata: &SCMMetadata{
 					ID:      "mock-id",
 					Version: "mock-version",
@@ -49,9 +49,9 @@ func TestSCM(t *testing.T) {
 			},
 			scmGet: "mock-name",
 			scmGetWant: &SCM{
-				ID:             "mock-id",
-				Name:           "mock-name",
-				AutoUpdate:     true,
+				ID:         "mock-id",
+				Name:       "mock-name",
+				AutoUpdate: true,
 				PluginMetadata: &SCMMetadata{
 					ID:      "mock-id",
 					Version: "mock-version",
@@ -63,9 +63,9 @@ func TestSCM(t *testing.T) {
 				},
 			},
 			scmUpdate: &SCM{
-				ID:             "mock-id",
-				Name:           "updated-mock-name",
-				AutoUpdate:     true,
+				ID:         "mock-id",
+				Name:       "updated-mock-name",
+				AutoUpdate: true,
 				PluginMetadata: &SCMMetadata{
 					ID:      "mock-id",
 					Version: "mock-version",
@@ -77,9 +77,9 @@ func TestSCM(t *testing.T) {
 				},
 			},
 			scmUpdateWant: &SCM{
-				ID:             "mock-id",
-				Name:           "updated-mock-name",
-				AutoUpdate:     true,
+				ID:         "mock-id",
+				Name:       "updated-mock-name",
+				AutoUpdate: true,
 				PluginMetadata: &SCMMetadata{
 					ID:      "mock-id",
 					Version: "mock-version",
@@ -92,9 +92,9 @@ func TestSCM(t *testing.T) {
 			},
 			scmListWant: []*SCM{
 				{
-					ID:             "mock-id",
-					Name:           "mock-name",
-					AutoUpdate:     true,
+					ID:         "mock-id",
+					Name:       "mock-name",
+					AutoUpdate: true,
 					PluginMetadata: &SCMMetadata{
 						ID:      "mock-id",
 						Version: "mock-version",
