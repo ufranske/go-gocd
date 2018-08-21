@@ -125,6 +125,8 @@ func (c *Client) httpAction(ctx context.Context, r *APIClientRequest) (responseB
 	fields := logrus.Fields{
 		"Protocol": resp.HTTP.Proto,
 		"Status":   resp.HTTP.Status,
+		"Method":   r.Method,
+		"Path":     r.Path,
 	}
 	if hasJSONResponseType {
 		b, _ := json.Marshal(r.ResponseBody)
