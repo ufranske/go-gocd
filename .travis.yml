@@ -30,7 +30,7 @@ before_install:
 
 script:
   - go generate -x $(glide novendor) && git diff --exit-code; code=$?; git checkout -- .; (exit	$code)
-  - make testacc
+  - GOCD_PLUGIN_INSTALL_github_pr=${GOCD_PLUGIN_INSTALL_github_pr} make testacc
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
