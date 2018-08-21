@@ -14,16 +14,19 @@ func TestSCM(t *testing.T) {
 		scmGet        string
 		scmGetWant    *SCM
 		scmUpdate     *SCM
-		scmUpdateWant *SCm
+		scmUpdateWant *SCM
 		scmListWant   []*SCM
 	}{
 		{
 			name: "basic",
 			scmCreate: &SCM{
-				ID:             "mock-id",
-				Name:           "mock-name",
-				AutoUpdate:     true,
-				PluginMetadata: &SCMMetadata{},
+				ID:         "mock-id",
+				Name:       "mock-name",
+				AutoUpdate: true,
+				PluginMetadata: &SCMMetadata{
+					ID:      "mock-id",
+					Version: "mock-version",
+				},
 				Configuration: []*SCMConfiguration{
 					{Key: "username", Value: "admin"},
 					{Key: "password", EncryptedValue: "1f3rrs9uhn63hd"},
@@ -34,7 +37,10 @@ func TestSCM(t *testing.T) {
 				ID:             "mock-id",
 				Name:           "mock-name",
 				AutoUpdate:     true,
-				PluginMetadata: &SCMMetadata{},
+				PluginMetadata: &SCMMetadata{
+					ID:      "mock-id",
+					Version: "mock-version",
+				},
 				Configuration: []*SCMConfiguration{
 					{Key: "username", Value: "admin"},
 					{Key: "password", EncryptedValue: "1f3rrs9uhn63hd"},
@@ -46,7 +52,10 @@ func TestSCM(t *testing.T) {
 				ID:             "mock-id",
 				Name:           "mock-name",
 				AutoUpdate:     true,
-				PluginMetadata: &SCMMetadata{},
+				PluginMetadata: &SCMMetadata{
+					ID:      "mock-id",
+					Version: "mock-version",
+				},
 				Configuration: []*SCMConfiguration{
 					{Key: "username", Value: "admin"},
 					{Key: "password", EncryptedValue: "1f3rrs9uhn63hd"},
@@ -57,7 +66,10 @@ func TestSCM(t *testing.T) {
 				ID:             "mock-id",
 				Name:           "updated-mock-name",
 				AutoUpdate:     true,
-				PluginMetadata: &SCMMetadata{},
+				PluginMetadata: &SCMMetadata{
+					ID:      "mock-id",
+					Version: "mock-version",
+				},
 				Configuration: []*SCMConfiguration{
 					{Key: "username", Value: "admin"},
 					{Key: "password", EncryptedValue: "1f3rrs9uhn63hd"},
@@ -68,7 +80,10 @@ func TestSCM(t *testing.T) {
 				ID:             "mock-id",
 				Name:           "updated-mock-name",
 				AutoUpdate:     true,
-				PluginMetadata: &SCMMetadata{},
+				PluginMetadata: &SCMMetadata{
+					ID:      "mock-id",
+					Version: "mock-version",
+				},
 				Configuration: []*SCMConfiguration{
 					{Key: "username", Value: "admin"},
 					{Key: "password", EncryptedValue: "1f3rrs9uhn63hd"},
@@ -80,7 +95,10 @@ func TestSCM(t *testing.T) {
 					ID:             "mock-id",
 					Name:           "mock-name",
 					AutoUpdate:     true,
-					PluginMetadata: &SCMMetadata{},
+					PluginMetadata: &SCMMetadata{
+						ID:      "mock-id",
+						Version: "mock-version",
+					},
 					Configuration: []*SCMConfiguration{
 						{Key: "username", Value: "admin"},
 						{Key: "password", EncryptedValue: "1f3rrs9uhn63hd"},
@@ -93,7 +111,7 @@ func TestSCM(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			if runIntegrationTest(t) {
 				ctx := context.Background()
-				
+
 				t.Run("create", func(t *testing.T) {
 					scmCreateGot, _, err := intClient.SCM.Create(ctx, test.scmCreate)
 					assert.NoError(t, err)
