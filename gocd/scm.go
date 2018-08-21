@@ -16,8 +16,8 @@ type SCM struct {
 	PluginMetadata *SCMMetadata        `json:"plugin_metadata"`
 	Configuration  []*SCMConfiguration `json:"configuration"`
 
-	Version string    `json:"version"`
-	Links   *HALLinks `json:"links"`
+	Version string    `json:"version,omitempty"`
+	Links   *HALLinks `json:"_links,omitempty"`
 }
 
 // SCMMetadata describing the plugin this SCM is describing
