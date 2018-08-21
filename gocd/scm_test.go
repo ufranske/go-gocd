@@ -24,8 +24,8 @@ func TestSCM(t *testing.T) {
 				Name:       "mock-name",
 				AutoUpdate: true,
 				PluginMetadata: &SCMMetadata{
-					ID:      "mock-id",
-					Version: "mock-version",
+					ID:     "github.pr",
+					Version: "1",
 				},
 				Configuration: []*SCMConfiguration{
 					{Key: "username", Value: "admin"},
@@ -38,8 +38,8 @@ func TestSCM(t *testing.T) {
 				Name:       "mock-name",
 				AutoUpdate: true,
 				PluginMetadata: &SCMMetadata{
-					ID:      "mock-id",
-					Version: "mock-version",
+					ID:     "github.pr",
+					Version: "1",
 				},
 				Configuration: []*SCMConfiguration{
 					{Key: "username", Value: "admin"},
@@ -53,8 +53,8 @@ func TestSCM(t *testing.T) {
 				Name:       "mock-name",
 				AutoUpdate: true,
 				PluginMetadata: &SCMMetadata{
-					ID:      "mock-id",
-					Version: "mock-version",
+					ID:     "github.pr",
+					Version: "1",
 				},
 				Configuration: []*SCMConfiguration{
 					{Key: "username", Value: "admin"},
@@ -67,8 +67,8 @@ func TestSCM(t *testing.T) {
 				Name:       "updated-mock-name",
 				AutoUpdate: true,
 				PluginMetadata: &SCMMetadata{
-					ID:      "mock-id",
-					Version: "mock-version",
+					ID:     "github.pr",
+					Version: "1",
 				},
 				Configuration: []*SCMConfiguration{
 					{Key: "username", Value: "admin"},
@@ -81,8 +81,8 @@ func TestSCM(t *testing.T) {
 				Name:       "updated-mock-name",
 				AutoUpdate: true,
 				PluginMetadata: &SCMMetadata{
-					ID:      "mock-id",
-					Version: "mock-version",
+					ID:    "github.pr",
+					Version: "1",
 				},
 				Configuration: []*SCMConfiguration{
 					{Key: "username", Value: "admin"},
@@ -96,8 +96,8 @@ func TestSCM(t *testing.T) {
 					Name:       "mock-name",
 					AutoUpdate: true,
 					PluginMetadata: &SCMMetadata{
-						ID:      "mock-id",
-						Version: "mock-version",
+						ID:      "github.pr",
+						Version: "1",
 					},
 					Configuration: []*SCMConfiguration{
 						{Key: "username", Value: "admin"},
