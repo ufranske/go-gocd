@@ -24,7 +24,7 @@ func TestSCM(t *testing.T) {
 				Name:       "mock-name",
 				AutoUpdate: true,
 				PluginMetadata: &SCMMetadata{
-					ID:     "github.pr",
+					ID:      "github.pr",
 					Version: "1",
 				},
 				Configuration: []*SCMConfiguration{
@@ -38,7 +38,7 @@ func TestSCM(t *testing.T) {
 				Name:       "mock-name",
 				AutoUpdate: true,
 				PluginMetadata: &SCMMetadata{
-					ID:     "github.pr",
+					ID:      "github.pr",
 					Version: "1",
 				},
 				Configuration: []*SCMConfiguration{
@@ -53,7 +53,7 @@ func TestSCM(t *testing.T) {
 				Name:       "mock-name",
 				AutoUpdate: true,
 				PluginMetadata: &SCMMetadata{
-					ID:     "github.pr",
+					ID:      "github.pr",
 					Version: "1",
 				},
 				Configuration: []*SCMConfiguration{
@@ -67,7 +67,7 @@ func TestSCM(t *testing.T) {
 				Name:       "updated-mock-name",
 				AutoUpdate: true,
 				PluginMetadata: &SCMMetadata{
-					ID:     "github.pr",
+					ID:      "github.pr",
 					Version: "1",
 				},
 				Configuration: []*SCMConfiguration{
@@ -81,7 +81,7 @@ func TestSCM(t *testing.T) {
 				Name:       "updated-mock-name",
 				AutoUpdate: true,
 				PluginMetadata: &SCMMetadata{
-					ID:    "github.pr",
+					ID:      "github.pr",
 					Version: "1",
 				},
 				Configuration: []*SCMConfiguration{
