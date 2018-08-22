@@ -29,8 +29,16 @@ type SCMMetadata struct {
 // SCMConfiguration describing an attribute in an SCM
 type SCMConfiguration struct {
 	Key            string `json:"key"`
-	Value          string `json:"value"`
-	EncryptedValue string `json:"encrypted_value"`
+	Value          string `json:"value,omitempty"`
+	EncryptedValue string `json:"encrypted_value,omitempty"`
+}
+
+// RoleListWrapper describes a container for the result of a role list operation
+type SCMListWrapper struct {
+	Embedded struct {
+		SCMs []*SCM `json:"scms"`
+	} `json:"_embedded"`
+	Links *HALLinks `json:"_links"`
 }
 
 // Create a new SCM
@@ -80,13 +88,14 @@ func (scms *SCMsService) Update(ctx context.Context, name string, newSCM *SCM) (
 // List all SCMs
 func (scms *SCMsService) List(ctx context.Context) (scmSlice []*SCM, resp *APIResponse, err error) {
 	var ver string
-	scmSlice = make([]*SCM, 0)
+	scmWrapper := &SCMListWrapper{}
 	if ver, err = scms.client.getAPIVersion(ctx, "admin/scms/"); err == nil {
 		_, resp, err = scms.client.getAction(ctx, &APIClientRequest{
 			Path:         "admin/scms",
 			APIVersion:   ver,
-			ResponseBody: scmSlice,
+			ResponseBody: scmWrapper,
 		})
 	}
+	scmSlice = scmWrapper.Embedded.SCMs
 	return
 }
