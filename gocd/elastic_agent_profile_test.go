@@ -23,18 +23,14 @@ func TestElasticAgentProfile(t *testing.T) {
 			name: "basic",
 			eapCreate: &ElasticAgentProfile{
 				ID:       "mock-id",
-				PluginID: "mock-name",
+				PluginID: "com.example.elasticagent.foocloud",
 				Properties: []*ConfigProperty{
 					{Key: "Image", Value: "alpine:latest"},
-					{Key: "Command", Value: ""},
-					{Key: "Environment", Value: ""},
-					{Key: "MaxMemory", Value: "200M"},
-					{Key: "ReservedMemory", Value: "150M"},
 				},
 			},
 			eapCreateWant: &ElasticAgentProfile{
 				ID:       "mock-id",
-				PluginID: "mock-name",
+				PluginID: "com.example.elasticagent.foocloud",
 				Properties: []*ConfigProperty{
 					{Key: "Image", Value: "alpine:latest"},
 					{Key: "Command", Value: ""},
@@ -46,7 +42,7 @@ func TestElasticAgentProfile(t *testing.T) {
 			eapGet: "mock-name",
 			eapGetWant: &ElasticAgentProfile{
 				ID:       "mock-id",
-				PluginID: "mock-name",
+				PluginID: "com.example.elasticagent.foocloud",
 				Properties: []*ConfigProperty{
 					{Key: "Image", Value: "alpine:latest"},
 					{Key: "Command", Value: ""},
@@ -57,7 +53,7 @@ func TestElasticAgentProfile(t *testing.T) {
 			},
 			eapUpdate: &ElasticAgentProfile{
 				ID:       "mock-id",
-				PluginID: "mock-name",
+				PluginID: "com.example.elasticagent.foocloud",
 				Properties: []*ConfigProperty{
 					{Key: "Image", Value: "alpine:latest"},
 					{Key: "Command", Value: ""},
@@ -68,7 +64,7 @@ func TestElasticAgentProfile(t *testing.T) {
 			},
 			eapUpdateWant: &ElasticAgentProfile{
 				ID:       "mock-id",
-				PluginID: "mock-name",
+				PluginID: "com.example.elasticagent.foocloud",
 				Properties: []*ConfigProperty{
 					{Key: "Image", Value: "alpine:latest"},
 					{Key: "Command", Value: ""},
@@ -80,7 +76,7 @@ func TestElasticAgentProfile(t *testing.T) {
 			eapListWant: []*ElasticAgentProfile{
 				{
 					ID:       "mock-id",
-					PluginID: "mock-name",
+					PluginID: "com.example.elasticagent.foocloud",
 					Properties: []*ConfigProperty{
 						{Key: "Image", Value: "alpine:latest"},
 						{Key: "Command", Value: ""},

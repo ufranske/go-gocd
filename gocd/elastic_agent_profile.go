@@ -14,6 +14,13 @@ type ElasticAgentProfile struct {
 	Links      *HALLinks         `json:"_links,omitempty"`
 }
 
+type ElasticAgentProfileListResponse struct {
+	Links    *HALLinks `json:"_links,omitempty"`
+	Embedded struct {
+		Profiles []*ElasticAgentProfile `json:"profiles"`
+	} `json:"_embedded"`
+}
+
 func (eaps *ElasticAgentService) Create(ctx context.Context, newProfile *ElasticAgentProfile) (profile *ElasticAgentProfile, resp *APIResponse, err error) {
 	var ver string
 	profile = &ElasticAgentProfile{}
@@ -39,8 +46,16 @@ func (eaps *ElasticAgentService) Update(ctx context.Context, profileID string, p
 }
 
 func (eaps *ElasticAgentService) List(ctx context.Context) (eapSlice []*ElasticAgentProfile, resp *APIResponse, err error) {
-	return
-
+	var ver string
+	response := &ElasticAgentProfileListResponse{}
+	if ver, err = eaps.client.getAPIVersion(ctx, "elastic/profiles"); err == nil {
+		_, resp, err = eaps.client.getAction(ctx, &APIClientRequest{
+			Path:         "elastic/profiles",
+			APIVersion:   ver,
+			ResponseBody: response,
+		})
+	}
+	return response.Embedded.Profiles, resp, err
 }
 
 func (eaps *ElasticAgentService) Delete(ctx context.Context, profileName string) (result string, resp *APIResponse, err error) {
