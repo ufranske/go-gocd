@@ -7,8 +7,12 @@ services:
   - docker
 
 env:
- - GOCD_VERSION=v17.10.0 CODECLIMATE_API_HOST=https://codebeat.co/webhooks/code_coverage
- - GOCD_VERSION=v18.7.0 CODECLIMATE_API_HOST=https://codebeat.co/webhooks/code_coverage
+  global:
+    - CODECLIMATE_API_HOST=https://codebeat.co/webhooks/code_coverage
+    - GOCD_LOG_LEVEL=DEBUG
+  matrix:
+    - GOCD_VERSION=v17.10.0
+    - GOCD_VERSION=v18.7.0
 
 addons:
   apt:
@@ -18,7 +22,7 @@ addons:
 matrix:
   fast_finish: true
   allow_failures:
-     - env: GOCD_VERSION=v17.10.0 CODECLIMATE_API_HOST=https://codebeat.co/webhooks/code_coverage
+    - env: GOCD_VERSION=v17.10.0
 
 before_install:
   - make before_install
@@ -32,6 +36,9 @@ after_success:
   - go get github.com/goreleaser/goreleaser
   - npm install -g codeclimate-test-reporter
   - codeclimate-test-reporter < coverage.out
+
+after_failure:
+  - docker logs gocd-server-test --tail all
 
 deploy:
   - provider: script
