@@ -23,7 +23,7 @@ addons:
 matrix:
   fast_finish: true
   allow_failures:
-     - env: GOCD_VERSION=v17.10.0
+    - env: GOCD_VERSION=v17.10.0
 
 before_install:
   - make before_install
@@ -39,7 +39,6 @@ after_success:
   - codeclimate-test-reporter < coverage.out
 
 after_failure:
-  - ls -lahR .
   - docker logs gocd-server-test --tail all
 
 deploy:
