@@ -16,6 +16,7 @@ const (
 type JobsService service
 
 // Job describes a job which can be performed in GoCD
+// codebeat:disable[TOO_MANY_IVARS]
 type Job struct {
 	AgentUUID            string                 `json:"agent_uuid,omitempty"`
 	Name                 string                 `json:"name"`
@@ -40,6 +41,8 @@ type Job struct {
 	Artifacts            []*Artifact            `json:"artifacts,omitempty"`
 	ElasticProfileID     string                 `json:"elastic_profile_id,omitempty"`
 }
+
+// codebeat:enable[TOO_MANY_IVARS]
 
 // Artifact describes the result of a job
 type Artifact struct {
@@ -111,6 +114,7 @@ type Task struct {
 }
 
 // TaskAttributes describes all the properties for a Task.
+// codebeat:disable[TOO_MANY_IVARS]
 type TaskAttributes struct {
 	RunIf               []string                    `json:"run_if,omitempty"`
 	Command             string                      `json:"command,omitempty"`
@@ -129,6 +133,8 @@ type TaskAttributes struct {
 	Configuration       []PluginConfigurationKVPair `json:"configuration,omitempty"`
 	ArtifactOrigin      string                      `json:"artifact_origin,omitempty"`
 }
+
+// codebeat:enable[TOO_MANY_IVARS]
 
 // TaskPluginConfiguration is for specifying options for pluggable task
 type TaskPluginConfiguration struct {

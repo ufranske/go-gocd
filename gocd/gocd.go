@@ -76,11 +76,7 @@ type Client struct {
 	clientMu sync.Mutex // clientMu protects the client during multi-threaded calls
 	client   *http.Client
 
-	BaseURL  *url.URL
-	Username string
-	Password string
-
-	UserAgent string
+	params *ClientParameters
 
 	Log *logrus.Logger
 
@@ -102,6 +98,23 @@ type Client struct {
 
 	common service
 	cookie string
+}
+
+// ClientParameters describe how the client interacts with the GoCD Server
+type ClientParameters struct {
+	BaseURL  *url.URL
+	Username string
+	Password string
+
+	UserAgent string
+}
+
+func (cp *ClientParameters) BuildPath(rel *url.URL) *url.URL {
+	u := cp.BaseURL.ResolveReference(rel)
+	if cp.BaseURL.RawQuery != "" {
+		u.RawQuery = cp.BaseURL.RawQuery
+	}
+	return u
 }
 
 // PaginationResponse is a struct used to handle paging through resposnes.
@@ -137,6 +150,34 @@ func (c *Configuration) Client() *Client {
 // NewClient creates a new client based on the provided configuration payload, and optionally a custom httpClient to
 // allow overriding of http client structures.
 func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
+
+	httpClient = generateHttpClient(cfg, httpClient)
+
+	baseURL, _ := url.Parse(cfg.Server)
+
+	c := &Client{
+		client: httpClient,
+		params: &ClientParameters{
+			BaseURL:   baseURL,
+			UserAgent: userAgent,
+			Username:  cfg.Username,
+			Password:  cfg.Password,
+		},
+		Log: logrus.New(),
+	}
+
+	c.common.client = c
+	c.common.log = c.Log
+
+	attachServices(c)
+
+	SetupLogging(c.Log)
+
+	return c
+}
+
+// generateHttpClient taking into account ssl, and existing httpClient
+func generateHttpClient(cfg *Configuration, httpClient *http.Client) *http.Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 		if strings.HasPrefix(cfg.Server, "https") && cfg.SkipSslCheck {
@@ -145,22 +186,12 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 			}
 		}
 	}
+	return httpClient
+}
 
-	baseURL, _ := url.Parse(cfg.Server)
-
-	c := &Client{
-		client:    httpClient,
-		BaseURL:   baseURL,
-		UserAgent: userAgent,
-		Log:       logrus.New(),
-	}
-
-	c.common.client = c
-	c.common.log = c.Log
-
-	c.Username = cfg.Username
-	c.Password = cfg.Password
-
+// attachServices to the client to give access to the difference API resources.
+// codebeat:disable[ABC]
+func attachServices(c *Client) {
 	c.Agents = (*AgentsService)(&c.common)
 	c.PipelineGroups = (*PipelineGroupsService)(&c.common)
 	c.Stages = (*StagesService)(&c.common)
@@ -176,10 +207,12 @@ func NewClient(cfg *Configuration, httpClient *http.Client) *Client {
 	c.Properties = (*PropertiesService)(&c.common)
 	c.Roles = (*RoleService)(&c.common)
 	c.ServerVersion = (*ServerVersionService)(&c.common)
+}
 
-	SetupLogging(c.Log)
+// codebeat:enable[ABC]
 
-	return c
+func (c *Client) BaseURL() *url.URL {
+	return c.params.BaseURL
 }
 
 // Lock the client until release
@@ -214,10 +247,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 		return req, err
 	}
 
-	u := c.BaseURL.ResolveReference(rel)
-	if c.BaseURL.RawQuery != "" {
-		u.RawQuery = c.BaseURL.RawQuery
-	}
+	u := c.params.BuildPath(rel)
 
 	if body != nil {
 		buf = new(bytes.Buffer)
@@ -248,11 +278,11 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, apiVersion 
 	if apiVersion != "" {
 		req.HTTP.Header.Set("Accept", apiVersion)
 	}
-	req.HTTP.Header.Set("User-Agent", c.UserAgent)
+	req.HTTP.Header.Set("User-Agent", c.params.UserAgent)
 
 	if c.cookie == "" {
-		if c.Username != "" && c.Password != "" {
-			req.HTTP.SetBasicAuth(c.Username, c.Password)
+		if c.params.Username != "" && c.params.Password != "" {
+			req.HTTP.SetBasicAuth(c.params.Username, c.params.Password)
 		}
 	} else {
 		req.HTTP.Header.Set("Cookie", c.cookie)
