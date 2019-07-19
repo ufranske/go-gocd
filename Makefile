@@ -13,31 +13,26 @@ format:
 
 lint:
 	diff -u <(echo -n) <(gofmt -d -s main.go $(GO_TARGETS))
-	golint -set_exit_status . $(glide novendor)
+	@go get golang.org/x/lint/golint
+	golint -set_exit_status .
 
 vet:
-	go tool vet $(GO_TARGETS)
-	go tool vet main.go
+	go get -mod=readonly ./...
+	go vet ./...
 
 test: vet lint
-	bash scripts/go-test.sh
-
-before_install:
-	@go get github.com/golang/lint/golint
-	@go install github.com/golang/lint/golint
-	curl https://glide.sh/get | sh
-	glide install
+	go test -mod=readonly -v -coverprofile=coverage.out -covermode=atomic ./...
 
 build: deploy_on_develop
 
 deploy_on_tag:
 	git clean -df
-	go get
+	go get -mod=readonly
 	goreleaser --debug
 
 deploy_on_develop:
 	git clean -df
-	go get
+	go get -mod=readonly
 	goreleaser --debug --rm-dist --snapshot
 
 testacc: provision-test-gocd
