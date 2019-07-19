@@ -28,11 +28,13 @@ build: deploy_on_develop
 deploy_on_tag:
 	git clean -df
 	go get -mod=readonly
+	git checkout -- go.mod go.sum
 	goreleaser --debug
 
 deploy_on_develop:
 	git clean -df
 	go get -mod=readonly
+	git checkout -- go.mod go.sum
 	goreleaser --debug --rm-dist --snapshot
 
 testacc: provision-test-gocd
