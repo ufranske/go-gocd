@@ -13,7 +13,7 @@ format:
 
 lint:
 	diff -u <(echo -n) <(gofmt -d -s main.go $(GO_TARGETS))
-	@go get golang.org/x/lint/golint
+	@go get -mod=readonly golang.org/x/lint/golint
 	golint -set_exit_status .
 
 vet:
