@@ -1,5 +1,7 @@
 module github.com/beamly/go-gocd
 
+go 1.11
+
 require (
 	github.com/Netflix/go-expect v0.0.0-20180928190340-9d1f4485533b // indirect
 	github.com/hashicorp/go-version v1.2.0
