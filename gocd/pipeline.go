@@ -219,7 +219,7 @@ func (pgs *PipelinesService) pipelineAction(ctx context.Context, name string, ac
 	request := &APIClientRequest{
 		Path:        fmt.Sprintf("pipelines/%s/%s", name, action),
 		APIVersion:  apiVersion,
-		requestBody: requestBody,
+		RequestBody: requestBody,
 	}
 	choosePipelineConfirmHeader(request, apiVersion)
 
