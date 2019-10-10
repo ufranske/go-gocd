@@ -141,6 +141,19 @@ type PipelineStatus struct {
 	Schedulable bool `json:"schedulable"`
 }
 
+// SchedulingMaterial describes a material that must be used to trigger a new instance of the pipeline.
+type SchedulingMaterial struct {
+	Fingerprint string `json:"fingerprint,omitempty"`
+	Revision    string `json:"revision"`
+}
+
+// ScheduleRequestBody describes properties to trigger a new instance of the pipeline.
+type ScheduleRequestBody struct {
+	EnvironmentVariables            []*EnvironmentVariable `json:"environment_variables,omitempty"`
+	Materials                       []SchedulingMaterial   `json:"materials,omitempty"`
+	UpdateMaterialsBeforeScheduling bool                   `json:"update_materials_before_scheduling"`
+}
+
 // GetStatus returns a list of pipeline instanves describing the pipeline history.
 func (pgs *PipelinesService) GetStatus(ctx context.Context, name string, offset int) (ps *PipelineStatus, resp *APIResponse, err error) {
 	ps = &PipelineStatus{}
@@ -154,17 +167,22 @@ func (pgs *PipelinesService) GetStatus(ctx context.Context, name string, offset 
 
 // Pause allows a pipeline to handle new build events
 func (pgs *PipelinesService) Pause(ctx context.Context, name string) (bool, *APIResponse, error) {
-	return pgs.pipelineAction(ctx, name, "pause")
+	return pgs.pipelineAction(ctx, name, "pause", nil)
+}
+
+// Schedule allows to trigger a specific pipeline.
+func (pgs *PipelinesService) Schedule(ctx context.Context, name string, body *ScheduleRequestBody) (bool, *APIResponse, error) {
+	return pgs.pipelineAction(ctx, name, "schedule", body)
 }
 
 // Unpause allows a pipeline to handle new build events
 func (pgs *PipelinesService) Unpause(ctx context.Context, name string) (bool, *APIResponse, error) {
-	return pgs.pipelineAction(ctx, name, "unpause")
+	return pgs.pipelineAction(ctx, name, "unpause", nil)
 }
 
 // ReleaseLock frees a pipeline to handle new build events
 func (pgs *PipelinesService) ReleaseLock(ctx context.Context, name string) (bool, *APIResponse, error) {
-	return pgs.pipelineAction(ctx, name, "releaseLock")
+	return pgs.pipelineAction(ctx, name, "releaseLock", nil)
 }
 
 // GetInstance of a pipeline run.
@@ -191,7 +209,7 @@ func (pgs *PipelinesService) GetHistory(ctx context.Context, name string, offset
 	return
 }
 
-func (pgs *PipelinesService) pipelineAction(ctx context.Context, name string, action string) (bool, *APIResponse, error) {
+func (pgs *PipelinesService) pipelineAction(ctx context.Context, name string, action string, requestBody interface{}) (bool, *APIResponse, error) {
 
 	apiVersion, err := pgs.client.getAPIVersion(ctx, fmt.Sprintf("pipelines/:pipeline_name/%s", action))
 	if err != nil {
@@ -199,8 +217,9 @@ func (pgs *PipelinesService) pipelineAction(ctx context.Context, name string, ac
 	}
 
 	request := &APIClientRequest{
-		Path:       fmt.Sprintf("pipelines/%s/%s", name, action),
-		APIVersion: apiVersion,
+		Path:        fmt.Sprintf("pipelines/%s/%s", name, action),
+		APIVersion:  apiVersion,
+		requestBody: requestBody,
 	}
 	choosePipelineConfirmHeader(request, apiVersion)
 
