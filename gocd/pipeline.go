@@ -176,7 +176,7 @@ func (pgs *PipelinesService) Schedule(ctx context.Context, name string, body *Sc
 	if body != nil {
 		reqBody = body
 	}
-	return pgs.pipelineAction(ctx, name, "schedule", body)
+	return pgs.pipelineAction(ctx, name, "schedule", reqBody)
 }
 
 // Unpause allows a pipeline to handle new build events
