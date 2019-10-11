@@ -172,6 +172,10 @@ func (pgs *PipelinesService) Pause(ctx context.Context, name string) (bool, *API
 
 // Schedule allows to trigger a specific pipeline.
 func (pgs *PipelinesService) Schedule(ctx context.Context, name string, body *ScheduleRequestBody) (bool, *APIResponse, error) {
+	var reqBody interface{}
+	if body != nil {
+		reqBody = body
+	}
 	return pgs.pipelineAction(ctx, name, "schedule", body)
 }
 
