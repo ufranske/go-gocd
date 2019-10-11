@@ -141,8 +141,8 @@ type PipelineStatus struct {
 	Schedulable bool `json:"schedulable"`
 }
 
-// SchedulingMaterial describes a material that must be used to trigger a new instance of the pipeline.
-type SchedulingMaterial struct {
+// ScheduleMaterial describes a material that must be used to trigger a new instance of the pipeline.
+type ScheduleMaterial struct {
 	Fingerprint string `json:"fingerprint,omitempty"`
 	Revision    string `json:"revision"`
 }
@@ -150,7 +150,7 @@ type SchedulingMaterial struct {
 // ScheduleRequestBody describes properties to trigger a new instance of the pipeline.
 type ScheduleRequestBody struct {
 	EnvironmentVariables            []*EnvironmentVariable `json:"environment_variables,omitempty"`
-	Materials                       []SchedulingMaterial   `json:"materials,omitempty"`
+	Materials                       []*ScheduleMaterial    `json:"materials,omitempty"`
 	UpdateMaterialsBeforeScheduling bool                   `json:"update_materials_before_scheduling"`
 }
 

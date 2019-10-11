@@ -15,9 +15,6 @@ func init() {
 			"/api/version": newVersionCollection(
 				newServerAPI("16.6.0", apiV1)),
 			"/api/admin/pipelines/:pipeline_name": newVersionCollection(
-				newServerAPI("19.8.0", apiV9),
-				newServerAPI("19.6.0", apiV8),
-				newServerAPI("19.4.0", apiV7),
 				newServerAPI("18.7.0", apiV6),
 				newServerAPI("17.12.0", apiV5),
 				newServerAPI("17.4.0", apiV4),
