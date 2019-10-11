@@ -190,11 +190,11 @@ func (pgs *PipelinesService) ReleaseLock(ctx context.Context, name string) (bool
 }
 
 // GetInstance of a pipeline run.
-func (pgs *PipelinesService) GetInstance(ctx context.Context, name string, offset int) (pt *PipelineInstance, resp *APIResponse, err error) {
+func (pgs *PipelinesService) GetInstance(ctx context.Context, name string, counter int) (pt *PipelineInstance, resp *APIResponse, err error) {
 
 	pt = &PipelineInstance{}
 	_, resp, err = pgs.client.getAction(ctx, &APIClientRequest{
-		Path:         pgs.buildPaginatedStub("admin/pipelines/%s/instance", name, offset),
+		Path:         fmt.Sprintf("pipelines/%s/instance/%d", name, counter),
 		ResponseBody: &pt,
 	})
 
